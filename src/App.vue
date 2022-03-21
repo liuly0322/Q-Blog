@@ -11,6 +11,5 @@ useHead({
 </script>
 
 <template>
-  <p>modify here?...</p>
   <router-view />
 </template>
