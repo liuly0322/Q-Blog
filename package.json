@@ -16,6 +16,7 @@
     "@iconify-json/ant-design": "^1.1.1",
     "@vueuse/core": "^8.1.2",
     "@vueuse/head": "^0.7.5",
+    "aplayer": "^1.10.1",
     "katex": "^0.15.3",
     "markdown-it-texmath": "^0.9.7",
     "naive-ui": "^2.26.4",

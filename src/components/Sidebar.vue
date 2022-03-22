@@ -6,11 +6,13 @@
         <span>—— {{ hitokoto.from_who }}「{{ hitokoto.from }}」</span>
       </n-card>
     </n-card>
+    <n-card title="我的歌单">
+      <a-player song-server="tencent" song-id="2363529455" />
+    </n-card>
   </div>
 </template>
 
 <script setup lang="ts">
-
 const hitokoto = ref({ from: '', hitokoto: '', from_who: '' })
 const url = 'https://v1.hitokoto.cn'
 

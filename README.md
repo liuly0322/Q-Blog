@@ -81,13 +81,15 @@ git init
 - [x] header 的响应式布局：移动端做一个可以展开的 menu
 - [x] footer
 - [x] 响应式布局的 sidebar
-- [ ] sidebar 增加音乐播放
+- [x] sidebar 增加音乐播放
+- [ ] 发布 / 别的什么方式处理自己魔改过后的 aplayer 包？增加 ts 支持
 - [ ] home 页
 - [ ] tags 页
 - [ ] tag 页
 - [ ] about 页
 - [ ] links 页
 - [ ] archive 页
+- [ ] sidebar 增加文章目录
 
 后端
 
