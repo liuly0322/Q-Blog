@@ -10,10 +10,24 @@ useHead({
     { name: 'description', content: 'liuly 的静态博客' },
   ],
 })
+
+const themeOverrides = {
+  Layout: {
+    footerColor: '#ffffff',
+  },
+  // ...
+}
+
+const darkOverrides = {
+  Layout: {
+    color: 'rgb(24, 24, 28)',
+  },
+  // ...
+}
 </script>
 
 <template>
-  <n-config-provider :theme="isDark ? darkTheme : undefined">
+  <n-config-provider :theme="isDark ? darkTheme : undefined" :theme-overrides="isDark ? darkOverrides : themeOverrides">
     <router-view />
   </n-config-provider>
 </template>

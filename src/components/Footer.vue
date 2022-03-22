@@ -18,6 +18,7 @@ const toggleLocales = () => {
       <p>
         Copyright © 2021 2022 liuly
       </p>
+      <p>License: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA 4.0</a></p>
       <p>
         Powered by
         <a href="https://github.com/liuly0322/Q-Blog" color="blue" target="_blank" rel="noopener noreferrer">Q-Blog</a>
