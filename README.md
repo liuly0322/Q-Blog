@@ -15,7 +15,7 @@
   - 怎么实现根据当前是否是文章来确定是否维护 toc?
 - 页面主体
 
-组件库采用 naive, 天然的 dark mode 支持
+组件库采用 naive-ui, 提供 dark mode 支持
 
 这里吐槽一下 Vue 原生的 dark mode 支持已经非常完善了，UseDark 的逻辑非常智能，但是 element 也不支持
 
@@ -68,7 +68,7 @@
 
 - SEO 优化
 - 特殊界面采用什么样的格式，是在 Vue3 里写组件还是渲染后前端单独请求
-- 博客生成的配置，哪些需要在 Vue3 里配置
+- 博客生成的配置文件
 
 ## 开发进度
 
@@ -81,7 +81,13 @@ git init
 前端：
 
 - [x] header
-- [ ] footer
+- [ ] header 的响应式布局：移动端做一个可以展开的 menu
+- [x] footer
+- [ ] home 页
+- [ ] tags 页
+- [ ] tag 页
+- [ ] about 页
+- [ ] links 页
 - [ ] ...
 
 后端

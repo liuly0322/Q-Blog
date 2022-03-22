@@ -11,25 +11,23 @@ const toggleLocales = () => {
 </script>
 
 <template>
-  <header text-xl mt-6>
-    <router-link class="icon-btn mx-2" to="/" :title="t('button.home')">
-      <div i-carbon-campsite />
-    </router-link>
-
-    <button class="icon-btn mx-2 !outline-none" :title="t('button.toggle_dark')" @click="toggleDark()">
-      <div i="carbon-sun dark:carbon-moon" />
-    </button>
-
-    <a class="icon-btn mx-2" :title="t('button.toggle_langs')" @click="toggleLocales">
-      <div i-carbon-language />
-    </a>
-
-    <router-link class="icon-btn mx-2" to="/about" :title="t('button.about')">
-      <div i-carbon-dicom-overlay />
-    </router-link>
-
-    <a class="icon-btn mx-2" rel="noreferrer" href="https://github.com/antfu/vitesse" target="_blank" title="GitHub">
-      <div i-carbon-logo-github />
-    </a>
-  </header>
+  <footer>
+    <div>
+      <a href="https://github.com/liuly0322"><div i-ant-design-github inline-block style="font-size:xx-large" /></a>
+      <a @click="toggleDark()"><div i="carbon-sun dark:carbon-moon" inline-block style="font-size:xx-large" /></a>
+      <p>
+        Copyright © 2021 2022 liuly
+      </p>
+      <p>
+        Powered by
+        <a href="https://github.com/liuly0322/Q-Blog" color="blue" target="_blank" rel="noopener noreferrer">Q-Blog</a>
+      </p>
+    </div>
+  </footer>
 </template>
+
+<style scoped>
+footer {
+  text-align: center;
+}
+</style>

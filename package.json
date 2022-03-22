@@ -13,6 +13,7 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@iconify-json/ant-design": "^1.1.1",
     "@vueuse/core": "^8.1.2",
     "@vueuse/head": "^0.7.5",
     "element-plus": "^2.1.4",
