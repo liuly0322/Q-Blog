@@ -2,7 +2,7 @@
   "private": true,
   "packageManager": "pnpm@6.32.3",
   "scripts": {
-    "build": "vite-ssg build",
+    "build": "vite build",
     "dev": "vite --port 3333 --open",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -16,7 +16,6 @@
     "@iconify-json/ant-design": "^1.1.1",
     "@vueuse/core": "^8.1.2",
     "@vueuse/head": "^0.7.5",
-    "element-plus": "^2.1.4",
     "naive-ui": "^2.26.4",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.12",
