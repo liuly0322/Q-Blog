@@ -8,9 +8,9 @@
           src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
         />
         <span class="subtitle">Life is but code.</span>
-        <router-link to="/" class="title">
+        <span class="title">
           liuly 的博客
-        </router-link>
+        </span>
       </n-card>
       <n-menu
         v-model:value="activeKey"
