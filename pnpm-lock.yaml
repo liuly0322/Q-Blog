@@ -18,8 +18,10 @@ specifiers:
   eslint: ^8.11.0
   eslint-plugin-cypress: ^2.12.1
   https-localhost: ^4.7.1
+  katex: ^0.15.3
   markdown-it-link-attributes: ^4.0.0
   markdown-it-prism: ^2.2.3
+  markdown-it-texmath: ^0.9.7
   naive-ui: ^2.26.4
   nprogress: ^0.2.0
   pinia: ^2.0.12
@@ -48,6 +50,8 @@ dependencies:
   '@iconify-json/ant-design': registry.npmmirror.com/@iconify-json/ant-design/1.1.1
   '@vueuse/core': registry.npmmirror.com/@vueuse/core/8.1.2_vue@3.2.31
   '@vueuse/head': registry.npmmirror.com/@vueuse/head/0.7.5_vue@3.2.31
+  katex: registry.npmmirror.com/katex/0.15.3
+  markdown-it-texmath: registry.npmmirror.com/markdown-it-texmath/0.9.7
   naive-ui: registry.npmmirror.com/naive-ui/2.26.4_vue@3.2.31
   nprogress: registry.npmmirror.com/nprogress/0.2.0
   pinia: registry.npmmirror.com/pinia/2.0.12_typescript@4.6.2+vue@3.2.31
@@ -3599,6 +3603,13 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
+  registry.npmmirror.com/commander/8.3.0:
+    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/commander/-/commander-8.3.0.tgz}
+    name: commander
+    version: 8.3.0
+    engines: {node: '>= 12'}
+    dev: false
+
   registry.npmmirror.com/common-tags/1.8.2:
     resolution: {integrity: sha512-gk/Z852D2Wtb//0I+kRFNKKE9dIIVirjoqPoA1wJU+XePVXZfGeBpk45+A1rKO4Q43prqWBNY/MiIeRLbPWUaA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/common-tags/-/common-tags-1.8.2.tgz}
     name: common-tags
@@ -6514,6 +6525,15 @@ packages:
       object.assign: registry.npmmirror.com/object.assign/4.1.2
     dev: true
 
+  registry.npmmirror.com/katex/0.15.3:
+    resolution: {integrity: sha512-Al6V7RJsmjklT9QItyHWGaQCt+NYTle1bZwB1e9MR/tLoIT1MXaHy9UpfGSB7eaqDgjjqqRxQOaQGrALCrEyBQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/katex/-/katex-0.15.3.tgz}
+    name: katex
+    version: 0.15.3
+    hasBin: true
+    dependencies:
+      commander: registry.npmmirror.com/commander/8.3.0
+    dev: false
+
   registry.npmmirror.com/kind-of/6.0.3:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/kind-of/-/kind-of-6.0.3.tgz}
     name: kind-of
@@ -6752,6 +6772,12 @@ packages:
     dependencies:
       prismjs: registry.npmmirror.com/prismjs/1.27.0
     dev: true
+
+  registry.npmmirror.com/markdown-it-texmath/0.9.7:
+    resolution: {integrity: sha512-2oZ7WO+xQCvQpfCwxUsCzDpz5jRjiY+FbSJSVz+66+Z9NoPR7ljzUNaOp1CDHYj0JWx+drQLxO0XUjuSsuqc0A==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/markdown-it-texmath/-/markdown-it-texmath-0.9.7.tgz}
+    name: markdown-it-texmath
+    version: 0.9.7
+    dev: false
 
   registry.npmmirror.com/markdown-it/12.3.2:
     resolution: {integrity: sha512-TchMembfxfNVpHkbtriWltGWc+m3xszaRD0CZup7GFFhzIgQqxIfn3eGj1yZpfuflzPvfkt611B2Q/Bsk1YnGg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/markdown-it/-/markdown-it-12.3.2.tgz}

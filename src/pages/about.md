@@ -19,3 +19,8 @@ function vitesse() {
 ```
 
 Check out the [GitHub repo](https://github.com/antfu/vitesse) for more details.
+
+$f(x) = x^2$ mathjax to be done
+
+> try some other syntax
+> sounds great

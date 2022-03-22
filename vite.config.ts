@@ -70,6 +70,12 @@ export default defineConfig({
       markdownItSetup(md) {
         // https://prismjs.com/
         md.use(Prism)
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        md.use(require('markdown-it-texmath'), {
+          engine: require('katex'),
+          delimiters: 'dollars',
+          katexOptions: { macros: { '\\RR': '\\mathbb{R}' } },
+        })
         md.use(LinkAttributes, {
           matcher: (link: string) => /^https?:\/\//.test(link),
           attrs: {
