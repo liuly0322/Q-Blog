@@ -32,9 +32,9 @@
 │   └── links       // 友情链接
 ├── posts
 │   ├── post1
-│   └── post2       // 写的文章
-└── tags
-    └── tag         // 标签页
+│   └── post2       // 文章，会作为 component 渲染
+└── tags            // 总览所有标签
+    └── tag         // 具体标签页
 ```
 
 例如标签页会根据 url 参数来请求对应的 `assets/tag.json`
@@ -44,9 +44,6 @@
 ```plaintext
 .
 ├── assets              // 生成的静态资源文件夹
-│   ├── blogs
-│   │   ├── blog1.md    // 这里还没想好放 md 还是预渲染好的 html
-│   │   └── blog2.md
 │   ├── summary.json    // 博客所有文章的标题，摘要
 │   └── tags
 │       ├── tag1.json   // 每个 tag 对应的文章索引
@@ -66,7 +63,7 @@
 
 ## 目前的一些问题
 
-- SEO 优化
+- SEO: 现在 ViteSSG 由于 bug 似乎无法使用，暂时使用 Vite 构建
 - 特殊界面采用什么样的格式，是在 Vue3 里写组件还是渲染后前端单独请求
 - 博客生成的配置文件
 
@@ -81,14 +78,14 @@ git init
 前端：
 
 - [x] header
-- [ ] header 的响应式布局：移动端做一个可以展开的 menu
+- [x] header 的响应式布局：移动端做一个可以展开的 menu
 - [x] footer
 - [ ] home 页
 - [ ] tags 页
 - [ ] tag 页
 - [ ] about 页
 - [ ] links 页
-- [ ] ...
+- [ ] archive 页
 
 后端
 
