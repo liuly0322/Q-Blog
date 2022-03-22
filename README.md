@@ -80,6 +80,8 @@ git init
 - [x] header
 - [x] header 的响应式布局：移动端做一个可以展开的 menu
 - [x] footer
+- [x] 响应式布局的 sidebar
+- [ ] sidebar 增加音乐播放
 - [ ] home 页
 - [ ] tags 页
 - [ ] tag 页
