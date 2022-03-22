@@ -1,31 +1,31 @@
 <template>
-  <div />
+  <div>
+    <n-card v-if="hitokoto.hitokoto" title="一言">
+      <span>{{ hitokoto.hitokoto }}</span>
+      <n-card :bordered="false" style="text-align:right">
+        <span>—— {{ hitokoto.from_who }}「{{ hitokoto.from }}」</span>
+      </n-card>
+    </n-card>
+  </div>
 </template>
 
 <script setup lang="ts">
 
-const notes = ref([])
-const add_note = ref('')
-const url = '....../notes' // 调用的接口
+const hitokoto = ref({ from: '', hitokoto: '', from_who: '' })
+const url = 'https://v1.hitokoto.cn'
 
-const getNotes = async() => {
-  const resp = await axios.get(url)
-  notes.value = resp.data
+const getHitokoto = async() => {
+  if (localStorage.getItem('last_hitokoto_date') === String(new Date().getDate())) {
+    hitokoto.value = JSON.parse(localStorage.getItem('hitokoto_data')!)
+    return
+  }
+  const { error, data } = await useFetch(url).get().json()
+  if (!(error.value)) {
+    hitokoto.value = data.value
+    localStorage.setItem('last_hitokoto_date', String(new Date().getDate()))
+    localStorage.setItem('hitokoto_data', JSON.stringify(hitokoto.value))
+  }
 }
 
-const addNote = async() => {
-  await axios.post(url, {
-    create_time: new Date().toLocaleString(),
-    content: add_note.value,
-  })
-  add_note.value = ''
-  getNotes()
-}
-
-const deleteNote = async(id) => {
-  await axios.delete(`${url}/${id}`)
-  getNotes()
-}
-
-onMounted(getNotes)
+onMounted(getHitokoto)
 </script>
