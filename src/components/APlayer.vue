@@ -6,7 +6,6 @@
 import APlayer from 'aplayer-ts'
 import 'aplayer-ts/dist/APlayer.min.css'
 import type { PropType } from '@vue/runtime-core'
-import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
 const playerRef = ref()
 let instance: APlayer
@@ -150,9 +149,7 @@ const songInit = async function() {
 }
 
 // 初始化
-onMounted(() => {
-  nextTick(songInit)
-})
+onMounted(songInit)
 // 销毁
 onBeforeUnmount(() => {
   instance.destroy()
