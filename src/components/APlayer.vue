@@ -108,8 +108,8 @@ const props = defineProps({
   },
   // 列表最大高度
   listMaxHeight: {
-    type: Number as PropType<number>,
-    default: 100,
+    type: String as PropType<String>,
+    default: '250px',
   },
   // 存储播放器设置的 localStorage key
   storageName: {
