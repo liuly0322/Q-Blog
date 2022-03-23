@@ -31,3 +31,9 @@ const getHitokoto = async() => {
 
 onMounted(getHitokoto)
 </script>
+
+<style scoped>
+.n-card {
+  margin: 0 0 24px 0;
+}
+</style>

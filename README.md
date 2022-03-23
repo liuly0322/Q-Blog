@@ -82,7 +82,7 @@ git init
 - [x] footer
 - [x] 响应式布局的 sidebar
 - [x] sidebar 增加音乐播放
-- [ ] 发布 / 别的什么方式处理自己魔改过后的 aplayer 包？增加 ts 支持
+- [x] npm 发布自己魔改过后的 aplayer 包, 增加 ts 支持
 - [ ] home 页
 - [ ] tags 页
 - [ ] tag 页
