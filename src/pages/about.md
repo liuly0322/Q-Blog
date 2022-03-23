@@ -1,28 +1,28 @@
 ---
-title: About
+title: 关于
 ---
 
-<div class="text-center">
-  <!-- You can use Vue components inside markdown -->
-  <div i-carbon-dicom-overlay class="text-4xl -mb-6 m-auto" />
-  <h3>About</h3>
-</div>
+## 网站信息
 
-## test anchor
+基于 [Vitesse](https://github.com/antfu/vitesse) 这一 Vue3 + Vite2 起步项目，搭建
 
-[Vitesse](https://github.com/antfu/vitesse) is an opinionated [Vite](https://github.com/vitejs/vite) starter template made by [@antfu](https://github.com/antfu) for mocking apps swiftly. With **file-based routing**, **components auto importing**, **markdown support**, I18n, PWA and uses **UnoCSS** for styling and icons.
+实现特性：
 
-```js
-// syntax highlighting example
-function vitesse() {
-  const foo = 'bar'
-  console.log(foo)
-}
-```
+- 响应式布局，暗黑模式，得益于 [Naive UI](https://github.com/TuSimple/naive-ui) 这一制作精良文档良心的组件库
+- 单页面路由（~~可以一直听歌~~）
+- 文章目录
+- $TeX$ 语法支持，通过 $KaTeX$ 实现
 
-Check out the [GitHub repo](https://github.com/antfu/vitesse) for more details.
+源代码见 [Q-Blog](https://github.com/liuly0322/Q-Blog)
 
-$f(x) = x^2$ mathjax to be done
+## 作者信息
 
-> try some other syntax
-> sounds great
+见 [个人主页](http://home.ustc.edu.cn/~liuly0322/)
+
+## 联系方式
+
+* email: liuly0322@mail.ustc.edu.cn
+
+* QQ: 453026205
+
+* github: https://github.com/liuly0322

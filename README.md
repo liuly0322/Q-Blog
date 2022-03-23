@@ -86,8 +86,8 @@ git init
 - [ ] home 页
 - [ ] tags 页
 - [ ] tag 页
-- [ ] about 页
-- [ ] links 页
+- [x] about 页
+- [x] links 页
 - [ ] archive 页
 - [ ] sidebar 增加文章目录
 
