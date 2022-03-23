@@ -7,7 +7,7 @@
       </n-card>
     </n-card>
     <n-card title="我的歌单">
-      <a-player song-server="tencent" song-id="2363529455" />
+      <a-player song-server="tencent" song-id="2363529455" order="random" />
     </n-card>
   </div>
 </template>

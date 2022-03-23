@@ -1,11 +1,9 @@
 <template>
   <n-layout-header><Header text-gray-700 dark:text-gray-200 /></n-layout-header>
   <n-layout has-sider sider-placement="right">
-    <n-layout-content content-style="padding: 24px;">
-      <main class="px-4 py-10 text-center text-gray-700 dark:text-gray-200">
+    <n-layout-content content-style="padding: 0 24px;">
+      <main class="px-6 pb-10 text-center text-gray-700 dark:text-gray-200">
         <router-view />
-
-        <Counter :initial="10" />
       </main>
     </n-layout-content>
     <n-layout-sider
