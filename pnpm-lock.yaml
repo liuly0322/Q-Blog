@@ -12,7 +12,7 @@ specifiers:
   '@vue/test-utils': ^2.0.0-rc.18
   '@vueuse/core': ^8.1.2
   '@vueuse/head': ^0.7.5
-  aplayer: ^1.10.1
+  aplayer-ts: ^1.0.2
   critters: ^0.0.16
   cross-env: ^7.0.3
   cypress: ^9.5.2
@@ -51,7 +51,7 @@ dependencies:
   '@iconify-json/ant-design': registry.npmmirror.com/@iconify-json/ant-design/1.1.1
   '@vueuse/core': registry.npmmirror.com/@vueuse/core/8.1.2_vue@3.2.31
   '@vueuse/head': registry.npmmirror.com/@vueuse/head/0.7.5_vue@3.2.31
-  aplayer: registry.npmmirror.com/aplayer/1.10.1
+  aplayer-ts: registry.npmmirror.com/aplayer-ts/1.0.2
   katex: registry.npmmirror.com/katex/0.15.3
   markdown-it-texmath: registry.npmmirror.com/markdown-it-texmath/0.9.7
   naive-ui: registry.npmmirror.com/naive-ui/2.26.4_vue@3.2.31
@@ -1780,11 +1780,11 @@ packages:
       - supports-color
     dev: true
 
-  registry.npmmirror.com/@intlify/bundle-utils/2.2.0_vue-i18n@9.1.9:
-    resolution: {integrity: sha512-qVuN7+c84UB6rlLHSued2J9R86LG1rHg6ZibCghGMyPXnW0nOuIfkUFf1F7tXIqfMXjIPeJzlbpmzjWTI2z9Kw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@intlify/bundle-utils/-/bundle-utils-2.2.0.tgz}
-    id: registry.npmmirror.com/@intlify/bundle-utils/2.2.0
+  registry.npmmirror.com/@intlify/bundle-utils/2.2.1_vue-i18n@9.1.9:
+    resolution: {integrity: sha512-8n8zhYEKypS+KP22KUAC6BnQifJDDWUGcn3OVPqsThqMMucU22MShGvOuiKqQ4AeT7XQ5O4pudlJmxv3L91JrQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@intlify/bundle-utils/-/bundle-utils-2.2.1.tgz}
+    id: registry.npmmirror.com/@intlify/bundle-utils/2.2.1
     name: '@intlify/bundle-utils'
-    version: 2.2.0
+    version: 2.2.1
     engines: {node: '>= 12'}
     peerDependencies:
       petite-vue-i18n: '*'
@@ -1895,7 +1895,7 @@ packages:
       vue-i18n:
         optional: true
     dependencies:
-      '@intlify/bundle-utils': registry.npmmirror.com/@intlify/bundle-utils/2.2.0_vue-i18n@9.1.9
+      '@intlify/bundle-utils': registry.npmmirror.com/@intlify/bundle-utils/2.2.1_vue-i18n@9.1.9
       '@intlify/shared': registry.npmmirror.com/@intlify/shared/9.2.0-beta.32
       '@rollup/pluginutils': registry.npmmirror.com/@rollup/pluginutils/4.2.0
       debug: registry.npmmirror.com/debug/4.3.4
@@ -2954,10 +2954,10 @@ packages:
       picomatch: registry.npmmirror.com/picomatch/2.3.1
     dev: true
 
-  registry.npmmirror.com/aplayer/1.10.1:
-    resolution: {integrity: sha512-HAfyxgCUTLAqtYlxzzK9Fyqg6y+kZ9CqT1WfeWE8FSzwspT6oBqWOZHANPHF3RGTtC33IsyEgrfthPDzU5r9kQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/aplayer/-/aplayer-1.10.1.tgz}
-    name: aplayer
-    version: 1.10.1
+  registry.npmmirror.com/aplayer-ts/1.0.2:
+    resolution: {integrity: sha512-++islGf/9QRFU5Twva+rrgmaJgzwU9cMcPJBtrrjPyoDniBwIbXaNpQ5SKUmCRJ+Ih67Ama1oOxngmocgWNHgw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/aplayer-ts/-/aplayer-ts-1.0.2.tgz}
+    name: aplayer-ts
+    version: 1.0.2
     dependencies:
       balloon-css: registry.npmmirror.com/balloon-css/0.5.2
       promise-polyfill: registry.npmmirror.com/promise-polyfill/7.1.0

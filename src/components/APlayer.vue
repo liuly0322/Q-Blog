@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts" setup>
-import APlayer from 'aplayer'
-import 'aplayer/dist/APlayer.min.css'
+import APlayer from 'aplayer-ts'
+import 'aplayer-ts/dist/APlayer.min.css'
 import type { PropType } from '@vue/runtime-core'
 import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
@@ -130,7 +130,6 @@ const songInit = async function() {
   const url = `https://api.i-meto.com/meting/api?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
   const { data } = await useFetch(url).get().json()
   const audioList = (data.value as Array<Meting>).map((value: Meting) => new Audio(value.author, value.title, value.url, value.pic, value.lrc))
-  // eslint-disable-next-line new-cap
   instance = new APlayer({
     container: playerRef.value,
     fixed: props.fixed,
