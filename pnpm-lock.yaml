@@ -20,6 +20,7 @@ specifiers:
   eslint-plugin-cypress: ^2.12.1
   https-localhost: ^4.7.1
   katex: ^0.15.3
+  markdown-it-anchor: ^8.4.1
   markdown-it-link-attributes: ^4.0.0
   markdown-it-prism: ^2.2.3
   markdown-it-texmath: ^0.9.7
@@ -53,6 +54,7 @@ dependencies:
   '@vueuse/head': registry.npmmirror.com/@vueuse/head/0.7.5_vue@3.2.31
   aplayer-ts: registry.npmmirror.com/aplayer-ts/1.0.3
   katex: registry.npmmirror.com/katex/0.15.3
+  markdown-it-anchor: registry.npmmirror.com/markdown-it-anchor/8.4.1
   markdown-it-texmath: registry.npmmirror.com/markdown-it-texmath/0.9.7
   naive-ui: registry.npmmirror.com/naive-ui/2.26.4_vue@3.2.31
   nprogress: registry.npmmirror.com/nprogress/0.2.0
@@ -6775,6 +6777,15 @@ packages:
     dependencies:
       sourcemap-codec: registry.npmmirror.com/sourcemap-codec/1.4.8
     dev: true
+
+  registry.npmmirror.com/markdown-it-anchor/8.4.1:
+    resolution: {integrity: sha512-sLODeRetZ/61KkKLJElaU3NuU2z7MhXf12Ml1WJMSdwpngeofneCRF+JBbat8HiSqhniOMuTemXMrsI7hA6XyA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/markdown-it-anchor/-/markdown-it-anchor-8.4.1.tgz}
+    name: markdown-it-anchor
+    version: 8.4.1
+    peerDependencies:
+      '@types/markdown-it': '*'
+      markdown-it: '*'
+    dev: false
 
   registry.npmmirror.com/markdown-it-link-attributes/4.0.0:
     resolution: {integrity: sha512-ssjxSLlLfQBkX6BvAx1rCPrx7ZoK91llQQvS3P7KXvlbnVD34OUkfXwWecN7su/7mrI/HOW0RI5szdJOIqYC3w==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/markdown-it-link-attributes/-/markdown-it-link-attributes-4.0.0.tgz}

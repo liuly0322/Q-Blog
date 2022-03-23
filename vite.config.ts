@@ -11,6 +11,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import VueI18n from '@intlify/vite-plugin-vue-i18n'
 import Inspect from 'vite-plugin-inspect'
 import Prism from 'markdown-it-prism'
+import anchor from 'markdown-it-anchor'
 import LinkAttributes from 'markdown-it-link-attributes'
 import Unocss from 'unocss/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
@@ -70,6 +71,7 @@ export default defineConfig({
       markdownItSetup(md) {
         // https://prismjs.com/
         md.use(Prism)
+        md.use(anchor)
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         md.use(require('markdown-it-texmath'), {
           engine: require('katex'),
