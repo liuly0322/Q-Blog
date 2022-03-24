@@ -1,10 +1,6 @@
-<script setup lang="ts">
-const { t } = useI18n()
-</script>
-
 <template>
   <div>
-    {{ t('not-found') }}
+    <n-result status="404" title="404 资源不存在" description="生活总归带点荒谬" />
   </div>
 </template>
 
