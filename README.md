@@ -8,7 +8,7 @@
 
 ## 项目说明
 
-一个静态博客生成器
+一个使用 Vue3.0 的静态博客站示例
 
 前端参考 [Vitesse](https://github.com/antfu/vitesse) 的 Vite2 + Vue3 模板
 
@@ -34,32 +34,25 @@
     └── [tag].vue   // 具体标签页
 ```
 
-例如标签页会根据 url 参数来请求对应的 `assets/tag.json`
+梳理一下后端需要做的工作，主要是解析资源文件夹的 markdown 博客, 生成索引，于是就产生了如下的问题：
 
-暂定 "后端" 文件结构：
+- 是否可以用 ts 写成 vite 插件的类似形式，由 `pnpm build` 一键构建？
+  - 知识水平有限，暂时不会实现
+- 需要产生哪些索引文件？这就需要具体分析前端各处的需求
+  - home 页：   (标题，摘要，Option<标签s>) for 博客 in 博客s
+  - tags 页：   数量                      for 标签 in 标签s
+  - tag 页：    (标题，时间)               for 博客 in 标签对应的博客s
+  - archive 页：(标题，时间)               for 博客 in 博客s
+  - search 框： 标题                      for 博客 in 博客s
 
-```plaintext
-.
-├── assets              // 生成的静态资源文件夹
-│   ├── summary.json    // 博客所有文章的标题，(摘要)，时间，url
-│   │                   // 用于主页，归档，侧边栏搜索
-│   │                   // 考虑通过注入方式实现？ APP.vue 的 setup 里单次载入
-│   └── tags
-│       ├── tag1.json   // 每个 tag 对应的文章 url
-│       └── tag2.json
-└── posts
-    ├── blog1.md        // 在这里写博客
-    └── blog2.md
-```
+此部分正在计划中
 
-大部分工作还是 Vue 完成，Python 主要负责生成索引文件
-
-如果有啥好建议欢迎提 issue
-
-## 目前的一些问题
+## 目前的其他问题
 
 - SEO: 现在 ViteSSG bug 太多暂时无法 build，使用 Vite 替代
-- 博客支持统一的自定义配置文件？
+- 是否考虑博客支持统一的自定义配置文件，拓展成一个可用的博客框架
+
+如果有啥好建议欢迎提 issue
 
 ## 开发进度
 
