@@ -1,79 +1,71 @@
 # Q Blog
 
+<p align='center'>
+  <img src='logo-512.png' alt='Q-Blog - Quicker and Cute' width='100'/>
+</p>
+
+~~\#66ccff~~
+
 ## 项目说明
 
 一个静态博客生成器
 
 前端参考 [Vitesse](https://github.com/antfu/vitesse) 的 Vite2 + Vue3 模板
 
-博客后端（？）采用 python 对 md 文件进行解析，生成分页相关的信息（相当于后端服务器做了个缓存），仍然生成的是静态资源，前端通过同源请求获取，并渲染界面
+博客后端（？）采用 python 对 md 文件 YAML front matter 进行解析，生成相应 json 静态文件，前端通过同源请求获取
 
-暂定前端页面结构：
+组件库采用 naive-ui, Vue3 + TS 写起来很爽（）
 
-- 公共顶栏，起导航作用（需要做响应式适配）
-- 公共侧栏，文章中需要额外增加目录功能，公共的可以是音乐，一言等
-  - 怎么实现根据当前是否是文章来确定是否维护 toc?
-- 页面主体
+- 响应式布局
+- 夜间模式
 
-组件库采用 naive-ui, 提供 dark mode 支持
-
-这里吐槽一下 Vue 原生的 dark mode 支持已经非常完善了，UseDark 的逻辑非常智能，但是 element 也不支持
-
-暂定前端网页路由结构：
+前端网页路由结构：
 
 ```plaintext
 .
-├── about
-│   └── about       // 关于
-├── archive
-│   └── archive     // 归档，展示标题和日期
-├── index           // 主页，动态分页
-├── links
-│   └── links       // 友情链接
-├── posts
-│   ├── post1
-│   └── post2       // 文章，会作为 component 渲染
+├── about.md        // 关于页面
+├── archive.vue     // 归档，只需要标题，发布时间等信息
+├── index           // 主页，分页如何实现？单页面 / 额外增添查询参数 / 路由
+├── links.vue       // 友情链接
+├── posts           // 文件夹，该目录本身没有意义
+│   ├── post1.md
+│   └── post2.md    // md 作为组件渲染
 └── tags            // 总览所有标签
-    └── tag         // 具体标签页
+    └── [tag].vue   // 具体标签页
 ```
 
 例如标签页会根据 url 参数来请求对应的 `assets/tag.json`
 
-暂定 "后端" 结构：
+暂定 "后端" 文件结构：
 
 ```plaintext
 .
 ├── assets              // 生成的静态资源文件夹
-│   ├── summary.json    // 博客所有文章的标题，摘要
+│   ├── summary.json    // 博客所有文章的标题，(摘要)，时间，url
+│   │                   // 用于主页，归档，侧边栏搜索
+│   │                   // 考虑通过注入方式实现？ APP.vue 的 setup 里单次载入
 │   └── tags
-│       ├── tag1.json   // 每个 tag 对应的文章索引
+│       ├── tag1.json   // 每个 tag 对应的文章 url
 │       └── tag2.json
-├── posts
-│   ├── blog1.md        // 在这里写博客
-│   └── blog2.md
-└── pages
-    ├── about.md        // 关于
-    ├── links.md        // 友情链接
-    └── ......          // 更多特殊界面
+└── posts
+    ├── blog1.md        // 在这里写博客
+    └── blog2.md
 ```
 
-感觉这个架构可以充分利用好前端框架的灵活性的同时降低系统的复杂度（无需维护数据库）
+大部分工作还是 Vue 完成，Python 主要负责生成索引文件
 
 如果有啥好建议欢迎提 issue
 
 ## 目前的一些问题
 
-- SEO: 现在 ViteSSG 由于 bug 似乎无法使用，暂时使用 Vite 构建
-- 特殊界面采用什么样的格式，是在 Vue3 里写组件还是渲染后前端单独请求
-- 博客生成的配置文件
+- SEO: 现在 ViteSSG bug 太多暂时无法 build，使用 Vite 替代
+- 博客支持统一的自定义配置文件？
 
 ## 开发进度
 
-```bash
-git init
-```
-
 争取不鸽（）
+
+成果暂时在 [这个页面](https://liuly0322.github.io/)
 
 前端：
 
@@ -94,14 +86,41 @@ git init
 
 后端
 
-- [ ] parser
-- [ ] ...
+- [ ] 暂未开始
 
-## Github Pages 的一点坑
+## 食用方法
 
-根据 [taoky](https://github.com/taoky) 建议，考虑部署在 Github Pages 上，后期也方便买域名
+clone 本仓库后，确保 node 版本号大于等于 14, 并已经安装 npm
 
-但是一些问题值得记录：
+```bash
+npm install -g pnpm # 如果还未安装 pnpm
+pnpm i
+```
 
-- Github Pages 默认会用 `jekyll` 构建静态页面，所以空文件和以下划线开头的文件都会被忽略，解决办法是网页根目录下添加 `.nojekyll` 文件
-- 单页面应用的动态路由问题。参考[这篇文章](https://huishun.medium.com/how-to-deploy-a-vue-js-application-with-dynamic-routing-on-github-pages-3d36f4644e54)
+### 开发
+
+```bash
+pnpm run dev
+```
+
+### 部署
+
+**注意：**
+
+**当前项目只针对默认部署在根目录下的情形，其余情况暂未兼容**
+
+```bash
+pnpm run build
+```
+
+即可生成静态文件在 dists 文件夹下，自行部署即可
+
+默认路由方式 History 而不是 Hash，这意味着自行部署可能需要对服务器进行相关设置，请求默认解析到 `index.html`
+
+#### GitHub Pages
+
+根据 [taoky](https://github.com/taoky) 建议，可以选择部署在 Github Pages 上，后期也方便买域名
+
+Github Pages 会把找不到文件的请求解析到 `404.html`，本项目已经针对此做了一定的配置
+
+如果你也有兴趣部署在 Github Pages 上，注意需要在网页静态资源的根目录下添加 `.nojekyll` 文件
