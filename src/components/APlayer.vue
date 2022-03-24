@@ -147,12 +147,12 @@ const fakeLoadingBar = async() => {
       break
   }
   while (loadingStatus.value !== 'error' && loadingStatus.value !== 'success') {
-    await sleep(200)
-    loadingTime.value += 200
     if (loadingTime.value > 2000) {
       loadingStatus.value = 'warning'
       return
     }
+    await sleep(200)
+    loadingTime.value += 200
   }
 }
 
