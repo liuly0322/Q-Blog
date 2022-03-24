@@ -1,7 +1,7 @@
 # Q Blog
 
 <p align='center'>
-  <img src='logo-512.png' alt='Q-Blog - Quicker and Cute' width='100'/>
+  <img src='docs/logo-512.png' alt='Q-Blog - Quicker and Cute' width='100'/>
 </p>
 
 ~~\#66ccff~~
