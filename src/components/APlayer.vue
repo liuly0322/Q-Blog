@@ -1,5 +1,12 @@
 <template>
   <div ref="playerRef" />
+  <n-progress
+    v-if="loadingStatus !== 'success'"
+    type="line"
+    :status="loadingStatus"
+    :percentage="percentage"
+    :show-indicator="false"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -7,7 +14,12 @@ import APlayer from 'aplayer-ts'
 import 'aplayer-ts/dist/APlayer.min.css'
 import type { PropType } from '@vue/runtime-core'
 
+type Status = 'success' | 'error' | 'warning' | undefined
+
 const playerRef = ref()
+const percentage = ref(0)
+const loadingTime = ref(0)
+const loadingStatus = ref(undefined as Status)
 let instance: APlayer
 
 class Audio {
@@ -125,9 +137,33 @@ interface Meting {
   lrc?: String
 }
 
-const songInit = async function() {
+const fakeLoadingBar = async() => {
+  const sleep = (ms: number) => new Promise((resolve, reject) => setTimeout(resolve, ms))
+  while (true) {
+    await sleep(200)
+    loadingTime.value += 200
+    percentage.value += Math.random() * 20
+    if (percentage.value > 80)
+      break
+  }
+  while (loadingStatus.value !== 'error' && loadingStatus.value !== 'success') {
+    await sleep(200)
+    loadingTime.value += 200
+    if (loadingTime.value > 2000) {
+      loadingStatus.value = 'warning'
+      return
+    }
+  }
+}
+
+const APlayerInit = async function() {
+  fakeLoadingBar()
   const url = `https://api.i-meto.com/meting/api?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
-  const { data } = await useFetch(url).get().json()
+  const { data, error } = await useFetch(url).get().json()
+  if (error.value) {
+    loadingStatus.value = 'error'
+    percentage.value = 100
+  }
   const audioList = (data.value as Array<Meting>).map((value: Meting) => new Audio(value.author, value.title, value.url, value.pic, value.lrc))
   instance = new APlayer({
     container: playerRef.value,
@@ -146,10 +182,11 @@ const songInit = async function() {
     storageName: props.storageName,
     audio: audioList,
   })
+  loadingStatus.value = 'success'
 }
 
 // 初始化
-onMounted(songInit)
+onMounted(() => nextTick(APlayerInit))
 // 销毁
 onBeforeUnmount(() => {
   instance.destroy()
