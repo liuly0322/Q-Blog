@@ -1,7 +1,7 @@
 <template>
   <n-layout-header><Header text-gray-700 dark:text-gray-200 /></n-layout-header>
   <n-layout has-sider sider-placement="right">
-    <n-layout-content content-style="padding: 0 24px;">
+    <n-layout-content content-style="padding: 0 24px;min-width: 340px;overflow: hidden;">
       <main class="px-6 pb-10 text-center text-gray-700 dark:text-gray-200">
         <router-view />
       </main>
@@ -12,7 +12,7 @@
       :collapsed-width="14"
       :width="320"
       :native-scrollbar="true"
-      :default-collapsed="screen_width_phone"
+      :default-collapsed="windowWidth < 800"
       :on-after-enter="() => sidebar_hidden=false"
       :on-update:collapsed="on_update"
       show-trigger="arrow-circle"
@@ -22,10 +22,11 @@
     </n-layout-sider>
   </n-layout>
   <n-layout-footer><Footer text-gray-700 dark:text-gray-200 /></n-layout-footer>
+  <n-back-top v-if="windowWidth <= 1200" :show="true" style="z-index:1" />
 </template>
 
 <script setup lang="ts">
-const screen_width_phone = ref(window.innerWidth < 800)
+const windowWidth = ref(window.innerWidth)
 const sidebar_hidden = ref(window.innerWidth < 800)
 const on_update = (collapsed: boolean) => sidebar_hidden.value = true
 </script>
