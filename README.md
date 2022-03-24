@@ -89,6 +89,7 @@ git init
 - [x] about 页
 - [x] links 页
 - [ ] archive 页
+- [ ] sidebar 增加搜索功能
 - [ ] sidebar 增加文章目录
 
 后端
