@@ -96,3 +96,12 @@ git init
 
 - [ ] parser
 - [ ] ...
+
+## Github Pages 的一点坑
+
+根据 [taoky](https://github.com/taoky) 建议，考虑部署在 Github Pages 上，后期也方便买域名
+
+但是一些问题值得记录：
+
+- Github Pages 似乎不会响应对空文件的请求，但是 css 的 preload 需要空文件（如果这个 router 组件恰好没写 style 的话）
+- 单页面应用的动态路由问题。参考[这篇文章](https://huishun.medium.com/how-to-deploy-a-vue-js-application-with-dynamic-routing-on-github-pages-3d36f4644e54)
