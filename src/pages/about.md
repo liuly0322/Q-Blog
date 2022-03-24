@@ -26,3 +26,9 @@ title: 关于
 * QQ: 453026205
 
 * github: https://github.com/liuly0322
+
+<style scoped>
+.no-rules-in-this-file {
+  display: block;
+}
+</style>

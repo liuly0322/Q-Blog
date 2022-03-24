@@ -47,3 +47,10 @@ watchEffect(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.no-rules-in-this-file {
+  /* empty role */
+  display: block;
+}
+</style>

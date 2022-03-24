@@ -4,6 +4,13 @@
   </div>
 </template>
 
+<style scoped>
+/* some empty style */
+.no-rules-in-this-file {
+  display: block;
+}
+</style>
+
 <route lang="yaml">
 meta:
   layout: 404

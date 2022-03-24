@@ -12,3 +12,9 @@ const router = useRouter()
     </div>
   </main>
 </template>
+
+<style scoped>
+.no-rules-in-this-file {
+  display: block;
+}
+</style>
