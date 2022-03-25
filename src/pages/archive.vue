@@ -5,7 +5,7 @@ const summary = inject(SummaryKey)
 </script>
 
 <template>
-  <n-card mt-10 title="归档" size="small" :segmented="true">
+  <n-card title="归档" size="small" :segmented="true">
     <div class="card-list">
       <template v-for="post in summary" :key="post.url">
         <router-link class="inside-card" :to="`/posts/${post.url}`" replace>
@@ -27,7 +27,7 @@ const summary = inject(SummaryKey)
 
 <style scoped>
 .card-list {
-  columns: 340px 3;
+  columns: 300px 3;
 }
 
 .inside-card {

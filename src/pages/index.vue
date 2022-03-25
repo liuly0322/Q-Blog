@@ -1,13 +1,8 @@
 <script setup lang="ts">
-import { useUserStore } from '~/stores/user'
-
-const user = useUserStore()
-const name = ref(user.savedName)
 
 const router = useRouter()
 const go = () => {
-  if (name.value)
-    router.push(`/hi/${encodeURIComponent(name.value)}`)
+  router.push(`/hi/${encodeURIComponent('123')}`)
 }
 </script>
 
@@ -47,7 +42,6 @@ const go = () => {
     <div>
       <button
         btn m-3 text-sm
-        :disabled="!name"
         @click="go"
       >
         {{ 123 }}

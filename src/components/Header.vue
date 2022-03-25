@@ -8,7 +8,7 @@
           src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
         />
         <span class="subtitle">Life is but code.</span>
-        <n-dropdown trigger="hover" :options="phoneOptions" @select="phoneNacSelect">
+        <n-dropdown trigger="click" :options="phoneOptions" @select="phoneNacSelect">
           <n-button text class="nav-phone">
             <div i-carbon-menu inline-block />
           </n-button>

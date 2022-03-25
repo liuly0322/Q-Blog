@@ -1,5 +1,5 @@
 <template>
-  <n-card mt-10 title="友情链接">
+  <n-card title="友情链接">
     <template #cover>
       <img src="/link-banner.jpg">
     </template>

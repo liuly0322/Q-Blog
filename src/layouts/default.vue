@@ -1,8 +1,8 @@
 <template>
   <n-layout-header><Header text-gray-700 dark:text-gray-200 /></n-layout-header>
-  <n-layout has-sider sider-placement="right">
-    <n-layout-content content-style="padding: 0 24px;min-width: 340px;overflow: hidden;">
-      <main class="px-6 pb-10 text-center text-gray-700 dark:text-gray-200">
+  <n-layout style="height: 100vh;" has-sider sider-placement="right">
+    <n-layout-content :native-scrollbar="false" content-style="padding: 0 24px;min-width: 340px;overflow: hidden;">
+      <main mt-10 class="px-6 pb-10 text-center text-gray-700 dark:text-gray-200">
         <router-view />
       </main>
     </n-layout-content>
@@ -11,7 +11,7 @@
       collapse-mode="width"
       :collapsed-width="14"
       :width="320"
-      :native-scrollbar="true"
+      :native-scrollbar="false"
       :default-collapsed="windowWidth < 800"
       :on-after-enter="() => sidebar_hidden=false"
       :on-update:collapsed="on_update"
