@@ -5,7 +5,7 @@ import { toggleDark } from '~/composables'
 <template>
   <footer>
     <div>
-      <a href="https://github.com/liuly0322"><div i-ant-design-github inline-block style="font-size:xx-large" /></a>
+      <a href="https://github.com/liuly0322" target="_blank"><div i-ant-design-github inline-block style="font-size:xx-large" /></a>
       <a @click="toggleDark()"><div i="carbon-sun dark:carbon-moon" inline-block style="font-size:xx-large" /></a>
       <p>
         Copyright © 2021 2022 liuly
