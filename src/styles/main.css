@@ -1,5 +1,4 @@
-@import './markdown.css';
-@import './aplayer.css';
+@import "./md.css";
 
 html,
 body,
@@ -16,7 +15,12 @@ body,
 }
 
 html.dark {
+  color: #e5e7eb;
   background: rgb(24, 24, 28);
+}
+
+.prose {
+  scroll-behavior: smooth;
 }
 
 #nprogress {
@@ -24,7 +28,7 @@ html.dark {
 }
 
 #nprogress .bar {
-  background: rgb(13,148,136);
+  background: rgb(13, 148, 136);
   opacity: 0.75;
   position: fixed;
   z-index: 1031;
@@ -34,7 +38,75 @@ html.dark {
   height: 2px;
 }
 
+/*
+* 全局滚动条
+*/
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+  background-color: rgb(246, 247, 248);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(233, 236, 239);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgb(246, 247, 248);
+  border-radius: 10px;
+}
+
+html.dark ::-webkit-scrollbar,
+html.dark ::-webkit-scrollbar-track {
+  background-color: #212529;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background-color: #343a40;
+}
+
 .katex-display {
   overflow-x: scroll;
   overflow-y: hidden;
+}
+
+/* Aplayer */
+html.dark .aplayer {
+  background: rgb(24, 24, 28);
+}
+
+html.dark .aplayer .aplayer-list ol li {
+  border-top: 1px solid #161616;
+}
+
+html.dark .aplayer .aplayer-list ol li.aplayer-list-light {
+  background: #161616;
+}
+
+html.dark .aplayer.aplayer-withlist .aplayer-info {
+  border-bottom: 1px solid #161616;
+}
+
+html.dark .aplayer .aplayer-lrc::before,
+html.dark .aplayer .aplayer-lrc::after {
+  background: linear-gradient(
+    180deg,
+    hsla(240, 7.7%, 10.2%, 0) 0,
+    hsla(240, 7.7%, 10.2%, 0.8)
+  );
+}
+
+html.dark .aplayer .aplayer-list ol li:hover {
+  background: #101010;
+}
+
+blockquote {
+  color: #646464;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 0;
+  padding-left: 15px;
+  padding-right: 10px;
+  border-left: 3px solid #ccc;
 }

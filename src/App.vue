@@ -2,26 +2,15 @@
 import { darkTheme } from 'naive-ui'
 import Summary from '../assets/summary.json'
 import { SummaryKey } from '~/types'
-import { isDark } from '~/composables'
+const { isDark, toggleDark } = useDarks()
 
 provide(SummaryKey, Summary)
 
 // https://github.com/vueuse/head
 // you can use this to manipulate the document head in any components,
 // they will be rendered correctly in the html results with vite-ssg
-useHead({
-  title: 'Q-Blog',
-  meta: [
-    { name: 'description', content: 'liuly 的静态博客' },
-  ],
-})
 
-const themeOverrides = {
-  Layout: {
-    footerColor: '#ffffff',
-  },
-  // ...
-}
+const themeOverrides = {}
 
 const darkOverrides = {
   Layout: {
@@ -29,10 +18,14 @@ const darkOverrides = {
   },
   // ...
 }
+
+const theme = computed(() => isDark.value ? darkTheme : undefined)
+
+const Overrides = computed(() => isDark.value ? darkOverrides : themeOverrides)
 </script>
 
 <template>
-  <n-config-provider :theme="isDark ? darkTheme : undefined" :theme-overrides="isDark ? darkOverrides : themeOverrides">
+  <n-config-provider :theme="theme" :theme-overrides="Overrides">
     <router-view />
   </n-config-provider>
 </template>

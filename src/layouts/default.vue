@@ -2,7 +2,7 @@
   <n-layout-header><Header text-gray-700 dark:text-gray-200 /></n-layout-header>
   <n-layout style="height: 100vh;" has-sider sider-placement="right">
     <n-layout-content :native-scrollbar="false" content-style="padding: 0 24px;min-width: 340px;overflow: hidden;">
-      <main mt-10 class="px-6 pb-10 text-center text-gray-700 dark:text-gray-200">
+      <main class="mt-10 px-6 pb-10 text-center text-gray-700 dark:text-gray-200">
         <router-view />
       </main>
     </n-layout-content>
@@ -21,8 +21,6 @@
       <Sidebar :hidden="sidebar_hidden" />
     </n-layout-sider>
   </n-layout>
-  <n-layout-footer><Footer text-gray-700 dark:text-gray-200 /></n-layout-footer>
-  <n-back-top v-if="windowWidth <= 1200" :show="true" style="z-index:1" />
 </template>
 
 <script setup lang="ts">
@@ -30,9 +28,3 @@ const windowWidth = ref(window.innerWidth)
 const sidebar_hidden = ref(window.innerWidth < 800)
 const on_update = (collapsed: boolean) => sidebar_hidden.value = true
 </script>
-
-<style scoped>
-.n-layout-footer {
-  padding: 24px;
-}
-</style>

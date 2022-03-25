@@ -1,0 +1,136 @@
+/* https://github.com/antfu/prism-theme-vars */
+@import "prism-theme-vars/base.css";
+
+.md-blog {
+  max-width: 65ch;
+}
+
+.md-blog p,
+.md-blog table {
+  line-height: 1.6em;
+  margin: 1.6em 0;
+}
+.md-blog blockquote p {
+  margin: 0;
+}
+.md-blog h1 {
+  font-size: 2em;
+}
+.md-blog h2 {
+  font-size: 1.5em;
+}
+.md-blog h3 {
+  font-size: 1.2em;
+}
+.md-blog h1,
+.md-blog h2,
+.md-blog h3,
+.md-blog h4,
+.md-blog h5,
+.md-blog h6 {
+  font-weight: bold;
+}
+.md-blog h1,
+.md-blog h2,
+.md-blog h3,
+.md-blog h4,
+.md-blog h5,
+.md-blog h6 {
+  line-height: 1.1em;
+  margin: 1.1em 0;
+}
+.md-blog a {
+  color: #258fb8;
+  text-decoration: none;
+}
+.md-blog a:hover {
+  text-decoration: underline;
+}
+.md-blog ul,
+.md-blog ol,
+.md-blog dl {
+  padding-left: 20px;
+  margin-top: 1.6em;
+  margin-bottom: 1.6em;
+}
+.md-blog img,
+.md-blog video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+}
+.md-blog iframe {
+  border: none;
+}
+.md-blog table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.md-blog th {
+  font-weight: bold;
+  border-bottom: 3px solid #ddd;
+  padding-bottom: 0.5em;
+}
+.md-blog td {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+.md-blog td footer {
+  font-size: 14px;
+  margin: 1.6em 0;
+  font-family: font-sans;
+}
+.md-blog td footer cite:before {
+  content: "—";
+  padding: 0 0.5em;
+}
+
+html:not(.dark) .md-blog {
+  --prism-foreground: #393a34;
+  --prism-background: #fbfbfb;
+  --prism-comment: #a0ada0;
+  --prism-string: #b56959;
+  --prism-literal: #2f8a89;
+  --prism-number: #296aa3;
+  --prism-keyword: #1c6b48;
+  --prism-function: #6c7834;
+  --prism-boolean: #1c6b48;
+  --prism-constant: #a65e2b;
+  --prism-deleted: #a14f55;
+  --prism-class: #2993a3;
+  --prism-builtin: #ab5959;
+  --prism-property: #b58451;
+  --prism-namespace: #b05a78;
+  --prism-punctuation: #8e8f8b;
+  --prism-decorator: #bd8f8f;
+  --prism-regex: #ab5e3f;
+  --prism-json-property: #698c96;
+}
+
+html.dark .md-blog {
+  --prism-foreground: #d4cfbf;
+  --prism-background: #151515;
+  --prism-comment: #758575;
+  --prism-string: #d48372;
+  --prism-literal: #429988;
+  --prism-keyword: #4d9375;
+  --prism-boolean: #1c6b48;
+  --prism-number: #6394bf;
+  --prism-variable: #c2b36e;
+  --prism-function: #a1b567;
+  --prism-deleted: #a14f55;
+  --prism-class: #54b1bf;
+  --prism-builtin: #e0a569;
+  --prism-property: #dd8e6e;
+  --prism-namespace: #db889a;
+  --prism-punctuation: #858585;
+  --prism-decorator: #bd8f8f;
+  --prism-regex: #ab5e3f;
+  --prism-json-property: #6b8b9e;
+  --prism-line-number: #888888;
+  --prism-line-number-gutter: #eeeeee;
+  --prism-line-highlight-background: #444444;
+  --prism-selection-background: #444444;
+}

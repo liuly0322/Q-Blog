@@ -1,26 +1,30 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "module": "ESNext",
-    "target": "es2016",
-    "lib": ["DOM", "ESNext"],
     "strict": true,
-    "esModuleInterop": true,
-    "incremental": false,
+    "jsx": "preserve",
+    "target": "esnext",
+    "module": "esnext",
+    "sourceMap": true,
     "skipLibCheck": true,
-    "moduleResolution": "node",
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "lib": ["esnext", "dom"],
     "resolveJsonModule": true,
-    "noUnusedLocals": true,
-    "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": [
-      "vite/client",
-      "vite-plugin-pages/client",
-      "vite-plugin-vue-layouts/client",
-    ],
+    "moduleResolution": "node",
+    "useDefineForClassFields": true,
+    "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"]
     }
   },
-  "exclude": ["dist", "node_modules", "cypress"]
+  "include": [
+    "srcipts",
+    "presets",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "./vite.config.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
 }

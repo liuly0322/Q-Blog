@@ -3,7 +3,7 @@ const router = useRouter()
 </script>
 
 <template>
-  <main p="x4 y10" text="center teal-700 dark:gray-200">
+  <main text="center teal-700 dark:gray-200">
     <router-view />
     <div>
       <n-button m="3 t8" @click="router.back()">
@@ -12,3 +12,9 @@ const router = useRouter()
     </div>
   </main>
 </template>
+
+<style scoped>
+main {
+  margin-top: 200px;
+}
+</style>

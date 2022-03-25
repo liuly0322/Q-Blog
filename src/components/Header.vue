@@ -10,7 +10,7 @@
         <span class="subtitle">Life is but code.</span>
         <n-dropdown trigger="click" :options="phoneOptions" @select="phoneNacSelect">
           <n-button text class="nav-phone">
-            <div i-carbon-menu inline-block />
+            <i-carbon:menu />
           </n-button>
         </n-dropdown>
         <span class="title">

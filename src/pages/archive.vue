@@ -11,7 +11,7 @@ const summary = inject(SummaryKey)
         <router-link class="inside-card" :to="`/posts/${post.url}`" replace>
           <n-card :key="post.url" mb-2 :title="post.title" size="small">
             <div>{{ post.date }}</div>
-            <div mt-2 mx-2>
+            <div class="mt-2 mx-2">
               <n-tag v-for="tag in post.tags" :key="tag" type="success" size="small" round>
                 <router-link :to="`/tags/${encodeURIComponent(tag)}`">
                   {{ tag }}

@@ -4,7 +4,7 @@ title: 关于
 
 ## 网站信息
 
-基于 [Vitesse](https://github.com/antfu/vitesse) 这一 Vue3 + Vite2 起步项目，搭建
+基于 [TOV 模板](https://github.com/dishait/tov-template) 这一 Vue3 + Vite2 起步项目，搭建
 
 实现特性：
 
@@ -21,8 +21,6 @@ title: 关于
 
 ## 联系方式
 
-* email: liuly0322@mail.ustc.edu.cn
-
-* QQ: 453026205
-
-* github: https://github.com/liuly0322
+- email: liuly0322@mail.ustc.edu.cn
+- QQ: 453026205
+- github: https://github.com/liuly0322

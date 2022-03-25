@@ -10,7 +10,7 @@
 
 一个使用 Vue3.0 的静态博客站示例
 
-前端参考 [Vitesse](https://github.com/antfu/vitesse) 的 Vite2 + Vue3 模板
+前端参考 [TOV](https://github.com/dishait/tov-template) 的 Vite2 + Vue3 模板
 
 博客后端（？）采用 python 对 md 文件 YAML front matter 进行解析，生成相应 json 静态文件，前端通过同源请求获取
 
@@ -63,7 +63,6 @@ home 页的需求比较特殊，主要是需要额外的摘要，一个可行的
 
 - [x] header
 - [x] header 的响应式布局：移动端做一个可以展开的 menu
-- [x] footer
 - [x] 响应式布局的 sidebar
 - [x] sidebar 增加音乐播放
 - [x] npm 发布自己魔改过后的 aplayer 包, 增加 ts 支持
@@ -79,6 +78,7 @@ home 页的需求比较特殊，主要是需要额外的摘要，一个可行的
 后端
 
 - [x] summary.json
+- [x] 图片，文章移动
 - [ ] post_detail.json
 
 ## 食用方法
