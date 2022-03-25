@@ -27,9 +27,7 @@ os.system('mkdir public/posts')
 path = os.listdir('posts')
 for p in path:
     if os.path.isdir('posts/' + p):
-        print(p)
-        # p 是一个文件夹，需要把它移动到 public/posts/...
-        os.system('cp -r posts/{} public/posts'.format(p))
+        os.system('cp -a posts/{}/. public/posts'.format(p))
 
 # Loop through all files
 for fpath in glob.glob(post_path):
