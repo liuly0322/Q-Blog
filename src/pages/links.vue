@@ -24,22 +24,7 @@
 </template>
 
 <script setup lang="ts">
-interface Friend {
-  name: string
-  avatar: string
-  introduction?: string
-  url: string
-}
-
-const friends = ref([] as Friend[])
-const links_url = '/friends.json'
-
-const get_links = async() => {
-  const { data } = await useFetch(links_url).get().json()
-  friends.value = data.value
-}
-
-onMounted(get_links)
+import friends from '../../assets/friends.json'
 </script>
 
 <style scoped>
