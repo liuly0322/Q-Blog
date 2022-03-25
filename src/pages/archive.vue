@@ -1,0 +1,37 @@
+<script setup lang="ts">
+import { SummaryKey } from '~/types'
+
+const summary = inject(SummaryKey)
+</script>
+
+<template>
+  <n-card mt-10 title="归档" size="small" :segmented="true">
+    <div class="card-list">
+      <template v-for="post in summary" :key="post.url">
+        <router-link class="inside-card" :to="`/posts/${post.url}`" replace>
+          <n-card :key="post.url" mb-2 :title="post.title" size="small">
+            <div>{{ post.date }}</div>
+            <div mt-2 mx-2>
+              <n-tag v-for="tag in post.tags" :key="tag" type="success" size="small" round>
+                <router-link :to="`/tags/${encodeURIComponent(tag)}`">
+                  {{ tag }}
+                </router-link>
+              </n-tag>
+            </div>
+          </n-card>
+        </router-link>
+      </template>
+    </div>
+  </n-card>
+</template>
+
+<style scoped>
+.card-list {
+  columns: 340px 3;
+}
+
+.inside-card {
+  break-inside: avoid;
+  display: block;
+}
+</style>

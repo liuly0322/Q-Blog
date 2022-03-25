@@ -23,7 +23,9 @@ for fpath in glob.glob(post_path):
         # use post.metadata to get a dict about metadata
         # use post.content to get content(str)
         # <!-- more --> to generate a description
-        post_metadatas.append({'title': post.get('title'),'data': post.get('date'),'tags': post.get('tags'),'url':fname})
+        post_metadatas.append({'title': post.get('title'),'date': post.get('date'),'tags': post.get('tags'),'url':fname})
+
+post_metadatas.sort(key=lambda post: post.get('date'), reverse=True)
 
 # so you get summary! 
 summary_file = io.open(out_path + "summary.json", 'w', encoding='utf8')

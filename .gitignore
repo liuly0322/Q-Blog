@@ -10,3 +10,4 @@ node_modules
 posts
 assets
 .vscode
+src/pages/posts

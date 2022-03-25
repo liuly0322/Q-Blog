@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { darkTheme } from 'naive-ui'
+import Summary from '../assets/summary.json'
+import { SummaryKey } from '~/types'
 import { isDark } from '~/composables'
+
+provide(SummaryKey, Summary)
+
 // https://github.com/vueuse/head
 // you can use this to manipulate the document head in any components,
 // they will be rendered correctly in the html results with vite-ssg

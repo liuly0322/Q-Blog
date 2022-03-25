@@ -39,15 +39,10 @@
 - 是否可以用 ts 写成 vite 插件的类似形式，由 `pnpm build` 一键构建？
   - 知识水平有限，暂时不会实现
 - 需要产生哪些索引文件？这就需要具体分析前端各处的需求
-  - home 页：   (标题索引，摘要，Option<标签s>)  for 博客 in 博客s
-  - tags 页：   数量                          for 标签 in 标签s
-  - tag 页：    标题索引                       for 博客 in 标签对应的博客s
-  - archive 页：标题索引                       for 博客 in 博客s
-  - search 框： 标题索引                       for 博客 in 博客s
 
-标题索引指 标题 + 时间 + url，全站大部分地方都会用到，做一个总的 summary.json, 这个可以直接通过 App.vue import 得到，并 inject 给子组件
+标题 + 时间 + url，全站大部分地方都会用到，做一个总的 summary.json, 这个可以直接通过 App.vue import 得到，并 inject 给子组件
 
-对于标签机制，一个博客贴的标签的长度应该和标题长度是一个数量级，因此也可以附在 summary.json 里，所有标签的统计可以通过前端完成
+一个博客贴的标签的长度应该和标题长度是一个数量级，因此也可以附在 summary.json 里，所有标签的统计可以通过前端完成
 
 home 页的需求比较特殊，主要是需要额外的摘要，一个可行的策略是对每个文章额外生成一个 `{ post }_detail.json`
 
@@ -77,7 +72,7 @@ home 页的需求比较特殊，主要是需要额外的摘要，一个可行的
 - [ ] tag 页
 - [x] about 页
 - [x] links 页
-- [ ] archive 页
+- [x] archive 页
 - [ ] sidebar 增加搜索功能
 - [ ] sidebar 增加文章目录
 
