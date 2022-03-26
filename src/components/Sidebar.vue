@@ -11,10 +11,10 @@
     </n-card>
     <n-card title="关于">
       <div style="text-align: center;">
-        <a href="https://github.com/liuly0322" target="_blank">
+        <a href="https://github.com/liuly0322" target="_blank" style="display: inline-block;">
           <i-ant-design:github-filled style="font-size:xx-large" />
         </a>
-        <a @click="toggleDark()">
+        <a @click="toggleDark()" style="display: inline-block;">
           <i-carbon:haze-night v-if="isDark" style="font-size:xx-large" />
           <i-carbon:sun v-if="!isDark" style="font-size:xx-large" />
         </a>

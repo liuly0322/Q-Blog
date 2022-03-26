@@ -80,6 +80,7 @@ home 页的需求比较特殊，主要是需要额外的摘要，一个可行的
 - [x] summary.json
 - [x] 图片，文章移动
 - [ ] post_detail.json
+- [ ] rss_feed
 
 ## 食用方法
 

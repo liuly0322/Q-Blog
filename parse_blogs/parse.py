@@ -10,12 +10,26 @@ post_path = "posts/*.md"
 # Where to store posts
 out_path = "assets/"
 out_post_path = "src/pages/posts/"
+out_detail_path = "public/details/"
 
 # summart.json is about individual blogs
 post_metadatas = []
 
 
 def save_post(name: str, content: str, title: str):
+    # get detail
+    detail_index = content.find('<!-- more -->')
+    if detail_index == -1:
+        detail = content[:100] + '......'
+    else:
+        detail = content[:detail_index]
+    detail = json.dumps({'content': detail}, default=str, ensure_ascii=False)
+    detail_file = io.open(out_detail_path + name +
+                          '.json', 'w', encoding='utf8')
+    detail_file.write(detail)
+    detail_file.close()
+
+    # get main content
     content_file = io.open(out_post_path + name + '.md', 'w', encoding='utf8')
     content = '# ' + title + '\n\n' + content
     content_file.write(content)
