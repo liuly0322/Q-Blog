@@ -2,20 +2,14 @@
   <header>
     <n-card>
       <n-card :bordered="false">
-        <n-avatar
-          round
-          :size="48"
-          src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
-        />
+        <n-avatar round :size="48" src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100" />
         <span class="subtitle">Life is but code.</span>
         <n-dropdown trigger="click" :options="phoneOptions" @select="phoneNacSelect">
           <n-button text class="nav-phone">
             <i-carbon:menu />
           </n-button>
         </n-dropdown>
-        <span class="title">
-          liuly 的博客
-        </span>
+        <span class="title">liuly 的博客</span>
       </n-card>
       <n-menu
         v-model:value="activeKey"
@@ -60,7 +54,7 @@ const menuOptions: MenuOption[] = [
       h(
         RouterLink,
         {
-          to: '/tags',
+          to: '/tags/',
         },
         { default: () => '标签' },
       ),
@@ -100,7 +94,7 @@ const phoneOptions = [
   },
   {
     label: '🏷️ 标签',
-    key: '/tags',
+    key: '/tags/',
   },
   {
     label: '🔗 友链',
@@ -137,7 +131,7 @@ header {
   font-size: 1.5em;
 }
 .subtitle {
-  line-height:48px;
+  line-height: 48px;
   display: ruby-text;
   padding: 0 20px;
   font-size: 1.2em;
