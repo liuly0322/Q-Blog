@@ -10,16 +10,18 @@
 
 一个使用 Vue3.0 的静态博客站示例
 
-前端参考 [TOV](https://github.com/dishait/tov-template) 的 Vite2 + Vue3 模板
+参考 [TOV](https://github.com/dishait/tov-template) 的 Vite2 + Vue3 模板
 
-博客后端（？）采用 python 对 md 文件 YAML front matter 进行解析，生成相应 json 静态文件，前端通过同源请求获取
+md 文件可直接作为组价被 Vue 引用
+
+并利用 python 对 md 文件 YAML front matter 进行解析，生成其余索引 json
 
 组件库采用 naive-ui, Vue3 + TS 写起来很爽（）
 
 - 响应式布局
 - 夜间模式
 
-前端网页路由结构：
+网页路由结构：
 
 ```plaintext
 .
@@ -34,21 +36,11 @@
     └── [tag].vue   // 具体标签页
 ```
 
-梳理一下后端需要做的工作，主要是解析资源文件夹的 markdown 博客, 生成索引，于是就产生了如下的问题：
-
-- 是否可以用 ts 写成 vite 插件的类似形式，由 `pnpm build` 一键构建？
-  - 知识水平有限，暂时不会实现
-- 需要产生哪些索引文件？这就需要具体分析前端各处的需求
-
-标题 + 时间 + url，全站大部分地方都会用到，做一个总的 summary.json, 这个可以直接通过 App.vue import 得到，并 inject 给子组件
-
-一个博客贴的标签的长度应该和标题长度是一个数量级，因此也可以附在 summary.json 里，所有标签的统计可以通过前端完成
-
-home 页的需求比较特殊，主要是需要额外的摘要，一个可行的策略是对每个文章额外生成一个 `{ post }_detail.json`
+python 生成对应 md 组件和索引文件 `summary.json`, `page.json`
 
 ## 目前的其他问题
 
-- SEO: 现在 ViteSSG bug 太多暂时无法 build，使用 Vite 替代
+- SEO: ViteSSG?
 - 是否考虑博客支持统一的自定义配置文件，拓展成一个可用的博客框架
 
 如果有啥好建议欢迎提 issue
@@ -66,7 +58,7 @@ home 页的需求比较特殊，主要是需要额外的摘要，一个可行的
 - [x] 响应式布局的 sidebar
 - [x] sidebar 增加音乐播放
 - [x] npm 发布自己魔改过后的 aplayer 包, 增加 ts 支持
-- [ ] home 页
+- [x] home 页
 - [ ] tags 页
 - [ ] tag 页
 - [x] about 页
@@ -75,11 +67,11 @@ home 页的需求比较特殊，主要是需要额外的摘要，一个可行的
 - [ ] sidebar 增加搜索功能
 - [ ] sidebar 增加文章目录
 
-后端
+python
 
 - [x] summary.json
 - [x] 图片，文章移动
-- [ ] post_detail.json
+- [x] post_detail.json
 - [ ] rss_feed
 
 ## 食用方法

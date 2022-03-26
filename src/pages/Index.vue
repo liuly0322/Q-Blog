@@ -1,46 +1,53 @@
 <script setup lang="ts">
-import MarkdownIt from 'markdown-it';
-import { SummaryKey } from '~/types'
+import { PostSummary, SummaryKey } from '~/types'
 
-const md = new MarkdownIt()
-const summary = inject(SummaryKey)
-const details = ref([] as Array<string>)
-const num_posts = summary?.length as number
-const pages_max = Math.floor(num_posts / 10)
-const now_page = ref(0)
+import details from '../../assets/page.json'
+const summary = inject(SummaryKey) as PostSummary[]
 
-const details_base_url = '/details/'
+const post_infos = details.map((e, i) => { return { 'detail': e, 'summary': summary[i] } })
 
-const get_detail = async (i: number) => {
-  const { data } = await useFetch(details_base_url + summary?.at(i)?.url + '.json').get().json()
-  details.value[i] = md.render(data.value.content)
-}
+const pages_max = Math.ceil(post_infos.length / 10)
+const now_page = ref(1)
 
-const get_now_page = async () => {
-  // 根据 now_page，如果是 0 就访问 0 到 9, etc
-  for (let i = 10 * now_page.value; i < 10 * now_page.value + 10; i++) {
-    if (i == num_posts)
-      break
-    get_detail(i)
-  }
-
-}
-
-onMounted(() => {
-  get_now_page()
-})
-
-const router = useRouter()
-const go = () => {
-  router.push(`/hi/${encodeURIComponent('123')}`)
-}
+const slices = computed(() => post_infos.slice((now_page.value - 1) * 10, now_page.value * 10))
 </script>
 
 <template>
-  <n-card :title="summary?.at(i)?.title" v-for="i in 5">
-    <div v-html="details[i]"></div>
-  </n-card>
+  <template v-for="ele in slices">
+    <n-card
+      class="mb-4 px-2"
+      header-style="font-size:2em; margin-top:1em"
+      footer-style="text-align: left"
+    >
+      <template #header>
+        <router-link :to="`/posts/${encodeURIComponent(ele.summary.url)}`">{{ ele.summary.title }}</router-link>
+      </template>
+      {{ ele.summary.date }}
+      <markdown-it :source="ele.detail"></markdown-it>
+      <router-link class="show-more" :to="`/posts/${encodeURIComponent(ele.summary.url)}`">查看更多</router-link>
+      <template #footer>
+        <span v-for="tag in ele.summary.tags" class="mr-2 text-slate-500">
+          <router-link :to="`/tags/${encodeURIComponent(tag)}`">#{{ tag }}</router-link>
+        </span>
+      </template>
+    </n-card>
+  </template>
+  <div class="my-10" style="display: inline-block;">
+    <n-pagination v-model:page="now_page" :page-count="pages_max" />
+  </div>
 </template>
+
+<style scoped>
+.show-more {
+  line-height: 1em;
+  padding: 6px 15px;
+  border-radius: 15px;
+  color: #fff;
+  background: #258fb8;
+  text-shadow: 0 1px #1e7293;
+  text-decoration: none;
+}
+</style>
 
 <route lang="yaml">
 meta:
