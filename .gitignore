@@ -6,3 +6,4 @@ assets
 .vscode
 src/pages/posts
 public/posts
+public/details
