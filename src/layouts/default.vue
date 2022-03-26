@@ -1,7 +1,13 @@
 <template>
-  <n-layout-header><Header text-gray-700 dark:text-gray-200 /></n-layout-header>
+  <n-layout-header>
+    <Header text-gray-700 dark:text-gray-200 />
+  </n-layout-header>
   <n-layout style="height: 100vh;" has-sider sider-placement="right">
-    <n-layout-content :native-scrollbar="false" content-style="padding: 0 24px;min-width: 340px;overflow: hidden;">
+    <n-layout-content
+      ref="contentRef"
+      :native-scrollbar="false"
+      content-style="padding: 0 24px;min-width: 340px;overflow: hidden;"
+    >
       <main class="mt-10 px-6 pb-10 text-center text-gray-700 dark:text-gray-200">
         <router-view />
       </main>
@@ -13,7 +19,7 @@
       :width="320"
       :native-scrollbar="false"
       :default-collapsed="windowWidth < 800"
-      :on-after-enter="() => sidebar_hidden=false"
+      :on-after-enter="() => sidebar_hidden = false"
       :on-update:collapsed="on_update"
       show-trigger="arrow-circle"
       bordered
@@ -24,7 +30,15 @@
 </template>
 
 <script setup lang="ts">
+import { LayoutInst } from 'naive-ui'
 const windowWidth = ref(window.innerWidth)
 const sidebar_hidden = ref(window.innerWidth < 800)
 const on_update = (collapsed: boolean) => sidebar_hidden.value = true
+
+const contentRef = ref<LayoutInst | null>(null)
+const route = useRoute()
+watch(toRef(route, 'path'), (value, oldValue) => {
+  if (value !== oldValue)
+    contentRef.value?.scrollTo(0, 0)
+})
 </script>

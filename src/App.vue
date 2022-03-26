@@ -6,22 +6,13 @@ const { isDark, toggleDark } = useDarks()
 
 provide(SummaryKey, Summary)
 
-// https://github.com/vueuse/head
-// you can use this to manipulate the document head in any components,
-// they will be rendered correctly in the html results with vite-ssg
-
-const themeOverrides = {}
-
 const darkOverrides = {
   Layout: {
     color: 'rgb(24, 24, 28)',
   },
-  // ...
 }
-
 const theme = computed(() => isDark.value ? darkTheme : undefined)
-
-const Overrides = computed(() => isDark.value ? darkOverrides : themeOverrides)
+const Overrides = computed(() => isDark.value ? darkOverrides : undefined)
 </script>
 
 <template>
