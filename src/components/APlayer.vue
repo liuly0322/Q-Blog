@@ -34,7 +34,7 @@ class Audio {
   // 歌词
   lrc?: String
 
-  constructor(artist: String|undefined, name: String, url: String, cover: String|undefined, lrc: String|undefined) {
+  constructor(artist: String | undefined, name: String, url: String, cover: String | undefined, lrc: String | undefined) {
     this.artist = artist
     this.name = name
     this.url = url
@@ -137,7 +137,7 @@ interface Meting {
   lrc?: String
 }
 
-const fakeLoadingBar = async() => {
+const fakeLoadingBar = async () => {
   const sleep = (ms: number) => new Promise((resolve, reject) => setTimeout(resolve, ms))
   while (true) {
     await sleep(200)
@@ -156,9 +156,9 @@ const fakeLoadingBar = async() => {
   }
 }
 
-const APlayerInit = async function() {
+const APlayerInit = async function () {
   fakeLoadingBar()
-  const url = `https://api.i-meto.com/meting/api?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
+  const url = `http://120.24.73.184/meting-api/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
   const { data, error } = await useFetch(url).get().json()
   if (error.value) {
     loadingStatus.value = 'error'
