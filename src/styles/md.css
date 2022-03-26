@@ -2,7 +2,7 @@
 @import "prism-theme-vars/base.css";
 
 .md-blog {
-  max-width: 65ch;
+  max-width: 1000px;
 }
 
 .md-blog p,
@@ -49,6 +49,7 @@
 .md-blog ul,
 .md-blog ol,
 .md-blog dl {
+  list-style: circle;
   padding-left: 20px;
   margin-top: 1.6em;
   margin-bottom: 1.6em;

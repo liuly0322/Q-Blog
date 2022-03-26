@@ -2,7 +2,9 @@
 title: 关于
 ---
 
-## 网站信息
+<div style="max-width:65ch; margin:auto; padding: 1em 0">
+
+# 网站信息
 
 基于 [TOV 模板](https://github.com/dishait/tov-template) 这一 Vue3 + Vite2 起步项目，搭建
 
@@ -15,12 +17,14 @@ title: 关于
 
 源代码见 [Q-Blog](https://github.com/liuly0322/Q-Blog)
 
-## 作者信息
+# 作者信息
 
 见 [个人主页](http://home.ustc.edu.cn/~liuly0322/)
 
-## 联系方式
+# 联系方式
 
 - email: liuly0322@mail.ustc.edu.cn
 - QQ: 453026205
 - github: https://github.com/liuly0322
+
+</div>
