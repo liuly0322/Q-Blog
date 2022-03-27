@@ -8,7 +8,7 @@
 
 ## 项目说明
 
-一个使用 Vue3.0 的静态博客站示例
+一个使用 Vue3.0 的静态博客站示例，目前 [个人自用](http://blog.liuly.moe)
 
 参考 [TOV](https://github.com/dishait/tov-template) 的 Vite2 + Vue3 模板
 
@@ -49,8 +49,6 @@ python 生成对应 md 组件和索引文件 `summary.json`, `page.json`
 
 争取不鸽（）
 
-成果暂时在 [这个页面](https://liuly0322.github.io/)
-
 前端：
 
 - [x] header
@@ -59,8 +57,8 @@ python 生成对应 md 组件和索引文件 `summary.json`, `page.json`
 - [x] sidebar 增加音乐播放
 - [x] npm 发布自己魔改过后的 aplayer 包, 增加 ts 支持
 - [x] home 页
-- [ ] tags 页
-- [ ] tag 页
+- [x] tags 页
+- [x] tag 页
 - [x] about 页
 - [x] links 页
 - [x] archive 页
