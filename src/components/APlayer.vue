@@ -130,8 +130,8 @@ const props = defineProps({
 })
 
 interface Meting {
-  author?: String
-  title: String
+  artist?: String
+  name: String
   url: String
   pic?: String
   lrc?: String
@@ -164,7 +164,7 @@ const APlayerInit = async function () {
     loadingStatus.value = 'error'
     percentage.value = 100
   }
-  const audioList = (data.value as Array<Meting>).map((value: Meting) => new Audio(value.author, value.title, value.url, value.pic, value.lrc))
+  const audioList = (data.value as Array<Meting>).map((value: Meting) => new Audio(value.artist, value.name, value.url, value.pic, value.lrc))
   instance = new APlayer({
     container: playerRef.value,
     fixed: props.fixed,
