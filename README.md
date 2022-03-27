@@ -47,13 +47,7 @@ python 生成对应 md 组件和索引文件 `summary.json`, `page.json`
 
 ## to be done
 
-前端：
-
 - [ ] sidebar 增加文章目录
-
-python
-
-- [ ] rss_feed
 
 ## 食用方法
 

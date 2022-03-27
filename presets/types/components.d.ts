@@ -10,8 +10,10 @@ declare module 'vue' {
     'IAntDesign:githubFilled': typeof import('~icons/ant-design/github-filled')['default']
     'ICarbon:hazeNight': typeof import('~icons/carbon/haze-night')['default']
     'ICarbon:menu': typeof import('~icons/carbon/menu')['default']
+    'ICarbon:rss': typeof import('~icons/carbon/rss')['default']
     'ICarbon:sun': typeof import('~icons/carbon/sun')['default']
     MarkdownIt: typeof import('./../../src/components/MarkdownIt.vue')['default']
+    NAutoComplete: typeof import('naive-ui')['NAutoComplete']
     NAvatar: typeof import('naive-ui')['NAvatar']
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
@@ -27,6 +29,7 @@ declare module 'vue' {
     NResult: typeof import('naive-ui')['NResult']
     NTag: typeof import('naive-ui')['NTag']
     Sidebar: typeof import('./../../src/components/Sidebar.vue')['default']
+    SidebarSearch: typeof import('./../../src/components/SidebarSearch.vue')['default']
   }
 }
 

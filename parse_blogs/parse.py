@@ -3,6 +3,8 @@ import io
 import os
 import json
 import glob
+import datetime
+from email import utils
 
 # Where are the files to modify
 post_path = "posts/*.md"
@@ -70,5 +72,32 @@ summary_file.close()
 detail_file = io.open(out_path + 'page.json', 'w', encoding='utf8')
 detail_file.write(json.dumps(details, default=str, ensure_ascii=False))
 detail_file.close()
+
+# generate rss
+rss_file = io.open('public/feed.xml', 'w', encoding='utf8')
+rss_file.write("""<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+	<title>liuly's Blog</title>
+	<description>liuly's Blog</description>
+	<lastBuildDate>{}</lastBuildDate>
+	<link>http://blog.liuly.moe</link>
+	<atom:link href="http://blog.liuly.moe/feed.xml" rel="self" type="application/rss+xml" />
+	<generator>Q-Blog</generator>""".format(utils.format_datetime(datetime.datetime.now())))
+# each post is an item
+for i in range(len(post_metadatas)):
+    rss_file.write("""<item><link>http://blog.liuly.moe/posts/{}/</link><guid>http://blog.liuly.moe/posts/{}/</guid>""".format(
+        post_metadatas[i].get('url'), post_metadatas[i].get('url')))
+    # here goes <description>, <title>, <pubDate>
+    rss_file.write('<title>{}</title>'.format(post_metadatas[i].get('title')))
+    rss_file.write(
+        '<pubDate>{}</pubDate>'.format(utils.format_datetime(post_metadatas[i].get('date'))))
+    rss_file.write(
+        '<description>{}</description>'.format(details[i]))
+    rss_file.write('</item>')
+rss_file.write("""</channel>
+</rss>
+""")
+rss_file.close()
 
 print('success')

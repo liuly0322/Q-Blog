@@ -11,7 +11,10 @@
       <a-player song-server="tencent" song-id="2363529455" order="random" />
     </n-card>
     <n-card title="关于">
-      <div style="text-align: center;">
+      <div style="text-align: center;" class="about">
+        <a href="/feed.xml" target="_blank" style="display: inline-block;">
+          <i-carbon:rss style="font-size:xx-large" />
+        </a>
         <a href="https://github.com/liuly0322" target="_blank" style="display: inline-block;">
           <i-ant-design:github-filled style="font-size:xx-large" />
         </a>
@@ -66,5 +69,9 @@ onMounted(getHitokoto)
 <style scoped>
 .n-card {
   margin: 0 0 24px 0;
+}
+
+.about a {
+  margin: 0 2px;
 }
 </style>
