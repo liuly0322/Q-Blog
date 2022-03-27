@@ -5,6 +5,7 @@
 declare module 'vue' {
   export interface GlobalComponents {
     APlayer: typeof import('./../../src/components/APlayer.vue')['default']
+    ArchiveCard: typeof import('./../../src/components/ArchiveCard.vue')['default']
     Header: typeof import('./../../src/components/Header.vue')['default']
     'IAntDesign:githubFilled': typeof import('~icons/ant-design/github-filled')['default']
     'ICarbon:hazeNight': typeof import('~icons/carbon/haze-night')['default']

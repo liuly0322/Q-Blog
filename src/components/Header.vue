@@ -54,7 +54,7 @@ const menuOptions: MenuOption[] = [
       h(
         RouterLink,
         {
-          to: '/tags/',
+          to: '/tags',
         },
         { default: () => '标签' },
       ),
@@ -94,7 +94,7 @@ const phoneOptions = [
   },
   {
     label: '🏷️ 标签',
-    key: '/tags/',
+    key: '/tags',
   },
   {
     label: '🔗 友链',

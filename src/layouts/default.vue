@@ -3,7 +3,11 @@
     <Header text-gray-700 dark:text-gray-200 />
   </n-layout-header>
   <n-layout style="height: 100vh;" has-sider sider-placement="right">
-    <n-layout-content ref="contentRef" :native-scrollbar="false" :content-style="contentStyle">
+    <n-layout-content
+      ref="contentRef"
+      :native-scrollbar="false"
+      content-style="padding: 0 24px;min-width: 340px;overflow: hidden;"
+    >
       <main :class="mainClass">
         <router-view />
       </main>
@@ -31,7 +35,6 @@ const windowWidth = ref(window.innerWidth)
 const sidebar_hidden = ref(window.innerWidth < 800)
 const on_update = (collapsed: boolean) => sidebar_hidden.value = true
 const mainClass = (windowWidth.value > 600 ? "px-6 " : "") + "mt-10 pb-10 text-center text-gray-700 dark:text-gray-200"
-const contentStyle = (windowWidth.value > 600 ? "padding: 0 24px;" : "") + "min-width: 340px;overflow: hidden;"
 
 const contentRef = ref<LayoutInst | null>(null)
 const route = useRoute()
