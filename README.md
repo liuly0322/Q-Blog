@@ -45,31 +45,14 @@ python 生成对应 md 组件和索引文件 `summary.json`, `page.json`
 
 如果有啥好建议欢迎提 issue
 
-## 开发进度
-
-争取不鸽（）
+## to be done
 
 前端：
 
-- [x] header
-- [x] header 的响应式布局：移动端做一个可以展开的 menu
-- [x] 响应式布局的 sidebar
-- [x] sidebar 增加音乐播放
-- [x] npm 发布自己魔改过后的 aplayer 包, 增加 ts 支持
-- [x] home 页
-- [x] tags 页
-- [x] tag 页
-- [x] about 页
-- [x] links 页
-- [x] archive 页
-- [ ] sidebar 增加搜索功能
 - [ ] sidebar 增加文章目录
 
 python
 
-- [x] summary.json
-- [x] 图片，文章移动
-- [x] post_detail.json
 - [ ] rss_feed
 
 ## 食用方法

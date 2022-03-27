@@ -1,5 +1,6 @@
 <template>
   <div>
+    <sidebar-search></sidebar-search>
     <n-card v-if="hitokoto.hitokoto" title="一言">
       <span>{{ hitokoto.hitokoto }}</span>
       <n-card :bordered="false" style="text-align:right">
