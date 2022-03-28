@@ -9,7 +9,7 @@
             <i-carbon:menu />
           </n-button>
         </n-dropdown>
-        <span class="title">liuly 的博客</span>
+        <span class="title nav-landscape">liuly 的博客</span>
       </n-card>
       <n-menu
         v-model:value="activeKey"

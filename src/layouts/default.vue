@@ -31,10 +31,10 @@
 
 <script setup lang="ts">
 import { LayoutInst } from 'naive-ui'
-const windowWidth = ref(window.innerWidth)
-const sidebar_hidden = ref(window.innerWidth < 800)
+const windowWidth = window.innerWidth
+const sidebar_hidden = ref(windowWidth < 800)
 const on_update = (collapsed: boolean) => sidebar_hidden.value = true
-const mainClass = (windowWidth.value > 600 ? "px-6 " : "") + "mt-10 pb-10 text-center text-gray-700 dark:text-gray-200"
+const mainClass = (windowWidth > 600 ? "px-6 " : "") + "mt-10 pb-10 text-center text-gray-700 dark:text-gray-200"
 
 const contentRef = ref<LayoutInst | null>(null)
 const route = useRoute()
