@@ -1,7 +1,7 @@
 <template>
   <header>
     <n-card>
-      <n-card :bordered="false">
+      <n-card :content-style="contentStyle" :bordered="false">
         <n-avatar round :size="48" src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100" />
         <span class="subtitle">Life is but code.</span>
         <n-dropdown trigger="click" :options="phoneOptions" @select="phoneNacSelect">
@@ -108,8 +108,10 @@ const phoneOptions = [
 
 export default defineComponent({
   setup() {
+    const contentStyle = window.innerWidth < 600 ? 'padding: 0' : ''
     const router = useRouter()
     return {
+      contentStyle,
       activeKey: ref<string | null>(null),
       menuOptions,
       phoneOptions,
