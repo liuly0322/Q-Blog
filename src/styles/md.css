@@ -49,10 +49,22 @@
 .md-blog ul,
 .md-blog ol,
 .md-blog dl {
-  list-style: circle;
   padding-left: 20px;
   margin-top: 1.6em;
   margin-bottom: 1.6em;
+}
+.md-blog ul {
+  list-style: circle;
+}
+.md-blog ol {
+  list-style: decimal;
+}
+.md-blog ul ul,
+.md-blog ol ul,
+.md-blog ul ol,
+.md-blog ol ol {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 .md-blog img,
 .md-blog video {
