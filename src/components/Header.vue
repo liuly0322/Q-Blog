@@ -2,7 +2,12 @@
   <header>
     <n-card>
       <n-card :content-style="contentStyle" :bordered="false">
-        <n-avatar round :size="48" src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100" />
+        <n-avatar
+          round
+          :size="48"
+          src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
+          style="float: left;"
+        />
         <span class="subtitle">Life is but code.</span>
         <n-dropdown trigger="click" :options="phoneOptions" @select="phoneNacSelect">
           <n-button text class="nav-phone">
@@ -134,9 +139,9 @@ header {
 }
 .subtitle {
   line-height: 48px;
-  display: ruby-text;
   padding: 0 20px;
   font-size: 1.2em;
+  float: left;
 }
 
 @media screen and (max-width: 450px) {
