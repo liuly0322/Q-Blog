@@ -5,6 +5,7 @@ import { SummaryKey } from '~/types'
 const { isDark, toggleDark } = useDarks()
 
 provide(SummaryKey, Summary)
+provide('page', ref(1))
 
 const darkOverrides = {
   Layout: {
