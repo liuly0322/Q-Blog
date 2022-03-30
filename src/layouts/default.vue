@@ -1,14 +1,14 @@
 <template>
-  <n-layout-header>
+  <n-layout-header style="height: calc(var(--header-height) - 1px)">
     <Header text-gray-700 dark:text-gray-200 />
   </n-layout-header>
-  <n-layout style="height: 100vh;" has-sider sider-placement="right">
+  <n-layout style="height: calc(100vh - var(--header-height));" has-sider sider-placement="right">
     <n-layout-content
       ref="contentRef"
       :native-scrollbar="false"
       content-style="padding: 0 24px;min-width: 340px;overflow: hidden;"
     >
-      <main :class="mainClass">
+      <main class="mt-10 pb-10 text-center text-gray-700 dark:text-gray-200">
         <router-view />
       </main>
     </n-layout-content>
@@ -34,7 +34,6 @@ import { LayoutInst } from 'naive-ui'
 const windowWidth = window.innerWidth
 const sidebar_hidden = ref(windowWidth < 800)
 const on_update = (collapsed: boolean) => sidebar_hidden.value = true
-const mainClass = (windowWidth > 600 ? "px-6 " : "") + "mt-10 pb-10 text-center text-gray-700 dark:text-gray-200"
 
 const contentRef = ref<LayoutInst | null>(null)
 const route = useRoute()

@@ -1,28 +1,23 @@
 <template>
   <header>
-    <n-card>
-      <n-card :content-style="contentStyle" :bordered="false">
-        <n-avatar
-          round
-          :size="48"
-          src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
-          style="float: left;"
-        />
+    <n-card content-style="display:flex;align-items:center;justify-content:space-between">
+      <div class="flex">
+        <n-avatar round :size="48" src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100" />
         <span class="subtitle">Life is but code.</span>
+      </div>
+      <div class="flex">
+        <n-menu
+          v-model:value="activeKey"
+          class="nav-landscape"
+          mode="horizontal"
+          :options="menuOptions"
+        />
         <n-dropdown trigger="click" :options="phoneOptions" @select="phoneNacSelect">
           <n-button text class="nav-phone">
             <i-carbon:menu />
           </n-button>
         </n-dropdown>
-        <span class="title nav-landscape">liuly 的博客</span>
-      </n-card>
-      <n-menu
-        v-model:value="activeKey"
-        class="nav-landscape"
-        style="float: right"
-        mode="horizontal"
-        :options="menuOptions"
-      />
+      </div>
     </n-card>
   </header>
 </template>
@@ -113,10 +108,8 @@ const phoneOptions = [
 
 export default defineComponent({
   setup() {
-    const contentStyle = window.innerWidth < 600 ? 'padding: 0' : ''
     const router = useRouter()
     return {
-      contentStyle,
       activeKey: ref<string | null>(null),
       menuOptions,
       phoneOptions,
@@ -132,30 +125,19 @@ export default defineComponent({
 header {
   padding: 10px;
 }
-.title {
-  float: right;
-  padding: 8px;
-  font-size: 1.5em;
-}
 .subtitle {
   line-height: 48px;
   padding: 0 20px;
   font-size: 1.2em;
-  float: left;
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 639px) {
   .nav-landscape {
     display: none;
   }
 }
 
-.nav-phone {
-  float: right;
-  margin-top: 14px;
-}
-
-@media screen and (min-width: 451px) {
+@media screen and (min-width: 640px) {
   .nav-phone {
     display: none;
   }
