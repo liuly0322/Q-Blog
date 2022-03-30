@@ -17,6 +17,13 @@
             <i-carbon:menu />
           </n-button>
         </n-dropdown>
+        <n-button
+          text
+          class="nav-phone nav-sider"
+          onclick="document.querySelector('.n-layout-toggle-button').click()"
+        >
+          <i-ant-design:arrow-left-outlined />
+        </n-button>
       </div>
     </n-card>
   </header>
@@ -137,8 +144,18 @@ header {
   }
 }
 
+.nav-phone {
+  margin: 0 4px;
+}
+
 @media screen and (min-width: 640px) {
   .nav-phone {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 450px) {
+  .nav-sider {
     display: none;
   }
 }

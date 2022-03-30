@@ -16,6 +16,12 @@ body {
   max-width: 1200px;
 }
 
+@media screen and (max-width: 449px) {
+  .n-layout-toggle-button {
+    display: none !important;
+  }
+}
+
 html.dark {
   color: #e5e7eb;
   background: rgb(24, 24, 28);

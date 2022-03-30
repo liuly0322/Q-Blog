@@ -2,7 +2,7 @@
   <n-layout-header style="height: calc(var(--header-height) - 1px)">
     <Header text-gray-700 dark:text-gray-200 />
   </n-layout-header>
-  <n-layout style="height: calc(100vh - var(--header-height));" has-sider sider-placement="right">
+  <n-layout class="main-layout" has-sider sider-placement="right">
     <n-layout-content
       ref="contentRef"
       :native-scrollbar="false"
@@ -18,7 +18,7 @@
       :collapsed-width="14"
       :width="320"
       :native-scrollbar="false"
-      :default-collapsed="windowWidth < 800"
+      :default-collapsed="width < 800"
       :on-after-enter="() => sidebar_hidden = false"
       :on-update:collapsed="on_update"
       show-trigger="arrow-circle"
@@ -27,12 +27,15 @@
       <Sidebar :hidden="sidebar_hidden" />
     </n-layout-sider>
   </n-layout>
+  <n-button circle class="go-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+    <i-carbon:arrow-up />
+  </n-button>
 </template>
 
 <script setup lang="ts">
 import { LayoutInst } from 'naive-ui'
-const windowWidth = window.innerWidth
-const sidebar_hidden = ref(windowWidth < 800)
+const width = window.innerWidth
+const sidebar_hidden = ref(width < 800)
 const on_update = (collapsed: boolean) => sidebar_hidden.value = true
 
 const contentRef = ref<LayoutInst | null>(null)
@@ -42,3 +45,25 @@ watch(toRef(route, 'path'), (value, oldValue) => {
     contentRef.value?.scrollTo(0, 0)
 })
 </script>
+
+<style scoped>
+@media screen and (max-width: 449px) {
+  .main-layout {
+    height: unset;
+  }
+  .go-top {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+  }
+}
+
+@media screen and (min-width: 450px) {
+  .main-layout {
+    height: calc(100vh - var(--header-height));
+  }
+  .go-top {
+    display: none;
+  }
+}
+</style>
