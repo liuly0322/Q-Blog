@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { Ref } from 'vue';
-import { PostSummary, SummaryKey } from '~/types'
-
+import { PostSummary, SummaryKey, PageKey } from '~/types'
 import details from '../../assets/page.json'
+
 const summary = inject(SummaryKey) as PostSummary[]
-
+const now_page = inject(PageKey) as Ref<number>
 const post_infos = details.map((e, i) => { return { 'detail': e, 'summary': summary[i] } })
-
 const pages_max = Math.ceil(post_infos.length / 10)
-const now_page = inject('page') as Ref<number>
 
 const slices = computed(() => post_infos.slice((now_page.value - 1) * 10, now_page.value * 10))
 </script>

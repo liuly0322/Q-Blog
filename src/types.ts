@@ -1,4 +1,4 @@
-import type { InjectionKey } from 'vue'
+import type { InjectionKey, Ref } from 'vue'
 
 export interface PostSummary {
     title: string
@@ -8,3 +8,5 @@ export interface PostSummary {
   }
   
 export const SummaryKey: InjectionKey<Array<PostSummary>> = Symbol('BlogSummary')
+
+export const PageKey: InjectionKey<Ref<number>> = Symbol('Page')

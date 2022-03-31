@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { darkTheme } from 'naive-ui'
 import Summary from '../assets/summary.json'
-import { SummaryKey } from '~/types'
-const { isDark, toggleDark } = useDarks()
+import { SummaryKey, PageKey } from '~/types'
+const { isDark } = useDarks()
 
 provide(SummaryKey, Summary)
-provide('page', ref(1))
+provide(PageKey, ref(1))
 
 const darkOverrides = {
   Layout: {
