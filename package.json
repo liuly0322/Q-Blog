@@ -26,7 +26,7 @@
     "@iconify-json/ant-design": "^1.1.1",
     "@iconify-json/carbon": "^1.1.2",
     "@vue/runtime-core": "^3.2.31",
-    "aplayer-ts": "^1.0.3",
+    "aplayer-ts": "^1.0.4",
     "katex": "^0.15.3",
     "markdown-it": "^12.3.2",
     "markdown-it-texmath": "^0.9.7",

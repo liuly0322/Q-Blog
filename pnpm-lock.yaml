@@ -12,7 +12,7 @@ specifiers:
   '@vue/runtime-core': ^3.2.31
   '@vueuse/components': ^7.7.1
   '@vueuse/core': ^7.7.1
-  aplayer-ts: ^1.0.3
+  aplayer-ts: ^1.0.4
   axios: ^0.26.1
   c8: ^7.11.0
   fast-glob: ^3.2.11
@@ -60,7 +60,7 @@ dependencies:
   '@iconify-json/ant-design': registry.npmmirror.com/@iconify-json/ant-design/1.1.1
   '@iconify-json/carbon': registry.npmmirror.com/@iconify-json/carbon/1.1.2
   '@vue/runtime-core': registry.npmmirror.com/@vue/runtime-core/3.2.31
-  aplayer-ts: registry.npmmirror.com/aplayer-ts/1.0.3
+  aplayer-ts: registry.npmmirror.com/aplayer-ts/1.0.4
   katex: registry.npmmirror.com/katex/0.15.3
   markdown-it: registry.npmmirror.com/markdown-it/12.3.2
   markdown-it-texmath: registry.npmmirror.com/markdown-it-texmath/0.9.7
@@ -4444,10 +4444,10 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  registry.npmmirror.com/aplayer-ts/1.0.3:
-    resolution: {integrity: sha512-RncEcQ6wmR0HuxP7bc8zA1AoCx8vPUM/8ZlDs38EZdXYeR6mLCp9SSNTIfP58mg7sKpR8sAXdERIX+vO3P+mMA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/aplayer-ts/-/aplayer-ts-1.0.3.tgz}
+  registry.npmmirror.com/aplayer-ts/1.0.4:
+    resolution: {integrity: sha512-kAh/xnWS2SdOY1Y5KRfdtPjje9v7cW3ISE0leLd/IK7EC9q1kNOM21hcMmEfSWVOo+VYN6EHWlb0mOqhxLVfzw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/aplayer-ts/-/aplayer-ts-1.0.4.tgz}
     name: aplayer-ts
-    version: 1.0.3
+    version: 1.0.4
     dependencies:
       balloon-css: registry.npmmirror.com/balloon-css/0.5.2
       promise-polyfill: registry.npmmirror.com/promise-polyfill/7.1.0

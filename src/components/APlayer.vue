@@ -23,18 +23,13 @@ let loadingTime = 0
 let instance: APlayer
 
 class Audio {
-  // 音频艺术家
-  artist?: String
-  // 音频名称
-  name: String
-  // 音频链接
-  url: String
-  // 音频封面
-  cover?: String
-  // 歌词
-  lrc?: String
+  artist?: string
+  name: string
+  url: string
+  cover?: string
+  lrc?: string
 
-  constructor(artist: String | undefined, name: String, url: String, cover: String | undefined, lrc: String | undefined) {
+  constructor(artist: string | undefined, name: string, url: string, cover: string | undefined, lrc: string | undefined) {
     this.artist = artist
     this.name = name
     this.url = url
@@ -44,42 +39,34 @@ class Audio {
 }
 
 const props = defineProps({
-  // 开启吸底模式
   fixed: {
     type: Boolean as PropType<boolean>,
     default: false,
   },
-  // 开启迷你模式
   mini: {
     type: Boolean as PropType<boolean>,
     default: false,
   },
-  // 音频自动播放
   autoplay: {
     type: Boolean as PropType<boolean>,
     default: false,
   },
-  // 主题色
   theme: {
     type: String as PropType<string>,
     default: 'rgba(255,255,255,0.2)',
   },
-  // 音频循环播放
   loop: {
     type: String as PropType<'all' | 'one' | 'none'>,
     default: 'all',
   },
-  // 音频循环顺序
   order: {
     type: String as PropType<'list' | 'random'>,
     default: 'list',
   },
-  // 预加载
   preload: {
     type: String as PropType<'auto' | 'metadata' | 'none'>,
     default: 'auto',
   },
-  // 默认音量
   volume: {
     type: Number as PropType<number>,
     default: 0.7,
@@ -87,42 +74,34 @@ const props = defineProps({
       return value >= 0 && value <= 1
     },
   },
-  // 歌曲服务器(netease-网易云, tencent-qq音乐, kugou-酷狗, xiami-小米音乐, baidu-百度音乐)
   songServer: {
     type: String as PropType<'netease' | 'tencent' | 'kugou' | 'xiami' | 'baidu'>,
     default: 'netease',
   },
-  // 播放类型(song-歌曲, playlist-播放列表, album-专辑, search-搜索, artist-艺术家)
   songType: {
     type: String as PropType<string>,
     default: 'playlist',
   },
-  // 歌的id
   songId: {
     type: String as PropType<string>,
     default: '19723756',
   },
-  // 互斥，阻止多个播放器同时播放，当前播放器播放时暂停其他播放器
   mutex: {
     type: Boolean as PropType<boolean>,
     default: true,
   },
-  // 传递歌词方式
   lrcType: {
     type: Number as PropType<number>,
     default: 3,
   },
-  // 列表是否默认折叠
   listFolded: {
     type: Boolean as PropType<boolean>,
     default: true,
   },
-  // 列表最大高度
   listMaxHeight: {
     type: String as PropType<String>,
     default: '250px',
   },
-  // 存储播放器设置的 localStorage key
   storageName: {
     type: String as PropType<string>,
     default: 'APlayer-setting',
@@ -130,11 +109,11 @@ const props = defineProps({
 })
 
 interface Meting {
-  artist?: String
-  name: String
-  url: String
-  pic?: String
-  lrc?: String
+  artist?: string
+  name: string
+  url: string
+  pic?: string
+  lrc?: string
 }
 
 const fakeLoadingBar = async () => {
