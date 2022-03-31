@@ -85,19 +85,17 @@ rss_file.write("""<?xml version="1.0" encoding="utf-8"?>
 	<atom:link href="http://blog.liuly.moe/feed.xml" rel="self" type="application/rss+xml" />
 	<generator>Q-Blog</generator>""".format(utils.format_datetime(datetime.datetime.now())))
 # each post is an item
-for i in range(len(post_metadatas)):
-    rss_file.write("""<item><link>http://blog.liuly.moe/posts/{}/</link><guid>http://blog.liuly.moe/posts/{}/</guid>""".format(
-        post_metadatas[i].get('url'), post_metadatas[i].get('url')))
+for meta, detail in zip(post_metadatas, details):
+    post_url = 'http://blog.liuly.moe/posts/{}/'.format(meta.get('url'))
+    rss_file.write('<item><link>{}</link>'.format(post_url))
+    rss_file.write('<guid>{}</guid>'.format(post_url))
     # here goes <description>, <title>, <pubDate>
-    rss_file.write('<title>{}</title>'.format(post_metadatas[i].get('title')))
-    rss_file.write(
-        '<pubDate>{}</pubDate>'.format(utils.format_datetime(post_metadatas[i].get('date'))))
-    rss_file.write(
-        '<description>{}</description>'.format(details[i]))
+    pub_date = utils.format_datetime(meta.get('date'))
+    rss_file.write('<title>{}</title>'.format(meta.get('title')))
+    rss_file.write('<pubDate>{}</pubDate>'.format(pub_date))
+    rss_file.write('<description>{}</description>'.format(detail))
     rss_file.write('</item>')
-rss_file.write("""</channel>
-</rss>
-""")
+rss_file.write('</channel></rss>')
 rss_file.close()
 
 print('success')
