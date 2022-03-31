@@ -11,6 +11,7 @@ declare module 'vue' {
     'IAntDesign:githubFilled': typeof import('~icons/ant-design/github-filled')['default']
     'ICarbon:arrowUp': typeof import('~icons/carbon/arrow-up')['default']
     'ICarbon:hazeNight': typeof import('~icons/carbon/haze-night')['default']
+    'ICarbon:information': typeof import('~icons/carbon/information')['default']
     'ICarbon:menu': typeof import('~icons/carbon/menu')['default']
     'ICarbon:rss': typeof import('~icons/carbon/rss')['default']
     'ICarbon:sun': typeof import('~icons/carbon/sun')['default']

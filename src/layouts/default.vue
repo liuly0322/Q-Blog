@@ -71,6 +71,7 @@ watch(nowPage, (value, oldValue) => {
     position: fixed;
     bottom: 1em;
     right: 1em;
+    z-index: 1;
   }
 }
 
