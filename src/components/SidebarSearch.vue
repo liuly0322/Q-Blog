@@ -12,8 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { SummaryKey } from '~/types'
-const summary = (inject(SummaryKey) ?? []).map((post) => ({ title: post.title.toLowerCase(), url: post.url }))
+const summary = useSummary.map((post) => ({ title: post.title.toLowerCase(), url: post.url }))
 
 const searchPattern = ref('')
 const searchOptions = computed(() => {

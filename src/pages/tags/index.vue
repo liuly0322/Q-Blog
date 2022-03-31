@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { SummaryKey } from '~/types'
 // trick：一个用 map 计数的 util 函数
 const counter = <T>(arr: Array<T>) => arr.reduce((acc: Map<T, number>, e: T) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
 
-const summary = (inject(SummaryKey) ?? []).map((post) => post.tags).flat()
+const summary = useSummary.map((post) => post.tags).flat()
 const tags = [...counter(summary).entries()].sort((tag_a, tag_b) => tag_b[1] - tag_a[1]).map(([s, n]) => ({ content: s, times: n }))
 
 const largeSizeTimes = tags[Math.floor(tags.length / 3)].times

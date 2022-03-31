@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { SummaryKey } from '~/types'
-
-const summary = inject(SummaryKey) ?? []
+const summary = useSummary
 </script>
 
 <template>

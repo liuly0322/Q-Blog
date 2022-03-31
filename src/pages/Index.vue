@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { SummaryKey, PageKey } from '~/types'
+import { PageKey } from '~/types'
 import details from '../../assets/page.json'
 
-const summary = inject(SummaryKey) ?? []
-const now_page = inject(PageKey) ?? ref(1)
-const post_infos = details.map((e, i) => { return { 'detail': e, 'summary': summary[i] } })
-const pages_max = Math.ceil(post_infos.length / 10)
+const summary = useSummary
+const nowPage = inject(PageKey) ?? ref(1)
+const postInfos = details.map((e, i) => { return { 'detail': e, 'summary': summary[i] } })
+const pagesMax = Math.ceil(postInfos.length / 10)
 
-const slices = computed(() => post_infos.slice((now_page.value - 1) * 10, now_page.value * 10))
+const slices = computed(() => postInfos.slice((nowPage.value - 1) * 10, nowPage.value * 10))
 </script>
 
 <template>
@@ -31,7 +31,7 @@ const slices = computed(() => post_infos.slice((now_page.value - 1) * 10, now_pa
     </n-card>
   </template>
   <div class="my-10" style="display: inline-block;">
-    <n-pagination v-model:page="now_page" :page-count="pages_max" />
+    <n-pagination v-model:page="nowPage" :page-count="pagesMax" />
   </div>
 </template>
 
