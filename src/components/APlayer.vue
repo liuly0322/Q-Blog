@@ -18,8 +18,8 @@ type Status = 'success' | 'error' | 'warning' | undefined
 
 const playerRef = ref()
 const percentage = ref(0)
-const loadingTime = ref(0)
 const loadingStatus = ref(undefined as Status)
+let loadingTime = 0
 let instance: APlayer
 
 class Audio {
@@ -141,18 +141,18 @@ const fakeLoadingBar = async () => {
   const sleep = (ms: number) => new Promise((resolve, reject) => setTimeout(resolve, ms))
   while (true) {
     await sleep(200)
-    loadingTime.value += 200
+    loadingTime += 200
     percentage.value += Math.random() * 20
     if (percentage.value > 80)
       break
   }
   while (loadingStatus.value !== 'error' && loadingStatus.value !== 'success') {
-    if (loadingTime.value > 2000) {
+    if (loadingTime > 2000) {
       loadingStatus.value = 'warning'
       return
     }
     await sleep(200)
-    loadingTime.value += 200
+    loadingTime += 200
   }
 }
 
