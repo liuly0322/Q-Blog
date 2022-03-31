@@ -6,12 +6,7 @@
         <span class="subtitle">Life is but code.</span>
       </div>
       <div class="flex">
-        <n-menu
-          v-model:value="activeKey"
-          class="nav-landscape"
-          mode="horizontal"
-          :options="menuOptions"
-        />
+        <n-menu class="nav-landscape" mode="horizontal" :options="menuOptions" />
         <n-dropdown trigger="click" :options="phoneOptions" @select="phoneNacSelect">
           <n-button text class="nav-phone">
             <i-carbon:menu />
@@ -29,9 +24,14 @@
   </header>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
+
+const router = useRouter()
+const phoneNacSelect = (key: string | number) => {
+  router.push(String(key))
+}
 
 const menuOptions: MenuOption[] = [
   {
@@ -112,20 +112,6 @@ const phoneOptions = [
     key: '/about',
   },
 ]
-
-export default defineComponent({
-  setup() {
-    const router = useRouter()
-    return {
-      activeKey: ref<string | null>(null),
-      menuOptions,
-      phoneOptions,
-      phoneNacSelect(key: string | number) {
-        router.push(String(key))
-      },
-    }
-  },
-})
 </script>
 
 <style scoped>
