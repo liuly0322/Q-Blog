@@ -34,7 +34,6 @@
 
 <script setup lang="ts">
 import { LayoutInst } from 'naive-ui'
-import { PageKey } from '~/types'
 const width = window.innerWidth
 const sidebar_hidden = ref(width < 800)
 const on_update = (collapsed: boolean) => sidebar_hidden.value = true
@@ -50,7 +49,7 @@ watch(toRef(route, 'path'), (value, oldValue) => {
   }
 })
 
-const nowPage = inject(PageKey) ?? ref(1)
+const nowPage = usePage()
 watch(nowPage, (value, oldValue) => {
   if (value !== oldValue) {
     if (window.innerWidth >= 450) {

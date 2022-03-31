@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const summary = useSummary
+const summary = useSummary()
 </script>
 
 <template>

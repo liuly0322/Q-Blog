@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-const summary = useSummary.map((post) => ({ title: post.title.toLowerCase(), url: post.url }))
+const summary = useSummary().map((post) => ({ title: post.title.toLowerCase(), url: post.url }))
 
 const searchPattern = ref('')
 const searchOptions = computed(() => {

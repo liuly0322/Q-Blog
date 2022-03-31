@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { PageKey } from '~/types'
 import details from '../../assets/page.json'
 
-const summary = useSummary
-const nowPage = inject(PageKey) ?? ref(1)
+const summary = useSummary()
+const nowPage = usePage()
 const postInfos = details.map((e, i) => { return { 'detail': e, 'summary': summary[i] } })
 const pagesMax = Math.ceil(postInfos.length / 10)
 

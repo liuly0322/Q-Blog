@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { darkTheme } from 'naive-ui'
-import { PageKey } from '~/types'
-provide(PageKey, ref(1))
-
 const { isDark } = useDarks()
 const darkOverrides = {
   Layout: {
