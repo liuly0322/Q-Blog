@@ -47,23 +47,9 @@
 
 <script setup lang="ts">
 const { isDark, toggleDark } = useDarks()
-const hitokoto = ref({ from: '', hitokoto: '', from_who: '' })
 const url = 'https://v1.hitokoto.cn'
-
-const getHitokoto = async () => {
-  if (localStorage.getItem('last_hitokoto_date') === String(new Date().getDate())) {
-    hitokoto.value = JSON.parse(localStorage.getItem('hitokoto_data')!)
-    return
-  }
-  const { error, data } = await useFetch(url).get().json()
-  if (!(error.value)) {
-    hitokoto.value = data.value
-    localStorage.setItem('last_hitokoto_date', String(new Date().getDate()))
-    localStorage.setItem('hitokoto_data', JSON.stringify(hitokoto.value))
-  }
-}
-
-onMounted(getHitokoto)
+const { data } = useFetch(url).json()
+const hitokoto = computed(() => ({ from: data.value?.from, hitokoto: data.value?.hitokoto, from_who: data.value?.from_who }))
 </script>
 
 <style scoped>
