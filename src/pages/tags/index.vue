@@ -1,14 +1,26 @@
 <script setup lang="ts">
 import { PostSummary, SummaryKey } from '~/types'
-const summary = (inject(SummaryKey) as PostSummary[]).map((post) => post.tags).flat()
+// trick：一个用 map 计数的 util 函数
 const counter = <T>(arr: Array<T>) => arr.reduce((acc: Map<T, number>, e: T) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
-const tags = [...counter(summary).entries()].sort((tag_a, tag_b) => tag_b[1] - tag_a[1])
+
+const summary = (inject(SummaryKey) as PostSummary[]).map((post) => post.tags).flat()
+const tags = [...counter(summary).entries()].sort((tag_a, tag_b) => tag_b[1] - tag_a[1]).map(([s, n]) => ({ content: s, times: n }))
+
+const largeSizeTimes = tags[Math.floor(tags.length / 3)].times
+const smallSizeTimes = tags[Math.floor(tags.length * 2 / 3)].times
+const computeSize = (times: number) => {
+  if (times > largeSizeTimes)
+    return 'large'
+  if (times < smallSizeTimes)
+    return 'small'
+  return 'medium'
+}
 </script>
 
 <template>
   <n-card title="标签">
-    <router-link v-for="tag in tags" :to="`/tags/${encodeURIComponent(tag[0])}`">
-      <n-tag type="info" round>{{ tag[0] }}: {{ tag[1] }}</n-tag>
+    <router-link v-for="tag in tags" :to="`/tags/${encodeURIComponent(tag.content)}`">
+      <n-tag type="info" :size="computeSize(tag.times)" round>{{ tag.content }}: {{ tag.times }}</n-tag>
     </router-link>
   </n-card>
 </template>
