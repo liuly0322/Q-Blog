@@ -34,16 +34,29 @@
 
 <script setup lang="ts">
 import { LayoutInst } from 'naive-ui'
+import { PageKey } from '~/types'
 const width = window.innerWidth
 const sidebar_hidden = ref(width < 800)
 const on_update = (collapsed: boolean) => sidebar_hidden.value = true
 
 const contentRef = ref<LayoutInst | null>(null)
 const route = useRoute()
+
 watch(toRef(route, 'path'), (value, oldValue) => {
   if (value !== oldValue) {
     if (window.innerWidth >= 450) {
       contentRef.value?.scrollTo(0, 0)
+    }
+  }
+})
+
+const nowPage = inject(PageKey) ?? ref(1)
+watch(nowPage, (value, oldValue) => {
+  if (value !== oldValue) {
+    if (window.innerWidth >= 450) {
+      contentRef.value?.scrollTo(0, 0)
+    } else {
+      window.scrollTo(0, 0);
     }
   }
 })
