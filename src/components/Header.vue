@@ -2,7 +2,13 @@
   <header>
     <n-card content-style="display:flex;align-items:center;justify-content:space-between">
       <div class="flex">
-        <n-avatar round :size="48" src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100" />
+        <n-avatar
+          @click="router.push('/')"
+          style="cursor: pointer;"
+          round
+          :size="48"
+          src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
+        />
         <span class="subtitle">Life is but code.</span>
       </div>
       <div class="flex">
@@ -17,7 +23,7 @@
           class="nav-phone nav-sider"
           onclick="document.querySelector('.n-layout-toggle-button').click()"
         >
-          <i-ant-design:arrow-left-outlined />
+          <i-carbon:information />
         </n-button>
       </div>
     </n-card>
