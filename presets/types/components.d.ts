@@ -28,7 +28,6 @@ declare module 'vue' {
     NMenu: typeof import('naive-ui')['NMenu']
     NPagination: typeof import('naive-ui')['NPagination']
     NProgress: typeof import('naive-ui')['NProgress']
-    NResult: typeof import('naive-ui')['NResult']
     NTag: typeof import('naive-ui')['NTag']
     Sidebar: typeof import('./../../src/components/Sidebar.vue')['default']
     SidebarSearch: typeof import('./../../src/components/SidebarSearch.vue')['default']
