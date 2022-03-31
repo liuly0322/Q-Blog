@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { PostSummary, SummaryKey } from '~/types'
+import { SummaryKey } from '~/types'
 
-const summary = inject(SummaryKey) as PostSummary[]
+const summary = inject(SummaryKey) ?? []
 </script>
 
 <template>

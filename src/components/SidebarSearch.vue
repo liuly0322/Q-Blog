@@ -12,8 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import { PostSummary, SummaryKey } from '~/types'
-const summary = (inject(SummaryKey) as PostSummary[]).map((post) => ({ title: post.title.toLowerCase(), url: post.url }))
+import { SummaryKey } from '~/types'
+const summary = (inject(SummaryKey) ?? []).map((post) => ({ title: post.title.toLowerCase(), url: post.url }))
 
 const searchPattern = ref('')
 const searchOptions = computed(() => {
