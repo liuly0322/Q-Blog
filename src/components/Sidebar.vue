@@ -47,8 +47,7 @@
 
 <script setup lang="ts">
 const { isDark, toggleDark } = useDarks()
-const url = 'https://v1.hitokoto.cn'
-const { data } = useFetch(url).json()
+const { data } = useFetch('https://v1.hitokoto.cn').json()
 const hitokoto = computed(() => ({ from: data.value?.from, hitokoto: data.value?.hitokoto, from_who: data.value?.from_who }))
 </script>
 
