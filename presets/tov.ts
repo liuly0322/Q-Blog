@@ -10,7 +10,6 @@ import Windicss from 'vite-plugin-windicss'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import ViteRestart from 'vite-plugin-restart'
 import Layouts from 'vite-plugin-vue-layouts'
-import I18n from '@intlify/vite-plugin-vue-i18n'
 import { viteMockServe } from 'vite-plugin-mock'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
@@ -93,19 +92,11 @@ export default () => {
 				dts: './presets/types/auto-imports.d.ts',
 				imports: [
 					'vue',
-					'pinia',
-					'vue-i18n',
 					'vue-router',
 					'@vueuse/core'
 				],
 				resolvers: AutoImportResolvers
 			}),
-		// i18n 国际化支持
-		I18n({
-			runtimeOnly: true,
-			compositionOnly: true,
-			include: [resolve(__dirname, '../locales/**')]
-		}),
 		// 预设热重启服务
 		ViteRestart({
 			restart: [
