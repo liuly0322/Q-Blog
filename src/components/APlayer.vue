@@ -137,7 +137,7 @@ const fakeLoadingBar = async () => {
 
 const APlayerInit = async function () {
   fakeLoadingBar()
-  const url = `http://120.24.73.184/meting-api/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
+  const url = `https://api.injahow.cn/meting/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
   const { data, error } = await useFetch(url).get().json()
   if (error.value) {
     loadingStatus.value = 'error'
