@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from '@vue/runtime-core'
-import { PostSummary } from '~/types'
+import { PostSummary } from '~/composables/useSummary'
 
 const props = defineProps({
   summary: {

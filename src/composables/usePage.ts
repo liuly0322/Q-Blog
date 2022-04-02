@@ -1,3 +1,3 @@
-const Page = ref(1)
+const page = ref(1)
 
-export default () => Page
+export default () => page
