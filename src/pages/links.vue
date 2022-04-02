@@ -3,11 +3,11 @@
     <template #cover>
       <img src="/link-banner.jpg" />
     </template>
-    <div class="friend-container">
+    <div class="overflow-hidden flex flex-wrap">
       <template v-for="friend in friends" :key="friend.name">
-        <a :href="friend.url" target="_blank" class="friend">
+        <a :href="friend.url" target="_blank" class="flex-auto text-left m-2.5">
           <n-card content-style="display:flex">
-            <n-avatar round :size="48" :src="friend.avatar" class="avatar" />
+            <n-avatar round :size="48" :src="friend.avatar" class="mr-3" />
             <div class="flex" style="flex-direction: column;">
               <b>{{ friend.name }}</b>
               {{ friend.introduction }}
@@ -22,22 +22,3 @@
 <script setup lang="ts">
 import friends from '../../assets/friends.json'
 </script>
-
-<style scoped>
-.friend-container {
-  overflow: hidden;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.friend {
-  margin: 10px;
-  text-align: left;
-  flex: 1 1 content;
-  min-width: 200px;
-}
-
-.avatar {
-  margin-right: 12px;
-}
-</style>

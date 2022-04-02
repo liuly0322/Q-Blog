@@ -6,9 +6,7 @@ const router = useRouter()
   <main text="center teal-700 dark:gray-200">
     <router-view />
     <div>
-      <n-button m="3 t8" @click="router.back()">
-        返回
-      </n-button>
+      <n-button m="3 t8" @click="router.back()">返回</n-button>
     </div>
   </main>
 </template>
