@@ -1,5 +1,12 @@
 <template>
   <div>
+    <n-card v-if="isTablet" title="导航" content-style="display: flex; flex-wrap:wrap">
+      <span class="nav-item" @click="phoneNav('/')">🏠主页</span>
+      <span class="nav-item" @click="phoneNav('/archive')">🗃️归档</span>
+      <span class="nav-item" @click="phoneNav('/tags')">🏷️标签</span>
+      <span class="nav-item" @click="phoneNav('/links')">🔗友链</span>
+      <span class="nav-item" @click="phoneNav('/about')">❓关于</span>
+    </n-card>
     <sidebar-search></sidebar-search>
     <n-card v-if="hitokoto.hitokoto" title="一言">
       <span>{{ hitokoto.hitokoto }}</span>
@@ -47,6 +54,14 @@
 
 <script setup lang="ts">
 const { isDark, toggleDark } = useDarks()
+
+const { isTablet } = usePhone()
+const router = useRouter()
+const phoneNav = (path: string) => {
+  (document.querySelector('.nav-sider') as HTMLElement).click()
+  router.push(path)
+}
+
 const { data } = useFetch('https://v1.hitokoto.cn').json()
 const hitokoto = computed(() => ({ from: data.value?.from, hitokoto: data.value?.hitokoto, from_who: data.value?.from_who }))
 </script>
@@ -58,5 +73,9 @@ const hitokoto = computed(() => ({ from: data.value?.from, hitokoto: data.value?
 
 .about a {
   margin: 0 2px;
+}
+
+.nav-item {
+  margin: 4px 1em;
 }
 </style>

@@ -1,4 +1,4 @@
-@import "./md.css";
+@import './md.css';
 
 html,
 body,
@@ -12,14 +12,12 @@ html {
   --header-height: 110px;
 }
 
-body {
-  max-width: 1200px;
+html.nav-overflow-hidden {
+  overflow: hidden;
 }
 
-@media screen and (max-width: 449px) {
-  .n-layout-toggle-button {
-    display: none !important;
-  }
+body {
+  max-width: 1200px;
 }
 
 html.dark {
@@ -115,4 +113,32 @@ blockquote {
   padding-left: 15px;
   padding-right: 10px;
   border-left: 3px solid #ccc;
+}
+
+.mdui-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 5000px;
+  height: 5000px;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.4);
+  backface-visibility: hidden;
+  display: none;
+  opacity: 0;
+  transition-duration: 0.3s;
+  transition-property: opacity, visibility;
+  will-change: opacity;
+}
+
+/* 显示遮罩层 */
+.mdui-overlay-show {
+  display: unset;
+  opacity: 1;
+}
+
+@media screen and (max-width: 639px) {
+  .n-layout-toggle-button {
+    display: none !important;
+  }
 }

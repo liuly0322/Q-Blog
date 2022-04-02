@@ -1,8 +1,10 @@
 <template>
-  <n-layout-header style="height: calc(var(--header-height) - 1px)">
+  <n-layout-header
+    style="height: calc(var(--header-height) - 1px); position: relative; z-index: 3;"
+  >
     <Header text-gray-700 dark:text-gray-200 />
   </n-layout-header>
-  <n-layout class="main-layout" has-sider sider-placement="right">
+  <n-layout :style="mainLayoutStyle" has-sider sider-placement="right">
     <n-layout-content
       ref="contentRef"
       :native-scrollbar="false"
@@ -10,6 +12,7 @@
     >
       <main class="mt-10 pb-10 text-center text-gray-700 dark:text-gray-200">
         <router-view />
+        <div class="mdui-overlay" onclick="document.querySelector('.nav-sider').click()"></div>
       </main>
     </n-layout-content>
     <n-layout-sider
@@ -19,31 +22,36 @@
       :width="320"
       :native-scrollbar="false"
       :default-collapsed="width < 800"
-      :on-after-enter="() => sidebar_hidden = false"
-      :on-update:collapsed="on_update"
+      :on-after-enter="() => sidebarHidden = false"
+      :on-update:collapsed="onUpdate"
       show-trigger="arrow-circle"
       bordered
     >
-      <Sidebar :hidden="sidebar_hidden" />
+      <Sidebar :hidden="sidebarHidden" />
     </n-layout-sider>
   </n-layout>
-  <n-button circle class="go-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+  <n-button
+    v-if="isTablet"
+    circle
+    class="go-top"
+    onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+  >
     <i-carbon:arrow-up />
   </n-button>
 </template>
 
 <script setup lang="ts">
 import { LayoutInst } from 'naive-ui'
-const width = window.innerWidth
-const sidebar_hidden = ref(width < 800)
-const on_update = (collapsed: boolean) => sidebar_hidden.value = true
+const { width, isTablet } = usePhone()
+const sidebarHidden = ref(width.value < 800)
+const mainLayoutStyle = computed(() => isTablet.value ? '' : 'height: calc(100vh - var(--header-height));')
+const onUpdate = (collapsed: boolean) => sidebarHidden.value = true
 
 const contentRef = ref<LayoutInst | null>(null)
 const route = useRoute()
-
 watch(toRef(route, 'path'), (value, oldValue) => {
   if (value !== oldValue) {
-    if (window.innerWidth >= 450) {
+    if (!isTablet.value) {
       contentRef.value?.scrollTo(0, 0)
     }
   }
@@ -52,34 +60,25 @@ watch(toRef(route, 'path'), (value, oldValue) => {
 const { page } = usePage()
 watch(page, (value, oldValue) => {
   if (value !== oldValue) {
-    if (window.innerWidth >= 450) {
-      contentRef.value?.scrollTo(0, 0)
+    if (isTablet.value) {
+      window.scrollTo(0, 0)
     } else {
-      window.scrollTo(0, 0);
+      contentRef.value?.scrollTo(0, 0)
     }
   }
 })
 </script>
 
 <style scoped>
-@media screen and (max-width: 449px) {
-  .main-layout {
-    height: unset;
-  }
-  .go-top {
-    position: fixed;
-    bottom: 1em;
-    right: 1em;
-    z-index: 1;
-  }
+.n-layout-sider {
+  z-index: 3;
+  height: calc(100vh - var(--header-height));
 }
 
-@media screen and (min-width: 450px) {
-  .main-layout {
-    height: calc(100vh - var(--header-height));
-  }
-  .go-top {
-    display: none;
-  }
+.go-top {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  z-index: 4;
 }
 </style>

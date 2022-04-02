@@ -1,7 +1,7 @@
 <template>
-  <header>
+  <header class="p-2.5">
     <n-card content-style="display:flex;align-items:center;justify-content:space-between">
-      <div class="flex">
+      <div class="flex items-center">
         <n-avatar
           @click="router.push('/')"
           style="cursor: pointer;"
@@ -9,21 +9,12 @@
           :size="48"
           src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
         />
-        <span class="subtitle">Life is but code.</span>
+        <span class="pl-5 text-lg">Life is but code.</span>
       </div>
       <div class="flex">
-        <n-menu class="nav-landscape" mode="horizontal" :options="menuOptions" />
-        <n-dropdown trigger="click" :options="phoneOptions" @select="phoneNacSelect">
-          <n-button text class="nav-phone">
-            <i-carbon:menu />
-          </n-button>
-        </n-dropdown>
-        <n-button
-          text
-          class="nav-phone nav-sider"
-          onclick="document.querySelector('.n-layout-toggle-button').click()"
-        >
-          <i-carbon:information />
+        <n-menu v-if="!isTablet" mode="horizontal" :options="menuOptions" />
+        <n-button text v-if="isTablet" class="mr-2 nav-sider" @click="phoneNavUpdate">
+          <i-carbon:menu />
         </n-button>
       </div>
     </n-card>
@@ -33,10 +24,19 @@
 <script setup lang="ts">
 import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
-
 const router = useRouter()
-const phoneNacSelect = (key: string | number) => {
-  router.push(String(key))
+
+const { isTablet } = usePhone()
+
+const phoneNavUpdate = () => {
+  if (document.querySelector('.n-layout-sider--collapsed')) {
+    document.querySelector('.mdui-overlay')?.classList.add('mdui-overlay-show')
+    document.documentElement.classList.add('nav-overflow-hidden')
+  } else {
+    document.querySelector('.mdui-overlay')?.classList.remove('mdui-overlay-show')
+    document.documentElement.classList.remove('nav-overflow-hidden')
+  }
+  (document.querySelector('.n-layout-toggle-button') as HTMLElement).click();
 }
 
 const menuOptions: MenuOption[] = [
@@ -96,59 +96,4 @@ const menuOptions: MenuOption[] = [
     key: 'about',
   },
 ]
-const phoneOptions = [
-  {
-    label: '🏠 主页',
-    key: '/',
-  },
-  {
-    label: '🗃️ 归档',
-    key: '/archive',
-  },
-  {
-    label: '🏷️ 标签',
-    key: '/tags',
-  },
-  {
-    label: '🔗 友链',
-    key: '/links',
-  },
-  {
-    label: '❓ 关于',
-    key: '/about',
-  },
-]
 </script>
-
-<style scoped>
-header {
-  padding: 10px;
-}
-.subtitle {
-  line-height: 48px;
-  padding: 0 20px;
-  font-size: 1.2em;
-}
-
-@media screen and (max-width: 639px) {
-  .nav-landscape {
-    display: none;
-  }
-}
-
-.nav-phone {
-  margin: 0 4px;
-}
-
-@media screen and (min-width: 640px) {
-  .nav-phone {
-    display: none;
-  }
-}
-
-@media screen and (min-width: 450px) {
-  .nav-sider {
-    display: none;
-  }
-}
-</style>
