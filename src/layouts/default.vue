@@ -49,8 +49,8 @@ watch(toRef(route, 'path'), (value, oldValue) => {
   }
 })
 
-const nowPage = usePage()
-watch(nowPage, (value, oldValue) => {
+const { page } = usePage()
+watch(page, (value, oldValue) => {
   if (value !== oldValue) {
     if (window.innerWidth >= 450) {
       contentRef.value?.scrollTo(0, 0)

@@ -1,36 +1,34 @@
 <script setup lang="ts">
 import details from '../../assets/page.json'
-
 const summary = useSummary()
-const nowPage = usePage()
-const postInfos = details.map((e, i) => { return { 'detail': e, 'summary': summary[i] } })
-const pagesMax = Math.ceil(postInfos.length / 10)
+const postInfos = details.map((detail, i) => { return { 'detail': detail, 'summary': summary[i] } })
 
-const slices = computed(() => postInfos.slice((nowPage.value - 1) * 10, nowPage.value * 10))
+const { page, pageMax } = usePage()
+const nowPosts = computed(() => postInfos.slice((page.value - 1) * 10, page.value * 10))
 </script>
 
 <template>
-  <template v-for="ele in slices">
+  <template v-for="post in nowPosts">
     <n-card
       class="mb-4 px-2"
       header-style="font-size:2em; margin-top:1em"
       footer-style="text-align: left"
     >
       <template #header>
-        <router-link :to="`/posts/${encodeURIComponent(ele.summary.url)}`">{{ ele.summary.title }}</router-link>
+        <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`">{{ post.summary.title }}</router-link>
       </template>
-      {{ ele.summary.date }}
-      <markdown-it :source="ele.detail"></markdown-it>
-      <router-link class="show-more" :to="`/posts/${encodeURIComponent(ele.summary.url)}`">查看更多</router-link>
+      {{ post.summary.date }}
+      <markdown-it :source="post.detail"></markdown-it>
+      <router-link class="show-more" :to="`/posts/${encodeURIComponent(post.summary.url)}`">查看更多</router-link>
       <template #footer>
-        <span v-for="tag in ele.summary.tags" class="mr-2 text-slate-500">
+        <span v-for="tag in post.summary.tags" class="mr-2 text-slate-500">
           <router-link :to="`/tags/${encodeURIComponent(tag)}`">#{{ tag }}</router-link>
         </span>
       </template>
     </n-card>
   </template>
   <div class="my-10" style="display: inline-block;">
-    <n-pagination v-model:page="nowPage" :page-count="pagesMax" />
+    <n-pagination v-model:page="page" :page-count="pageMax" />
   </div>
 </template>
 
