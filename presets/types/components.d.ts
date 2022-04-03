@@ -6,6 +6,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     APlayer: typeof import('./../../src/components/APlayer.vue')['default']
     ArchiveCard: typeof import('./../../src/components/ArchiveCard.vue')['default']
+    Comment: typeof import('./../../src/components/Comment.vue')['default']
     Header: typeof import('./../../src/components/Header.vue')['default']
     'IAntDesign:githubFilled': typeof import('~icons/ant-design/github-filled')['default']
     'ICarbon:arrowUp': typeof import('~icons/carbon/arrow-up')['default']

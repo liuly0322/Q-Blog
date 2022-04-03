@@ -32,8 +32,7 @@
     "markdown-it-texmath": "^0.9.7",
     "naive-ui": "^2.27.0",
     "tailwind": "link:@unocss/reset/tailwind",
-    "vue": "^3.2.31",
-    "vue-utterances": "^0.1.4"
+    "vue": "^3.2.31"
   },
   "devDependencies": {
     "@types/ityped": "^1.0.1",

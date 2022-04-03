@@ -19,10 +19,8 @@ post_metadatas = []
 details = []
 
 content_end = """
-<script setup>
-	import VueUtterances from "vue-utterances";
-</script>
-<vue-utterances repo="liuly0322/liuly0322.github.io" theme="preferred-color-scheme" issue-term="pathname" />
+
+<Comment repo="liuly0322/liuly0322.github.io" issue-term="pathname" />
 """
 
 

@@ -48,7 +48,6 @@ specifiers:
   vue: ^3.2.31
   vue-router: ^4.0.14
   vue-tsc: ^0.32.1
-  vue-utterances: ^0.1.4
   windicss: ^3.5.1
   windicss-analysis: ^0.3.5
 
@@ -63,7 +62,6 @@ dependencies:
   naive-ui: registry.npmmirror.com/naive-ui/2.27.0_vue@3.2.31
   tailwind: link:@unocss/reset/tailwind
   vue: 3.2.31
-  vue-utterances: registry.npmmirror.com/vue-utterances/0.1.4_vue@3.2.31
 
 devDependencies:
   '@types/ityped': 1.0.1
@@ -5301,18 +5299,6 @@ packages:
       vue: ^3.0.0
     dependencies:
       evtd: registry.npmmirror.com/evtd/0.2.3
-      vue: 3.2.31
-    dev: false
-
-  registry.npmmirror.com/vue-utterances/0.1.4_vue@3.2.31:
-    resolution: {integrity: sha512-mI4gO4IcsOJorkEcuPw/uizlmPM43MUHaUvi19osPhcwOqJewkuVtN+9PSyE5SJIJnN2KUCYvzJuTRJEDAALNQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vue-utterances/-/vue-utterances-0.1.4.tgz}
-    id: registry.npmmirror.com/vue-utterances/0.1.4
-    name: vue-utterances
-    version: 0.1.4
-    engines: {node: '>=12'}
-    peerDependencies:
-      vue: ^3.0.5
-    dependencies:
       vue: 3.2.31
     dev: false
 
