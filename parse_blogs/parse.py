@@ -18,11 +18,6 @@ post_metadatas = []
 # we also need pagination info
 details = []
 
-content_end = """
-
-<Comment repo="liuly0322/liuly0322.github.io" issue-term="pathname" />
-"""
-
 
 def save_post(name: str, content: str, title: str, date: str):
     # get detail
@@ -38,7 +33,6 @@ def save_post(name: str, content: str, title: str, date: str):
     content_file = io.open(out_post_path + name + '.md', 'w', encoding='utf8')
     content = '# ' + title + '\n\n' + content
     content_file.write(content)
-    content_file.write(content_end)
     content_file.close()
 
 

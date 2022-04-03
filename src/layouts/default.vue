@@ -12,6 +12,7 @@
     >
       <main class="mt-10 pb-10 text-center text-gray-700 dark:text-gray-200">
         <router-view />
+        <Comment v-if="commentEnable" repo="liuly0322/liuly0322.github.io" issue-term="pathname" />
         <div class="mdui-overlay" onclick="document.querySelector('.nav-sider').click()"></div>
       </main>
     </n-layout-content>
@@ -48,12 +49,18 @@ const mainLayoutStyle = computed(() => isTablet.value ? '' : 'height: calc(100vh
 const onUpdate = (collapsed: boolean) => sidebarHidden.value = true
 
 const contentRef = ref<LayoutInst | null>(null)
-const route = useRoute()
-watch(toRef(route, 'path'), (value, oldValue) => {
+const routePath = toRef(useRoute(), 'path')
+const commentEnable = ref(routePath.value.includes('posts'))
+watch(routePath, (value, oldValue) => {
   if (value !== oldValue) {
     if (!isTablet.value) {
       contentRef.value?.scrollTo(0, 0)
     }
+    (async () => {
+      commentEnable.value = false     // first disable
+      await nextTick()                // ensure refresh
+      commentEnable.value = value.includes('posts')
+    })()
   }
 })
 
