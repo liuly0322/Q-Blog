@@ -165,7 +165,7 @@ const APlayerInit = async function () {
 }
 
 // 初始化
-onMounted(() => nextTick(APlayerInit))
+onMounted(APlayerInit)
 // 销毁
 onBeforeUnmount(() => {
   instance.destroy()

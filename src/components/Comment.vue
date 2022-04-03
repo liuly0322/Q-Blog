@@ -12,7 +12,7 @@ const props = defineProps({
   },
 })
 
-const commentInit = () => {
+onMounted(() => {
   let utterances = document.createElement("script")
 
   utterances.async = true
@@ -26,8 +26,7 @@ const commentInit = () => {
     utterances.setAttribute("theme", "github-light")
 
   vueUtterances.value.appendChild(utterances)
-}
-onMounted(() => nextTick(commentInit))
+})
 
 watch(isDark, (value, oldValue) => {
   if (value !== oldValue)
