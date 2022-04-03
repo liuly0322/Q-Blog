@@ -22,9 +22,9 @@ const props = defineProps({
     size="small"
     :segmented="true"
   >
-    <div class="card-list">
+    <div class="columns-[300px]">
       <template v-for="post in props.summary" :key="post.url">
-        <router-link class="inside-card" :to="`/posts/${post.url}`">
+        <router-link class="block break-inside-avoid" :to="`/posts/${post.url}`">
           <n-card :key="post.url" class="mb-2" :title="post.title" size="small">
             <div>{{ post.date }}</div>
             <div class="mt-2 mx-2">
@@ -38,14 +38,3 @@ const props = defineProps({
     </div>
   </n-card>
 </template>
-
-<style scoped>
-.card-list {
-  columns: 300px 3;
-}
-
-.inside-card {
-  break-inside: avoid;
-  display: grid;
-}
-</style>

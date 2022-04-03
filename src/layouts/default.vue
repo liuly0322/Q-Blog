@@ -33,7 +33,7 @@
   <n-button
     v-if="isTablet"
     circle
-    class="go-top"
+    class="z-4 fixed bottom-4 right-4"
     onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
   >
     <i-carbon:arrow-up />
@@ -73,12 +73,5 @@ watch(page, (value, oldValue) => {
 .n-layout-sider {
   z-index: 3;
   height: calc(100vh - var(--header-height));
-}
-
-.go-top {
-  position: fixed;
-  bottom: 1em;
-  right: 1em;
-  z-index: 4;
 }
 </style>
