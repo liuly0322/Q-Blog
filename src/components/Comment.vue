@@ -30,7 +30,7 @@ onMounted(() => {
 
 watch(isDark, (value, oldValue) => {
   if (value !== oldValue)
-    document.querySelector("iframe")?.contentWindow?.postMessage({
+    vueUtterances.value.querySelector("iframe")?.contentWindow?.postMessage({
       type: "set-theme",
       theme: value ? "github-dark" : "github-light"
     }, 'https://utteranc.es')
@@ -38,7 +38,5 @@ watch(isDark, (value, oldValue) => {
 </script>
 
 <template>
-  <div class="vue-utterances" ref="vueUtterances">
-    <!-- utterances script here -->
-  </div>
+  <div ref="vueUtterances" />
 </template>
