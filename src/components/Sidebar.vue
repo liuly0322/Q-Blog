@@ -7,7 +7,7 @@
       <span class="nav-item" @click="phoneNav('/links')">🔗友链</span>
       <span class="nav-item" @click="phoneNav('/about')">❓关于</span>
     </n-card>
-    <sidebar-search></sidebar-search>
+    <SidebarSearch />
     <n-card v-if="hitokoto.hitokoto" title="一言">
       <span>{{ hitokoto.hitokoto }}</span>
       <n-card :bordered="false" style="text-align:right">
@@ -15,7 +15,7 @@
       </n-card>
     </n-card>
     <n-card title="我的歌单">
-      <a-player song-server="tencent" song-id="2363529455" order="random" />
+      <APlayer song-server="tencent" song-id="2363529455" order="random" />
     </n-card>
     <n-card title="关于">
       <div style="text-align: center;" class="about">

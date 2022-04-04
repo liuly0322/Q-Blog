@@ -5,5 +5,5 @@ const curSummary = computed(() => summary.filter((post) => post.tags.includes(pr
 </script>
 
 <template>
-  <archive-card :title="props.tag" :summary="curSummary"></archive-card>
+  <ArchiveCard :title="props.tag" :summary="curSummary" />
 </template>

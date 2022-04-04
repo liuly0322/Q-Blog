@@ -18,7 +18,7 @@ const nowPosts = computed(() => postInfos.slice((page.value - 1) * 10, page.valu
         <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`">{{ post.summary.title }}</router-link>
       </template>
       {{ post.summary.date }}
-      <markdown-it :source="post.detail"></markdown-it>
+      <MarkdownIt :source="post.detail" />
       <router-link class="show-more" :to="`/posts/${encodeURIComponent(post.summary.url)}`">查看更多</router-link>
       <template #footer>
         <span v-for="tag in post.summary.tags" class="mr-2 text-slate-500">
