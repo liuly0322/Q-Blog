@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import details from '../../assets/page.json'
+const { data } = useFetch('/page.json').json()
 const summary = useSummary()
-const postInfos = details.map((detail, i) => { return { 'detail': detail, 'summary': summary[i] } })
+const postInfos = computed(() => data.value?.map((detail: string, i: number) => { return { 'detail': detail, 'summary': summary.value[i] } }))
 
 const { page, pageMax } = usePage()
-const nowPosts = computed(() => postInfos.slice((page.value - 1) * 10, page.value * 10))
+const nowPosts = computed(() => postInfos.value?.slice((page.value - 1) * 10, page.value * 10))
 </script>
 
 <template>

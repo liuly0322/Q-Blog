@@ -10,7 +10,7 @@ from email import utils
 post_path = "posts/*.md"
 
 # Where to store posts
-out_path = "assets/"
+out_path = "public/"
 out_post_path = "src/pages/posts/"
 
 # summart.json is about individual blogs

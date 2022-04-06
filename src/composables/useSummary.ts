@@ -1,4 +1,4 @@
-import summary from '../../assets/summary.json'
+const { data } = useFetch('/summary.json').json()
 export interface PostSummary {
   title: string
   date: string
@@ -6,4 +6,5 @@ export interface PostSummary {
   url: string
 }
 
-export default () => summary 
+const summary = computed(() => (data.value ? data.value : []) as PostSummary[])
+export default () => summary

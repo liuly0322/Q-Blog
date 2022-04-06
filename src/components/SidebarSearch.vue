@@ -12,13 +12,14 @@
 </template>
 
 <script setup lang="ts">
-const summary = useSummary().map((post) => ({ title: post.title.toLowerCase(), url: post.url }))
+const _summary = useSummary()
+const summary = computed(() => _summary.value.map((post) => ({ title: post.title.toLowerCase(), url: post.url })))
 
 const searchPattern = ref('')
 const searchOptions = computed(() => {
   if (!searchPattern.value) return []
   const pattern = searchPattern.value.toLowerCase().slice(0, 20)
-  return summary.filter((post) => post.title.includes(pattern)).map((post) => ({
+  return summary.value.filter((post) => post.title.includes(pattern)).map((post) => ({
     label: post.title,
     value: post.url
   }))

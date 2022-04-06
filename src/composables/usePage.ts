@@ -1,4 +1,6 @@
+const summary = useSummary()
+
 const page = ref(1)
-const pageMax = Math.ceil(useSummary().length / 10)
+const pageMax = computed(() => Math.ceil(summary.value.length / 10))
 
 export default () => ({ page, pageMax })
