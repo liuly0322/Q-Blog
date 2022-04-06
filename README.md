@@ -4,6 +4,8 @@
   <img src='docs/logo-512.png' alt='Q-Blog - Quicker and Cute' width='100'/>
 </p>
 
+<p align='center'>Q-Blog - Quicker and Cute</p>
+
 ~~\#66ccff~~
 
 ## 项目说明
@@ -12,7 +14,7 @@
 
 参考 [TOV](https://github.com/dishait/tov-template) 的 Vite2 + Vue3 模板
 
-md 文件可直接作为组价被 Vue 引用
+md 文件可直接作为组件被 Vue 引用
 
 并利用 python 对 md 文件 YAML front matter 进行解析，生成其余索引 json
 
@@ -51,6 +53,8 @@ python 生成对应 md 组件和索引文件 `summary.json`, `page.json`
 
 ## 食用方法
 
+**注意：目前仅测试部署在域名根目录的情形，其余情形暂未测试**
+
 clone 本仓库后，确保 node 版本号大于等于 14, 并已经安装 npm
 
 ```bash
@@ -64,7 +68,15 @@ pnpm i
 
 需要有 YAML frontmatter, 至少包含 title, date, tags
 
+写完后： 
+
+```bash
+python parse_blogs/parse.py # 在项目根目录下运行
+```
+
 ### 开发
+
+用于在自己浏览器上预览效果
 
 ```bash
 pnpm run dev
@@ -72,12 +84,7 @@ pnpm run dev
 
 ### 部署
 
-**注意：**
-
-**当前项目只针对默认部署在根目录下的情形，其余情况暂未兼容**
-
 ```bash
-python parse_blogs/parse.py # 在项目根目录下运行
 pnpm run build
 ```
 
@@ -87,8 +94,6 @@ pnpm run build
 
 #### GitHub Pages
 
-根据 [taoky](https://github.com/taoky) 建议，可以选择部署在 Github Pages 上，后期也方便买域名
+- 注意需要在网页静态资源的根目录下添加 `.nojekyll` 文件
 
-Github Pages 会把找不到文件的请求解析到 `404.html`，本项目已经针对此做了一定的配置
-
-如果你也有兴趣部署在 Github Pages 上，注意需要在网页静态资源的根目录下添加 `.nojekyll` 文件
+- Github Pages 会把找不到文件的请求解析到 `404.html`，作为单页面应用，本项目已经针对此做了一定的配置，可以参考 `404.html` 中的代码 
