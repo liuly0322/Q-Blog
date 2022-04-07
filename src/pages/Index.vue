@@ -43,8 +43,3 @@ const nowPosts = computed(() => postInfos.value?.slice((page.value - 1) * 10, pa
   text-decoration: none;
 }
 </style>
-
-<route lang="yaml">
-meta:
-  layout: default
-</route>
