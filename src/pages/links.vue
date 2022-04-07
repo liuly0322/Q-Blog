@@ -8,7 +8,7 @@
         <a :href="friend.url" target="_blank" class="flex-auto text-left m-2.5">
           <n-card content-style="display:flex">
             <n-avatar round :size="48" :src="friend.avatar" class="mr-3" />
-            <div class="flex" style="flex-direction: column;">
+            <div class="flex flex-col">
               <b>{{ friend.name }}</b>
               {{ friend.introduction }}
             </div>

@@ -27,7 +27,7 @@ const nowPosts = computed(() => postInfos.value?.slice((page.value - 1) * 10, pa
       </template>
     </n-card>
   </template>
-  <div class="my-10" style="display: inline-block;">
+  <div class="my-10 inline-block">
     <n-pagination v-model:page="page" :page-count="pageMax" />
   </div>
 </template>

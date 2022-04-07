@@ -43,7 +43,7 @@ const hitokoto = computed(() => ({ from: data.value?.from, hitokoto: data.value?
           <i-carbon:haze-night v-if="isDark" style="font-size:xx-large" />
           <i-carbon:sun v-if="!isDark" style="font-size:xx-large" />
         </span>
-        <p style="margin-top: 1em;">Copyright © 2021 2022 liuly</p>
+        <p class="mt-3">Copyright © 2021 2022 liuly</p>
         <p>
           License:
           <a
