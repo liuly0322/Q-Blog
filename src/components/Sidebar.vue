@@ -1,12 +1,8 @@
 <script setup lang="ts">
 const { isDark, toggleDark } = useDarks()
 
-const { isTablet } = usePhone()
+const { isMobile } = usePhone()
 const router = useRouter()
-const phoneNav = (path: string) => {
-  (document.querySelector('.nav-sider') as HTMLElement).click()
-  router.push(path)
-}
 
 const { data } = useFetch('https://v1.hitokoto.cn').json()
 const hitokoto = computed(() => ({ from: data.value?.from, hitokoto: data.value?.hitokoto, from_who: data.value?.from_who }))
@@ -14,12 +10,12 @@ const hitokoto = computed(() => ({ from: data.value?.from, hitokoto: data.value?
 
 <template>
   <div>
-    <n-card v-if="isTablet" title="导航" content-style="display: flex; flex-wrap:wrap" class="mb-6">
-      <span class="mx-3 my-1" @click="phoneNav('/')">🏠主页</span>
-      <span class="mx-3 my-1" @click="phoneNav('/archive')">🗃️归档</span>
-      <span class="mx-3 my-1" @click="phoneNav('/tags')">🏷️标签</span>
-      <span class="mx-3 my-1" @click="phoneNav('/links')">🔗友链</span>
-      <span class="mx-3 my-1" @click="phoneNav('/about')">❓关于</span>
+    <n-card v-if="isMobile" title="导航" content-style="display: flex; flex-wrap:wrap" class="mb-6">
+      <span class="mx-3 my-1" @click="router.push('/')">🏠主页</span>
+      <span class="mx-3 my-1" @click="router.push('/archive')">🗃️归档</span>
+      <span class="mx-3 my-1" @click="router.push('/tags')">🏷️标签</span>
+      <span class="mx-3 my-1" @click="router.push('/links')">🔗友链</span>
+      <span class="mx-3 my-1" @click="router.push('/about')">❓关于</span>
     </n-card>
     <SidebarSearch class="mb-6" />
     <n-card v-if="hitokoto.hitokoto" title="一言" class="mb-6">

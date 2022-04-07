@@ -13,7 +13,7 @@
       <main class="mt-10 pb-10 text-center text-gray-700 dark:text-gray-200">
         <router-view />
         <Comment v-if="commentEnable" repo="liuly0322/liuly0322.github.io" issue-term="pathname" />
-        <div class="mdui-overlay" onclick="document.querySelector('.nav-sider').click()"></div>
+        <div v-if="isMobile" class="mdui-overlay" @click="() => phoneNavToggle()"></div>
       </main>
     </n-layout-content>
     <n-layout-sider
@@ -22,7 +22,7 @@
       :collapsed-width="14"
       :width="320"
       :native-scrollbar="false"
-      :default-collapsed="width < 800"
+      :default-collapsed="isMobile"
       :on-after-enter="() => sidebarHidden = false"
       :on-update:collapsed="onUpdate"
       show-trigger="arrow-circle"
@@ -32,7 +32,7 @@
     </n-layout-sider>
   </n-layout>
   <n-button
-    v-if="isTablet"
+    v-if="isMobile"
     circle
     class="z-4 fixed bottom-4 right-4"
     onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
@@ -43,9 +43,9 @@
 
 <script setup lang="ts">
 import { LayoutInst } from 'naive-ui'
-const { width, isTablet } = usePhone()
-const sidebarHidden = ref(width.value < 800)
-const mainLayoutStyle = computed(() => isTablet.value ? '' : 'height: calc(100vh - var(--header-height));')
+const { isMobile, phoneNavToggle } = usePhone()
+const sidebarHidden = ref(isMobile.value)
+const mainLayoutStyle = computed(() => isMobile.value ? '' : 'height: calc(100vh - var(--header-height));')
 const onUpdate = (collapsed: boolean) => sidebarHidden.value = true
 
 const contentRef = ref<LayoutInst | null>(null)
@@ -53,7 +53,9 @@ const routePath = toRef(useRoute(), 'path')
 const commentEnable = ref(routePath.value.includes('posts'))
 watch(routePath, (value, oldValue) => {
   if (value !== oldValue) {
-    if (!isTablet.value) {
+    if (isMobile.value) {
+      phoneNavToggle(false)           // 关闭导航栏
+    } else {
       contentRef.value?.scrollTo(0, 0)
     }
     (async () => {
@@ -67,7 +69,7 @@ watch(routePath, (value, oldValue) => {
 const { page } = usePage()
 watch(page, (value, oldValue) => {
   if (value !== oldValue) {
-    if (isTablet.value) {
+    if (isMobile.value) {
       window.scrollTo(0, 0)
     } else {
       contentRef.value?.scrollTo(0, 0)

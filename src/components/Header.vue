@@ -12,8 +12,8 @@
         <span class="pl-5 text-lg">Life is but code.</span>
       </div>
       <div class="flex">
-        <n-menu v-if="!isTablet" mode="horizontal" :options="menuOptions" />
-        <n-button text v-if="isTablet" class="mr-2 nav-sider" @click="phoneNavUpdate">
+        <n-menu v-if="!isMobile" mode="horizontal" :options="menuOptions" />
+        <n-button text v-if="isMobile" class="mr-2" @click="() => phoneNavToggle()">
           <i-carbon:menu />
         </n-button>
       </div>
@@ -26,18 +26,7 @@ import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
 const router = useRouter()
 
-const { isTablet } = usePhone()
-
-const phoneNavUpdate = () => {
-  if (document.querySelector('.n-layout-sider--collapsed')) {
-    document.querySelector('.mdui-overlay')?.classList.add('mdui-overlay-show')
-    document.documentElement.classList.add('nav-overflow-hidden')
-  } else {
-    document.querySelector('.mdui-overlay')?.classList.remove('mdui-overlay-show')
-    document.documentElement.classList.remove('nav-overflow-hidden')
-  }
-  (document.querySelector('.n-layout-toggle-button') as HTMLElement).click();
-}
+const { isMobile, phoneNavToggle } = usePhone()
 
 const menuOptions: MenuOption[] = [
   {

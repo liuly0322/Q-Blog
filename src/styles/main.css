@@ -136,7 +136,7 @@ blockquote {
   opacity: 1;
 }
 
-@media screen and (max-width: 639px) {
+@media screen and (max-width: 767px) {
   .n-layout-toggle-button {
     display: none !important;
   }
