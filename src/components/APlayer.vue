@@ -65,7 +65,7 @@ const props = defineProps({
   },
   preload: {
     type: String as PropType<'auto' | 'metadata' | 'none'>,
-    default: 'auto',
+    default: 'none',
   },
   volume: {
     type: Number as PropType<number>,
@@ -164,8 +164,8 @@ const APlayerInit = async function () {
   loadingStatus.value = 'success'
 }
 
-// 初始化
-onMounted(APlayerInit)
+// 初始化，nextTick 减少页面渲染等待时间
+onMounted(() => nextTick(APlayerInit))
 // 销毁
 onBeforeUnmount(() => {
   instance.destroy()
