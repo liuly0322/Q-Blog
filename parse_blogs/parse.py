@@ -1,4 +1,5 @@
 import frontmatter
+import mistune
 import io
 import os
 import json
@@ -26,6 +27,7 @@ def save_post(name: str, content: str, title: str, date: str):
         detail = content[:100] + '......'
     else:
         detail = content[:detail_index]
+    detail = mistune.markdown(detail)
     details.append(
         {'detail': detail, 'date': date})
 

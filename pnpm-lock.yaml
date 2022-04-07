@@ -17,7 +17,6 @@ specifiers:
   fs-extra: ^10.0.1
   ityped: ^1.0.3
   katex: ^0.15.3
-  markdown-it: ^12.3.2
   markdown-it-anchor: ^8.4.1
   markdown-it-prism: ^2.2.3
   markdown-it-texmath: ^0.9.7
@@ -56,7 +55,6 @@ dependencies:
   '@iconify-json/carbon': registry.npmmirror.com/@iconify-json/carbon/1.1.2
   '@vue/runtime-core': registry.npmmirror.com/@vue/runtime-core/3.2.31
   aplayer-ts: registry.npmmirror.com/aplayer-ts/1.0.4
-  markdown-it: registry.npmmirror.com/markdown-it/12.3.2
   tailwind: link:@unocss/reset/tailwind
   vue: 3.2.31
 
@@ -73,7 +71,7 @@ devDependencies:
   fs-extra: 10.0.1
   ityped: 1.0.3
   katex: registry.npmmirror.com/katex/0.15.3
-  markdown-it-anchor: 8.4.1_markdown-it@12.3.2
+  markdown-it-anchor: 8.4.1
   markdown-it-prism: 2.2.3
   markdown-it-texmath: registry.npmmirror.com/markdown-it-texmath/0.9.7
   mockjs: 1.1.0
@@ -1955,7 +1953,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /markdown-it-anchor/8.4.1_markdown-it@12.3.2:
+  /markdown-it-anchor/8.4.1:
     resolution: {integrity: sha512-sLODeRetZ/61KkKLJElaU3NuU2z7MhXf12Ml1WJMSdwpngeofneCRF+JBbat8HiSqhniOMuTemXMrsI7hA6XyA==}
     peerDependencies:
       '@types/markdown-it': '*'
@@ -1965,8 +1963,6 @@ packages:
         optional: true
       markdown-it:
         optional: true
-    dependencies:
-      markdown-it: registry.npmmirror.com/markdown-it/12.3.2
     dev: true
 
   /markdown-it-prism/2.2.3:
@@ -4154,6 +4150,7 @@ packages:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/argparse/-/argparse-2.0.1.tgz}
     name: argparse
     version: 2.0.1
+    dev: true
 
   registry.npmmirror.com/async-validator/4.0.7:
     resolution: {integrity: sha512-Pj2IR7u8hmUEDOwB++su6baaRi+QvsgajuFB9j95foM1N2gy5HM4z60hfusIO0fBPG5uLAEl6yCJr1jNSVugEQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/async-validator/-/async-validator-4.0.7.tgz}
@@ -4364,6 +4361,7 @@ packages:
     resolution: {integrity: sha512-hCx1oky9PFrJ611mf0ifBLBRW8lUUVRlFolb5gWRfIELabBlbp9xZvrqZLZAs+NxFnbfQoeGd8wDkygjg7U85w==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/entities/-/entities-2.1.0.tgz}
     name: entities
     version: 2.1.0
+    dev: true
 
   registry.npmmirror.com/entities/2.2.0:
     resolution: {integrity: sha512-p92if5Nz619I0w+akJrLZH0MX0Pb5DX39XOwQTtXSdQQOaYH03S1uIQp4mhOZtAXrxq4ViO67YTiLBo2638o9A==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/entities/-/entities-2.2.0.tgz}
@@ -4867,6 +4865,7 @@ packages:
     version: 3.0.3
     dependencies:
       uc.micro: registry.npmmirror.com/uc.micro/1.0.6
+    dev: true
 
   registry.npmmirror.com/local-pkg/0.4.1:
     resolution: {integrity: sha512-lL87ytIGP2FU5PWwNDo0w3WhIo2gopIAxPg9RxDYF7m4rr5ahuZxP22xnJHIvaLTe4Z9P6uKKY2UHiwyB4pcrw==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/local-pkg/-/local-pkg-0.4.1.tgz}
@@ -4920,11 +4919,13 @@ packages:
       linkify-it: registry.npmmirror.com/linkify-it/3.0.3
       mdurl: registry.npmmirror.com/mdurl/1.0.1
       uc.micro: registry.npmmirror.com/uc.micro/1.0.6
+    dev: true
 
   registry.npmmirror.com/mdurl/1.0.1:
     resolution: {integrity: sha512-/sKlQJCBYVY9Ers9hqzKou4H6V5UWc/M59TH2dvkt+84itfnq7uFOMLpOiOS4ujvHP4etln18fmIxA5R5fll0g==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/mdurl/-/mdurl-1.0.1.tgz}
     name: mdurl
     version: 1.0.1
+    dev: true
 
   registry.npmmirror.com/ms/2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ms/-/ms-2.1.2.tgz}
@@ -5196,6 +5197,7 @@ packages:
     resolution: {integrity: sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/uc.micro/-/uc.micro-1.0.6.tgz}
     name: uc.micro
     version: 1.0.6
+    dev: true
 
   registry.npmmirror.com/uglify-js/3.15.3:
     resolution: {integrity: sha512-6iCVm2omGJbsu3JWac+p6kUiOpg3wFO2f8lIXjfEb8RrmLjzog1wTPMmwKB7swfzzqxj9YM+sGUM++u1qN4qJg==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/uglify-js/-/uglify-js-3.15.3.tgz}

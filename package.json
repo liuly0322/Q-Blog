@@ -27,7 +27,6 @@
     "@iconify-json/carbon": "^1.1.2",
     "@vue/runtime-core": "^3.2.31",
     "aplayer-ts": "^1.0.4",
-    "markdown-it": "^12.3.2",
     "tailwind": "link:@unocss/reset/tailwind",
     "vue": "^3.2.31"
   },
@@ -90,7 +89,6 @@
         "@vueuse/core",
         "aplayer-ts",
         "ityped",
-        "markdown-it",
         "mockjs",
         "naive-ui",
         "nprogress",

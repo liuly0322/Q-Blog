@@ -5,10 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import MarkdownIt from 'markdown-it';
-
-const md = new MarkdownIt()
-const renderedHTML = computed(() => md.render(props.source))
+// now it only deliver content to raw html
+const renderedHTML = computed(() => props.source)
 
 const props = defineProps({
   source: {
