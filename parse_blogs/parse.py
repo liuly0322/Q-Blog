@@ -82,10 +82,9 @@ rss_file.write("""<?xml version="1.0" encoding="utf-8"?>
 <channel>
 	<title>liuly's Blog</title>
 	<description>liuly's Blog</description>
-	<lastBuildDate>{}</lastBuildDate>
 	<link>http://blog.liuly.moe</link>
 	<atom:link href="http://blog.liuly.moe/feed.xml" rel="self" type="application/rss+xml" />
-	<generator>Q-Blog</generator>""".format(utils.format_datetime(datetime.datetime.now())))
+	<generator>Q-Blog</generator>""")
 # each post is an item
 for meta, detail in zip(post_metadatas, details):
     post_url = 'http://blog.liuly.moe/posts/{}/'.format(meta.get('url'))
