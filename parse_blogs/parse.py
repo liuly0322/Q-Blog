@@ -4,7 +4,6 @@ import io
 import os
 import json
 import glob
-import datetime
 from email import utils
 
 # Where are the files to modify
