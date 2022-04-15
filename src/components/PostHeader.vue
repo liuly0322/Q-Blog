@@ -10,8 +10,8 @@ const props = defineProps<{
   <div class="md-blog m-auto text-left">
     <h1>{{ currPost.title }}</h1>
     <p>{{ currPost.date }}</p>
-    <div class="my-2 border-b pb-4">
-      <n-tag v-for="tag in currPost.tags" :key="tag" class="mr-2" type="success" round>
+    <div class="border-b pb-4">
+      <n-tag v-for="tag in currPost.tags" :key="tag" class="mr-2 mb-4" type="success" round>
         <router-link :to="`/tags/${encodeURIComponent(tag)}`">{{ tag }}</router-link>
       </n-tag>
     </div>
