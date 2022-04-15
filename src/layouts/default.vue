@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { LayoutInst } from 'naive-ui'
 const { isMobile, phoneNavToggle } = usePhone()
-const sidebarHidden = ref(isMobile.value)
 const mainLayoutStyle = computed(() => isMobile.value ? '' : 'height: calc(100vh - var(--header-height));')
-const onUpdate = (collapsed: boolean) => sidebarHidden.value = true
 
 const contentRef = ref<LayoutInst | null>(null)
 const routePath = toRef(useRoute(), 'path')
@@ -22,6 +20,7 @@ watch(routePath, (value, oldValue) => {
     })()
   }
 })
+const siderWidth = computed(() => isMobile.value ? 0 : 14)
 
 const { page } = usePage()
 watch(page, (value, oldValue) => {
@@ -48,10 +47,9 @@ watch(page, (value, oldValue) => {
         <div v-if="isMobile" class="mdui-overlay" @click="() => phoneNavToggle()"></div>
       </main>
     </n-layout-content>
-    <n-layout-sider content-style="padding: 24px;" collapse-mode="width" :collapsed-width="14" :width="320"
-      :native-scrollbar="false" :default-collapsed="isMobile" :on-after-enter="() => sidebarHidden = false"
-      :on-update:collapsed="onUpdate" show-trigger="arrow-circle" bordered>
-      <Sidebar :hidden="sidebarHidden" />
+    <n-layout-sider content-style="padding: 24px;" :collapsed-width="siderWidth" :width="320" :native-scrollbar="false"
+      :default-collapsed="isMobile" show-trigger="arrow-circle" bordered>
+      <Sidebar />
     </n-layout-sider>
   </n-layout>
   <n-button v-if="isMobile" circle class="z-4 fixed bottom-4 right-4"
