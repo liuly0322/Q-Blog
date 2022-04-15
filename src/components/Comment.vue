@@ -1,24 +1,19 @@
 <script setup lang="ts">
+import { PostSummary } from '~/composables/useSummary';
 const { isDark } = useDarks()
 const vueUtterances = ref()
-const props = defineProps({
-  repo: {
-    type: String,
-    required: true
-  },
-  issueTerm: {
-    type: String,
-    required: true
-  },
-})
+const props = defineProps<{
+  currPost: PostSummary
+}>()
 
-onMounted(() => {
+const init = () => {
+  vueUtterances.value.firstChild?.remove()
+
   let utterances = document.createElement("script")
-
   utterances.async = true
   utterances.setAttribute("src", "https://utteranc.es/client.js")
-  utterances.setAttribute("repo", props.repo)
-  utterances.setAttribute("issue-term", props.issueTerm)
+  utterances.setAttribute("repo", "liuly0322/liuly0322.github.io")
+  utterances.setAttribute("issue-term", "pathname")
   utterances.setAttribute("crossorigin", "anonymous")
   if (isDark.value)
     utterances.setAttribute("theme", "github-dark")
@@ -26,7 +21,10 @@ onMounted(() => {
     utterances.setAttribute("theme", "github-light")
 
   vueUtterances.value.appendChild(utterances)
-})
+}
+
+onMounted(init)
+watch(() => props.currPost, init)
 
 watch(isDark, (value, oldValue) => {
   if (value !== oldValue)

@@ -32,7 +32,6 @@ def save_post(name: str, content: str, title: str, date: str):
 
     # get main content
     content_file = io.open(out_post_path + name + '.md', 'w', encoding='utf8')
-    content = '# ' + title + '\n\n' + content
     content_file.write(content)
     content_file.close()
 

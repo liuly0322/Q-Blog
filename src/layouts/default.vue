@@ -1,37 +1,29 @@
 <script setup lang="ts">
 import { LayoutInst } from 'naive-ui'
+import usePost from '~/composables/usePost';
 const { isMobile, phoneNavToggle } = usePhone()
 const mainLayoutStyle = computed(() => isMobile.value ? '' : 'height: calc(100vh - var(--header-height));')
+const siderWidth = computed(() => isMobile.value ? 0 : 14)
 
 const contentRef = ref<LayoutInst | null>(null)
 const routePath = toRef(useRoute(), 'path')
-const commentEnable = ref(routePath.value.includes('posts'))
-watch(routePath, (value, oldValue) => {
-  if (value !== oldValue) {
-    if (isMobile.value) {
-      phoneNavToggle(false)           // 关闭导航栏
-    } else {
-      contentRef.value?.scrollTo(0, 0)
-    }
-    (async () => {
-      commentEnable.value = false     // first disable
-      await nextTick()                // ensure refresh
-      commentEnable.value = value.includes('posts')
-    })()
+watch(routePath, () => {
+  if (isMobile.value) {
+    phoneNavToggle(false)           // 关闭导航栏
+  } else {
+    contentRef.value?.scrollTo(0, 0)
   }
 })
-const siderWidth = computed(() => isMobile.value ? 0 : 14)
-
 const { page } = usePage()
-watch(page, (value, oldValue) => {
-  if (value !== oldValue) {
-    if (isMobile.value) {
-      window.scrollTo(0, 0)
-    } else {
-      contentRef.value?.scrollTo(0, 0)
-    }
+watch(page, () => {
+  if (isMobile.value) {
+    window.scrollTo(0, 0)
+  } else {
+    contentRef.value?.scrollTo(0, 0)
   }
 })
+
+const { isPost, currPost } = usePost()
 </script>
 
 <template>
@@ -42,8 +34,10 @@ watch(page, (value, oldValue) => {
     <n-layout-content ref="contentRef" :native-scrollbar="false"
       content-style="padding: 0 24px;min-width: 340px;overflow: hidden;">
       <main class="mt-10 pb-10 text-center text-gray-700 dark:text-gray-200">
+        <PostHeader v-if="isPost" :curr-post="currPost"></PostHeader>
         <router-view />
-        <Comment v-if="commentEnable" repo="liuly0322/liuly0322.github.io" issue-term="pathname" />
+        <PostFooter v-if="isPost" :curr-post="currPost.url"></PostFooter>
+        <Comment v-if="isPost" :curr-post="currPost" />
         <div v-if="isMobile" class="mdui-overlay" @click="() => phoneNavToggle()"></div>
       </main>
     </n-layout-content>
