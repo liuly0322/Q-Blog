@@ -6,5 +6,5 @@ export interface PostSummary {
   url: string
 }
 
-const summary = computed(() => (data.value ? data.value : []) as PostSummary[])
+const summary = computed(() => (data.value ?? []) as PostSummary[])
 export default () => summary
