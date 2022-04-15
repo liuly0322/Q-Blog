@@ -1,19 +1,18 @@
 <script setup lang="ts">
 const { data } = useFetch('/page.json').json()
 const summary = useSummary()
-const postInfos = computed(() => data.value?.map((detail: string, i: number) => { return { 'detail': detail, 'summary': summary.value[i] } }))
-
 const { page, pageMax } = usePage()
-const nowPosts = computed(() => postInfos.value?.slice((page.value - 1) * 10, page.value * 10))
+const posts = computed(() => {
+  const currSummary = data.value ?? Array(summary.value.length).fill('')
+  return currSummary.map((detail: string, i: number) => (
+    { 'detail': detail, 'summary': summary.value[i] }
+  )).slice((page.value - 1) * 10, page.value * 10)
+})
 </script>
 
 <template>
-  <template v-for="post in nowPosts">
-    <n-card
-      class="mb-4 px-2"
-      header-style="font-size:2em; margin-top:1em"
-      footer-style="text-align: left"
-    >
+  <template v-for="post in posts">
+    <n-card class="mb-4 px-2" header-style="font-size:2em; margin-top:1em" footer-style="text-align: left">
       <template #header>
         <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`">{{ post.summary.title }}</router-link>
       </template>
