@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import friends from '../../assets/friends.json'
+</script>
+
 <template>
   <n-card title="友情链接">
     <template #cover>
@@ -18,7 +22,3 @@
     </div>
   </n-card>
 </template>
-
-<script setup lang="ts">
-import friends from '../../assets/friends.json'
-</script>
