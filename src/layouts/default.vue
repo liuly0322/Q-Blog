@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { LayoutInst } from 'naive-ui'
-import usePost from '~/composables/usePost';
 const { isMobile, phoneNavToggle } = usePhone()
 const mainLayoutStyle = computed(() => isMobile.value ? '' : 'height: calc(100vh - var(--header-height));')
 const siderWidth = computed(() => isMobile.value ? 0 : 14)
