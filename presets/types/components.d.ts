@@ -28,6 +28,8 @@ declare module 'vue' {
     NPagination: typeof import('naive-ui')['NPagination']
     NProgress: typeof import('naive-ui')['NProgress']
     NTag: typeof import('naive-ui')['NTag']
+    PostFooter: typeof import('./../../src/components/PostFooter.vue')['default']
+    PostHeader: typeof import('./../../src/components/PostHeader.vue')['default']
     Sidebar: typeof import('./../../src/components/Sidebar.vue')['default']
     SidebarSearch: typeof import('./../../src/components/SidebarSearch.vue')['default']
   }
