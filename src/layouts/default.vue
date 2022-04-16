@@ -33,10 +33,10 @@ const { isPost, currPost } = usePost()
     <n-layout-content ref="contentRef" :native-scrollbar="false"
       content-style="padding: 0 24px;min-width: 340px;overflow: hidden;">
       <main class="mt-10 pb-10 text-center text-gray-700 dark:text-gray-200">
-        <PostHeader v-if="isPost" :curr-post="currPost"></PostHeader>
+        <PostHeader v-if="isPost" :post="currPost"></PostHeader>
         <router-view />
-        <PostFooter v-if="isPost" :curr-post="currPost.url"></PostFooter>
-        <Comment v-if="isPost" :curr-post="currPost" />
+        <PostFooter v-if="isPost" :post="currPost.url"></PostFooter>
+        <Comment v-if="isPost" :post="currPost" />
         <div v-if="isMobile" class="mdui-overlay" @click="() => phoneNavToggle()"></div>
       </main>
     </n-layout-content>

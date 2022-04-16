@@ -1,21 +1,22 @@
 <script setup lang="ts">
 const summary = useSummary()
 const props = defineProps<{
-  currPost: string
+  post: string
 }>()
-const curIndex = computed(() => summary.value.findIndex((PostSummary) => PostSummary.url == props.currPost))
-
+const postIndex = computed(() => summary.value.findIndex((PostSummary) => PostSummary.url == props.post))
 </script>
 
 <template>
   <div class="overflow-hidden my-12 p-4 border-t border-b">
-    <div class="float-left my-2" v-if="curIndex > 0">
-      <router-link :to="`/posts/${encodeURIComponent(summary[curIndex - 1].url)}`">
-        上一篇：{{ summary[curIndex - 1].title }}
+    <div class="float-left my-2" v-if="postIndex > 0">
+      <router-link :to="`/posts/${encodeURIComponent(summary[postIndex - 1].url)}`">
+        上一篇：{{ summary[postIndex - 1].title }}
       </router-link>
     </div>
-    <div class="float-right my-2" v-if="curIndex + 1 < summary.length">
-      <router-link :to="`/posts/${encodeURIComponent(summary[curIndex + 1].url)}`">下一篇：{{ summary[curIndex + 1].title }}
+    <div class="float-right my-2" v-if="postIndex + 1 < summary.length">
+      <router-link :to="`/posts/${encodeURIComponent(summary[postIndex + 1].url)}`">下一篇：{{
+        summary[postIndex + 1].title
+      }}
       </router-link>
     </div>
   </div>

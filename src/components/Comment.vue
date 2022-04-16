@@ -3,7 +3,7 @@ import { PostSummary } from '~/composables/useSummary';
 const { isDark } = useDarks()
 const vueUtterances = ref()
 const props = defineProps<{
-  currPost: PostSummary
+  post: PostSummary
 }>()
 
 const init = () => {
@@ -24,7 +24,7 @@ const init = () => {
 }
 
 onMounted(init)
-watch(() => props.currPost, init)
+watch(() => props.post, init)
 
 watch(isDark, (value, oldValue) => {
   if (value !== oldValue)
