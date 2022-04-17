@@ -6,17 +6,11 @@ const siderWidth = computed(() => isMobile.value ? 0 : 14)
 
 const contentRef = ref<LayoutInst | null>(null)
 const routePath = toRef(useRoute(), 'path')
-watch(routePath, () => {
-  if (isMobile.value) {
-    phoneNavToggle(false)           // 关闭导航栏
-  } else {
-    contentRef.value?.scrollTo(0, 0)
-  }
-})
 const { page } = usePage()
-watch(page, () => {
+watch([routePath, page], () => {
   if (isMobile.value) {
     window.scrollTo(0, 0)
+    phoneNavToggle(false)
   } else {
     contentRef.value?.scrollTo(0, 0)
   }
