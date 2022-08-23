@@ -1,8 +1,8 @@
-<h1 align='center'>Q Blog</h1>
-
 <p align='center'>
-  <img src='docs/logo.png' alt='Q-Blog - Quicker and Cute' width='100'/>
+  <img src='docs/logo.png' width='200'/>
 </p>
+
+<h1 align='center'>Q Blog</h1>
 
 <p align='center'>Q-Blog - Quicker and Cuter</p>
 
