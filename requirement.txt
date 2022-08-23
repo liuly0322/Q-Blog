@@ -1,0 +1,3 @@
+mistune==2.0.4
+python-frontmatter==1.0.0
+PyYAML==5.1
