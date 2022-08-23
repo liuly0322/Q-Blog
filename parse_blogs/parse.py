@@ -36,11 +36,13 @@ def save_post(name: str, content: str, title: str, date: str):
     content_file.close()
 
 
-# mv pic resources
+# clean resources
 # todo: this is unsafe
 try:
     os.system('rm -r public/posts')
     os.system('mkdir public/posts')
+    os.system('rm -r src/pages/posts')
+    os.system('mkdir src/pages/posts')
 except:
     pass
 
