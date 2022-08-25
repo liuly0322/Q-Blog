@@ -3,9 +3,9 @@
   "version": "1.5.0",
   "description": "vite + vue3 + ts 开箱即用现代开发模板",
   "scripts": {
-    "dev": "vite",
+    "dev": "node parse/parse.js && vite",
     "test": "vitest",
-    "build": "vite build",
+    "build": "node parse/parse.js && vite build",
     "dev:host": "vite --host",
     "dev:open": "vite --open",
     "preview": "vite preview",
@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@types/ityped": "^1.0.1",
+    "@types/markdown-it": "^12.2.3",
     "@types/node": "^17.0.23",
     "@types/nprogress": "^0.2.0",
     "@vitejs/plugin-vue": "^2.3.1",
@@ -40,9 +41,11 @@
     "@vueuse/core": "^7.7.1",
     "c8": "^7.11.0",
     "fast-glob": "^3.2.11",
+    "frontmatter": "^0.0.3",
     "fs-extra": "^10.0.1",
     "ityped": "^1.0.3",
     "katex": "^0.15.3",
+    "markdown-it": "^13.0.1",
     "markdown-it-anchor": "^8.4.1",
     "markdown-it-prism": "^2.2.3",
     "markdown-it-texmath": "^0.9.7",
@@ -51,6 +54,7 @@
     "nprogress": "^0.2.0",
     "plop": "^3.0.5",
     "prism-theme-vars": "^0.2.2",
+    "rss": "^1.2.2",
     "typescript": "^4.6.3",
     "unplugin-auto-import": "^0.6.9",
     "unplugin-icons": "^0.13.4",
@@ -77,9 +81,7 @@
   "pnpm": {
     "peerDependencyRules": {
       "ignoreMissing": [
-        "rollup",
-        "markdown-it",
-        "@types/markdown-it"
+        "rollup"
       ]
     }
   },

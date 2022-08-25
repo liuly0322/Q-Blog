@@ -5,7 +5,7 @@ posts
 assets
 .vscode
 src/pages/posts
-public/posts
+public/images
 public/details
 public/CNAME
 public/feed.xml
