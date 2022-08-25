@@ -11,6 +11,7 @@ const feed = new Rss({
   copyright: '2021 Liuly',
   language: 'zh-cn',
 })
+const template = require('art-template')
 
 const prism = require('markdown-it-prism')
 const math = require('markdown-it-texmath')
@@ -102,7 +103,10 @@ const formatDate = (date) => {
     )
   }
 
-  // 生成 feed.xml
+  // 生成 feed.xml 和每篇文章的 index.html (SSG)
+  const htmlTemplate = await fs.readFile(path.join('public', '404.html'), {
+    encoding: 'utf-8',
+  })
   for (const post of posts) {
     feed.item({
       title: post.title,
@@ -110,6 +114,16 @@ const formatDate = (date) => {
       description: md_pure.render(truncate(post.content, 100)),
       date: post.date,
     })
+    const html = template.render(htmlTemplate, {
+      title: post.title,
+      description: post.content
+        .replace(/[#\*~`><!-]/g, '')
+        .replace(/\s+/g, ' ')
+        .slice(0, 160),
+      jsonPath: '/posts/' + post.url + '.json',
+      tags: post.tags,
+    })
+    fs.writeFile(path.join('public', 'posts', post.url + '.html'), html)
   }
   const xml = feed.xml()
   fs.writeFile(path.join('public', 'feed.xml'), xml)

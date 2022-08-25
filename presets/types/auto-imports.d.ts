@@ -160,7 +160,6 @@ declare global {
   const usePhone: typeof import('/home/liu/Documents/my-blog/src/composables/usePhone')['default']
   const usePointer: typeof import('@vueuse/core')['usePointer']
   const usePointerSwipe: typeof import('@vueuse/core')['usePointerSwipe']
-  const usePost: typeof import('/home/liu/Documents/my-blog/src/composables/usePost')['default']
   const usePreferredColorScheme: typeof import('@vueuse/core')['usePreferredColorScheme']
   const usePreferredDark: typeof import('@vueuse/core')['usePreferredDark']
   const usePreferredLanguages: typeof import('@vueuse/core')['usePreferredLanguages']

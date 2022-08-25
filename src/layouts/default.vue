@@ -15,8 +15,6 @@ watch([routePath, page], () => {
     contentRef.value?.scrollTo(0, 0)
   }
 })
-
-const { isPost, currPost } = usePost()
 </script>
 
 <template>
@@ -26,11 +24,8 @@ const { isPost, currPost } = usePost()
   <n-layout :style="mainLayoutStyle" has-sider sider-placement="right">
     <n-layout-content ref="contentRef" :native-scrollbar="false"
       content-style="padding: 0 24px;min-width: 340px;overflow: hidden;">
-      <main class="mt-10 pb-10 text-center text-gray-700 dark:text-gray-200">
-        <PostHeader v-if="isPost" :post="currPost"></PostHeader>
+      <main class="mt-10 pb-10 text-center text-gray-700 dark:text-gray-200">  
         <router-view />
-        <PostFooter v-if="isPost" :post="currPost.url"></PostFooter>
-        <Comment v-if="isPost" :post="currPost" />
         <div v-if="isMobile" class="mdui-overlay" @click="() => phoneNavToggle()"></div>
       </main>
     </n-layout-content>

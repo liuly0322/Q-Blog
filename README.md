@@ -12,11 +12,11 @@
 
 参考 [TOV](https://github.com/dishait/tov-template) 的 Vite2 + Vue3 模板
 
-组件库采用 naive-ui, Vue3 + TS 写起来很爽（）
-
+- TypeScript
+- Naive UI
 - 响应式布局
 - 夜间模式
-- 目前是 SPA 应用，SEO 不友好
+- 半 SSG，博客 url 仍然通过路由跳转，但是默认生成了包含标题简介等信息的静态界面
 
 ## 食用方法
 
