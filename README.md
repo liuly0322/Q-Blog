@@ -4,6 +4,22 @@
 
 <h1 align='center'>Q Blog</h1>
 
+<p align="center">
+
+  <a href="https://github.com/liuly0322/Q-Blog/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/liuly0322/Q-Blog?color=blue">
+  </a>
+
+  <a href="https://github.com/liuly0322/Q-Blog/actions/workflows/test.yml">
+    <img src="https://github.com/liuly0322/Q-Blog/actions/workflows/test.yml/badge.svg?branch=main">
+  </a>
+
+  <a href="https://www.codefactor.io/repository/github/liuly0322/q-blog">
+    <img src="https://img.shields.io/codefactor/grade/github/liuly0322/q-blog/main">
+  </a>
+
+</p>
+
 <p align='center'>Q-Blog - Quicker and Cuter</p>
 
 ## 说明
