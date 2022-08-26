@@ -29,16 +29,10 @@
 .md-blog h5,
 .md-blog h6 {
   font-weight: bold;
-}
-.md-blog h1,
-.md-blog h2,
-.md-blog h3,
-.md-blog h4,
-.md-blog h5,
-.md-blog h6 {
   line-height: 1.1em;
   margin: 1.1em 0;
 }
+
 .md-blog a {
   color: #258fb8;
   text-decoration: none;

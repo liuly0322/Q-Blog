@@ -21,6 +21,6 @@ jobs:
 
       - name: run lint
         run: pnpm lint
-        
+
       - name: test build
         run: pnpm build
