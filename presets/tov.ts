@@ -25,7 +25,6 @@ import {
 	VueUseComponentsResolver
 } from 'unplugin-vue-components/resolvers'
 import Modules from 'vite-plugin-use-modules'
-import { GenerateTitle } from './plugins/html'
 import { FixLayoutsHmr } from './plugins/layouts'
 import PkgConfig from 'vite-plugin-package-config'
 import { AutoImportResolvers } from './shared/resolvers'
@@ -34,8 +33,6 @@ import OptimizationPersist from 'vite-plugin-optimize-persist'
 export default () => {
 	return [
 		Modules(),
-		// 生成 title
-		GenerateTitle(),
 		// 将包信息文件作为 vite 的配置文件之一，为 vite-plugin-optimize-persist 所用
 		PkgConfig(),
 		// 依赖预构建分析，提高大型项目性能

@@ -1,7 +1,5 @@
 <script setup lang="ts">
 const props = defineProps<{ post: string }>()
-const url = computed(() => './' + props.post + '.json')
-const { data } = useFetch(url, { refetch: true }).json()
 const summary = useSummary()
 const currPost = computed(
   () =>
@@ -12,6 +10,15 @@ const currPost = computed(
       date: '',
     }
 )
+
+const title = computed(() => {
+  return `${currPost.value.title} | llyのblog`
+})
+useTitle(title)
+onBeforeUnmount(() => { if (document) document.title = 'llyのblog' })
+
+const url = computed(() => './' + props.post + '.json')
+const { data } = useFetch(url, { refetch: true }).json()
 </script>
 
 <template>
