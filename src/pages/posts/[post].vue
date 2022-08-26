@@ -15,7 +15,9 @@ const title = computed(() => {
   return `${currPost.value.title} | llyのblog`
 })
 useTitle(title)
-onBeforeUnmount(() => { if (document) document.title = 'llyのblog' })
+onBeforeUnmount(() => {
+  if (document) document.title = 'llyのblog'
+})
 
 const url = computed(() => './' + props.post + '.json')
 const { data } = useFetch(url, { refetch: true }).json()
@@ -23,7 +25,8 @@ const { data } = useFetch(url, { refetch: true }).json()
 
 <template>
   <PostHeader :post="currPost"></PostHeader>
-  <div v-html="data" class="md-blog m-auto text-left"></div>
+  <!-- eslint-disable-next-line vue/no-v-html -->
+  <div class="md-blog m-auto text-left" v-html="data"></div>
   <PostFooter :post="currPost.url"></PostFooter>
   <Comment :post="currPost" />
 </template>

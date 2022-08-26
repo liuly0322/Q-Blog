@@ -2,8 +2,8 @@
 import { darkTheme } from 'naive-ui'
 const { isDark, darkOverrides } = useDarks()
 
-const theme = computed(() => isDark.value ? darkTheme : undefined)
-const overrides = computed(() => isDark.value ? darkOverrides : undefined)
+const theme = computed(() => (isDark.value ? darkTheme : undefined))
+const overrides = computed(() => (isDark.value ? darkOverrides : undefined))
 </script>
 
 <template>

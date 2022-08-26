@@ -12,7 +12,7 @@
 <script lang="ts" setup>
 import APlayer from 'aplayer-ts'
 import 'aplayer-ts/dist/APlayer.min.css'
-import type { PropType } from '@vue/runtime-core'
+import type { PropType } from 'vue'
 
 type Status = 'success' | 'error' | 'warning' | undefined
 
@@ -29,7 +29,13 @@ class Audio {
   cover?: string
   lrc?: string
 
-  constructor(artist: string | undefined, name: string, url: string, cover: string | undefined, lrc: string | undefined) {
+  constructor(
+    artist: string | undefined,
+    name: string,
+    url: string,
+    cover: string | undefined,
+    lrc: string | undefined
+  ) {
     this.artist = artist
     this.name = name
     this.url = url
@@ -75,7 +81,9 @@ const props = defineProps({
     },
   },
   songServer: {
-    type: String as PropType<'netease' | 'tencent' | 'kugou' | 'xiami' | 'baidu'>,
+    type: String as PropType<
+      'netease' | 'tencent' | 'kugou' | 'xiami' | 'baidu'
+    >,
     default: 'netease',
   },
   songType: {
@@ -117,13 +125,12 @@ interface Meting {
 }
 
 const fakeLoadingBar = async () => {
-  const sleep = (ms: number) => new Promise((resolve, reject) => setTimeout(resolve, ms))
-  while (true) {
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms))
+  while (percentage.value <= 80) {
     await sleep(200)
     loadingTime += 200
     percentage.value += Math.random() * 20
-    if (percentage.value > 80)
-      break
   }
   while (loadingStatus.value !== 'error' && loadingStatus.value !== 'success') {
     if (loadingTime > 2000) {
@@ -137,13 +144,18 @@ const fakeLoadingBar = async () => {
 
 const APlayerInit = async function () {
   fakeLoadingBar()
-  const url = `https://api.injahow.cn/meting/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
+  const url = `https://api.injahow.cn/meting/?server=${props.songServer}&type=${
+    props.songType
+  }&id=${props.songId}&r=${Math.random()}`
   const { data, error } = await useFetch(url).get().json()
   if (error.value) {
     loadingStatus.value = 'error'
     percentage.value = 100
   }
-  const audioList = (data.value as Array<Meting>).map((value: Meting) => new Audio(value.artist, value.name, value.url, value.pic, value.lrc))
+  const audioList = (data.value as Array<Meting>).map(
+    (value: Meting) =>
+      new Audio(value.artist, value.name, value.url, value.pic, value.lrc)
+  )
   instance = new APlayer({
     container: playerRef.value,
     fixed: props.fixed,

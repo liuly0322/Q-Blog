@@ -5,14 +5,14 @@ const renderedHTML = computed(() => props.source)
 const props = defineProps({
   source: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 })
 </script>
 
 <template>
   <div style="overflow: auto">
-    <div v-html="renderedHTML" class="md-blog m-auto text-left"></div>
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <div class="md-blog m-auto text-left" v-html="renderedHTML"></div>
   </div>
 </template>
-

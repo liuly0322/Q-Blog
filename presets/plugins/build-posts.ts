@@ -1,46 +1,55 @@
-const fs = require('fs/promises')
-const path = require('path')
-
-const frontmatter = require('frontmatter')
-const Rss = require('rss')
-const feed = new Rss({
-  title: "liuly's Blog",
-  description: 'liuly 的个人 Blog',
-  feed_url: 'https://blog.liuly.moe/feed.xml',
-  site_url: 'https://blog.liuly.moe',
-  copyright: '2021 Liuly',
-  language: 'zh-cn',
+export default () => ({
+  name: 'build-posts',
+  async buildStart() {
+    await buildPosts()
+  },
 })
-const template = require('art-template')
 
-const prism = require('markdown-it-prism')
-const math = require('markdown-it-texmath')
-const anchor = require('markdown-it-anchor')
-const md = require('markdown-it')({
-  html: true,
-})
-  .use(prism)
-  .use(math)
-  .use(anchor)
-const md_pure = require('markdown-it')()
+async function buildPosts() {
+  const fs = require('fs/promises')
+  const path = require('path')
 
-const publicImages = path.join('public', 'images')
-const publicPosts = path.join('public', 'posts')
+  const frontmatter = require('frontmatter')
+  const Rss = require('rss')
+  const feed = new Rss({
+    title: "liuly's Blog",
+    description: 'liuly 的个人 Blog',
+    feed_url: 'https://blog.liuly.moe/feed.xml',
+    site_url: 'https://blog.liuly.moe',
+    copyright: '2021 Liuly',
+    language: 'zh-cn',
+  })
+  const template = require('art-template')
 
-const formatDate = (date) => {
-  return date
-    .toISOString()
-    .replace(/T/g, ' ')
-    .replace(/\.[\d]{3}Z/, '')
-}
+  const prism = require('markdown-it-prism')
+  const math = require('markdown-it-texmath')
+  const anchor = require('markdown-it-anchor')
+  const md = require('markdown-it')({
+    html: true,
+  })
+    .use(prism)
+    .use(math)
+    .use(anchor)
+  const md_pure = require('markdown-it')()
 
-;(async () => {
+  const publicImages = path.join('public', 'images')
+  const publicPosts = path.join('public', 'posts')
+
+  const formatDate = (date: Date) => {
+    return date
+      .toISOString()
+      .replace(/T/g, ' ')
+      .replace(/\.[\d]{3}Z/, '')
+  }
+
   try {
     await fs.rm(publicImages, { recursive: true, force: true })
     await fs.mkdir(publicImages)
     await fs.rm(publicPosts, { recursive: true, force: true })
     await fs.mkdir(publicPosts)
-  } catch {}
+  } catch {
+    console.log('File operations error...')
+  }
 
   const posts = []
 
@@ -77,13 +86,7 @@ const formatDate = (date) => {
   })
 
   // 生成 page.json
-  /**
-   * 截断字符串，优先使用 <!-- more --> 标识
-   * @param {string} s 原字符串
-   * @param {number} len 截断长度
-   * @returns {string} 截断后的字符串
-   */
-  const truncate = (s, len) => {
+  const truncate = (s: string, len: number) => {
     const index = s.indexOf('<!-- more -->')
     if (index != -1) {
       return s.slice(0, index)
@@ -117,7 +120,7 @@ const formatDate = (date) => {
     const html = template.render(htmlTemplate, {
       title: post.title,
       description: post.content
-        .replace(/[#\*~`><!-]/g, '')
+        .replace(/[#*~`><!-]/g, '')
         .replace(/\s+/g, ' ')
         .slice(0, 160),
       jsonPath: '/posts/' + post.url + '.json',
@@ -133,4 +136,4 @@ const formatDate = (date) => {
     delete post.content
   }
   fs.writeFile(path.join('public', 'summary.json'), JSON.stringify(posts))
-})()
+}
