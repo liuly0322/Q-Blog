@@ -26,7 +26,8 @@ const posts = computed(() => {
         }}</router-link>
       </template>
       {{ post.summary.date }}
-      <MarkdownIt :source="post.detail" />
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div class="md-blog m-auto text-left" v-html="post.detail"></div>
       <router-link
         class="show-more"
         :to="`/posts/${encodeURIComponent(post.summary.url)}`"
