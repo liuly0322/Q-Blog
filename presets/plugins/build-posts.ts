@@ -95,12 +95,12 @@ async function buildPosts() {
     }
   }
   const pages = posts.map((post) => md.render(truncate(post.content, 100)))
-  fs.writeFile(path.join('public', 'page.json'), JSON.stringify(pages))
+  await fs.writeFile(path.join('public', 'page.json'), JSON.stringify(pages))
 
   // 生成每篇文章的 json
   for (const post of posts) {
     const rendered = md.render(post.content)
-    fs.writeFile(
+    await fs.writeFile(
       path.join(publicPosts, post.url + '.json'),
       JSON.stringify(rendered)
     )
@@ -126,14 +126,14 @@ async function buildPosts() {
       jsonPath: '/posts/' + post.url + '.json',
       tags: post.tags,
     })
-    fs.writeFile(path.join('public', 'posts', post.url + '.html'), html)
+    await fs.writeFile(path.join('public', 'posts', post.url + '.html'), html)
   }
   const xml = feed.xml()
-  fs.writeFile(path.join('public', 'feed.xml'), xml)
+  await fs.writeFile(path.join('public', 'feed.xml'), xml)
 
   // 生成 summary.json
   for (const post of posts) {
     delete post.content
   }
-  fs.writeFile(path.join('public', 'summary.json'), JSON.stringify(posts))
+  await fs.writeFile(path.join('public', 'summary.json'), JSON.stringify(posts))
 }
