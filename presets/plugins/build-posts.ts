@@ -1,16 +1,58 @@
+const fs = require('fs/promises')
+const path = require('path')
+
+const frontmatter = require('frontmatter')
+const Rss = require('rss')
+
+const template = require('art-template')
+
+const prism = require('markdown-it-prism')
+const math = require('markdown-it-texmath')
+const anchor = require('markdown-it-anchor')
+const md = require('markdown-it')({
+  html: true,
+})
+  .use(prism)
+  .use(math)
+  .use(anchor)
+const md_pure = require('markdown-it')()
+
+const publicImages = path.join('public', 'images')
+const publicPosts = path.join('public', 'posts')
+
+async function tryAccess(dir: string) {
+  try {
+    return await fs.access(dir)
+  } catch {
+    return 'Not found'
+  }
+}
+
 export default () => ({
   name: 'build-posts',
   async buildStart() {
     await buildPosts()
   },
+  async handleHotUpdate(ctx: { file: string; server: any }) {
+    if (ctx.file.includes('posts') && !ctx.file.includes('public')) {
+      await buildPosts()
+      ctx.server.ws.send({
+        type: 'custom',
+        event: 'posts-build',
+      })
+    }
+  },
+  async closeBundle() {
+    if ((await tryAccess(publicImages)) !== 'Not found') {
+      await fs.rm(publicImages, { recursive: true })
+    }
+    if ((await tryAccess(publicPosts)) !== 'Not found') {
+      await fs.rm(publicPosts, { recursive: true })
+    }
+  },
 })
 
 async function buildPosts() {
-  const fs = require('fs/promises')
-  const path = require('path')
-
-  const frontmatter = require('frontmatter')
-  const Rss = require('rss')
   const feed = new Rss({
     title: "liuly's Blog",
     description: 'liuly 的个人 Blog',
@@ -19,21 +61,6 @@ async function buildPosts() {
     copyright: '2021 Liuly',
     language: 'zh-cn',
   })
-  const template = require('art-template')
-
-  const prism = require('markdown-it-prism')
-  const math = require('markdown-it-texmath')
-  const anchor = require('markdown-it-anchor')
-  const md = require('markdown-it')({
-    html: true,
-  })
-    .use(prism)
-    .use(math)
-    .use(anchor)
-  const md_pure = require('markdown-it')()
-
-  const publicImages = path.join('public', 'images')
-  const publicPosts = path.join('public', 'posts')
 
   const formatDate = (date: Date) => {
     return date
@@ -42,13 +69,12 @@ async function buildPosts() {
       .replace(/\.[\d]{3}Z/, '')
   }
 
-  try {
-    await fs.rm(publicImages, { recursive: true, force: true })
+  if ((await tryAccess(publicImages)) === 'Not found') {
     await fs.mkdir(publicImages)
-    await fs.rm(publicPosts, { recursive: true, force: true })
+  }
+
+  if ((await tryAccess(publicPosts)) === 'Not found') {
     await fs.mkdir(publicPosts)
-  } catch {
-    console.log('File operations error...')
   }
 
   const posts = []

@@ -28,8 +28,9 @@
 
 参考 [TOV](https://github.com/dishait/tov-template) 的 Vite2 + Vue3 模板
 
-- TypeScript
-- Naive UI
+- Vite2，支持博客热更新
+- Vue3 + TypeScript，纯组合式 API
+- Naive UI，Vue3 UI 库
 - 响应式布局
 - 夜间模式
 - 半 SSG，博客 url 仍然通过路由跳转，但是默认生成了包含标题简介等信息的静态界面
@@ -65,7 +66,7 @@ pnpm i
 
 需要有 YAML frontmatter, 至少包含 title, date, tags
 
-在自己浏览器上预览效果（目前暂时没做到热加载实时预览文章内容）
+在自己浏览器上预览效果
 
 ```bash
 pnpm run dev

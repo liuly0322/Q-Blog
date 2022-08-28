@@ -17,6 +17,13 @@ watch([routePath, page], () => {
     contentRef.value?.scrollTo(0, 0)
   }
 })
+
+const hotUpdateKey = ref(0)
+if (import.meta.hot) {
+  import.meta.hot.on('posts-build', () => {
+    hotUpdateKey.value++
+  })
+}
 </script>
 
 <template>
@@ -36,7 +43,7 @@ watch([routePath, page], () => {
       content-style="padding: 0 24px;min-width: 340px;overflow: hidden;"
     >
       <main class="mt-10 pb-10 text-center text-gray-700 dark:text-gray-200">
-        <router-view />
+        <router-view :key="hotUpdateKey" />
         <div
           v-if="isMobile"
           class="mdui-overlay"

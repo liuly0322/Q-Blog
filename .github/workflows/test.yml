@@ -24,3 +24,9 @@ jobs:
 
       - name: test build
         run: pnpm build
+
+      - name: install dependencies
+        run: sudo apt install tree
+
+      - name: manually check output
+        run: tree dist
