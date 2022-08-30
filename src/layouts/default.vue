@@ -63,14 +63,13 @@ if (import.meta.hot) {
       <Sidebar />
     </n-layout-sider>
   </n-layout>
-  <n-button
+  <button
     v-if="isMobile"
-    circle
-    class="z-4 fixed bottom-4 right-4"
+    class="z-4 fixed bottom-4 right-4 rounded-full border-solid border-1 w-8 h-8 inline-flex items-center justify-center"
     onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
   >
     <i-carbon:arrow-up />
-  </n-button>
+  </button>
 </template>
 
 <style scoped>

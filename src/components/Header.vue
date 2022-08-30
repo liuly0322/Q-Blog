@@ -1,30 +1,29 @@
 <script setup lang="ts">
-import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
 const router = useRouter()
 
 const { isMobile, phoneNavToggle } = usePhone()
 
-const menuOptions: MenuOption[] = [
+const menuOptions = [
   {
-    label: () => h(RouterLink, { to: '/' }, { default: () => '主页' }),
-    key: 'home',
+    label: '主页',
+    to: '/',
   },
   {
-    label: () => h(RouterLink, { to: '/archive' }, { default: () => '归档' }),
-    key: 'archive',
+    label: '归档',
+    to: '/archive',
   },
   {
-    label: () => h(RouterLink, { to: '/tags' }, { default: () => '标签' }),
-    key: 'tags',
+    label: '标签',
+    to: '/tags',
   },
   {
-    label: () => h(RouterLink, { to: '/links' }, { default: () => '友链' }),
-    key: 'links',
+    label: '友链',
+    to: '/links',
   },
   {
-    label: () => h(RouterLink, { to: '/about' }, { default: () => '关于' }),
-    key: 'about',
+    label: '关于',
+    to: '/about',
   },
 ]
 </script>
@@ -35,26 +34,29 @@ const menuOptions: MenuOption[] = [
       content-style="display:flex;align-items:center;justify-content:space-between"
     >
       <div class="flex items-center">
-        <n-avatar
-          style="cursor: pointer"
-          round
-          :size="48"
+        <img
           src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
+          alt="liuly"
+          class="rounded-full"
+          height="48"
+          width="48"
+          style="cursor: pointer"
           @click="router.push('/')"
         />
         <span class="pl-5 text-lg">Life is but code.</span>
       </div>
-      <div class="flex">
-        <n-menu v-if="!isMobile" mode="horizontal" :options="menuOptions" />
-        <n-button
-          v-if="isMobile"
-          text
-          class="mr-2"
-          @click="() => phoneNavToggle()"
+      <div v-if="!isMobile" class="inline-flex">
+        <router-link
+          v-for="option in menuOptions"
+          :key="option.to"
+          class="block px-5"
+          :to="option.to"
+          >{{ option.label }}</router-link
         >
-          <i-carbon:menu />
-        </n-button>
       </div>
+      <button v-if="isMobile" class="mr-2 flex" @click="() => phoneNavToggle()">
+        <i-carbon:menu />
+      </button>
     </n-card>
   </header>
 </template>
