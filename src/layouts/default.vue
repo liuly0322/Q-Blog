@@ -34,7 +34,7 @@ if (import.meta.hot) {
       z-index: 3;
     "
   >
-    <Header text-gray-700 dark:text-gray-200 />
+    <Header />
   </n-layout-header>
   <n-layout :style="mainLayoutStyle" has-sider sider-placement="right">
     <n-layout-content
