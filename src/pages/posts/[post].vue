@@ -19,8 +19,8 @@ onBeforeUnmount(() => {
   if (document) document.title = 'llyのblog'
 })
 
-const url = computed(() => './' + props.post + '.json')
-const { data } = useFetch(url, { refetch: true }).json()
+const url = computed(() => './' + props.post + '.htm')
+const { data } = useFetch(url, { refetch: true })
 </script>
 
 <template>

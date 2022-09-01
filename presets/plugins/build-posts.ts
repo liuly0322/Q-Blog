@@ -86,7 +86,7 @@ async function buildPosts() {
       const blogPath = path.join('posts', file)
       const content = await fs.readFile(blogPath, { encoding: 'utf-8' })
       const parsed = frontmatter(content)
-      // 准备生成每一博客的 json, page.json, summary.json
+      // 准备生成每一博客的 htm, page.json, summary.json
       posts.push({
         title: parsed.data.title,
         date: parsed.data.date,
@@ -123,13 +123,10 @@ async function buildPosts() {
   const pages = posts.map((post) => md.render(truncate(post.content, 100)))
   await fs.writeFile(path.join('public', 'page.json'), JSON.stringify(pages))
 
-  // 生成每篇文章的 json
+  // 生成每篇文章的 htm
   for (const post of posts) {
     const rendered = md.render(post.content)
-    await fs.writeFile(
-      path.join(publicPosts, post.url + '.json'),
-      JSON.stringify(rendered)
-    )
+    await fs.writeFile(path.join(publicPosts, post.url + '.htm'), rendered)
   }
 
   // 生成 feed.xml 和每篇文章的 index.html (SSG)
@@ -149,7 +146,7 @@ async function buildPosts() {
         .replace(/[#*~`><!-]/g, '')
         .replace(/\s+/g, ' ')
         .slice(0, 160),
-      jsonPath: '/posts/' + post.url + '.json',
+      textPath: '/posts/' + post.url + '.htm',
       tags: post.tags,
     })
     await fs.writeFile(path.join('public', 'posts', post.url + '.html'), html)
