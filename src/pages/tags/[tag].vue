@@ -1,8 +1,8 @@
 <script setup lang="ts">
-const summary = useSummary()
 const props = defineProps<{ tag: string }>()
+const summary = useSummary()
 const curSummary = computed(() =>
-  summary.value.filter((post) => post.tags.includes(props.tag))
+  summary.value.filter(post => post.tags.includes(props.tag)),
 )
 </script>
 

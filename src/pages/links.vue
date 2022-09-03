@@ -5,7 +5,7 @@ import friends from '../../assets/friends.json'
 <template>
   <n-card title="友情链接">
     <template #cover>
-      <img src="/link-banner.jpg" />
+      <img src="/link-banner.jpg">
     </template>
     <div class="overflow-hidden flex flex-wrap">
       <template v-for="friend in friends" :key="friend.name">
@@ -17,7 +17,7 @@ import friends from '../../assets/friends.json'
               class="mr-3 rounded-full"
               height="48"
               width="48"
-            />
+            >
             <div class="flex flex-col">
               <b>{{ friend.name }}</b>
               {{ friend.introduction }}

@@ -52,15 +52,16 @@ const hitokoto = computed(() => ({
           <i-carbon:haze-night v-if="isDark" style="font-size: xx-large" />
           <i-carbon:sun v-if="!isDark" style="font-size: xx-large" />
         </span>
-        <p class="mt-3">Copyright © 2021 2022 liuly</p>
+        <p class="mt-3">
+          Copyright © 2021 2022 liuly
+        </p>
         <p>
           License:
           <a
             href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
             style="color: #66ccff"
             target="_blank"
-            >CC-BY-NC-SA 4.0</a
-          >
+          >CC-BY-NC-SA 4.0</a>
         </p>
         <p>
           Powered by
@@ -69,8 +70,7 @@ const hitokoto = computed(() => ({
             style="color: #66ccff"
             target="_blank"
             rel="noopener noreferrer"
-            >Q-Blog</a
-          >
+          >Q-Blog</a>
         </p>
       </div>
     </n-card>

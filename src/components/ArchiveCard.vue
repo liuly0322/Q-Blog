@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
-import { PostSummary } from '~/composables/useSummary'
+import type { PostSummary } from '~/composables/useSummary'
 
 const props = defineProps({
   summary: {
@@ -38,9 +38,11 @@ const props = defineProps({
                 size="small"
                 round
               >
-                <router-link :to="`/tags/${encodeURIComponent(tag)}`">{{
-                  tag
-                }}</router-link>
+                <router-link :to="`/tags/${encodeURIComponent(tag)}`">
+                  {{
+                    tag
+                  }}
+                </router-link>
               </n-tag>
             </div>
           </n-card>

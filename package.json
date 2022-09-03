@@ -18,8 +18,6 @@
     "deps:fresh:patch": "npx taze patch -w",
     "preview:host": "vite preview --host",
     "preview:open": "vite preview --open",
-    "auto:create": "plop --plopfile scripts/create.js",
-    "auto:remove": "plop --plopfile scripts/remove.js",
     "analysis:build": "windicss-analysis --html dist",
     "lint": "eslint --ext .ts,.js,.jsx,.vue .",
     "lint:fix": "eslint --fix --ext .ts,.js,.jsx,.vue ."
@@ -28,6 +26,7 @@
     "vue": "^3.2.31"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^0.26.3",
     "@iconify-json/ant-design": "^1.1.1",
     "@iconify-json/carbon": "^1.1.2",
     "@types/ityped": "^1.0.1",
@@ -44,8 +43,6 @@
     "art-template": "^4.13.2",
     "c8": "^7.11.0",
     "eslint": "^8.22.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.4.0",
     "fast-glob": "^3.2.11",
     "frontmatter": "^0.0.3",
@@ -60,10 +57,8 @@
     "naive-ui": "^2.27.0",
     "nprogress": "^0.2.0",
     "plop": "^3.0.5",
-    "prettier": "^2.7.1",
     "prism-theme-vars": "^0.2.2",
     "rss": "^1.2.2",
-    "tailwind": "link:@unocss/reset/tailwind",
     "typescript": "^4.6.3",
     "unplugin-auto-import": "^0.6.9",
     "unplugin-icons": "^0.13.4",

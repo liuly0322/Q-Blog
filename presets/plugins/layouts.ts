@@ -1,5 +1,5 @@
 import { normalizePath } from 'vite'
-import type { Plugin, ModuleNode } from 'vite'
+import type { ModuleNode, Plugin } from 'vite'
 
 interface Options {
   layoutsDirs?: string | string[]

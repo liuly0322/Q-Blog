@@ -1,12 +1,8 @@
-import { markdownWrapperClasses } from './plugins/markdown'
 import { resolve } from 'path'
-import { env } from './shared/env'
 import Vue from '@vitejs/plugin-vue'
 import Pages from 'vite-plugin-pages'
 import Icons from 'unplugin-icons/vite'
 import Inspect from 'vite-plugin-inspect'
-import Markdown from './plugins/markdown'
-import BuildPosts from './plugins/build-posts'
 import Windicss from 'vite-plugin-windicss'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import ViteRestart from 'vite-plugin-restart'
@@ -19,17 +15,20 @@ import viteCompression from 'vite-plugin-compression'
 
 import { DirResolverHelper } from 'vite-auto-import-resolvers'
 import {
-  ArcoResolver,
-  NaiveUiResolver,
   AntDesignVueResolver,
+  ArcoResolver,
   ElementPlusResolver,
+  NaiveUiResolver,
   VueUseComponentsResolver,
 } from 'unplugin-vue-components/resolvers'
 import Modules from 'vite-plugin-use-modules'
-import { FixLayoutsHmr } from './plugins/layouts'
 import PkgConfig from 'vite-plugin-package-config'
-import { AutoImportResolvers } from './shared/resolvers'
 import OptimizationPersist from 'vite-plugin-optimize-persist'
+import { FixLayoutsHmr } from './plugins/layouts'
+import { AutoImportResolvers } from './shared/resolvers'
+import BuildPosts from './plugins/build-posts'
+import Markdown, { markdownWrapperClasses } from './plugins/markdown'
+import { env } from './shared/env'
 
 export default () => {
   return [
@@ -83,20 +82,15 @@ export default () => {
       ],
     }),
     // 目录下 api 按需自动引入辅助插件
-    env.VITE_APP_API_AUTO_IMPORT &&
-      env.VITE_APP_DIR_API_AUTO_IMPORT &&
-      DirResolverHelper(),
+    env.VITE_APP_API_AUTO_IMPORT
+      && env.VITE_APP_DIR_API_AUTO_IMPORT
+      && DirResolverHelper(),
     // api 自动按需引入
-    env.VITE_APP_API_AUTO_IMPORT &&
-      AutoImport({
+    env.VITE_APP_API_AUTO_IMPORT
+      && AutoImport({
         dts: './presets/types/auto-imports.d.ts',
         imports: ['vue', 'vue-router', '@vueuse/core'],
         resolvers: AutoImportResolvers,
-        eslintrc: {
-          enabled: true,
-          globalsPropValue: true,
-          filepath: 'presets/eslint/.eslintrc-auto-import.json',
-        },
       }),
     // 预设热重启服务
     ViteRestart({
@@ -106,7 +100,7 @@ export default () => {
     vueJsx(),
     // 生产环境资源压缩
     viteCompression({
-      // @ts-ignore
+      // @ts-expect-error: algorithm is a string
       algorithm: env.VITE_APP_COMPRESSINON_ALGORITHM,
     }),
     // 对 vite-plugin-vue-layouts 的 hmr 问题的临时处理

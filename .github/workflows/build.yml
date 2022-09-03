@@ -1,4 +1,4 @@
-name: test
+name: build
 
 on:
   push:
@@ -22,11 +22,13 @@ jobs:
       - name: run lint
         run: pnpm lint
 
-      - name: test build
+      - name: build
         run: pnpm build
 
-      - name: install dependencies
-        run: sudo apt install tree
-
-      - name: manually check output
-        run: tree dist
+      - name: Push
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: gh-pages
+          FOLDER: dist
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -19,15 +19,13 @@ const phoneNavToggle = (open?: boolean) => {
   const toggle = () =>
     (document.querySelector('.n-layout-toggle-button') as HTMLElement).click()
 
-  const currNavOpen = document.querySelector('.n-layout-sider--collapsed')
-    ? false
-    : true
+  const currNavOpen = !document.querySelector('.n-layout-sider--collapsed')
   if (typeof open !== 'undefined') {
     open ? openNav() : closeNav()
-    if (open !== currNavOpen) {
+    if (open !== currNavOpen)
       toggle()
-    }
-  } else {
+  }
+  else {
     currNavOpen ? closeNav() : openNav()
     toggle()
   }

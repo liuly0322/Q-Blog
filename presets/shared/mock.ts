@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /**
  * issue: https://github.com/vbenjs/vite-plugin-mock/issues/47
@@ -6,15 +7,16 @@
 import Mock from 'mockjs'
 
 export function createFetchSever(mockList: any[]) {
-  if (!window['originFetch']) {
-    window['originFetch'] = window.fetch
+  if (!window.originFetch) {
+    window.originFetch = window.fetch
     window.fetch = function (fetchUrl: string, init: any) {
-      const currentMock = mockList.find((mi) => fetchUrl.includes(mi.url))
+      const currentMock = mockList.find(mi => fetchUrl.includes(mi.url))
       if (currentMock) {
         const result = createFetchReturn(currentMock, init)
         return result
-      } else {
-        return window['originFetch'](fetchUrl, init)
+      }
+      else {
+        return window.originFetch(fetchUrl, init)
       }
     }
   }
@@ -22,17 +24,17 @@ export function createFetchSever(mockList: any[]) {
 
 function __param2Obj__(url: string) {
   const search = url.split('?')[1]
-  if (!search) {
+  if (!search)
     return {}
-  }
+
   return JSON.parse(
-    '{"' +
+    `{"${
       decodeURIComponent(search)
         .replace(/"/g, '\\"')
         .replace(/&/g, '","')
         .replace(/=/g, '":"')
-        .replace(/\+/g, ' ') +
-      '"}'
+        .replace(/\+/g, ' ')
+      }"}`,
   )
 }
 
@@ -50,7 +52,8 @@ function __Fetch2ExpressReqWrapper__(handle: () => any) {
         query: __param2Obj__(url),
         headers,
       })
-    } else {
+    }
+    else {
       result = handle
     }
 

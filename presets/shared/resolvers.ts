@@ -1,7 +1,7 @@
-import { env } from './env'
 import { dirResolver } from 'vite-auto-import-resolvers'
 import type { Resolver } from 'unplugin-auto-import/types'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { env } from './env'
 
 type Arrayable<T> = T | Array<T>
 type Resolvers = Arrayable<Arrayable<Resolver>>
@@ -14,6 +14,6 @@ if (env.VITE_APP_DIR_API_AUTO_IMPORT) {
     dirResolver({
       target: 'stores',
       suffix: 'Store',
-    })
+    }),
   )
 }

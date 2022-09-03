@@ -42,17 +42,18 @@ const menuOptions = [
           width="48"
           style="cursor: pointer"
           @click="router.push('/')"
-        />
+        >
         <span class="pl-5 text-lg">Life is but code.</span>
       </div>
       <div v-if="!isMobile" class="inline-flex">
-        <router-link
+        <RouterLink
           v-for="option in menuOptions"
           :key="option.to"
           class="block px-5"
           :to="option.to"
-          >{{ option.label }}</router-link
         >
+          {{ option.label }}
+        </RouterLink>
       </div>
       <button v-if="isMobile" class="mr-2 flex" @click="() => phoneNavToggle()">
         <i-carbon:menu />

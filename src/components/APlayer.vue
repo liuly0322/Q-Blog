@@ -1,48 +1,9 @@
-<template>
-  <div ref="playerRef" />
-  <n-progress
-    v-if="loadingStatus !== 'success'"
-    type="line"
-    :status="loadingStatus"
-    :percentage="percentage"
-    :show-indicator="false"
-  />
-</template>
-
 <script lang="ts" setup>
 import APlayer from 'aplayer-ts'
 import 'aplayer-ts/dist/APlayer.min.css'
 import type { PropType } from 'vue'
 
 type Status = 'success' | 'error' | 'warning' | undefined
-
-const playerRef = ref()
-const percentage = ref(0)
-const loadingStatus = ref(undefined as Status)
-let loadingTime = 0
-let instance: APlayer
-
-class Audio {
-  artist?: string
-  name: string
-  url: string
-  cover?: string
-  lrc?: string
-
-  constructor(
-    artist: string | undefined,
-    name: string,
-    url: string,
-    cover: string | undefined,
-    lrc: string | undefined
-  ) {
-    this.artist = artist
-    this.name = name
-    this.url = url
-    this.cover = cover
-    this.lrc = lrc
-  }
-}
 
 const props = defineProps({
   fixed: {
@@ -115,6 +76,33 @@ const props = defineProps({
     default: 'APlayer-setting',
   },
 })
+const playerRef = ref()
+const percentage = ref(0)
+const loadingStatus = ref(undefined as Status)
+let loadingTime = 0
+let instance: APlayer
+
+class Audio {
+  artist?: string
+  name: string
+  url: string
+  cover?: string
+  lrc?: string
+
+  constructor(
+    artist: string | undefined,
+    name: string,
+    url: string,
+    cover: string | undefined,
+    lrc: string | undefined,
+  ) {
+    this.artist = artist
+    this.name = name
+    this.url = url
+    this.cover = cover
+    this.lrc = lrc
+  }
+}
 
 interface Meting {
   artist?: string
@@ -126,7 +114,7 @@ interface Meting {
 
 const fakeLoadingBar = async () => {
   const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms))
+    new Promise(resolve => setTimeout(resolve, ms))
   while (percentage.value <= 80) {
     await sleep(200)
     loadingTime += 200
@@ -154,7 +142,7 @@ const APlayerInit = async function () {
   }
   const audioList = (data.value as Array<Meting>).map(
     (value: Meting) =>
-      new Audio(value.artist, value.name, value.url, value.pic, value.lrc)
+      new Audio(value.artist, value.name, value.url, value.pic, value.lrc),
   )
   instance = new APlayer({
     container: playerRef.value,
@@ -183,3 +171,14 @@ onBeforeUnmount(() => {
   instance.destroy()
 })
 </script>
+
+<template>
+  <div ref="playerRef" />
+  <n-progress
+    v-if="loadingStatus !== 'success'"
+    type="line"
+    :status="loadingStatus"
+    :percentage="percentage"
+    :show-indicator="false"
+  />
+</template>

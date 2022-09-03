@@ -10,8 +10,8 @@
     <img src="https://img.shields.io/github/license/liuly0322/Q-Blog?color=blue">
   </a>
 
-  <a href="https://github.com/liuly0322/Q-Blog/actions/workflows/test.yml">
-    <img src="https://github.com/liuly0322/Q-Blog/actions/workflows/test.yml/badge.svg?branch=main">
+  <a href="https://github.com/liuly0322/Q-Blog/actions/workflows/build.yml">
+    <img src="https://github.com/liuly0322/Q-Blog/actions/workflows/build.yml/badge.svg?branch=main">
   </a>
 
   <a href="https://www.codefactor.io/repository/github/liuly0322/q-blog">
@@ -24,7 +24,7 @@
 
 ## 说明
 
-一个使用 Vue3.0 的静态博客站示例，目前 [个人自用](http://blog.liuly.moe)
+一个使用 Vue3.0 的静态博客站示例，自用于 [个人博客](http://blog.liuly.moe)
 
 参考 [TOV](https://github.com/dishait/tov-template) 的 Vite2 + Vue3 模板
 
@@ -41,15 +41,7 @@
 
 基于 Github Actions 实现
 
-可以 fork [该仓库](https://github.com/liuly0322/liuly0322.github.io)
-
-只需要在 posts 分支写博客即可
-
-对 posts 分支进行的 push 操作会自动将构建出的静态资源部署到 main 分支
-
-对 main 分支配置 Github Pages 后即可看到部署的静态界面
-
-- 需要更改 posts 分支下的 `public/CNAME` 文件以适配部署域名，不需要域名的话直接删除该文件即可
+可以参考本仓库的 [build.yml](./.github/workflows/build.yml)
 
 ### 手动部署
 

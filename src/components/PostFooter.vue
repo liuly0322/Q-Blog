@@ -1,10 +1,10 @@
 <script setup lang="ts">
-const summary = useSummary()
 const props = defineProps<{
   post: string
 }>()
+const summary = useSummary()
 const postIndex = computed(() =>
-  summary.value.findIndex((PostSummary) => PostSummary.url == props.post)
+  summary.value.findIndex(PostSummary => PostSummary.url === props.post),
 )
 </script>
 
@@ -20,7 +20,8 @@ const postIndex = computed(() =>
     <div v-if="postIndex + 1 < summary.length" class="float-right my-2">
       <router-link
         :to="`/posts/${encodeURIComponent(summary[postIndex + 1].url)}`"
-        >下一篇：{{ summary[postIndex + 1].title }}
+      >
+        下一篇：{{ summary[postIndex + 1].title }}
       </router-link>
     </div>
   </div>

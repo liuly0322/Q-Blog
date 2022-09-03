@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { LayoutInst } from 'naive-ui'
+import type { LayoutInst } from 'naive-ui'
 const { isMobile, phoneNavToggle } = usePhone()
 const mainLayoutStyle = computed(() =>
-  isMobile.value ? '' : 'height: calc(100vh - var(--header-height));'
+  isMobile.value ? '' : 'height: calc(100vh - var(--header-height));',
 )
 const siderWidth = computed(() => (isMobile.value ? 0 : 14))
 
@@ -13,7 +13,8 @@ watch([routePath, page], () => {
   if (isMobile.value) {
     window.scrollTo(0, 0)
     phoneNavToggle(false)
-  } else {
+  }
+  else {
     contentRef.value?.scrollTo(0, 0)
   }
 })
@@ -48,7 +49,7 @@ if (import.meta.hot) {
           v-if="isMobile"
           class="mdui-overlay"
           @click="() => phoneNavToggle()"
-        ></div>
+        />
       </main>
     </n-layout-content>
     <n-layout-sider

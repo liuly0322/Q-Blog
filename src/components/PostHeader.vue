@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { PostSummary } from '~/composables/useSummary'
-// eslint-disable-next-line no-unused-vars
+import type { PostSummary } from '~/composables/useSummary'
+
 const props = defineProps<{
   post: PostSummary
 }>()
@@ -21,8 +21,9 @@ const props = defineProps<{
         <router-link
           :to="`/tags/${encodeURIComponent(tag)}`"
           class="!text-inherit"
-          >{{ tag }}</router-link
         >
+          {{ tag }}
+        </router-link>
       </n-tag>
     </div>
   </div>

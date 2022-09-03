@@ -1,5 +1,5 @@
-import { router } from './router'
 import NProgress from 'nprogress'
+import { router } from './router'
 
 export default () => {
   router.beforeEach(() => {
