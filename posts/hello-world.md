@@ -6,6 +6,8 @@ tags: [生活, 博客]
 
 Welcome to Q-Blog
 
+作者博客地址：<https://blog.liuly.moe>
+
 这是一个 demo 博客，位置在 `posts` 下，你可以在这里新建或者修改博客
 
 目前在新建或者修改完成后需要重新使用 `pnpm run dev` 以预览效果
