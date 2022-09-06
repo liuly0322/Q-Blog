@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 const router = useRouter()
+const routePath = useRoute()
 
 const { isMobile, phoneNavToggle } = usePhone()
 
@@ -8,22 +9,27 @@ const menuOptions = [
   {
     label: '主页',
     to: '/',
+    match: '/$',
   },
   {
     label: '归档',
     to: '/archive',
+    match: '/archive$',
   },
   {
     label: '标签',
     to: '/tags',
+    match: '/tags',
   },
   {
     label: '友链',
     to: '/links',
+    match: '/links$',
   },
   {
     label: '关于',
     to: '/about',
+    match: '/about$',
   },
 ]
 </script>
@@ -37,10 +43,9 @@ const menuOptions = [
         <img
           src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
           alt="liuly"
-          class="rounded-full"
+          class="rounded-full cursor-pointer"
           height="48"
           width="48"
-          style="cursor: pointer"
           @click="router.push('/')"
         >
         <span class="pl-5 text-lg">Life is but code.</span>
@@ -49,7 +54,7 @@ const menuOptions = [
         <RouterLink
           v-for="option in menuOptions"
           :key="option.to"
-          class="block px-5"
+          :class="`block px-5${routePath.path.match(option.match) ? ' cur-route' : ''}`"
           :to="option.to"
         >
           {{ option.label }}
@@ -61,3 +66,9 @@ const menuOptions = [
     </n-card>
   </header>
 </template>
+
+<style scoped>
+.cur-route {
+  color: #42b883
+}
+</style>
