@@ -34,6 +34,7 @@ const props = defineProps({
               <n-tag
                 v-for="tag in post.tags"
                 :key="tag"
+                class="m-0.5"
                 type="success"
                 size="small"
                 round

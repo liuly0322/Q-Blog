@@ -37,7 +37,7 @@ const computeSize = (times: number) => {
       :key="tag"
       :to="`/tags/${encodeURIComponent(tag.content)}`"
     >
-      <n-tag type="info" :size="computeSize(tag.times)" round>
+      <n-tag type="info" :size="computeSize(tag.times)" class="m-1 cursor-pointer" round>
         {{ tag.content }}: {{ tag.times }}
       </n-tag>
     </router-link>
@@ -45,11 +45,6 @@ const computeSize = (times: number) => {
 </template>
 
 <style scoped>
-.n-tag {
-  margin: 4px;
-  cursor: pointer;
-}
-
 .n-tag:hover {
   background: rgba(171, 205, 255, 0.5);
 }
