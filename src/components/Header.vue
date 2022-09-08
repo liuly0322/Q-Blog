@@ -54,7 +54,8 @@ const menuOptions = [
         <RouterLink
           v-for="option in menuOptions"
           :key="option.to"
-          :class="`block px-5${routePath.path.match(option.match) ? ' cur-route' : ''}`"
+          class="block px-5"
+          :style="routePath.path.match(option.match) ? 'color: #42b883' : ''"
           :to="option.to"
         >
           {{ option.label }}
@@ -66,9 +67,3 @@ const menuOptions = [
     </n-card>
   </header>
 </template>
-
-<style scoped>
-.cur-route {
-  color: #42b883
-}
-</style>
