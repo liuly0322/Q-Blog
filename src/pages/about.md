@@ -10,9 +10,8 @@ title: 关于
 
 实现特性：
 
-- 响应式布局，暗黑模式，得益于 [Naive UI](https://github.com/TuSimple/naive-ui) 这一制作精良文档良心的组件库
+- 响应式布局，暗黑模式
 - 单页面路由（~~可以一直听歌~~）
-- 文章目录
 - $TeX$ 语法支持，通过 $KaTeX$ 实现
 
 源代码见 [Q-Blog](https://github.com/liuly0322/Q-Blog)

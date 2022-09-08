@@ -27,14 +27,12 @@ function handleSearch(value: any) {
 </script>
 
 <template>
-  <n-card title="博客搜索">
-    <n-auto-complete
-      v-model:value="searchPattern"
-      placeholder="搜索"
-      :options="searchOptions"
-      clear-after-select
-      blur-after-select
-      @select="handleSearch"
-    />
-  </n-card>
+  <n-auto-complete
+    v-model:value="searchPattern"
+    placeholder="搜索博客..."
+    :options="searchOptions"
+    clear-after-select
+    blur-after-select
+    @select="handleSearch"
+  />
 </template>
