@@ -14,8 +14,6 @@ const hitokoto = computed(() => ({
 
 <template>
   <div>
-    <n-card />
-
     <n-card
       v-if="isMobile"
       content-style="display: flex; flex-wrap:wrap"
@@ -30,7 +28,7 @@ const hitokoto = computed(() => ({
 
     <SidebarSearch class="mb-6" />
 
-    <n-card v-if="hitokoto.hitokoto" title="一言" class="mb-6">
+    <n-card v-if="!isMobile && hitokoto.hitokoto" title="一言" class="mb-6">
       <span>{{ hitokoto.hitokoto }}</span>
       <div class="text-right pt-3.5">
         <span>—— {{ hitokoto.from_who }}「{{ hitokoto.from }}」</span>
