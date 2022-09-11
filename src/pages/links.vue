@@ -3,14 +3,14 @@ import friends from '../../assets/friends.json'
 </script>
 
 <template>
-  <n-card title="友情链接">
+  <n-card :bordered="false" content-style="padding: 0" title="友情链接">
     <template #cover>
       <img src="/link-banner.jpg">
     </template>
     <div class="overflow-hidden flex flex-wrap">
       <template v-for="friend in friends" :key="friend.name">
         <a :href="friend.url" target="_blank" class="flex-auto text-left m-2.5">
-          <n-card content-style="display:flex">
+          <n-card content-style="display: flex">
             <img
               :src="friend.avatar"
               :alt="friend.name"
