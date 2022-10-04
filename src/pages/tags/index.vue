@@ -31,7 +31,13 @@ const computeSize = (times: number) => {
 </script>
 
 <template>
-  <n-card title="标签">
+  <n-card
+    title="标签"
+    :bordered="false"
+    content-style="padding-top: 16px"
+    size="small"
+    :segmented="true"
+  >
     <router-link
       v-for="tag in tags"
       :key="tag"

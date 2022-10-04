@@ -18,7 +18,7 @@ const props = defineProps({
   <n-card
     :title="props.title"
     :bordered="false"
-    content-style="padding: 16px 0 0 0"
+    content-style="padding-top: 16px"
     size="small"
     :segmented="true"
   >

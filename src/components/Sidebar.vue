@@ -23,6 +23,7 @@ const hitokoto = computed(() => ({
       <span class="mx-3 my-1" @click="router.push('/archive')">🗃️归档</span>
       <span class="mx-3 my-1" @click="router.push('/tags')">🏷️标签</span>
       <span class="mx-3 my-1" @click="router.push('/links')">🔗友链</span>
+      <span class="mx-3 my-1" @click="router.push('/microblog')">❤️微博</span>
       <span class="mx-3 my-1" @click="router.push('/about')">❓关于</span>
     </n-card>
 

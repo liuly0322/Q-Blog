@@ -27,6 +27,11 @@ const menuOptions = [
     match: '/links$',
   },
   {
+    label: '微博',
+    to: '/microblog',
+    match: '/microblog$',
+  },
+  {
     label: '关于',
     to: '/about',
     match: '/about$',

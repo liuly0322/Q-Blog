@@ -3,7 +3,7 @@ import friends from '../../assets/friends.json'
 </script>
 
 <template>
-  <n-card :bordered="false" content-style="padding: 0" title="友情链接">
+  <n-card :bordered="false" content-style="padding-top: 16px" title="友情链接" size="small" :segmented="true">
     <template #cover>
       <img src="/link-banner.jpg">
     </template>
