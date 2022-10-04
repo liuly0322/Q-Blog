@@ -5,7 +5,7 @@ interface MicroBlog {
   id: number
 }
 
-const { data } = useFetch('http://120.24.73.184:7777/notes').json()
+const { data } = useFetch('https://120.24.73.184/notes').json()
 const microBlogs = computed(() => {
   const microBlogs = (data.value ?? []).slice() as Array<MicroBlog>
   microBlogs.sort((a, b) => b.id - a.id)
@@ -25,7 +25,8 @@ const microBlogs = computed(() => {
       <template #header-extra>
         {{ microBlog.create_time }}
       </template>
-      {{ microBlog.description }}
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div v-html="microBlog.description" />
     </n-card>
   </n-card>
 </template>
