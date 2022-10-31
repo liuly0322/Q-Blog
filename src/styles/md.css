@@ -93,7 +93,9 @@
   content: "—";
   padding: 0 0.5em;
 }
-
+.md-blog code {
+  color: #e96900;
+}
 html:not(.dark) .md-blog {
   --prism-foreground: #393a34;
   --prism-background: #fbfbfb;
