@@ -2,6 +2,7 @@
 // Author: boyum
 // License: Apache-2.0 license
 
+import path from 'path'
 import imageSize from 'image-size'
 import type markdownIt from 'markdown-it'
 import type Token from 'markdown-it/lib/token'
@@ -10,17 +11,19 @@ export default function markdownItImageSize(md: markdownIt): void {
   md.renderer.rules.image = (tokens, index) => {
     const token = tokens[index]
     const srcIndex = token.attrIndex('src')
-    const imageUrl = token.attrs![srcIndex][1]
+    let imageUrl = token.attrs![srcIndex][1]
     const caption = md.utils.escapeHtml(token.content)
 
     const otherAttributes = generateAttributes(md, token)
 
     const isExternalImage = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
     const isLocalAbsoluteUrl = imageUrl.startsWith('/')
+    if (!isExternalImage && !isLocalAbsoluteUrl)
+      imageUrl = `/images/${path.basename(imageUrl)}`
 
     const { width, height } = isExternalImage
       ? { width: undefined, height: undefined }
-      : imageSize(`${isLocalAbsoluteUrl ? './public' : ''}${imageUrl}`)
+      : imageSize(`./public${imageUrl}`)
     const dimensionsAttributes = width && height ? ` width="${width}" height="${height}"` : ''
 
     return `<img src="${imageUrl}" alt="${caption}"${dimensionsAttributes}${otherAttributes ? ` ${otherAttributes}` : ''}>`
