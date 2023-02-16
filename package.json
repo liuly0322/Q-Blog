@@ -47,6 +47,7 @@
     "fast-glob": "^3.2.11",
     "frontmatter": "^0.0.3",
     "fs-extra": "^10.0.1",
+    "image-size": "^1.0.2",
     "ityped": "^1.0.3",
     "katex": "^0.15.3",
     "markdown-it": "^13.0.1",

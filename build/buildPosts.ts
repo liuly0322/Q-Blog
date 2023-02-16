@@ -1,33 +1,29 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const fs = require('fs/promises')
-const path = require('path')
+import fs from 'fs/promises'
+import path from 'path'
+import mdImageSizePlugin from './mdImageSizePlugin'
 
 const frontmatter = require('frontmatter')
 const Rss = require('rss')
 
 const template = require('art-template')
 
-const prism = require('markdown-it-prism')
-const math = require('markdown-it-texmath')
-const anchor = require('markdown-it-anchor')
-const md = require('markdown-it')({
-  html: true,
-})
-  .use(prism)
-  .use(math)
-  .use(anchor)
-const md_pure = require('markdown-it')()
+const descriptionRenderer = require('markdown-it')()
+
+const mdPrismPlugin = require('markdown-it-prism')
+const mdMathPlugin = require('markdown-it-texmath')
+const mdAnchorPlugin = require('markdown-it-anchor')
+const postRenderer = require('markdown-it')({ html: true })
+  .use(mdPrismPlugin)
+  .use(mdMathPlugin)
+  .use(mdAnchorPlugin)
+  .use(mdImageSizePlugin)
 
 const publicImages = path.join('public', 'images')
 const publicPosts = path.join('public', 'posts')
 
-async function tryAccess(dir: string) {
-  try {
-    return await fs.access(dir)
-  }
-  catch {
-    return 'Not found'
-  }
+async function fileExists(dir: string) {
+  return fs.access(dir).then(() => true).catch(() => false)
 }
 
 export default () => ({
@@ -45,13 +41,19 @@ export default () => ({
     }
   },
   async closeBundle() {
-    if ((await tryAccess(publicImages)) !== 'Not found')
+    if (await fileExists(publicImages))
       await fs.rm(publicImages, { recursive: true })
-
-    if ((await tryAccess(publicPosts)) !== 'Not found')
+    if (await fileExists(publicPosts))
       await fs.rm(publicPosts, { recursive: true })
   },
 })
+
+const formatDate = (date: Date) => {
+  return date
+    .toISOString()
+    .replace(/T/g, ' ')
+    .replace(/\.[\d]{3}Z/, '')
+}
 
 async function buildPosts() {
   const feed = new Rss({
@@ -63,17 +65,9 @@ async function buildPosts() {
     language: 'zh-cn',
   })
 
-  const formatDate = (date: Date) => {
-    return date
-      .toISOString()
-      .replace(/T/g, ' ')
-      .replace(/\.[\d]{3}Z/, '')
-  }
-
-  if ((await tryAccess(publicImages)) === 'Not found')
+  if (!await fileExists(publicImages))
     await fs.mkdir(publicImages)
-
-  if ((await tryAccess(publicPosts)) === 'Not found')
+  if (!await fileExists(publicPosts))
     await fs.mkdir(publicPosts)
 
   const posts = []
@@ -119,12 +113,12 @@ async function buildPosts() {
     else
       return s.length > len ? s.slice(0, len) : s
   }
-  const pages = posts.map(post => md.render(truncate(post.content, 100)))
+  const pages = posts.map(post => postRenderer.render(truncate(post.content, 100)))
   await fs.writeFile(path.join('public', 'page.json'), JSON.stringify(pages))
 
   // 生成每篇文章的 htm
   for (const post of posts) {
-    const rendered = md.render(post.content)
+    const rendered = postRenderer.render(post.content)
     await fs.writeFile(path.join(publicPosts, `${post.url}.htm`), rendered)
   }
 
@@ -136,7 +130,7 @@ async function buildPosts() {
     feed.item({
       title: post.title,
       url: `https://blog.liuly.moe/posts/${post.url}`,
-      description: md_pure.render(truncate(post.content, 100)),
+      description: descriptionRenderer.render(truncate(post.content, 100)),
       date: post.date,
     })
     const html = template.render(htmlTemplate, {

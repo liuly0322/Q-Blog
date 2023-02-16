@@ -24,9 +24,9 @@ import {
 import Modules from 'vite-plugin-use-modules'
 import PkgConfig from 'vite-plugin-package-config'
 import OptimizationPersist from 'vite-plugin-optimize-persist'
+import BuildPosts from '../build/buildPosts'
 import { FixLayoutsHmr } from './plugins/layouts'
 import { AutoImportResolvers } from './shared/resolvers'
-import BuildPosts from './plugins/build-posts'
 import Markdown, { markdownWrapperClasses } from './plugins/markdown'
 import { env } from './shared/env'
 
