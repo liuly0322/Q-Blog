@@ -30,12 +30,3 @@ const microBlogs = computed(() => {
     </n-card>
   </n-card>
 </template>
-
-<style>
-  .header{
-    font-weight: bold;
-    line-height: 1.1em;
-    margin: 1.1em 0;
-    font-size: 2em;
-  }
-</style>

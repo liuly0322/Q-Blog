@@ -24,10 +24,7 @@ const props = defineProps({
   >
     <div class="columns-[300px]">
       <template v-for="post in props.summary" :key="post.url">
-        <router-link
-          class="block break-inside-avoid"
-          :to="`/posts/${post.url}`"
-        >
+        <router-link class="block break-inside-avoid" :to="`/posts/${post.url}`">
           <n-card :key="post.url" class="mb-2" :title="post.title" size="small">
             <div>{{ post.date }}</div>
             <div class="mt-2 mx-2">
@@ -40,9 +37,7 @@ const props = defineProps({
                 round
               >
                 <router-link :to="`/tags/${encodeURIComponent(tag)}`">
-                  {{
-                    tag
-                  }}
+                  {{ tag }}
                 </router-link>
               </n-tag>
             </div>

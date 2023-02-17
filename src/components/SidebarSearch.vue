@@ -29,7 +29,7 @@ function handleSearch(value: any) {
 <template>
   <n-auto-complete
     v-model:value="searchPattern"
-    placeholder="搜索博客..."
+    placeholder="搜索标题..."
     :options="searchOptions"
     clear-after-select
     blur-after-select

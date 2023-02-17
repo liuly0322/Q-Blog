@@ -10,21 +10,21 @@ const hitokoto = computed(() => ({
   hitokoto: data.value?.hitokoto,
   from_who: data.value?.from_who,
 }))
+
+const mobileNavigation = {
+  '🏠主页': '/',
+  '🗃️归档': '/archive',
+  '🏷️标签': '/tags',
+  '🔗友链': '/links',
+  '🧡微博': '/microblog',
+  '❓关于': '/about',
+}
 </script>
 
 <template>
   <div>
-    <n-card
-      v-if="isMobile"
-      content-style="display: flex; flex-wrap:wrap"
-      class="mb-6"
-    >
-      <span class="mx-3 my-1" @click="router.push('/')">🏠主页</span>
-      <span class="mx-3 my-1" @click="router.push('/archive')">🗃️归档</span>
-      <span class="mx-3 my-1" @click="router.push('/tags')">🏷️标签</span>
-      <span class="mx-3 my-1" @click="router.push('/links')">🔗友链</span>
-      <span class="mx-3 my-1" @click="router.push('/microblog')">❤️微博</span>
-      <span class="mx-3 my-1" @click="router.push('/about')">❓关于</span>
+    <n-card v-if="isMobile" content-style="display: flex; flex-wrap:wrap" class="mb-6">
+      <span v-for="(v, k, i) in mobileNavigation" :key="i" class="mx-3 my-1" @click="router.push(v)">{{ k }}</span>
     </n-card>
 
     <SidebarSearch class="mb-6" />
@@ -70,7 +70,6 @@ const hitokoto = computed(() => ({
           href="https://github.com/liuly0322/Q-Blog"
           style="color: #258fb8"
           target="_blank"
-          rel="noopener noreferrer"
         >Q-Blog</a>
       </p>
     </n-card>
