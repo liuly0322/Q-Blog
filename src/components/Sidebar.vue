@@ -54,7 +54,7 @@ const hitokoto = computed(() => ({
         <i-carbon:sun v-if="!isDark" style="font-size: xx-large" />
       </span>
       <p class="mt-3">
-        Copyright © 2021 2022 liuly
+        Copyright © 2021 - 2023 liuly
       </p>
       <p>
         License:

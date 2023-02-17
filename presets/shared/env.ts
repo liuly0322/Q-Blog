@@ -19,7 +19,7 @@ const useEnv = () => {
     : loadEnv('development', '.')
 
   const {
-    VITE_APP_TITLE,
+    VITE_SITE_URL,
     VITE_APP_INSPECT,
     VITE_APP_MARKDOWN,
     VITE_APP_API_AUTO_IMPORT,
@@ -29,7 +29,7 @@ const useEnv = () => {
   } = env
 
   const newEnv = {
-    VITE_APP_TITLE,
+    VITE_SITE_URL,
     VITE_APP_COMPRESSINON_ALGORITHM,
     VITE_APP_INSPECT: stringToBoolean(VITE_APP_INSPECT),
     VITE_APP_MARKDOWN: stringToBoolean(VITE_APP_MARKDOWN),

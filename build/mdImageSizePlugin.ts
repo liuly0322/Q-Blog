@@ -1,4 +1,4 @@
-// https://github.com/boyum/markdown-it-image-size/blob/main/src/index.ts
+// ref: https://github.com/boyum/markdown-it-image-size/blob/main/src/index.ts
 // Author: boyum
 // License: Apache-2.0 license
 
@@ -7,26 +7,43 @@ import imageSize from 'image-size'
 import type markdownIt from 'markdown-it'
 import type Token from 'markdown-it/lib/token'
 
-export default function markdownItImageSize(md: markdownIt): void {
-  md.renderer.rules.image = (tokens, index) => {
-    const token = tokens[index]
-    const srcIndex = token.attrIndex('src')
-    let imageUrl = token.attrs![srcIndex][1]
-    const caption = md.utils.escapeHtml(token.content)
+export default (absolutePathPrefix = '') =>
+  function markdownItImageSize(md: markdownIt): void {
+    md.renderer.rules.image = (tokens, index) => {
+      const token = tokens[index]
+      const srcIndex = token.attrIndex('src')
+      const mdUrl = token.attrs![srcIndex][1]
+      const caption = md.utils.escapeHtml(token.content)
+      const otherAttributes = generateAttributes(md, token)
 
-    const otherAttributes = generateAttributes(md, token)
+      const { localUrl, siteUrl } = getImageUrl(mdUrl, absolutePathPrefix)
+      const { width, height } = localUrl
+        ? imageSize(localUrl)
+        : { width: null, height: null }
+      const dimensionsAttributes = width && height ? ` width="${width}" height="${height}"` : ''
 
-    const isExternalImage = imageUrl.startsWith('http://') || imageUrl.startsWith('https://')
-    const isLocalAbsoluteUrl = imageUrl.startsWith('/')
-    if (!isExternalImage && !isLocalAbsoluteUrl)
-      imageUrl = `/images/${path.basename(imageUrl)}`
+      return `<img src="${siteUrl}" alt="${caption}"${dimensionsAttributes}${otherAttributes ? ` ${otherAttributes}` : ''}>`
+    }
+  }
 
-    const { width, height } = isExternalImage
-      ? { width: undefined, height: undefined }
-      : imageSize(`./public${imageUrl}`)
-    const dimensionsAttributes = width && height ? ` width="${width}" height="${height}"` : ''
+function getImageUrl(mdUrl: string, absolutePathPrefix: string): {
+  localUrl: string
+  siteUrl: string
+} {
+  const isExternalImage = mdUrl.startsWith('http://') || mdUrl.startsWith('https://')
+  if (isExternalImage) {
+    return {
+      localUrl: '',
+      siteUrl: mdUrl,
+    }
+  }
 
-    return `<img src="${imageUrl}" alt="${caption}"${dimensionsAttributes}${otherAttributes ? ` ${otherAttributes}` : ''}>`
+  const isLocalRelativeUrl = !mdUrl.startsWith('/')
+  if (isLocalRelativeUrl)
+    mdUrl = `/images/${path.basename(mdUrl)}`
+  return {
+    localUrl: `./public${mdUrl}`,
+    siteUrl: `${absolutePathPrefix}${mdUrl}`,
   }
 }
 

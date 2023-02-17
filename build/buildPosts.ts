@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import fs from 'fs/promises'
 import path from 'path'
+import { env } from '../presets/shared/env'
 import mdImageSizePlugin from './mdImageSizePlugin'
+
+const site_url = env.VITE_SITE_URL
 
 const frontmatter = require('frontmatter')
 const Rss = require('rss')
@@ -9,6 +12,7 @@ const Rss = require('rss')
 const template = require('art-template')
 
 const descriptionRenderer = require('markdown-it')()
+  .use(mdImageSizePlugin(site_url))
 
 const mdPrismPlugin = require('markdown-it-prism')
 const mdMathPlugin = require('markdown-it-texmath')
@@ -17,7 +21,7 @@ const postRenderer = require('markdown-it')({ html: true })
   .use(mdPrismPlugin)
   .use(mdMathPlugin)
   .use(mdAnchorPlugin)
-  .use(mdImageSizePlugin)
+  .use(mdImageSizePlugin())
 
 const publicImages = path.join('public', 'images')
 const publicPosts = path.join('public', 'posts')
@@ -59,9 +63,9 @@ async function buildPosts() {
   const feed = new Rss({
     title: 'liuly\'s Blog',
     description: 'liuly 的个人 Blog',
-    feed_url: 'https://blog.liuly.moe/feed.xml',
-    site_url: 'https://blog.liuly.moe',
-    copyright: '2021 Liuly',
+    site_url,
+    feed_url: `${site_url}/feed.xml`,
+    copyright: '2023 liuly',
     language: 'zh-cn',
   })
 
@@ -129,7 +133,7 @@ async function buildPosts() {
   for (const post of posts) {
     feed.item({
       title: post.title,
-      url: `https://blog.liuly.moe/posts/${post.url}`,
+      url: `${site_url}/posts/${post.url}`,
       description: descriptionRenderer.render(truncate(post.content, 100)),
       date: post.date,
     })
