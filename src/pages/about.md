@@ -22,7 +22,7 @@ title: 关于
 
 # 联系方式
 
-- email: liuly0322@mail.ustc.edu.cn
+- email: me@liuly.moe
 - QQ: 453026205
 - github: https://github.com/liuly0322
 
