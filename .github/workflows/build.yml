@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: pnpm/action-setup@v2.2.2
         with:
-          version: latest
+          version: 7.17.0
 
       - uses: actions/checkout@v2
 
