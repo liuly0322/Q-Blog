@@ -4,9 +4,11 @@ title: 关于
 
 <div style="max-width:65ch; margin:auto; padding: 1em 0">
 
+# 关于我
+
 USTC 20 级本科少年班学院，计算机科学与技术专业在读。
 
-爱好 System/PL/Security 及其他任何 CS 相关~
+爱好 System/PL/Security 及其他任何 CS 相关的有趣知识~
 
 已看 ACG 作品清单绝赞咕咕中。
 
