@@ -132,7 +132,7 @@ const fakeLoadingBar = async () => {
 
 const APlayerInit = async function () {
   fakeLoadingBar()
-  const url = `https://liuly.moe/meting-api/?server=${props.songServer}&type=${
+  const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${
     props.songType
   }&id=${props.songId}&r=${Math.random()}`
   const { data, error } = await useFetch(url).get().json()
