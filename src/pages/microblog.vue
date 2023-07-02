@@ -5,7 +5,7 @@ interface MicroBlog {
   id: number
 }
 
-const { data } = useFetch('https://120.24.73.184/notes').json()
+const { data } = useFetch('https://liuly.moe/notes').json()
 const microBlogs = computed(() => {
   const microBlogs = (data.value ?? []).slice() as Array<MicroBlog>
   microBlogs.sort((a, b) => b.id - a.id)

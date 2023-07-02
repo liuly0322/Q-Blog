@@ -37,7 +37,7 @@ const props = defineProps({
   volume: {
     type: Number as PropType<number>,
     default: 0.7,
-    validator: (value: Number) => {
+    validator: (value: number) => {
       return value >= 0 && value <= 1
     },
   },
@@ -132,7 +132,7 @@ const fakeLoadingBar = async () => {
 
 const APlayerInit = async function () {
   fakeLoadingBar()
-  const url = `https://120.24.73.184/meting-api/?server=${props.songServer}&type=${
+  const url = `https://liuly.moe/meting-api/?server=${props.songServer}&type=${
     props.songType
   }&id=${props.songId}&r=${Math.random()}`
   const { data, error } = await useFetch(url).get().json()
