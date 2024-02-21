@@ -36,7 +36,7 @@ const mobileNavigation = {
       </div>
     </n-card>
 
-    <APlayer song-server="netease" song-id="373425292" order="random" />
+    <APlayer song-server="netease" song-id="373425292" />
 
     <n-card class="mt-6 text-center">
       <a class="m-0.5 inline-block" href="/feed.xml" target="_blank">
