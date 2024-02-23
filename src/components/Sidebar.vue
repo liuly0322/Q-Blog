@@ -16,7 +16,7 @@ const mobileNavigation = {
   '🗃️归档': '/archive',
   '🏷️标签': '/tags',
   '🔗友链': '/links',
-  '🧡微博': '/microblog',
+  '🧡动画': '/bangumi',
   '❓关于': '/about',
 }
 </script>
@@ -54,7 +54,7 @@ const mobileNavigation = {
         <i-carbon:sun v-if="!isDark" style="font-size: xx-large" />
       </span>
       <p class="mt-3">
-        Copyright © 2021 - 2023 liuly
+        Copyright © 2021 - 2024 liuly
       </p>
       <p>
         License:

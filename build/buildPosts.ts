@@ -65,7 +65,7 @@ async function buildPosts() {
     description: 'liuly 的个人 Blog',
     site_url,
     feed_url: `${site_url}/feed.xml`,
-    copyright: '2023 liuly',
+    copyright: '2024 liuly',
     language: 'zh-cn',
   })
 

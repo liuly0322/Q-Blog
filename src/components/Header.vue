@@ -27,9 +27,9 @@ const menuOptions = [
     match: '/links$',
   },
   {
-    label: '微博',
-    to: '/microblog',
-    match: '/microblog$',
+    label: '动画',
+    to: '/bangumi',
+    match: '/bangumi$',
   },
   {
     label: '关于',
