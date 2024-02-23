@@ -25,6 +25,7 @@ declare module 'vue' {
     NLayoutSider: typeof import('naive-ui')['NLayoutSider']
     NPagination: typeof import('naive-ui')['NPagination']
     NProgress: typeof import('naive-ui')['NProgress']
+    NSpin: typeof import('naive-ui')['NSpin']
     NTag: typeof import('naive-ui')['NTag']
     PostFooter: typeof import('./../../src/components/PostFooter.vue')['default']
     PostHeader: typeof import('./../../src/components/PostHeader.vue')['default']
