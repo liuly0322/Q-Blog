@@ -12,10 +12,6 @@
     <img src="https://img.shields.io/github/license/liuly0322/Q-Blog?color=blue">
   </a>
 
-  <a href="https://github.com/liuly0322/Q-Blog/actions/workflows/build.yml">
-    <img src="https://github.com/liuly0322/Q-Blog/actions/workflows/build.yml/badge.svg?branch=main">
-  </a>
-
   <a href="https://www.codefactor.io/repository/github/liuly0322/q-blog">
     <img src="https://img.shields.io/codefactor/grade/github/liuly0322/q-blog/main">
   </a>
@@ -41,13 +37,11 @@
 
 ### 自动部署
 
-基于 Github Actions 实现
-
-可以参考本仓库的 [build.yml](./.github/workflows/build.yml)
+[Github Actions 示例](https://github.com/liuly0322/blog-static/blob/posts/.github/workflows/test.yml)
 
 ### 手动部署
 
-（目前仅测试部署在域名根目录的情形）
+需要部署在域名根目录下，或者自行修改路由
 
 clone 本仓库后，确保 node 版本号大于等于 14, 并已经安装 npm
 
@@ -56,22 +50,16 @@ npm install -g pnpm # 如果还未安装 pnpm
 pnpm i
 ```
 
-博客写在 posts 文件夹下，md 格式
+博客写在 `posts` 文件夹下，markdown 格式。YAML frontmatter 需至少包含 title, date, tags
 
-需要有 YAML frontmatter, 至少包含 title, date, tags
-
-在自己浏览器上预览效果
+预览：
 
 ```bash
-pnpm run dev
+pnpm run dev # run server at `localhost:3000`
 ```
 
-部署
+部署：
 
 ```bash
-pnpm run build
+pnpm run build # compile to `dist` folder
 ```
-
-即可生成静态文件在 dists 文件夹下，自行部署即可
-
-默认路由方式 History 而不是 Hash，这意味着可能需要对服务器进行相关设置，将请求默认解析到 `index.html`
