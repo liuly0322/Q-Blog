@@ -4,6 +4,9 @@ const { isMobile, phoneNavToggle } = usePhone()
 const mainLayoutStyle = computed(() =>
   isMobile.value ? '' : 'height: calc(100vh - var(--header-height));',
 )
+const sidebarLayoutStyle = computed(() =>
+  `padding:0 24px;overflow:hidden;${isMobile.value ? 'min-width:100vw' : ''}`,
+)
 const siderWidth = computed(() => (isMobile.value ? 0 : 14))
 
 const contentRef = ref<LayoutInst | null>(null)
@@ -41,7 +44,7 @@ if (import.meta.hot) {
     <n-layout-content
       ref="contentRef"
       :native-scrollbar="false"
-      content-style="padding: 0 24px;min-width: 340px;overflow: hidden;"
+      :content-style="sidebarLayoutStyle"
     >
       <main class="mt-10 pb-10 text-center text-gray-700 dark:text-gray-200">
         <router-view :key="hotUpdateKey" />
