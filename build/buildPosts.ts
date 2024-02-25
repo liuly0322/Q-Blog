@@ -119,6 +119,8 @@ async function buildPosts() {
   }
   const pages = posts.map(post => postRenderer.render(truncate(post.content, 100)))
   await fs.writeFile(path.join('public', 'page.json'), JSON.stringify(pages))
+  // 前 10 篇：assets/page.0.json
+  await fs.writeFile(path.join('assets', 'page.0.json'), JSON.stringify(pages.slice(0, 10)))
 
   // 生成每篇文章的 htm
   for (const post of posts) {

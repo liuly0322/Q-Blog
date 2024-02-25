@@ -1,9 +1,11 @@
 <script setup lang="ts">
-const { data } = useFetch('/page.json').json()
+import firstPage from '../../assets/page.0.json'
+
 const summary = useSummary()
-const { page, pageMax } = usePage()
+const { data, page, pageMax } = usePage()
+
 const posts = computed(() => {
-  const currSummary = data.value ?? Array(summary.value.length).fill('')
+  const currSummary = data.value ?? firstPage
   return currSummary
     .map((detail: string, i: number) => ({
       detail,
