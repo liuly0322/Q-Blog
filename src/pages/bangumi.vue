@@ -79,14 +79,14 @@ const timeToDate = (time: string) => {
         <img
           :src="anime.subject.images.medium"
           :alt="anime.subject.name"
-          class="rounded-lg"
+          class="rounded-lg w-full"
         >
         <div class="mt-2">
           <p class="text-lg font-bold">
             {{ anime.subject.name_cn || anime.subject.name }}
           </p>
           <p class="text-sm text-gray-500 mt-4 whitespace-pre-line">
-            {{ anime.subject.short_summary }}……
+            {{ anime.subject.short_summary.slice(0, 50) }}……
           </p>
         </div>
       </div>
