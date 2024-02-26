@@ -12,7 +12,7 @@ export default defineConfig({
   plugins: [Tov(), VitePWA({
     registerType: 'autoUpdate',
     workbox: {
-      globPatterns: ['**/*.{js,css,html,ico,png,svg,json,htm}'],
+      globPatterns: ['**/*.{js,css,html,ico,png,svg,json,htm,xml}'],
     },
     includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
     manifest: {
