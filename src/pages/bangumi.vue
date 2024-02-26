@@ -66,28 +66,30 @@ const timeToDate = (time: string) => {
     动画列表
   </h1>
   <p class="mt-5">
-    我在 <a href="https://bangumi.tv/user/undef_baka" class="text-blue-500" target="_blank" rel="noopener noreferrer">Bangumi</a> 上对部分看过动画的评分与短评（Optional）。
+    我在 <a href="https://bangumi.tv/user/undef_baka" target="_blank" rel="noopener noreferrer">bangumi</a> 上对部分看过动画的评分与短评（Optional）。
   </p>
   <div v-if="animeList.length > 0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-5">
     <n-card
       v-for="anime in animeList"
       :key="anime.subject.id"
-      content-style="display:flex;flex-direction:column;justify-content:space-between"
+      content-style="display:flex;flex-direction:column;justify-content:space-between;padding:1em"
       style="height:100%"
     >
-      <div class="mb-4">
-        <img
-          :src="anime.subject.images.medium"
-          :alt="anime.subject.name"
-          class="rounded-lg w-full"
-        >
+      <div class="mb-2">
+        <a :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer">
+          <img
+            :src="anime.subject.images.medium"
+            :alt="anime.subject.name"
+            class="rounded-lg w-full"
+          >
+        </a>
         <div class="mt-2">
-          <p class="text-lg font-bold">
+          <a :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer" class="text-lg font-bold">
             {{ anime.subject.name_cn || anime.subject.name }}
-          </p>
-          <p class="text-sm text-gray-500 mt-4 whitespace-pre-line">
-            {{ anime.subject.short_summary.slice(0, 50) }}……
-          </p>
+          </a>
+          <n-ellipsis class="text-sm text-gray-500 mt-4 whitespace-pre-line" expand-trigger="click" line-clamp="2" :tooltip="false">
+            {{ anime.subject.short_summary }}
+          </n-ellipsis>
         </div>
       </div>
       <hr>
@@ -109,3 +111,11 @@ const timeToDate = (time: string) => {
   </div>
 </template>
 
+<style scoped>
+a {
+  color: #258fb8;
+}
+a:hover {
+  text-decoration: underline;
+}
+</style>
