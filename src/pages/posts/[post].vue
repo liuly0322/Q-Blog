@@ -15,26 +15,16 @@ const title = computed(() => {
   return `${currPost.value.title} | llyのblog`
 })
 useTitle(title)
-
-const loadingHint = ref({
-  text: '加载中',
-  dots: 0,
-})
-const timer = setInterval(() => {
-  loadingHint.value = {
-    text: '加载中' + '.'.repeat(loadingHint.value.dots),
-    dots: (loadingHint.value.dots + 1) % 4,
-  }
-}, 500)
-
 onBeforeUnmount(() => {
   if (document) document.title = 'llyのblog'
-  clearInterval(timer)
 })
 
-const isDataReady = ref(false)
+function getRand(min: number, max: number): number {
+  return min + Math.round(Math.random() * (max - min))
+}
+const loading = ref(true)
 const data = asyncComputed(async (onCancel) => {
-  isDataReady.value = false
+  loading.value = true
 
   const abortController = new AbortController()
   onCancel(() => abortController.abort())
@@ -42,19 +32,21 @@ const data = asyncComputed(async (onCancel) => {
   const url = './' + props.post + '.htm'
   const data = await fetch(url, { signal: abortController.signal }).then((res) => res.text())
 
-  isDataReady.value = true
+  loading.value = false
   return data
 }, '')
 </script>
 
 <template>
   <PostHeader :post="currPost"></PostHeader>
-  <div class="mt-12" v-show="!isDataReady">
-    <n-spin size="large"/>
-    <p class="mt-4 text-sm text-gray-500">{{ loadingHint.text }}</p>
+  <div class="mt-1.6em text-left" v-show="loading">
+    <template v-for="i in 4">
+      <n-skeleton text :repeat="getRand(1, 3)" />
+      <n-skeleton text :style="'width: ' + getRand(20, 80) + '%'" />
+    </template>
   </div>
   <!-- eslint-disable-next-line vue/no-v-html -->
-  <div class="md-blog m-auto text-left" v-show="isDataReady" v-html="data"></div>
+  <div class="md-blog m-auto text-left" v-show="!loading" v-html="data"></div>
   <PostFooter :post="currPost.url"></PostFooter>
   <Comment :post="currPost" />
 </template>
