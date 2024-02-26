@@ -1,5 +1,5 @@
 {
-  "name": "tov-template",
+  "name": "llyのblog",
   "version": "1.5.0",
   "description": "vite + vue3 + ts 开箱即用现代开发模板",
   "scripts": {
@@ -73,6 +73,7 @@
     "vite-plugin-optimize-persist": "^0.1.2",
     "vite-plugin-package-config": "^0.1.1",
     "vite-plugin-pages": "^0.21.4",
+    "vite-plugin-pwa": "^0.12.8",
     "vite-plugin-restart": "^0.1.1",
     "vite-plugin-use-modules": "^1.0.1",
     "vite-plugin-vue-layouts": "^0.6.0",
