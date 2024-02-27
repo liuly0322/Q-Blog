@@ -15,35 +15,20 @@ const props = defineProps({
 </script>
 
 <template>
-  <n-card
-    :title="props.title"
-    :bordered="false"
-    content-style="padding-top: 16px"
-    size="small"
-    :segmented="true"
-  >
-    <div class="columns-[300px]">
-      <template v-for="post in props.summary" :key="post.url">
-        <router-link class="block break-inside-avoid" :to="`/posts/${post.url}`">
-          <n-card :key="post.url" class="mb-2" :title="post.title" size="small">
-            <div>{{ post.date }}</div>
-            <div class="mt-2 mx-2">
-              <n-tag
-                v-for="tag in post.tags"
-                :key="tag"
-                class="m-0.5"
-                type="success"
-                size="small"
-                round
-              >
-                <router-link :to="`/tags/${encodeURIComponent(tag)}`">
-                  {{ tag }}
-                </router-link>
-              </n-tag>
-            </div>
-          </n-card>
-        </router-link>
-      </template>
-    </div>
-  </n-card>
+  <n-divider title-placement="left">{{ props.title }}</n-divider>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <router-link v-for="post in props.summary" :key="post.url" class="flex" :to="`/posts/${post.url}`">
+      <n-card class="mb-2" :title="post.title" size="small"
+        content-style="display:flex;flex-direction:column;justify-content:center">
+        <div>{{ post.date }}</div>
+        <div class="mt-2 mx-2">
+          <n-tag v-for="tag in post.tags" :key="tag" class="m-0.5" type="success" size="small" round>
+            <router-link :to="`/tags/${encodeURIComponent(tag)}`">
+              {{ tag }}
+            </router-link>
+          </n-tag>
+        </div>
+      </n-card>
+    </router-link>
+  </div>
 </template>
