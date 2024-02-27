@@ -1,0 +1,34 @@
+name: build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - posts/**
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 7.17.0
+
+      - uses: actions/checkout@v4
+
+      - name: install dependencies
+        run: pnpm i
+
+      - name: build
+        run: pnpm build
+
+      - name: Push
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: gh-pages
+          FOLDER: dist
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
