@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import firstPage from '../../assets/page.0.json'
-
+import { firstPageAbstracts } from '~/composables/useSummary'
 const summary = useSummary()
+
 const { data, page, pageMax } = usePage()
 
 const posts = computed(() => {
-  const currSummary = data.value ?? firstPage
+  const currSummary = data.value ?? firstPageAbstracts.value
   return currSummary
     .map((detail: string, i: number) => ({
       detail,

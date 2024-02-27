@@ -59,21 +59,15 @@ const formatDate = (date: Date) => {
     .replace(/\.[\d]{3}Z/, '')
 }
 
-async function buildPosts() {
-  const feed = new Rss({
-    title: 'liuly\'s Blog',
-    description: 'liuly 的个人 Blog',
-    site_url,
-    feed_url: `${site_url}/feed.xml`,
-    copyright: '2024 liuly',
-    language: 'zh-cn',
-  })
+interface Post {
+  title: string
+  date: string
+  tags: string[]
+  url: string
+  content: string
+}
 
-  if (!await fileExists(publicImages))
-    await fs.mkdir(publicImages)
-  if (!await fileExists(publicPosts))
-    await fs.mkdir(publicPosts)
-
+async function collectPostsAndImages(): Promise<Post[]> {
   const posts = []
 
   const files = await fs.readdir('posts')
@@ -83,7 +77,6 @@ async function buildPosts() {
       const blogPath = path.join('posts', file)
       const content = await fs.readFile(blogPath, { encoding: 'utf-8' })
       const parsed = frontmatter(content)
-      // 准备生成每一博客的 htm, page.json, summary.json
       posts.push({
         title: parsed.data.title,
         date: parsed.data.date,
@@ -93,7 +86,6 @@ async function buildPosts() {
       })
     }
     else if (!path.extname(file)) {
-      // 移动 images
       const dirname = path.join('posts', file)
       const images = await fs.readdir(dirname)
       for (const image of images) {
@@ -108,27 +100,32 @@ async function buildPosts() {
   posts.forEach((post) => {
     post.date = formatDate(post.date)
   })
+  return posts
+}
 
-  // 生成 page.json
-  const truncate = (s: string, len: number) => {
-    const index = s.indexOf('<!-- more -->')
-    if (index !== -1)
-      return s.slice(0, index)
-    else
-      return s.length > len ? s.slice(0, len) : s
-  }
-  const pages = posts.map(post => postRenderer.render(truncate(post.content, 100)))
-  await fs.writeFile(path.join('public', 'page.json'), JSON.stringify(pages))
-  // 前 10 篇：assets/page.0.json
-  await fs.writeFile(path.join('assets', 'page.0.json'), JSON.stringify(pages.slice(0, 10)))
+function truncate(s: string, len: number) {
+  const index = s.indexOf('<!-- more -->')
+  if (index !== -1)
+    return s.slice(0, index)
+  else
+    return s.length > len ? s.slice(0, len) : s
+}
 
-  // 生成每篇文章的 htm
+async function generateSitemap(posts: Post[]) {
+  const feed = new Rss({
+    title: 'liuly\'s Blog',
+    description: 'liuly 的个人 Blog',
+    site_url,
+    feed_url: `${site_url}/feed.xml`,
+    copyright: '2024 liuly',
+    language: 'zh-cn',
+  })
+
   for (const post of posts) {
     const rendered = postRenderer.render(post.content)
     await fs.writeFile(path.join(publicPosts, `${post.url}.htm`), rendered)
   }
 
-  // 生成 feed.xml 和每篇文章的 index.html (SSG)
   const htmlTemplate = await fs.readFile(path.join('public', '404.html'), {
     encoding: 'utf-8',
   })
@@ -152,10 +149,28 @@ async function buildPosts() {
   }
   const xml = feed.xml()
   await fs.writeFile(path.join('public', 'feed.xml'), xml)
+}
 
-  // 生成 summary.json
-  for (const post of posts)
-    delete post.content
+async function generateSummary(posts: Post[], firstPageAbstracts: string[]) {
+  const summary = {
+    posts: posts.map(post => {
+      return Object.fromEntries(Object.entries(post).filter(([k]) => k !== 'content'))
+    }),
+    firstPageAbstracts,
+  }
+  await fs.writeFile(path.join('public', 'summary.json'), JSON.stringify(summary))
+}
 
-  await fs.writeFile(path.join('public', 'summary.json'), JSON.stringify(posts))
+async function buildPosts() {
+  if (!await fileExists(publicImages))
+    await fs.mkdir(publicImages)
+  if (!await fileExists(publicPosts))
+    await fs.mkdir(publicPosts)
+
+  const posts = await collectPostsAndImages()
+  const abstracts = posts.map(post => postRenderer.render(truncate(post.content, 100)))
+  await fs.writeFile(path.join('public', 'page.json'), JSON.stringify(abstracts))
+
+  await generateSitemap(posts)
+  await generateSummary(posts, abstracts.slice(0, 10))
 }
