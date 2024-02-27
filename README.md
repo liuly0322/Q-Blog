@@ -37,7 +37,7 @@
 
 ### 自动部署
 
-[Github Actions 示例](https://github.com/liuly0322/blog-static/blob/posts/.github/workflows/test.yml)
+[Github Actions 示例](https://github.com/liuly0322/Q-Blog/blob/main/.github/workflows/build.yml)
 
 ### 手动部署
 
