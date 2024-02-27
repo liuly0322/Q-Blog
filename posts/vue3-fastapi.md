@@ -1,7 +1,7 @@
 ---
 title: vue3-fastapi 简易开发体验
 date: 2022-03-01 14:20:02
-tags: [vue, fastapi, web, 异步, js]
+tags: [vue, fastapi, 异步]
 category: web
 mathjax: true
 tocbot: true

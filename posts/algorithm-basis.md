@@ -1,7 +1,7 @@
 ---
 title: 算法基础笔记
 date: 2021-08-01 17:03:21
-tags: [算法, 枚举, 模拟, 位运算, 动态规划, 递归, 记忆化搜索, 贪心, 前缀和, 差分]
+tags: [算法]
 category: 笔记
 mathjax: true
 tocbot: true

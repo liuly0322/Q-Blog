@@ -1,7 +1,7 @@
 ---
 title: 数据结构实验之一元稀疏多项式计算器
 date: 2021-10-03 13:51:42
-tags: [链表, php, C/C++, web]
+tags: [C/C++, web]
 category: 笔记
 mathjax: true
 tocbot: true

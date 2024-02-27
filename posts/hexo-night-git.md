@@ -1,7 +1,7 @@
 ---
 title: Hexo 博客夜间模式的实现兼 git 工作流简介
 date: 2021-07-09 09:36:41
-tags: [web, hexo, git, 夜间模式]
+tags: [hexo, git]
 category: web
 tocbot: true
 ---

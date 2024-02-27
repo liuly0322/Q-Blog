@@ -1,7 +1,7 @@
 ---
 title: lc3 评测姬
 date: 2021-12-10 22:17:59
-tags: [js, 模拟]
+tags: [杂谈]
 category: web
 mathjax: false
 tocbot: true

@@ -1,7 +1,7 @@
 ---
 title: 前后端分离实现简易备忘系统
 date: 2021-07-15 10:48:45
-tags: [服务器, php]
+tags: [php]
 category: web
 tocbot: true
 ---

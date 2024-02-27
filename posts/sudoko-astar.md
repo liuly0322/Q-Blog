@@ -1,7 +1,7 @@
 ---
 title: 数独的 A* 算法及其实现
 date: 2021-06-05 22:19:04
-tags: [搜索, C/C++]
+tags: [算法, C/C++]
 category: 算法
 mathjax: true
 tocbot: true

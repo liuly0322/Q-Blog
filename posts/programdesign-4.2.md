@@ -1,7 +1,7 @@
 ---
 title: 程序设计 2 上机 4 - 全排列输出
 date: 2021-05-05 10:23:37
-tags: [递归, 搜索]
+tags: [算法]
 mathjax: true
 category: 算法
 ---

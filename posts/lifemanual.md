@@ -4,7 +4,7 @@ category:
   - 日志
 date: 2021-05-21 20:16:47
 mathjax: true
-tags: [生活]
+tags: [杂谈]
 tocbot: true
 ---
 

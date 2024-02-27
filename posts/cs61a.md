@@ -1,7 +1,7 @@
 ---
 title: CS61A 课程笔记
 date: 2021-12-23 09:26:19
-tags: [函数式编程, 递归, python, 动态规划]
+tags: [函数式编程, python]
 category: 笔记
 mathjax: true
 tocbot: true

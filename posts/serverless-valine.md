@@ -1,7 +1,7 @@
 ---
 title: Valine 评论系统及 Serverless 浅探
 date: 2021-09-16 00:08:47
-tags: [serverless, js]
+tags: [serverless]
 category: web
 tocbot: true
 ---

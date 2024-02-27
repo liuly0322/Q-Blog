@@ -1,7 +1,7 @@
 ---
 title: LLVM IR 稀疏条件常量传播优化及 WASM 初探
 date: 2023-02-07 22:50:29
-tags: [C/C++, web, 编译器]
+tags: [C/C++, wasm, 编译器]
 category: 笔记
 mathjax: true
 tocbot: true

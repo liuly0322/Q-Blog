@@ -1,7 +1,7 @@
 ---
 title: 静态页面 AES 加密的使用
 date: 2021-09-10 21:09:09
-tags: [AES, 密码学]
+tags: [密码学]
 category: web
 tocbot: true
 ---

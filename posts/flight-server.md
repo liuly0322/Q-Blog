@@ -1,7 +1,7 @@
 ---
 title: 航空客运订票系统实验报告
 date: 2021-11-07 22:19:35
-tags: [C/C++, web, 链表, 队列, 服务器]
+tags: [C/C++, web]
 category: 笔记
 mathjax: true
 tocbot: true

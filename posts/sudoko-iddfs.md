@@ -1,7 +1,7 @@
 ---
 title: 数独的模拟逻辑解法的实现
 date: 2021-06-03 23:38:03
-tags: [递归, 搜索, C/C++]
+tags: [算法, C/C++]
 category: 算法
 mathjax: true
 tocbot: true

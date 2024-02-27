@@ -1,7 +1,7 @@
 ---
 title: Github Actions 持续集成体验
 date: 2022-08-23 19:10:20
-tags: [web, js, git]
+tags: [笔记]
 category: web
 ---
 

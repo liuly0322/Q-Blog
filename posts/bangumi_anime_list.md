@@ -1,7 +1,7 @@
 ---
 title: Anime List!
 date: 2024-02-23 22:43:15
-tags: [web, js, 动画]
+tags: [杂谈, anime]
 category: web
 ---
 

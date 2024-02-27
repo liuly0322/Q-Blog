@@ -1,7 +1,7 @@
 ---
 title: Hello New World
 date: 2022-03-28 13:50:20
-tags: [web, vue, typescript, python, 夜间模式]
+tags: [vue, typescript]
 category: web
 ---
 

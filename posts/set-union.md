@@ -1,7 +1,7 @@
 ---
 title: 集合间并集个数计算
 date: 2022-09-09 16:00:49
-tags: [C/C++, 模拟, 搜索, python, 位运算]
+tags: [C/C++, 算法]
 category: 算法
 ---
 

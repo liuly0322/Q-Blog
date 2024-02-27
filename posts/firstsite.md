@@ -1,7 +1,7 @@
 ---
 title: 利用 USTC 服务器的初次建站体验
 date: 2021-05-04 18:41:29
-tags: [web, hexo]
+tags: [hexo]
 category: web
 tocbot: true
 ---

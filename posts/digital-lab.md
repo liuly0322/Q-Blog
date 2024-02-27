@@ -1,7 +1,7 @@
 ---
 title: 数电计组实验 Vscode 配置指南
 date: 2022-03-19 21:18:29
-tags: [数电]
+tags: [笔记]
 category: 笔记
 tocbot: true
 ---
