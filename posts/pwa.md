@@ -30,6 +30,8 @@ PWA 这个词听上去可能很让人陌生，但在国内我们早就熟悉一�
 pnpm add -D vite-plugin-pwa
 ```
 
+配置过程参考了 VitePWA 的 [PWA Minimal Requirements](https://vite-pwa-org.netlify.app/guide/pwa-minimal-requirements.html)、[Automatic reload](https://vite-pwa-org.netlify.app/guide/auto-update.html) 和 [Static assets handling](https://vite-pwa-org.netlify.app/guide/static-assets.html)。此外，[Periodic Service Worker Updates](https://vite-pwa-org.netlify.app/guide/periodic-sw-updates.html) 解释了如何以指定间隔检查更新，[Unregister Service Worker](https://vite-pwa-org.netlify.app/guide/unregister-service-worker.html) 解释了如何在启用后禁用 PWA 功能，也值得看看。
+
 主要在 `vite.config.ts` 中配置：
 
 ```typescript
@@ -69,6 +71,8 @@ export default defineConfig({
 - `registerType: 'autoUpdate'` 配置了 PWA 自动更新；
 - `workbox.globPatterns` 配置了缓存（预取）的文件类型；
 - `includeAssets` 和 `manifest` 是一些元信息和图标相关的配置。
+
+图标可以在 [Favicon InBrowser.App](https://favicon.inbrowser.app/tools/favicon-generator) 生成。
 
 在 `main.ts` 里需要引入 `registerSW` 以实现自动更新：
 
