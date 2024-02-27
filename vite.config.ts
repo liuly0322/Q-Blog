@@ -12,7 +12,9 @@ export default defineConfig({
   plugins: [Tov(), VitePWA({
     registerType: 'autoUpdate',
     workbox: {
-      globPatterns: ['**/*.{js,css,html,ico,png,svg,htm,xml}'],
+      globPatterns: ['**/*.{js,css,ico,svg}', 'index.html'],
+      // https://github.com/vite-pwa/vite-plugin-pwa/issues/120
+      navigateFallback: null,
     },
     includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
     manifest: {
