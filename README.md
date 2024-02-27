@@ -31,7 +31,7 @@
 - Naive UI，Vue3 UI 库
 - 响应式布局
 - 夜间模式
-- 半 SSG，博客 url 仍然通过路由跳转，但是默认生成了包含标题简介等信息的静态界面
+- PWA 支持
 
 ## 食用方法
 
@@ -41,25 +41,20 @@
 
 ### 手动部署
 
-需要部署在域名根目录下，或者自行修改路由
-
-clone 本仓库后，确保 node 版本号大于等于 14, 并已经安装 npm
-
 ```bash
 npm install -g pnpm # 如果还未安装 pnpm
 pnpm i
 ```
 
-博客写在 `posts` 文件夹下，markdown 格式。YAML frontmatter 需至少包含 title, date, tags
-
-预览：
+开发：
 
 ```bash
-pnpm run dev # run server at `localhost:3000`
+pnpm dev # run server at `localhost:3000`
 ```
 
 部署：
 
 ```bash
-pnpm run build # compile to `dist` folder
+pnpm build # compile to `dist` folder
+pnpm preview # preview the production build
 ```
