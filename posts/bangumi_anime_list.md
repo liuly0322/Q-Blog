@@ -98,26 +98,65 @@ interface Anime {
 
 ## 分页
 
-bangumi 的这个 api 是分页的，考虑到本人目前没啥数据，可能以后也不会补标以前看过的动画，所以就先没写无限滚动了，直接所有数据拉下来。
+bangumi 的这个 api 是分页的，出于性能考虑可以写一个滚动加载。
 
 ```typescript
-onMounted(async () => {
-  let page = 0
-  while (true) {
+const animeList = ref([] as Anime[])
+
+const loading = ref(true)
+const pageSize = 12
+let page = 0
+
+const fetchAnimeList = async () => {
+  if (!loading.value) return
+  const offset = page * pageSize
+  try {
     const res = await fetch(
-      `https://api.bgm.tv/v0/users/undef_baka/collections?subject_type=2&type=2&limit=50&offset=${page * 50}`,
+      `https://api.bgm.tv/v0/users/undef_baka/collections?subject_type=2&type=2&limit=${pageSize}&offset=${offset}`,
     )
-    try {
-      if (!res.ok)
-        throw new Error('Bangumi response was not ok')
-      const data = await res.json()
-      animeList.value = animeList.value.concat(data.data)
+    if (!res.ok) {
+      throw new Error('Network response was not ok')
     }
-    catch (e) {
+    const data = await res.json()
+    const totalSize = data.total
+    animeList.value = animeList.value.concat(data.data)
+    if (offset + data.data.length >= totalSize) {
       loading.value = false
-      break
     }
     page++
+  } catch (error) {
+    loading.value = false
   }
+}
+
+// 节流
+let ticking = false
+
+async function updateOnScroll(event: Event) {
+  if (ticking) return
+  ticking = true
+  const element = event.target as HTMLElement
+  // 这里在处理兼容问题，正常情况元素滚动用元素，页面滚动用 document 就行
+  const isBottom = document.documentElement.scrollTop ? document.documentElement.scrollHeight - document.documentElement.scrollTop <= document.documentElement.clientHeight + 100 :
+    element.scrollHeight - element.scrollTop <= element.clientHeight + 100
+  if (isBottom) {
+    await fetchAnimeList()
+  }
+  ticking = false
+}
+
+onMounted(async () => {
+  await fetchAnimeList()
+  nextTick(() => {
+    const element = document.querySelector('.n-layout-content .n-scrollbar-container')
+    element?.addEventListener('scroll', updateOnScroll)
+    document.addEventListener('scroll', updateOnScroll)
+  })
+})
+
+onUnmounted(() => {
+  const element = document.querySelector('.n-layout-content .n-scrollbar-container')
+  element?.removeEventListener('scroll', updateOnScroll)
+  document.removeEventListener('scroll', updateOnScroll)
 })
 ```
