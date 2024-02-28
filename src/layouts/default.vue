@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { LayoutInst } from 'naive-ui'
+
 const { isMobile, phoneNavToggle } = usePhone()
 const mainLayoutStyle = computed(() =>
   isMobile.value ? '' : 'height: calc(100vh - var(--header-height));',

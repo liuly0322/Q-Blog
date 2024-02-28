@@ -5,7 +5,7 @@ const isMobile = computed(() => width.value < 768)
  * 用于手机端切换导航栏
  * @param open   用于显式指定是打开还是关闭
  */
-const phoneNavToggle = (open?: boolean) => {
+function phoneNavToggle(open?: boolean) {
   const openNav = () => {
     document.querySelector('.mdui-overlay')?.classList.add('mdui-overlay-show')
     document.documentElement.classList.add('nav-overflow-hidden')

@@ -2,7 +2,7 @@
 interface Anime {
   updated_at: string
   comment: string
-  tags: { name: string; count: number }[]
+  tags: { name: string, count: number }[]
   subject: {
     date: string
     images: {
@@ -15,7 +15,7 @@ interface Anime {
     name: string
     name_cn: string
     short_summary: string
-    tags: { name: string; count: number }[]
+    tags: { name: string, count: number }[]
     score: number
     type: number
     id: number
@@ -38,7 +38,7 @@ const loading = ref(true)
 const pageSize = 12
 let page = 0
 
-const fetchAnimeList = async () => {
+async function fetchAnimeList() {
   const offset = page * pageSize
   try {
     const res = await fetch(
@@ -91,7 +91,7 @@ onUnmounted(() => {
   document.removeEventListener('scroll', updateOnScroll)
 })
 
-const timeToDate = (time: string) => {
+function timeToDate(time: string) {
   const date = new Date(time)
   return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`
 }

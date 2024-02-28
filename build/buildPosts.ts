@@ -1,5 +1,5 @@
-import fs from 'fs/promises'
-import path from 'path'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 import frontmatter from 'frontmatter'
 import Rss from 'rss'
 import template from 'art-template'
@@ -31,7 +31,7 @@ export default () => ({
   async buildStart() {
     await buildPosts()
   },
-  async handleHotUpdate(ctx: { file: string; server: any }) {
+  async handleHotUpdate(ctx: { file: string, server: any }) {
     if (ctx.file.includes('posts') && !ctx.file.includes('public')) {
       await buildPosts()
       ctx.server.ws.send({
@@ -48,7 +48,7 @@ export default () => ({
   },
 })
 
-const formatDate = (date: Date) => {
+function formatDate(date: Date) {
   return date
     .toISOString()
     .replace(/T/g, ' ')

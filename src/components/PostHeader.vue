@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PostSummary } from '~/composables/useSummary'
 
-const props = defineProps<{
+defineProps<{
   post: PostSummary
 }>()
 </script>

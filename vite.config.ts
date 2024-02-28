@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import Vue from '@vitejs/plugin-vue'
@@ -58,8 +58,6 @@ export default defineConfig({
     }),
     // 组件自动按需引入
     Components({
-      extensions: ['vue', 'md'],
-      include: [/\.md$/, /\.vue$/],
       dts: resolve(__dirname, './types/components.d.ts'),
       resolvers: [
         IconsResolver(),
@@ -102,5 +100,6 @@ export default defineConfig({
           },
         ],
       },
-    })],
+    }),
+  ],
 })

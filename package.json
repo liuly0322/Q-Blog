@@ -1,8 +1,8 @@
 {
   "name": "lly_blog",
+  "type": "module",
   "version": "1.5.0",
   "description": "vite + vue3 + ts 开箱即用现代开发模板",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -16,8 +16,8 @@
     "deps:fresh:patch": "npx taze patch -w",
     "preview:host": "vite preview --host",
     "preview:open": "vite preview --open",
-    "lint": "eslint --ext .ts,.js,.vue .",
-    "lint:fix": "eslint --fix --ext .ts,.js,.vue ."
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix"
   },
   "dependencies": {
     "vue": "^3.4.20"

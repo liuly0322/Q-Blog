@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { darkTheme } from 'naive-ui'
+
 const { isDark, darkOverrides } = useDarks()
 
 const theme = computed(() => (isDark.value ? darkTheme : undefined))

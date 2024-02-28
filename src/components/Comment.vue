@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import type { PostSummary } from '~/composables/useSummary'
+
 const props = defineProps<{
   post: PostSummary
 }>()
 
 const { isDark } = useDarks()
 const vueUtterances = ref()
-const init = () => {
+function init() {
   vueUtterances.value.firstChild?.remove()
 
   const utterances = document.createElement('script')

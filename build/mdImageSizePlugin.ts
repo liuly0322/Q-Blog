@@ -2,7 +2,7 @@
 // Author: boyum
 // License: Apache-2.0 license
 
-import path from 'path'
+import path from 'node:path'
 import imageSize from 'image-size'
 import type markdownIt from 'markdown-it'
 import type Token from 'markdown-it/lib/token'

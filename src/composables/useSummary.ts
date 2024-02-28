@@ -11,9 +11,9 @@ interface SiteSummary {
 }
 
 const summary = computed(() => {
-  return (data.value as SiteSummary).posts
+  return (data.value as SiteSummary)?.posts || []
 })
 export default () => summary
 export const firstPageAbstracts = computed(() => {
-  return (data.value as SiteSummary).firstPageAbstracts
+  return (data.value as SiteSummary)?.firstPageAbstracts || []
 })

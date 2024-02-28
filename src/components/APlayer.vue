@@ -68,7 +68,7 @@ const props = defineProps({
     default: true,
   },
   listMaxHeight: {
-    type: String as PropType<String>,
+    type: String as PropType<string>,
     default: '250px',
   },
   storageName: {
@@ -112,7 +112,7 @@ interface Meting {
   lrc?: string
 }
 
-const fakeLoadingBar = async () => {
+async function fakeLoadingBar() {
   const sleep = (ms: number) =>
     new Promise(resolve => setTimeout(resolve, ms))
   while (percentage.value <= 80) {
