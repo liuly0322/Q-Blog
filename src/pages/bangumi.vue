@@ -35,24 +35,58 @@ interface Anime {
 const animeList = ref([] as Anime[])
 
 const loading = ref(true)
-onMounted(async () => {
-  let page = 0
-  while (true) {
+const pageSize = 12
+let page = 0
+
+const fetchAnimeList = async () => {
+  if (!loading.value) return
+  const offset = page * pageSize
+  try {
     const res = await fetch(
-      `https://api.bgm.tv/v0/users/undef_baka/collections?subject_type=2&type=2&limit=50&offset=${page * 50}`,
+      `https://api.bgm.tv/v0/users/undef_baka/collections?subject_type=2&type=2&limit=${pageSize}&offset=${offset}`,
     )
-    try {
-      if (!res.ok)
-        throw new Error('Bangumi response was not ok')
-      const data = await res.json()
-      animeList.value = animeList.value.concat(data.data)
+    if (!res.ok) {
+      throw new Error('Network response was not ok')
     }
-    catch (e) {
+    const data = await res.json()
+    const totalSize = data.total
+    animeList.value = animeList.value.concat(data.data)
+    if (offset + data.data.length >= totalSize) {
       loading.value = false
-      break
     }
     page++
+  } catch (error) {
+    loading.value = false
   }
+}
+
+let ticking = false
+
+async function updateOnScroll(event: Event) {
+  if (ticking) return
+  ticking = true
+  const element = event.target as HTMLElement
+  const isBottom = document.documentElement.scrollTop ? document.documentElement.scrollHeight - document.documentElement.scrollTop <= document.documentElement.clientHeight + 100 :
+    element.scrollHeight - element.scrollTop <= element.clientHeight + 100
+  if (isBottom) {
+    await fetchAnimeList()
+  }
+  ticking = false
+}
+
+onMounted(async () => {
+  await fetchAnimeList()
+  nextTick(() => {
+    const element = document.querySelector('.n-layout-content .n-scrollbar-container')
+    element?.addEventListener('scroll', updateOnScroll)
+    document.addEventListener('scroll', updateOnScroll)
+  })
+})
+
+onUnmounted(() => {
+  const element = document.querySelector('.n-layout-content .n-scrollbar-container')
+  element?.removeEventListener('scroll', updateOnScroll)
+  document.removeEventListener('scroll', updateOnScroll)
 })
 
 const timeToDate = (time: string) => {
@@ -66,28 +100,23 @@ const timeToDate = (time: string) => {
     动画列表
   </h1>
   <p class="mt-5">
-    我在 <a href="https://bangumi.tv/user/undef_baka" target="_blank" rel="noopener noreferrer">bangumi</a> 上对部分看过动画的评分与短评（Optional）。
+    我在 <a href="https://bangumi.tv/user/undef_baka" target="_blank" rel="noopener noreferrer">bangumi</a>
+    上对部分看过动画的评分与短评（Optional）。
   </p>
-  <div v-if="animeList.length > 0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-5">
-    <n-card
-      v-for="anime in animeList"
-      :key="anime.subject.id"
-      content-style="display:flex;flex-direction:column;justify-content:space-between;padding:1em"
-      style="height:100%"
-    >
+  <div v-if="animeList.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+    <n-card v-for="anime in animeList" :key="anime.subject.id"
+      content-style="display:flex;flex-direction:column;justify-content:space-between;padding:1em" style="height:100%">
       <div class="mb-2">
         <a :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer">
-          <img
-            :src="anime.subject.images.medium"
-            :alt="anime.subject.name"
-            class="rounded-lg w-full"
-          >
+          <img :src="anime.subject.images.medium" :alt="anime.subject.name" class="rounded-lg w-full">
         </a>
         <div class="mt-2">
-          <a :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer" class="text-lg font-bold">
+          <a :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer"
+            class="text-lg font-bold">
             {{ anime.subject.name_cn || anime.subject.name }}
           </a>
-          <n-ellipsis class="text-sm text-gray-500 mt-4 whitespace-pre-line" expand-trigger="click" line-clamp="2" :tooltip="false">
+          <n-ellipsis class="text-sm text-gray-500 mt-4 whitespace-pre-line" expand-trigger="click" line-clamp="2"
+            :tooltip="false">
             {{ anime.subject.short_summary }}
           </n-ellipsis>
         </div>
@@ -115,6 +144,7 @@ const timeToDate = (time: string) => {
 a {
   color: #258fb8;
 }
+
 a:hover {
   text-decoration: underline;
 }
