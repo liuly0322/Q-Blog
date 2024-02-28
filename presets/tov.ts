@@ -4,7 +4,6 @@ import Pages from 'vite-plugin-pages'
 import Icons from 'unplugin-icons/vite'
 import Inspect from 'vite-plugin-inspect'
 import Windicss from 'vite-plugin-windicss'
-import vueJsx from '@vitejs/plugin-vue-jsx'
 import ViteRestart from 'vite-plugin-restart'
 import Layouts from 'vite-plugin-vue-layouts'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -45,7 +44,7 @@ export default () => {
     BuildPosts(),
     // 文件路由
     Pages({
-      extensions: ['vue', 'md', 'tsx'],
+      extensions: ['vue', 'md'],
     }),
     // 布局系统
     Layouts(),
@@ -63,8 +62,8 @@ export default () => {
     }),
     // 组件自动按需引入
     Components({
-      extensions: ['vue', 'md', 'tsx'],
-      include: [/\.md$/, /\.vue$/, /\.tsx$/],
+      extensions: ['vue', 'md'],
+      include: [/\.md$/, /\.vue$/],
       dts: resolve(__dirname, './types/components.d.ts'),
       resolvers: [
         ArcoResolver(),
@@ -90,8 +89,6 @@ export default () => {
     ViteRestart({
       restart: ['.env*', 'presets/tov.[jt]s', 'presets/shared/**/*'],
     }),
-    // tsx 支持
-    vueJsx(),
     // 对 vite-plugin-vue-layouts 的 hmr 问题的临时处理
     // 如果 https://github.com/JohnCampionJr/vite-plugin-vue-layouts/pull/58 被接受的话，未来可能会移除
     FixLayoutsHmr(),
