@@ -114,7 +114,7 @@ function timeToDate(time: string) {
         <img :src="anime.subject.images.medium" :alt="anime.subject.name" class="rounded-lg w-full">
       </a>
 
-      <div class="anime-card-content">
+      <div class="anime-card-content flex flex-col justify-between flex-grow">
         <div class="mt-2">
           <a
             :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer"

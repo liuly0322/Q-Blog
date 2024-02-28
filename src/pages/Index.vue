@@ -31,7 +31,7 @@ const posts = computed(() => {
     <router-link class="show-more" :to="`/posts/${encodeURIComponent(post.summary.url)}`">
       查看更多
     </router-link>
-    <div class="text-left">
+    <div class="text-left mt-6">
       <span v-for="tag in post.summary.tags" :key="tag" class="mr-2 text-slate-500">
         <router-link :to="`/tags/${encodeURIComponent(tag)}`">#{{ tag }}</router-link>
       </span>
