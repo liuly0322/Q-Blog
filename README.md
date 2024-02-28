@@ -20,8 +20,8 @@
 
 [My personal blog](http://blog.liuly.moe)
 
-- Vite5，Vue3，TypeScript，Naive UI
-- Responsive Web Design，Dark Mode
+- Vite5, Vue3, TypeScript, Naive UI
+- Responsive Web Design, Dark Mode
 - PWA
 
 ## Usage
