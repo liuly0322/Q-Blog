@@ -3,7 +3,9 @@ const friends = useFetch('/friends.json').json().data
 </script>
 
 <template>
-  <n-divider title-placement="left">友情链接</n-divider>
+  <n-divider title-placement="left">
+    友情链接
+  </n-divider>
   <div class="overflow-hidden flex flex-wrap">
     <a v-for="friend in friends" :key="friend.name" :href="friend.url" target="_blank" class="flex-auto text-left m-2.5">
       <n-card content-style="display: flex">

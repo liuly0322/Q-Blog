@@ -31,7 +31,9 @@ const computeSize = (times: number) => {
 </script>
 
 <template>
-  <n-divider title-placement="left">标签</n-divider>
+  <n-divider title-placement="left">
+    标签
+  </n-divider>
   <router-link v-for="tag in tags" :key="tag" :to="`/tags/${encodeURIComponent(tag.content)}`">
     <n-tag type="info" :size="computeSize(tag.times)" class="m-1 cursor-pointer" round>
       {{ tag.content }}: {{ tag.times }}

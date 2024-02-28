@@ -153,7 +153,7 @@ async function generateSitemap(posts: Post[]) {
 
 async function generateSummary(posts: Post[], firstPageAbstracts: string[]) {
   const summary = {
-    posts: posts.map(post => {
+    posts: posts.map((post) => {
       return Object.fromEntries(Object.entries(post).filter(([k]) => k !== 'content'))
     }),
     firstPageAbstracts,

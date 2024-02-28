@@ -16,8 +16,10 @@ const posts = computed(() => {
 </script>
 
 <template>
-  <n-card v-for="post in posts" :key="post" class="mb-4 px-2" header-style="font-size:2em; margin-top:1em"
-    footer-style="text-align: left">
+  <n-card
+    v-for="post in posts" :key="post" class="mb-4 px-2" header-style="font-size:2em; margin-top:1em"
+    footer-style="text-align: left"
+  >
     <template #header>
       <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`">
         {{
