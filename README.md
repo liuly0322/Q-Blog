@@ -2,8 +2,6 @@
   <img src='public/pwa-192x192.png' width='192'/>
 </p>
 
-<p align='center' style="font-size: 0.6em;">图文无关，只是因为太可爱了</p>
-
 <h1 align='center'>Q Blog</h1>
 
 <p align="center">
