@@ -9,10 +9,10 @@ import mdMathPlugin from 'markdown-it-texmath'
 import mdAnchorPlugin from 'markdown-it-anchor'
 import mdImageSizePlugin from './mdImageSizePlugin'
 
-const site_url = 'https://blog.liuly.moe'
+const SITE_URL = 'https://blog.liuly.moe'
 
 const descriptionRenderer = markdownIt()
-  .use(mdImageSizePlugin(site_url))
+  .use(mdImageSizePlugin(SITE_URL))
 const postRenderer = markdownIt({ html: true })
   .use(mdPrismPlugin)
   .use(mdMathPlugin)
@@ -111,8 +111,8 @@ async function generateSitemap(posts: Post[]) {
   const feed = new Rss({
     title: 'liuly\'s Blog',
     description: 'liuly 的个人 Blog',
-    site_url,
-    feed_url: `${site_url}/feed.xml`,
+    site_url: SITE_URL,
+    feed_url: `${SITE_URL}/feed.xml`,
     copyright: '2024 liuly',
     language: 'zh-cn',
   })
@@ -128,7 +128,7 @@ async function generateSitemap(posts: Post[]) {
   for (const post of posts) {
     feed.item({
       title: post.title,
-      url: `${site_url}/posts/${post.url}`,
+      url: `${SITE_URL}/posts/${post.url}`,
       description: descriptionRenderer.render(truncate(post.content, 100)),
       date: post.date,
     })
