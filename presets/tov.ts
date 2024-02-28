@@ -22,7 +22,6 @@ import Modules from 'vite-plugin-use-modules'
 import PkgConfig from 'vite-plugin-package-config'
 import OptimizationPersist from 'vite-plugin-optimize-persist'
 import BuildPosts from '../build/buildPosts'
-import { FixLayoutsHmr } from './plugins/layouts'
 import { AutoImportResolvers } from './shared/resolvers'
 import Markdown, { markdownWrapperClasses } from './plugins/markdown'
 import { env } from './shared/env'
@@ -89,8 +88,5 @@ export default () => {
     ViteRestart({
       restart: ['.env*', 'presets/tov.[jt]s', 'presets/shared/**/*'],
     }),
-    // 对 vite-plugin-vue-layouts 的 hmr 问题的临时处理
-    // 如果 https://github.com/JohnCampionJr/vite-plugin-vue-layouts/pull/58 被接受的话，未来可能会移除
-    FixLayoutsHmr(),
   ]
 }

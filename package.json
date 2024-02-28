@@ -72,7 +72,7 @@
     "vite-plugin-pwa": "^0.12.8",
     "vite-plugin-restart": "^0.1.1",
     "vite-plugin-use-modules": "^1.0.1",
-    "vite-plugin-vue-layouts": "^0.6.0",
+    "vite-plugin-vue-layouts": "^0.7.0",
     "vite-plugin-windicss": "^1.8.3",
     "vitest": "^0.6.3",
     "vue-router": "^4.0.14",
