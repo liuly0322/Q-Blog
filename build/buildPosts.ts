@@ -1,23 +1,20 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import fs from 'fs/promises'
 import path from 'path'
+import frontmatter from 'frontmatter'
+import Rss from 'rss'
+import template from 'art-template'
+import markdownIt from 'markdown-it'
+import mdPrismPlugin from 'markdown-it-prism'
+import mdMathPlugin from 'markdown-it-texmath'
+import mdAnchorPlugin from 'markdown-it-anchor'
 import { env } from '../presets/shared/env'
 import mdImageSizePlugin from './mdImageSizePlugin'
 
 const site_url = env.VITE_SITE_URL
 
-const frontmatter = require('frontmatter')
-const Rss = require('rss')
-
-const template = require('art-template')
-
-const descriptionRenderer = require('markdown-it')()
+const descriptionRenderer = markdownIt()
   .use(mdImageSizePlugin(site_url))
-
-const mdPrismPlugin = require('markdown-it-prism')
-const mdMathPlugin = require('markdown-it-texmath')
-const mdAnchorPlugin = require('markdown-it-anchor')
-const postRenderer = require('markdown-it')({ html: true })
+const postRenderer = markdownIt({ html: true })
   .use(mdPrismPlugin)
   .use(mdMathPlugin)
   .use(mdAnchorPlugin)
