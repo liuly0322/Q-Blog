@@ -10,7 +10,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
 
-import { DirResolverHelper } from 'vite-auto-import-resolvers'
+import { DirResolverHelper, dirResolver } from 'vite-auto-import-resolvers'
 import {
   AntDesignVueResolver,
   ArcoResolver,
@@ -21,10 +21,14 @@ import {
 import Modules from 'vite-plugin-use-modules'
 import PkgConfig from 'vite-plugin-package-config'
 import OptimizationPersist from 'vite-plugin-optimize-persist'
+import Markdown from 'vite-plugin-md'
+import Prism from 'markdown-it-prism'
+import anchor from 'markdown-it-anchor'
+import texmath from 'markdown-it-texmath'
+import katex from 'katex'
 import BuildPosts from '../build/buildPosts'
-import { AutoImportResolvers } from './shared/resolvers'
-import Markdown, { markdownWrapperClasses } from './plugins/markdown'
-import { env } from './shared/env'
+
+const markdownWrapperClasses = 'md-blog m-auto text-left'
 
 export default () => {
   return [
@@ -38,7 +42,18 @@ export default () => {
       include: [/\.vue$/, /\.md$/],
     }),
     // markdown 编译插件
-    Markdown(),
+    Markdown({
+      wrapperClasses: markdownWrapperClasses,
+      markdownItSetup(md) {
+        md.use(Prism)
+        md.use(anchor)
+        md.use(texmath, {
+          engine: katex,
+          delimiters: 'dollars',
+          katexOptions: { macros: { '\\RR': '\\mathbb{R}' } },
+        })
+      },
+    }),
     // 自动构建文件
     BuildPosts(),
     // 文件路由
@@ -48,9 +63,7 @@ export default () => {
     // 布局系统
     Layouts(),
     // 调试工具
-    Inspect({
-      enabled: env.VITE_APP_INSPECT,
-    }),
+    Inspect(),
     // windicss 插件
     Windicss({
       safelist: markdownWrapperClasses,
@@ -74,16 +87,13 @@ export default () => {
       ],
     }),
     // 目录下 api 按需自动引入辅助插件
-    env.VITE_APP_API_AUTO_IMPORT
-      && env.VITE_APP_DIR_API_AUTO_IMPORT
-      && DirResolverHelper(),
+    DirResolverHelper(),
     // api 自动按需引入
-    env.VITE_APP_API_AUTO_IMPORT
-      && AutoImport({
-        dts: './presets/types/auto-imports.d.ts',
-        imports: ['vue', 'vue-router', '@vueuse/core'],
-        resolvers: AutoImportResolvers,
-      }),
+    AutoImport({
+      dts: './presets/types/auto-imports.d.ts',
+      imports: ['vue', 'vue-router', '@vueuse/core'],
+      resolvers: [dirResolver()],
+    }),
     // 预设热重启服务
     ViteRestart({
       restart: ['.env*', 'presets/tov.[jt]s', 'presets/shared/**/*'],

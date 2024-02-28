@@ -7,10 +7,9 @@ import markdownIt from 'markdown-it'
 import mdPrismPlugin from 'markdown-it-prism'
 import mdMathPlugin from 'markdown-it-texmath'
 import mdAnchorPlugin from 'markdown-it-anchor'
-import { env } from '../presets/shared/env'
 import mdImageSizePlugin from './mdImageSizePlugin'
 
-const site_url = env.VITE_SITE_URL
+const site_url = 'https://blog.liuly.moe'
 
 const descriptionRenderer = markdownIt()
   .use(mdImageSizePlugin(site_url))
