@@ -7,7 +7,6 @@ import Windicss from 'vite-plugin-windicss'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import ViteRestart from 'vite-plugin-restart'
 import Layouts from 'vite-plugin-vue-layouts'
-import { viteMockServe } from 'vite-plugin-mock'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
@@ -58,10 +57,6 @@ export default () => {
     // windicss 插件
     Windicss({
       safelist: markdownWrapperClasses,
-    }),
-    // mock 服务
-    viteMockServe({
-      prodEnabled: env.VITE_APP_MOCK_IN_PRODUCTION,
     }),
     // https://icones.netlify.app/
     Icons({
