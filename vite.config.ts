@@ -17,13 +17,7 @@ import {
   VueUseComponentsResolver,
 } from 'unplugin-vue-components/resolvers'
 import Modules from 'vite-plugin-use-modules'
-import PkgConfig from 'vite-plugin-package-config'
-import OptimizationPersist from 'vite-plugin-optimize-persist'
-import Markdown from 'vite-plugin-md'
-import Prism from 'markdown-it-prism'
-import anchor from 'markdown-it-anchor'
-import texmath from 'markdown-it-texmath'
-import katex from 'katex'
+import Markdown from 'unplugin-vue-markdown/vite'
 import BuildPosts from './build/buildPosts'
 
 const markdownWrapperClasses = 'md-blog m-auto text-left'
@@ -36,10 +30,6 @@ export default defineConfig({
   },
   plugins: [
     Modules(),
-    // 将包信息文件作为 vite 的配置文件之一，为 vite-plugin-optimize-persist 所用
-    PkgConfig(),
-    // 依赖预构建分析，提高大型项目性能
-    OptimizationPersist(),
     // vue 官方插件，用来解析 sfc
     Vue({
       include: [/\.vue$/, /\.md$/],
@@ -47,15 +37,6 @@ export default defineConfig({
     // markdown 编译插件
     Markdown({
       wrapperClasses: markdownWrapperClasses,
-      markdownItSetup(md) {
-        md.use(Prism)
-        md.use(anchor)
-        md.use(texmath, {
-          engine: katex,
-          delimiters: 'dollars',
-          katexOptions: { macros: { '\\RR': '\\mathbb{R}' } },
-        })
-      },
     }),
     // 自动构建文件
     BuildPosts(),
