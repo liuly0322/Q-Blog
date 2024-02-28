@@ -20,40 +20,36 @@
 
 <p align='center'>Q-Blog - Quicker and Cuter</p>
 
-## 说明
+[My personal blog](http://blog.liuly.moe)
 
-一个使用 Vue3.0 的静态博客站示例，自用于 [个人博客](http://blog.liuly.moe)
-
-参考 [TOV](https://github.com/dishait/tov-template) 的 Vite5 + Vue3 模板（裁了个很小的子集）
-
-- TypeScript
-- Naive UI
-- 响应式布局
-- 夜间模式
+- Vite5，Vue3，TypeScript，Naive UI
+- Responsive Web Design，Dark Mode
 - PWA
 
-## 食用方法
+## Usage
 
-### 自动部署
-
-[Github Actions 示例](https://github.com/liuly0322/Q-Blog/blob/main/.github/workflows/build.yml)
-
-### 手动部署
+See also [Github Actions](https://github.com/liuly0322/Q-Blog/blob/main/.github/workflows/build.yml)
 
 ```bash
-npm install -g pnpm # 如果还未安装 pnpm
+npm install -g pnpm # install pnpm first
 pnpm i
 ```
 
-开发：
+Development：
 
 ```bash
 pnpm dev # run server at `localhost:3000`
 ```
 
-部署：
+Build：
 
 ```bash
 pnpm build # compile to `dist` folder
 pnpm preview # preview the production build
 ```
+
+## credits
+
+- [tov-template](https://github.com/dishait/tov-template)
+- [Vite PWA](https://github.com/vite-pwa/vite-plugin-pwa)
+
