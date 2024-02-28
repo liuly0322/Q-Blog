@@ -1,5 +1,5 @@
 <p align='center'>
-  <img src='docs/logo.png' width='200'/>
+  <img src='public/pwa-192x192.png' width='192'/>
 </p>
 
 <p align='center' style="font-size: 0.6em;">图文无关，只是因为太可爱了</p>
