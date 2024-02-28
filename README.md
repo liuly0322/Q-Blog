@@ -24,14 +24,13 @@
 
 一个使用 Vue3.0 的静态博客站示例，自用于 [个人博客](http://blog.liuly.moe)
 
-参考 [TOV](https://github.com/dishait/tov-template) 的 Vite2 + Vue3 模板
+参考 [TOV](https://github.com/dishait/tov-template) 的 Vite5 + Vue3 模板（裁了个很小的子集）
 
-- Vite2，支持博客热更新
-- Vue3 + TypeScript，纯组合式 API
-- Naive UI，Vue3 UI 库
+- TypeScript
+- Naive UI
 - 响应式布局
 - 夜间模式
-- PWA 支持
+- PWA
 
 ## 食用方法
 
