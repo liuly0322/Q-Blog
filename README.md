@@ -30,6 +30,8 @@
 
 See also [Github Actions](https://github.com/liuly0322/Q-Blog/blob/main/.github/workflows/build.yml)
 
+Installation:
+
 ```bash
 npm install -g pnpm # install pnpm first
 pnpm i
@@ -48,7 +50,7 @@ pnpm build # compile to `dist` folder
 pnpm preview # preview the production build
 ```
 
-## credits
+## Credits
 
 - [tov-template](https://github.com/dishait/tov-template)
 - [Vite PWA](https://github.com/vite-pwa/vite-plugin-pwa)
