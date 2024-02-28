@@ -3,4 +3,4 @@ assets
 posts
 dist
 node_modules
-presets/types
+types

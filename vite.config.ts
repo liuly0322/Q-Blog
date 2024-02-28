@@ -6,7 +6,6 @@ import Pages from 'vite-plugin-pages'
 import Icons from 'unplugin-icons/vite'
 import Inspect from 'vite-plugin-inspect'
 import Windicss from 'vite-plugin-windicss'
-import ViteRestart from 'vite-plugin-restart'
 import Layouts from 'vite-plugin-vue-layouts'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
@@ -80,7 +79,7 @@ export default defineConfig({
     Components({
       extensions: ['vue', 'md'],
       include: [/\.md$/, /\.vue$/],
-      dts: resolve(__dirname, './presets/types/components.d.ts'),
+      dts: resolve(__dirname, './types/components.d.ts'),
       resolvers: [
         IconsResolver(),
         NaiveUiResolver(),
@@ -91,13 +90,9 @@ export default defineConfig({
     DirResolverHelper(),
     // api 自动按需引入
     AutoImport({
-      dts: './presets/types/auto-imports.d.ts',
+      dts: './types/auto-imports.d.ts',
       imports: ['vue', 'vue-router', '@vueuse/core'],
       resolvers: [dirResolver()],
-    }),
-    // 预设热重启服务
-    ViteRestart({
-      restart: ['.env*', 'presets/tov.[jt]s', 'presets/shared/**/*'],
     }),
     VitePWA({
       registerType: 'autoUpdate',
