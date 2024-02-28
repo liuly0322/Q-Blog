@@ -18,21 +18,24 @@ const props = defineProps({
   <n-divider title-placement="left">
     {{ props.title }}
   </n-divider>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <router-link v-for="post in props.summary" :key="post.url" class="flex" :to="`/posts/${post.url}`">
-      <n-card
-        class="mb-2" :title="post.title" size="small"
-        content-style="display:flex;flex-direction:column;justify-content:center"
-      >
-        <div>{{ post.date }}</div>
-        <div class="mt-2 mx-2">
-          <n-tag v-for="tag in post.tags" :key="tag" class="m-0.5" type="success" size="small" round>
-            <router-link :to="`/tags/${encodeURIComponent(tag)}`">
-              {{ tag }}
-            </router-link>
-          </n-tag>
-        </div>
-      </n-card>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <router-link
+      v-for="post in props.summary" :key="post.url"
+      class="mb-2 rounded-lg shadow-md custom-card p-4 flex flex-col justify-between" :to="`/posts/${post.url}`"
+    >
+      <h2 class="font-medium text-base mb-4 mt-2">
+        {{ post.title }}
+      </h2>
+      <div class="text-xs text-gray-500">
+        {{ post.date }}
+      </div>
+      <div class="mt-2 mx-2">
+        <n-tag v-for="tag in post.tags" :key="tag" class="m-0.5" type="success" size="small" round>
+          <router-link :to="`/tags/${encodeURIComponent(tag)}`">
+            {{ tag }}
+          </router-link>
+        </n-tag>
+      </div>
     </router-link>
   </div>
 </template>

@@ -105,10 +105,10 @@ function timeToDate(time: string) {
     我在 <a href="https://bangumi.tv/user/undef_baka" target="_blank" rel="noopener noreferrer">bangumi</a>
     上对部分看过动画的评分与短评（Optional）。
   </p>
-  <div v-if="animeList.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
-    <n-card
+  <div v-if="animeList.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-5">
+    <div
       v-for="anime in animeList" :key="anime.subject.id"
-      content-style="display:flex;flex-direction:column;justify-content:space-between;padding:1em" style="height:100%"
+      class="flex flex-col justify-between rounded-lg shadow-md custom-card p-3"
     >
       <div class="mb-2">
         <a :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer">
@@ -132,16 +132,18 @@ function timeToDate(time: string) {
       <hr>
       <div class="mt-2">
         <p v-if="anime.comment" class="mt-2 text-sm">
-          {{ anime.comment }}
+          <n-ellipsis expand-trigger="click" line-clamp="3" :tooltip="false">
+            {{ anime.comment }}
+          </n-ellipsis>
         </p>
-        <div class="text-sm mt-4 flex justify-center">
+        <div class="text-sm mt-4 flex flex-wrap justify-center">
           <n-rate :default-value="anime.rate / 2" readonly allow-half />
           <span class="text-gray-500 ml-2 text-xs mt-1">
             {{ timeToDate(anime.updated_at) }}
           </span>
         </div>
       </div>
-    </n-card>
+    </div>
   </div>
   <div v-if="loading" class="text-center mt-5">
     <n-spin size="large" />

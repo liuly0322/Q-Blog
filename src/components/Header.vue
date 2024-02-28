@@ -42,8 +42,8 @@ const menuOptions = [
 
 <template>
   <header class="p-2.5">
-    <n-card
-      content-style="display:flex;align-items:center;justify-content:space-between"
+    <div
+      class="flex items-center justify-between rounded-lg custom-card px-6 py-5"
     >
       <div class="flex items-center">
         <img
@@ -70,6 +70,15 @@ const menuOptions = [
       <button v-if="isMobile" class="mr-2 flex" @click="() => phoneNavToggle()">
         <i-carbon:menu />
       </button>
-    </n-card>
+    </div>
   </header>
 </template>
+
+<style scoped>
+header {
+  border-bottom: 0.8px solid #e2e8f0;
+}
+html.dark header {
+  border-bottom: unset;
+}
+</style>

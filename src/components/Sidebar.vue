@@ -23,22 +23,25 @@ const mobileNavigation = {
 
 <template>
   <div>
-    <n-card v-if="isMobile" content-style="display: flex; flex-wrap:wrap" class="mb-6">
+    <div v-if="isMobile" class="flex flex-wrap rounded-lg shadow-md custom-card p-4 mb-6 mx-1.25">
       <span v-for="(v, k, i) in mobileNavigation" :key="i" class="mx-3 my-1" @click="router.push(v)">{{ k }}</span>
-    </n-card>
+    </div>
 
     <SidebarSearch class="mb-6" />
 
-    <n-card v-if="!isMobile && hitokoto.hitokoto" title="一言" class="mb-6">
+    <div v-if="!isMobile && hitokoto.hitokoto" class="mb-6 mx-1.25 rounded-lg shadow-md custom-card p-6">
+      <h2 class="font-medium text-lg mb-4">
+        一言
+      </h2>
       <span>{{ hitokoto.hitokoto }}</span>
       <div class="text-right pt-3.5">
         <span>—— {{ hitokoto.from_who }}「{{ hitokoto.from }}」</span>
       </div>
-    </n-card>
+    </div>
 
     <APlayer song-server="netease" song-id="373425292" />
 
-    <n-card class="mt-6 text-center">
+    <div class="mt-6 mx-1.25 text-center rounded-lg shadow-md custom-card p-4">
       <a class="m-0.5 inline-block" href="/feed.xml" target="_blank">
         <i-carbon:rss style="font-size: xx-large" />
       </a>
@@ -72,6 +75,6 @@ const mobileNavigation = {
           target="_blank"
         >Q-Blog</a>
       </p>
-    </n-card>
+    </div>
   </div>
 </template>

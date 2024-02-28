@@ -18,7 +18,6 @@ declare module 'vue' {
     'ICarbon:rss': typeof import('~icons/carbon/rss')['default']
     'ICarbon:sun': typeof import('~icons/carbon/sun')['default']
     NAutoComplete: typeof import('naive-ui')['NAutoComplete']
-    NCard: typeof import('naive-ui')['NCard']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     NDivider: typeof import('naive-ui')['NDivider']
     NEllipsis: typeof import('naive-ui')['NEllipsis']

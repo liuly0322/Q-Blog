@@ -76,6 +76,10 @@ html.dark ::-webkit-scrollbar-thumb {
   overflow-y: hidden;
 }
 
+html.dark .custom-card {
+  border: 0.8px solid rgba(255, 255, 255, 0.09);
+}
+
 /* Aplayer */
 html.dark .aplayer {
   background: rgb(24, 24, 28);
