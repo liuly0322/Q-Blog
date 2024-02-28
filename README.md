@@ -18,7 +18,7 @@
 
 <p align='center'>Q-Blog - Quicker and Cuter</p>
 
-[My personal blog](http://blog.liuly.moe)
+[My personal blog](https://blog.liuly.moe), [RSS](https://blog.liuly.moe/feed.xml)
 
 - Vite5, Vue3, TypeScript, Naive UI
 - Responsive Web Design, Dark Mode
