@@ -11,14 +11,12 @@
     "preview": "vite preview",
     "deps:fresh": "npx taze -w",
     "coverage": "vitest --coverage",
-    "analysis": "windicss-analysis",
     "typecheck": "vue-tsc --noEmit",
     "deps:fresh:major": "npx taze major -w",
     "deps:fresh:minor": "npx taze minor -w",
     "deps:fresh:patch": "npx taze patch -w",
     "preview:host": "vite preview --host",
     "preview:open": "vite preview --open",
-    "analysis:build": "windicss-analysis --html dist",
     "lint": "eslint --ext .ts,.js,.vue .",
     "lint:fix": "eslint --fix --ext .ts,.js,.vue ."
   },
@@ -76,8 +74,7 @@
     "vitest": "^0.6.3",
     "vue-router": "^4.0.14",
     "vue-tsc": "^0.32.1",
-    "windicss": "^3.5.1",
-    "windicss-analysis": "^0.3.5"
+    "windicss": "^3.5.1"
   },
   "pnpm": {
     "peerDependencyRules": {
