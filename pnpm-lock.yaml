@@ -40,7 +40,6 @@ specifiers:
   unplugin-vue-components: ^0.17.21
   vite: ^2.9.1
   vite-auto-import-resolvers: ^2.2.2
-  vite-plugin-compression: ^0.5.1
   vite-plugin-inspect: ^0.4.3
   vite-plugin-md: ^0.11.9
   vite-plugin-optimize-persist: ^0.1.2
@@ -101,7 +100,6 @@ devDependencies:
   unplugin-vue-components: 0.17.21_vite@2.9.1+vue@3.2.31
   vite: registry.npmmirror.com/vite/2.9.1
   vite-auto-import-resolvers: 2.2.2_@vueuse+core@7.7.1
-  vite-plugin-compression: 0.5.1_vite@2.9.1
   vite-plugin-inspect: 0.4.3_vite@2.9.1
   vite-plugin-md: 0.11.9_vite@2.9.1
   vite-plugin-optimize-persist: 0.1.2_5bjvuytvfgfg5n6wamlw4etck4
@@ -6895,19 +6893,6 @@ packages:
       - sass
       - stylus
       - webpack
-    dev: true
-
-  /vite-plugin-compression/0.5.1_vite@2.9.1:
-    resolution: {integrity: sha512-5QJKBDc+gNYVqL/skgFAP81Yuzo9R+EAf19d+EtsMF/i8kFUpNi3J/H01QD3Oo8zBQn+NzoCIFkpPLynoOzaJg==}
-    peerDependencies:
-      vite: '>=2.0.0'
-    dependencies:
-      chalk: 4.1.2
-      debug: 4.3.4
-      fs-extra: 10.0.1
-      vite: registry.npmmirror.com/vite/2.9.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /vite-plugin-inspect/0.4.3_vite@2.9.1:

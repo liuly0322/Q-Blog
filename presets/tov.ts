@@ -10,7 +10,6 @@ import Layouts from 'vite-plugin-vue-layouts'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
-import viteCompression from 'vite-plugin-compression'
 
 import { DirResolverHelper } from 'vite-auto-import-resolvers'
 import {
@@ -93,11 +92,6 @@ export default () => {
     }),
     // tsx 支持
     vueJsx(),
-    // 生产环境资源压缩
-    viteCompression({
-      // @ts-expect-error: algorithm is a string
-      algorithm: env.VITE_APP_COMPRESSINON_ALGORITHM,
-    }),
     // 对 vite-plugin-vue-layouts 的 hmr 问题的临时处理
     // 如果 https://github.com/JohnCampionJr/vite-plugin-vue-layouts/pull/58 被接受的话，未来可能会移除
     FixLayoutsHmr(),
