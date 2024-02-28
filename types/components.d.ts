@@ -4,10 +4,10 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
-    APlayer: typeof import('./../../src/components/APlayer.vue')['default']
-    ArchiveCard: typeof import('./../../src/components/ArchiveCard.vue')['default']
-    Comment: typeof import('./../../src/components/Comment.vue')['default']
-    Header: typeof import('./../../src/components/Header.vue')['default']
+    APlayer: typeof import('./../src/components/APlayer.vue')['default']
+    ArchiveCard: typeof import('./../src/components/ArchiveCard.vue')['default']
+    Comment: typeof import('./../src/components/Comment.vue')['default']
+    Header: typeof import('./../src/components/Header.vue')['default']
     'IAntDesign:githubFilled': typeof import('~icons/ant-design/github-filled')['default']
     'ICarbon:arrowUp': typeof import('~icons/carbon/arrow-up')['default']
     'ICarbon:hazeNight': typeof import('~icons/carbon/haze-night')['default']
@@ -29,10 +29,10 @@ declare module 'vue' {
     NSkeleton: typeof import('naive-ui')['NSkeleton']
     NSpin: typeof import('naive-ui')['NSpin']
     NTag: typeof import('naive-ui')['NTag']
-    PostFooter: typeof import('./../../src/components/PostFooter.vue')['default']
-    PostHeader: typeof import('./../../src/components/PostHeader.vue')['default']
-    Sidebar: typeof import('./../../src/components/Sidebar.vue')['default']
-    SidebarSearch: typeof import('./../../src/components/SidebarSearch.vue')['default']
+    PostFooter: typeof import('./../src/components/PostFooter.vue')['default']
+    PostHeader: typeof import('./../src/components/PostHeader.vue')['default']
+    Sidebar: typeof import('./../src/components/Sidebar.vue')['default']
+    SidebarSearch: typeof import('./../src/components/SidebarSearch.vue')['default']
   }
 }
 
