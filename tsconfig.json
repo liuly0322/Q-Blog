@@ -1,21 +1,21 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "jsx": "preserve",
     "target": "esnext",
-    "module": "esnext",
-    "sourceMap": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
+    "jsx": "preserve",
     "lib": ["esnext", "dom"],
-    "resolveJsonModule": true,
-    "moduleResolution": "node",
     "useDefineForClassFields": true,
     "baseUrl": ".",
+    "module": "esnext",
+    "moduleResolution": "node",
     "paths": {
       "~/*": ["src/*"]
-    }
+    },
+    "resolveJsonModule": true,
+    "strict": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
   },
   "include": [
     "build",
