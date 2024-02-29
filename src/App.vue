@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { darkTheme } from 'naive-ui'
 import type { LayoutInst } from 'naive-ui'
+import { setGetScrollPositionFunction, setScrollFunction } from './modules/router'
 
 const { isDark, darkOverrides } = useDarks()
 const theme = computed(() => (isDark.value ? darkTheme : undefined))
@@ -16,15 +17,28 @@ const sidebarLayoutStyle = computed(() =>
 const siderWidth = computed(() => (isMobile.value ? 0 : 14))
 
 const contentRef = ref<LayoutInst | null>(null)
-const routePath = toRef(useRoute(), 'path')
 const { page } = usePage()
-watch([routePath, page], () => {
-  if (isMobile.value) {
+watch(page, () => {
+  if (isMobile.value)
     window.scrollTo(0, 0)
-    phoneNavToggle(false)
-  }
-  else {
+  else
     contentRef.value?.scrollTo(0, 0)
+})
+setGetScrollPositionFunction(() => {
+  if (isMobile.value)
+    return { left: window.scrollX, top: window.scrollY }
+  const element = document.querySelector('.n-layout-content .n-scrollbar-container')
+  return { left: element?.scrollLeft ?? 0, top: element?.scrollTop ?? 0 }
+})
+setScrollFunction((to, from, position, isSavedPosition) => {
+  if (to.path === '/' && !isSavedPosition)
+    page.value = 1
+
+  if (isMobile.value) {
+    window.scrollTo(position.left, position.top)
+    phoneNavToggle(false)
+  } else {
+    contentRef.value?.scrollTo(position.left, position.top)
   }
 })
 
