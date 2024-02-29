@@ -10,7 +10,6 @@ import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
 
-import { DirResolverHelper, dirResolver } from 'vite-auto-import-resolvers'
 import {
   NaiveUiResolver,
   VueUseComponentsResolver,
@@ -60,13 +59,13 @@ export default defineConfig({
         VueUseComponentsResolver(),
       ],
     }),
-    // 目录下 api 按需自动引入辅助插件
-    DirResolverHelper(),
     // api 自动按需引入
     AutoImport({
       dts: './types/auto-imports.d.ts',
       imports: ['vue', 'vue-router', '@vueuse/core'],
-      resolvers: [dirResolver()],
+      dirs: [
+        './src/composables'
+      ]
     }),
     VitePWA({
       registerType: 'autoUpdate',
