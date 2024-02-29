@@ -16,7 +16,6 @@ import {
   NaiveUiResolver,
   VueUseComponentsResolver,
 } from 'unplugin-vue-components/resolvers'
-import Modules from 'vite-plugin-use-modules'
 import Markdown from 'unplugin-vue-markdown/vite'
 import BuildPosts from './build/buildPosts'
 
@@ -29,7 +28,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    Modules(),
     // vue 官方插件，用来解析 sfc
     Vue({
       include: [/\.vue$/, /\.md$/],
