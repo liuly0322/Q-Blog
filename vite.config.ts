@@ -64,8 +64,8 @@ export default defineConfig({
       dts: './types/auto-imports.d.ts',
       imports: ['vue', 'vue-router', '@vueuse/core'],
       dirs: [
-        './src/composables'
-      ]
+        './src/composables',
+      ],
     }),
     VitePWA({
       registerType: 'autoUpdate',
