@@ -6,7 +6,6 @@ import Pages from 'vite-plugin-pages'
 import Icons from 'unplugin-icons/vite'
 import Inspect from 'vite-plugin-inspect'
 import Windicss from 'vite-plugin-windicss'
-import Layouts from 'vite-plugin-vue-layouts'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
@@ -42,8 +41,6 @@ export default defineConfig({
     Pages({
       extensions: ['vue', 'md'],
     }),
-    // 布局系统
-    Layouts(),
     // 调试工具
     Inspect(),
     // windicss 插件

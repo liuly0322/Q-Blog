@@ -45,7 +45,6 @@ specifiers:
   vite-plugin-inspect: ^0.8.3
   vite-plugin-pages: ^0.32.0
   vite-plugin-pwa: ^0.19.1
-  vite-plugin-vue-layouts: ^0.11.0
   vite-plugin-windicss: ^1.9.3
   vue: ^3.4.21
   vue-router: ^4.3.0
@@ -97,7 +96,6 @@ devDependencies:
   vite-plugin-inspect: 0.8.3_vite@5.1.4
   vite-plugin-pages: 0.32.0_4n4nshz5oaehh5wb6kj5au54va
   vite-plugin-pwa: 0.19.1_vite@5.1.4
-  vite-plugin-vue-layouts: 0.11.0_wia6mz6yxu655lit27gz25nem4
   vite-plugin-windicss: 1.9.3_vite@5.1.4
   vue: 3.4.21_typescript@5.3.3
   vue-router: 4.3.0_vue@3.4.21
@@ -7323,22 +7321,6 @@ packages:
       workbox-window: 7.0.0
     transitivePeerDependencies:
       - '@types/babel__core'
-      - supports-color
-    dev: true
-
-  /vite-plugin-vue-layouts/0.11.0_wia6mz6yxu655lit27gz25nem4:
-    resolution: {integrity: sha512-uh6NW7lt+aOXujK4eHfiNbeo55K9OTuB7fnv+5RVc4OBn/cZull6ThXdYH03JzKanUfgt6QZ37NbbtJ0og59qw==}
-    peerDependencies:
-      vite: ^4.0.0 || ^5.0.0
-      vue: ^3.2.4
-      vue-router: ^4.0.11
-    dependencies:
-      debug: 4.3.4
-      fast-glob: 3.3.2
-      vite: 5.1.4_@types+node@20.11.21
-      vue: 3.4.21_typescript@5.3.3
-      vue-router: 4.3.0_vue@3.4.21
-    transitivePeerDependencies:
       - supports-color
     dev: true
 
