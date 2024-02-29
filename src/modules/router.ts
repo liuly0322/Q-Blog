@@ -1,6 +1,6 @@
 import type { App } from 'vue'
 import routes from 'virtual:generated-pages'
-import type { RouteLocationNormalized, RouteLocationNormalizedLoaded} from 'vue-router';
+import type { RouteLocationNormalized, RouteLocationNormalizedLoaded } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
 type ScrollFunction = (to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded, position: { left: number, top: number }, isSavedPosition: boolean) => void

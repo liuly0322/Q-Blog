@@ -37,7 +37,8 @@ setScrollFunction((to, from, position, isSavedPosition) => {
   if (isMobile.value) {
     window.scrollTo(position.left, position.top)
     phoneNavToggle(false)
-  } else {
+  }
+  else {
     contentRef.value?.scrollTo(position.left, position.top)
   }
 })
