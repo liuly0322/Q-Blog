@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const APlayer = defineAsyncComponent(() => import('./APlayer.vue'))
+
 const { isDark, toggleDark } = useDarks()
 
 const { isMobile } = usePhone()
