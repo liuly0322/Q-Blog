@@ -49,6 +49,7 @@
     "naive-ui": "^2.38.1",
     "nprogress": "^0.2.0",
     "prism-theme-vars": "^0.2.4",
+    "rollup-plugin-visualizer": "^5.12.0",
     "rss": "^1.2.2",
     "typescript": "^5.3.3",
     "unplugin-auto-import": "^0.17.5",

@@ -9,6 +9,7 @@ import Windicss from 'vite-plugin-windicss'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 import {
   NaiveUiResolver,
@@ -67,6 +68,7 @@ export default defineConfig({
         './src/composables',
       ],
     }),
+    // PWA
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
@@ -95,5 +97,7 @@ export default defineConfig({
         ],
       },
     }),
+    // 打包体积分析
+    visualizer(),
   ],
 })
