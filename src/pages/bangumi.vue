@@ -32,7 +32,7 @@ interface Anime {
   rate: number
   private: boolean
 }
-const animeList = ref([] as Anime[])
+const animeList: Ref<Anime[]> = ref([])
 
 const loading = ref(true)
 const pageSize = 12

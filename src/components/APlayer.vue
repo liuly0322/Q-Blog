@@ -1,108 +1,50 @@
 <script lang="ts" setup>
+import type { Audio } from 'aplayer-ts'
 import APlayer from 'aplayer-ts'
 import 'aplayer-ts/dist/APlayer.min.css'
-import type { PropType } from 'vue'
+
+const props = withDefaults(defineProps<{
+  fixed: boolean
+  mini: boolean
+  autoplay: boolean
+  theme: string
+  loop: 'all' | 'one' | 'none'
+  order: 'list' | 'random'
+  preload: 'auto' | 'metadata' | 'none'
+  volume: number
+  songServer: 'netease' | 'tencent' | 'kugou' | 'xiami' | 'baidu'
+  songType: string
+  songId: string
+  mutex: boolean
+  lrcType: number
+  listFolded: boolean
+  listMaxHeight: string
+  storageName: string
+}>(), {
+  fixed: false,
+  mini: false,
+  autoplay: false,
+  theme: 'rgba(255,255,255,0.2)',
+  loop: 'all',
+  order: 'list',
+  preload: 'none',
+  volume: 0.7,
+  songServer: 'netease',
+  songType: 'playlist',
+  mutex: true,
+  lrcType: 3,
+  listFolded: true,
+  listMaxHeight: '250px',
+  storageName: 'APlayer-setting',
+})
+
+const playerRef = ref()
 
 type Status = 'success' | 'error' | 'warning' | undefined
-
-const props = defineProps({
-  fixed: {
-    type: Boolean as PropType<boolean>,
-    default: false,
-  },
-  mini: {
-    type: Boolean as PropType<boolean>,
-    default: false,
-  },
-  autoplay: {
-    type: Boolean as PropType<boolean>,
-    default: false,
-  },
-  theme: {
-    type: String as PropType<string>,
-    default: 'rgba(255,255,255,0.2)',
-  },
-  loop: {
-    type: String as PropType<'all' | 'one' | 'none'>,
-    default: 'all',
-  },
-  order: {
-    type: String as PropType<'list' | 'random'>,
-    default: 'list',
-  },
-  preload: {
-    type: String as PropType<'auto' | 'metadata' | 'none'>,
-    default: 'none',
-  },
-  volume: {
-    type: Number as PropType<number>,
-    default: 0.7,
-    validator: (value: number) => {
-      return value >= 0 && value <= 1
-    },
-  },
-  songServer: {
-    type: String as PropType<
-      'netease' | 'tencent' | 'kugou' | 'xiami' | 'baidu'
-    >,
-    default: 'netease',
-  },
-  songType: {
-    type: String as PropType<string>,
-    default: 'playlist',
-  },
-  songId: {
-    type: String as PropType<string>,
-    default: '19723756',
-  },
-  mutex: {
-    type: Boolean as PropType<boolean>,
-    default: true,
-  },
-  lrcType: {
-    type: Number as PropType<number>,
-    default: 3,
-  },
-  listFolded: {
-    type: Boolean as PropType<boolean>,
-    default: true,
-  },
-  listMaxHeight: {
-    type: String as PropType<string>,
-    default: '250px',
-  },
-  storageName: {
-    type: String as PropType<string>,
-    default: 'APlayer-setting',
-  },
-})
-const playerRef = ref()
+const loadingStatus: Ref<Status> = ref(undefined)
 const percentage = ref(0)
-const loadingStatus = ref(undefined as Status)
 let loadingTime = 0
 let instance: APlayer
-
-class Audio {
-  artist?: string
-  name: string
-  url: string
-  cover?: string
-  lrc?: string
-
-  constructor(
-    artist: string | undefined,
-    name: string,
-    url: string,
-    cover: string | undefined,
-    lrc: string | undefined,
-  ) {
-    this.artist = artist
-    this.name = name
-    this.url = url
-    this.cover = cover
-    this.lrc = lrc
-  }
-}
 
 interface Meting {
   artist?: string
@@ -135,15 +77,20 @@ const APlayerInit = async function () {
   const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${
     props.songType
   }&id=${props.songId}&r=${Math.random()}`
-  const { data, error } = await useFetch(url).get().json()
+  const { data, error }: { data: Ref<Meting[] | null>, error: Ref<any> } = await useFetch(url).get().json()
   if (error.value) {
     loadingStatus.value = 'error'
     percentage.value = 100
   }
-  const audioList = (data.value as Array<Meting>).map(
-    (value: Meting) =>
-      new Audio(value.artist, value.name, value.url, value.pic, value.lrc),
-  )
+  const audioList: Audio[] = data.value?.map(
+    value => ({
+      name: value.name,
+      url: value.url,
+      artist: value.artist,
+      cover: value.pic,
+      lrc: value.lrc,
+    }),
+  ) ?? []
   instance = new APlayer({
     container: playerRef.value,
     fixed: props.fixed,
@@ -164,9 +111,7 @@ const APlayerInit = async function () {
   loadingStatus.value = 'success'
 }
 
-// 初始化，nextTick 减少页面渲染等待时间
 onMounted(() => nextTick(APlayerInit))
-// 销毁
 onBeforeUnmount(() => {
   instance.destroy()
 })

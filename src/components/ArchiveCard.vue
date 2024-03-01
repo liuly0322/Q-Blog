@@ -1,17 +1,10 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
 import type { PostSummary } from '~/composables/useSummary'
 
-const props = defineProps({
-  summary: {
-    type: Array as PropType<PostSummary[]>,
-    required: true,
-  },
-  title: {
-    type: String as PropType<string>,
-    required: true,
-  },
-})
+const props = defineProps<{
+  summary: PostSummary[]
+  title: string
+}>()
 </script>
 
 <template>

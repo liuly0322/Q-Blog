@@ -1,4 +1,4 @@
-const { data } = useFetch('/summary.json').json()
+const { data }: { data: Ref<SiteSummary | null> } = useFetch('/summary.json').json()
 export interface PostSummary {
   title: string
   date: string
@@ -11,9 +11,9 @@ interface SiteSummary {
 }
 
 const summary = computed(() => {
-  return (data.value as SiteSummary)?.posts || []
+  return data.value?.posts || []
 })
 export default () => summary
 export const firstPageAbstracts = computed(() => {
-  return (data.value as SiteSummary)?.firstPageAbstracts || []
+  return data.value?.firstPageAbstracts || []
 })
