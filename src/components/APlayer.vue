@@ -3,23 +3,26 @@ import type { Audio } from 'aplayer-ts'
 import APlayer from 'aplayer-ts'
 import 'aplayer-ts/dist/APlayer.min.css'
 
+// We do have APlayerOptions type from 'aplayer-ts'
+// but vue doesn't support complex type (Omit/extends/...) in defineProps
+// see: https://github.com/vuejs/core/issues/8286
 const props = withDefaults(defineProps<{
-  fixed: boolean
-  mini: boolean
-  autoplay: boolean
-  theme: string
-  loop: 'all' | 'one' | 'none'
-  order: 'list' | 'random'
-  preload: 'auto' | 'metadata' | 'none'
-  volume: number
-  songServer: 'netease' | 'tencent' | 'kugou' | 'xiami' | 'baidu'
-  songType: string
+  fixed?: boolean
+  mini?: boolean
+  autoplay?: boolean
+  theme?: string
+  loop?: 'all' | 'one' | 'none'
+  order?: 'list' | 'random'
+  preload?: 'auto' | 'metadata' | 'none'
+  volume?: number
+  songServer?: 'netease' | 'tencent' | 'kugou' | 'xiami' | 'baidu'
+  songType?: string
   songId: string
-  mutex: boolean
-  lrcType: number
-  listFolded: boolean
-  listMaxHeight: string
-  storageName: string
+  mutex?: boolean
+  lrcType?: number
+  listFolded?: boolean
+  listMaxHeight?: string
+  storageName?: string
 }>(), {
   fixed: false,
   mini: false,
@@ -39,11 +42,6 @@ const props = withDefaults(defineProps<{
 })
 
 const playerRef = ref()
-
-type Status = 'success' | 'error' | 'warning' | undefined
-const loadingStatus: Ref<Status> = ref(undefined)
-const percentage = ref(0)
-let loadingTime = 0
 let instance: APlayer
 
 interface Meting {
@@ -54,34 +52,11 @@ interface Meting {
   lrc?: string
 }
 
-async function fakeLoadingBar() {
-  const sleep = (ms: number) =>
-    new Promise(resolve => setTimeout(resolve, ms))
-  while (percentage.value <= 80) {
-    await sleep(200)
-    loadingTime += 200
-    percentage.value += Math.random() * 20
-  }
-  while (loadingStatus.value !== 'error' && loadingStatus.value !== 'success') {
-    if (loadingTime > 2000) {
-      loadingStatus.value = 'warning'
-      return
-    }
-    await sleep(200)
-    loadingTime += 200
-  }
-}
-
-const APlayerInit = async function () {
-  fakeLoadingBar()
+async function appendAplayerData() {
   const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${
     props.songType
   }&id=${props.songId}&r=${Math.random()}`
-  const { data, error }: { data: Ref<Meting[] | null>, error: Ref<any> } = await useFetch(url).get().json()
-  if (error.value) {
-    loadingStatus.value = 'error'
-    percentage.value = 100
-  }
+  const { data }: { data: Ref<Meting[] | null> } = await useFetch(url).get().json()
   const audioList: Audio[] = data.value?.map(
     value => ({
       name: value.name,
@@ -91,27 +66,20 @@ const APlayerInit = async function () {
       lrc: value.lrc,
     }),
   ) ?? []
-  instance = new APlayer({
-    container: playerRef.value,
-    fixed: props.fixed,
-    mini: props.mini,
-    autoplay: props.autoplay,
-    theme: props.theme,
-    loop: props.loop,
-    order: props.order,
-    preload: props.preload,
-    volume: props.volume,
-    mutex: props.mutex,
-    lrcType: props.lrcType,
-    listFolded: props.listFolded,
-    listMaxHeight: props.listMaxHeight,
-    storageName: props.storageName,
-    audio: audioList,
-  })
-  loadingStatus.value = 'success'
+  instance.list.remove(0)
+  instance.list.add(audioList)
 }
 
-onMounted(() => nextTick(APlayerInit))
+function APlayerInit() {
+  const aplayerOptions = { ...props, container: playerRef.value, audio: {
+    name: '正在加载...',
+    artist: '正在加载...',
+  } }
+  instance = new APlayer(aplayerOptions)
+  appendAplayerData()
+}
+
+onMounted(APlayerInit)
 onBeforeUnmount(() => {
   instance.destroy()
 })
@@ -119,11 +87,4 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="playerRef" />
-  <n-progress
-    v-if="loadingStatus !== 'success'"
-    type="line"
-    :status="loadingStatus"
-    :percentage="percentage"
-    :show-indicator="false"
-  />
 </template>
