@@ -122,7 +122,7 @@ async function generateSitemap(posts: Post[]) {
     await fs.writeFile(path.join(publicPosts, `${post.url}.htm`), rendered)
   }
 
-  const htmlTemplate = await fs.readFile(path.join('public', '404.html'), {
+  const htmlTemplate = await fs.readFile(path.join('public', 'template.html'), {
     encoding: 'utf-8',
   })
   for (const post of posts) {

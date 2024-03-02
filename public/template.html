@@ -2,8 +2,15 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>llyのblog</title>
+    <title>{{title}} | llyのblog</title>
+    <meta name="description" content="{{description}}">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{title}}">
     <meta property="og:locale" content="zh_CN">
+    <link rel="alternate" href="{{textPath}}" title="llyのblog" type="text/html">
+    <meta property="article:author" content="liuly">
+    {{each tags}}<meta property="article:tag" content="{{$value}}">
+    {{/each}}
     <script type="text/javascript">
       // Single Page Apps for GitHub Pages
       // MIT License
