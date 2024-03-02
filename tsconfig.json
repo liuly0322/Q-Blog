@@ -19,7 +19,6 @@
   },
   "include": [
     "build",
-    "types",
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.vue",

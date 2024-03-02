@@ -53,7 +53,7 @@ export default defineConfig({
     }),
     // 组件自动按需引入
     Components({
-      dts: resolve(__dirname, './types/components.d.ts'),
+      dts: resolve(__dirname, './src/types/components.d.ts'),
       resolvers: [
         IconsResolver(),
         NaiveUiResolver(),
@@ -62,7 +62,7 @@ export default defineConfig({
     }),
     // api 自动按需引入
     AutoImport({
-      dts: './types/auto-imports.d.ts',
+      dts: './src/types/auto-imports.d.ts',
       imports: ['vue', 'vue-router', '@vueuse/core'],
       dirs: [
         './src/composables',
