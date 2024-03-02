@@ -3,23 +3,47 @@ import routes from 'virtual:generated-pages'
 import type { RouteLocationNormalized, RouteLocationNormalizedLoaded } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
-type ScrollFunction = (to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded, position: { left: number, top: number }, isSavedPosition: boolean) => void
-let scrollFunction: ScrollFunction = () => {}
-export function setScrollFunction(fn: ScrollFunction) {
-  scrollFunction = fn
+const { isMobile, phoneNavToggle } = usePhone()
+
+let contentRef: Ref
+export function setContentRef(ref: Ref) {
+  contentRef = ref
 }
 
-type GetScrollPositionFunction = () => { left: number, top: number }
-let getScrollPositionFunction = () => ({ left: 0, top: 0 })
-export function setGetScrollPositionFunction(fn: GetScrollPositionFunction) {
-  getScrollPositionFunction = fn
+const { page } = usePage()
+watch(page, () => {
+  if (isMobile.value)
+    window.scrollTo(0, 0)
+  else
+    contentRef.value?.scrollTo(0, 0)
+})
+
+function customScrollBehavior(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded, position: { left: number, top: number }, isSavedPosition: boolean) {
+  if (to.path === '/' && !isSavedPosition)
+    page.value = 1
+
+  if (isMobile.value) {
+    window.scrollTo(position.left, position.top)
+    phoneNavToggle(false)
+  }
+  else {
+    contentRef.value?.scrollTo(position.left, position.top)
+  }
 }
 
-function savePostion(path: string, position: { left: number, top: number }) {
-  sessionStorage.setItem(path, JSON.stringify(position))
+function getScrollPosition() {
+  if (isMobile.value)
+    return { left: window.scrollX, top: window.scrollY }
+  const element = contentRef.value?.scrollbarInstRef.containerRef
+  return { left: element?.scrollLeft ?? 0, top: element?.scrollTop ?? 0 }
 }
 
-function getSavedPosition(path: string) {
+function saveScrollPostion(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded) {
+  const position = getScrollPosition()
+  sessionStorage.setItem(from.path, JSON.stringify(position))
+}
+
+function getSavedScrollPosition(path: string) {
   const position = sessionStorage.getItem(path)
   return position ? JSON.parse(position) : null
 }
@@ -30,17 +54,13 @@ export const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     const isSavedPosition = savedPosition !== null
     if (isSavedPosition)
-      savedPosition = getSavedPosition(to.path)
+      savedPosition = getSavedScrollPosition(to.path)
     const position = savedPosition || { left: 0, top: 0 }
-    scrollFunction(to, from, position, isSavedPosition)
+    customScrollBehavior(to, from, position, isSavedPosition)
     // disable scroll by router
     return false
   },
 })
-
-router.beforeEach((to, from) => {
-  const position = getScrollPositionFunction()
-  savePostion(from.path, position)
-})
+router.beforeEach(saveScrollPostion)
 
 export default (app: App) => app.use(router)
