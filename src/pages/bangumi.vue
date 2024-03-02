@@ -3,24 +3,18 @@ import { isScrollBottom } from '~/modules/router'
 
 const { animeList, loading, fetchAnimeList, timeToDate } = useBangumi()
 
-async function updateOnScroll() {
+function updateOnBottom() {
   if (isScrollBottom())
-    await fetchAnimeList()
+    fetchAnimeList()
 }
 
-onMounted(async () => {
-  await fetchAnimeList()
-  nextTick(() => {
-    const element = document.querySelector('.n-layout-content .n-scrollbar-container')
-    element?.addEventListener('scroll', updateOnScroll)
-    document.addEventListener('scroll', updateOnScroll)
-  })
+let timer: number
+onMounted(() => {
+  updateOnBottom()
+  timer = window.setInterval(updateOnBottom, 100)
 })
-
 onUnmounted(() => {
-  const element = document.querySelector('.n-layout-content .n-scrollbar-container')
-  element?.removeEventListener('scroll', updateOnScroll)
-  document.removeEventListener('scroll', updateOnScroll)
+  window.clearInterval(timer)
 })
 </script>
 
