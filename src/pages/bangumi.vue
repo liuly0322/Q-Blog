@@ -1,79 +1,11 @@
 <script setup lang="ts">
-interface Anime {
-  updated_at: string
-  comment: string
-  tags: { name: string, count: number }[]
-  subject: {
-    date: string
-    images: {
-      small: string
-      grid: string
-      large: string
-      medium: string
-      common: string
-    }
-    name: string
-    name_cn: string
-    short_summary: string
-    tags: { name: string, count: number }[]
-    score: number
-    type: number
-    id: number
-    eps: number
-    volumes: number
-    collection_total: number
-    rank: number
-  }
-  subject_id: number
-  vol_status: number
-  ep_status: number
-  subject_type: number
-  type: number
-  rate: number
-  private: boolean
-}
-const animeList: Ref<Anime[]> = ref([])
+import { isScrollBottom } from '~/modules/router'
 
-const loading = ref(true)
-const pageSize = 12
-let page = 0
+const { animeList, loading, fetchAnimeList, timeToDate } = useBangumi()
 
-async function fetchAnimeList() {
-  const offset = page * pageSize
-  try {
-    const res = await fetch(
-      `https://api.bgm.tv/v0/users/undef_baka/collections?subject_type=2&type=2&limit=${pageSize}&offset=${offset}`,
-    )
-    if (!res.ok)
-      throw new Error('Network response was not ok')
-
-    const data = await res.json()
-    const totalSize = data.total
-    animeList.value = animeList.value.concat(data.data)
-    if (offset + data.data.length >= totalSize)
-      loading.value = false
-
-    page++
-  }
-  catch (error) {
-    loading.value = false
-  }
-}
-
-let ticking = false
-
-async function updateOnScroll(event: Event) {
-  if (ticking || !loading.value)
-    return
-  ticking = true
-  const element = event.target as HTMLElement
-  const isBottom = document.documentElement.scrollTop
-    ? document.documentElement.scrollHeight - document.documentElement.scrollTop <= document.documentElement.clientHeight + 100
-    : element.scrollHeight - element.scrollTop <= element.clientHeight + 100
-  if (isBottom)
+async function updateOnScroll() {
+  if (isScrollBottom())
     await fetchAnimeList()
-
-  ticking = false
 }
 
 onMounted(async () => {
@@ -90,11 +22,6 @@ onUnmounted(() => {
   element?.removeEventListener('scroll', updateOnScroll)
   document.removeEventListener('scroll', updateOnScroll)
 })
-
-function timeToDate(time: string) {
-  const date = new Date(time)
-  return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`
-}
 </script>
 
 <template>

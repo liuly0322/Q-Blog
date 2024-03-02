@@ -38,6 +38,12 @@ function getScrollPosition() {
   return { left: element?.scrollLeft ?? 0, top: element?.scrollTop ?? 0 }
 }
 
+export function isScrollBottom() {
+  const errorMargin = 24
+  const element = isMobile.value ? document.documentElement : contentRef.value?.scrollbarInstRef.containerRef
+  return element.scrollHeight - element.scrollTop <= element.clientHeight + errorMargin
+}
+
 function saveScrollPostion(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded) {
   const position = getScrollPosition()
   sessionStorage.setItem(from.path, JSON.stringify(position))
