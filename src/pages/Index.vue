@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { firstPageAbstracts } from '~/composables/useSummary'
-
-const summary = useSummary()
+const { summary, firstPageAbstracts } = useSummary()
 const { data, page, pageMax } = usePage()
 const posts = computed(() => {
   const currSummary = data.value ?? firstPageAbstracts.value

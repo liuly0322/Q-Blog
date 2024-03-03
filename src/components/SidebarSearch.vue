@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const summary = useSummary()
+const { summary } = useSummary()
 
 const searchPattern: Ref<string | undefined> = ref('')
 const searchOptions = computed(() => {

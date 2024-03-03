@@ -2,7 +2,7 @@
 const props = defineProps<{
   post: string
 }>()
-const summary = useSummary()
+const { summary } = useSummary()
 const postIndex = computed(() =>
   summary.value.findIndex(PostSummary => PostSummary.url === props.post),
 )

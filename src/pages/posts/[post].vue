@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{ post: string }>()
-const summary = useSummary()
+const { summary } = useSummary()
 const currPost = computed(
   () =>
     summary.value.find(post => props.post.includes(post.url)) ?? {
