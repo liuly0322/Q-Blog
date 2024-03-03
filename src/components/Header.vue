@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
-
-const router = useRouter()
-const routePath = useRoute()
-
 const { isMobile, phoneNavToggle } = usePhone()
 
+const routePath = useRoute()
 const menuOptions = [
   {
     label: '主页',
@@ -46,14 +42,15 @@ const menuOptions = [
       class="flex items-center justify-between rounded-lg custom-card px-6 py-5"
     >
       <div class="flex items-center">
-        <img
-          src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
-          alt="liuly"
-          class="rounded-full cursor-pointer"
-          height="48"
-          width="48"
-          @click="router.push('/')"
-        >
+        <router-link to="/">
+          <img
+            src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
+            alt="liuly"
+            class="rounded-full cursor-pointer"
+            height="48"
+            width="48"
+          >
+        </router-link>
         <span class="pl-5 text-lg">Life is but code.</span>
       </div>
       <div v-if="!isMobile" class="inline-flex">

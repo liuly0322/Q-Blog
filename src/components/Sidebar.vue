@@ -1,17 +1,9 @@
 <script setup lang="ts">
 const APlayer = defineAsyncComponent(() => import('./APlayer.vue'))
 
-const { isDark, toggleDark } = useDarks()
-
 const { isMobile } = usePhone()
-const router = useRouter()
-
+const { isDark, toggleDark } = useDarks()
 const { data } = useFetch('https://v1.hitokoto.cn').json()
-const hitokoto = computed(() => ({
-  from: data.value?.from,
-  hitokoto: data.value?.hitokoto,
-  from_who: data.value?.from_who,
-}))
 
 const mobileNavigation = {
   '🏠主页': '/',
@@ -26,18 +18,20 @@ const mobileNavigation = {
 <template>
   <div>
     <div v-if="isMobile" class="flex flex-wrap rounded-lg shadow-md custom-card p-4 mb-6 mx-1.25">
-      <span v-for="(v, k, i) in mobileNavigation" :key="i" class="mx-3 my-1" @click="router.push(v)">{{ k }}</span>
+      <router-link v-for="(v, k, i) in mobileNavigation" :key="i" class="mx-3 my-1" :to="v">
+        {{ k }}
+      </router-link>
     </div>
 
     <SidebarSearch class="mb-6" />
 
-    <div v-if="!isMobile && hitokoto.hitokoto" class="mb-6 mx-1.25 rounded-lg shadow-md custom-card p-6">
+    <div v-if="!isMobile && data?.hitokoto" class="mb-6 mx-1.25 rounded-lg shadow-md custom-card p-6">
       <h2 class="font-medium text-lg mb-4">
         一言
       </h2>
-      <span>{{ hitokoto.hitokoto }}</span>
+      <span>{{ data?.hitokoto }}</span>
       <div class="text-right pt-3.5">
-        <span>—— {{ hitokoto.from_who }}「{{ hitokoto.from }}」</span>
+        <span>—— {{ data?.from_who }}「{{ data?.from }}」</span>
       </div>
     </div>
 
