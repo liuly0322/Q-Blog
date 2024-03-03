@@ -1,39 +1,7 @@
 <script setup lang="ts">
 const { isMobile, phoneNavToggle } = usePhone()
-
+const { navOptions } = useSiteNavigation()
 const routePath = useRoute()
-const menuOptions = [
-  {
-    label: '主页',
-    to: '/',
-    match: '/$',
-  },
-  {
-    label: '归档',
-    to: '/archive',
-    match: '/archive$',
-  },
-  {
-    label: '标签',
-    to: '/tags',
-    match: '/tags',
-  },
-  {
-    label: '友链',
-    to: '/links',
-    match: '/links$',
-  },
-  {
-    label: '动画',
-    to: '/bangumi',
-    match: '/bangumi$',
-  },
-  {
-    label: '关于',
-    to: '/about',
-    match: '/about$',
-  },
-]
 </script>
 
 <template>
@@ -55,7 +23,7 @@ const menuOptions = [
       </div>
       <div v-if="!isMobile" class="inline-flex">
         <RouterLink
-          v-for="option in menuOptions"
+          v-for="option in navOptions"
           :key="option.to"
           class="block px-5"
           :style="routePath.path.match(option.match) ? 'color: #42b883' : ''"

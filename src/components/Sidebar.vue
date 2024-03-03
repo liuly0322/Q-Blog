@@ -2,17 +2,9 @@
 const APlayer = defineAsyncComponent(() => import('./APlayer.vue'))
 
 const { isMobile } = usePhone()
+const { mobileNavigation } = useSiteNavigation()
 const { isDark, toggleDark } = useDarks()
 const { data } = useFetch('https://v1.hitokoto.cn').json()
-
-const mobileNavigation = {
-  '🏠主页': '/',
-  '🗃️归档': '/archive',
-  '🏷️标签': '/tags',
-  '🔗友链': '/links',
-  '🧡动画': '/bangumi',
-  '❓关于': '/about',
-}
 </script>
 
 <template>
