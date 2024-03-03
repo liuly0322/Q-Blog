@@ -7,9 +7,9 @@ const { isDark, darkOverrides } = useDarks()
 // Phone
 const { isMobile, phoneNavToggle } = usePhone()
 const mainLayoutStyle = computed(() =>
-  isMobile.value ? '' : 'height: calc(100vh - var(--header-height));',
+  isMobile.value ? '' : 'height: calc(100vh - var(--header-height) - 1px);',
 )
-const sidebarLayoutStyle = computed(() =>
+const contentLayoutStyle = computed(() =>
   `padding:0 24px;overflow:hidden;${isMobile.value ? 'min-width:100vw' : ''}`,
 )
 
@@ -30,7 +30,7 @@ if (import.meta.hot) {
   <n-config-provider :theme="isDark ? darkTheme : null" :theme-overrides="isDark ? darkOverrides : null">
     <n-layout-header
       style="
-      height: calc(var(--header-height) - 1px);
+      height: var(--header-height);
       position: relative;
       z-index: 3;
     "
@@ -41,7 +41,7 @@ if (import.meta.hot) {
       <n-layout-content
         ref="contentRef"
         :native-scrollbar="false"
-        :content-style="sidebarLayoutStyle"
+        :content-style="contentLayoutStyle"
       >
         <main class="mt-10 pb-10 text-center text-gray-700 dark:text-gray-200">
           <router-view :key="hotUpdateKey" />
@@ -77,6 +77,6 @@ if (import.meta.hot) {
 <style scoped>
 .n-layout-sider {
   z-index: 3;
-  height: calc(100vh - var(--header-height));
+  height: calc(100vh - var(--header-height) - 1px);
 }
 </style>
