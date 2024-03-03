@@ -7,6 +7,7 @@ import markdownIt from 'markdown-it'
 import mdPrismPlugin from 'markdown-it-prism'
 import mdMathPlugin from 'markdown-it-texmath'
 import mdAnchorPlugin from 'markdown-it-anchor'
+import type { ViteDevServer } from 'vite'
 import mdImageSizePlugin from './mdImageSizePlugin'
 
 const SITE_URL = 'https://blog.liuly.moe'
@@ -31,10 +32,10 @@ export default () => ({
   async buildStart() {
     await buildPosts()
   },
-  async handleHotUpdate(ctx: { file: string, server: any }) {
-    if (ctx.file.includes('posts') && !ctx.file.includes('public')) {
+  async handleHotUpdate({ file, server }: { file: string, server: ViteDevServer }) {
+    if (file.includes('posts') && !file.includes('public')) {
       await buildPosts()
-      ctx.server.ws.send({
+      server.hot.send({
         type: 'custom',
         event: 'posts-build',
       })
