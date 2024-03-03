@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const summary = useSummary()
 
-const searchPattern = ref('')
+const searchPattern: Ref<string | undefined> = ref('')
 const searchOptions = computed(() => {
-  const pattern = searchPattern.value.toLowerCase().slice(0, 20)
+  const pattern = searchPattern.value?.toLowerCase().slice(0, 20)
   return (pattern && summary.value
     .filter(post => post.title.toLowerCase().includes(pattern))
     .map(post => ({
