@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { isScrollBottom } from '~/modules/router'
-
+const { isScrollBottom } = useCustomScroll()
 const { animeList, loading, fetchAnimeList, timeToDate } = useBangumi()
 
 function updateOnBottom() {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { darkTheme } from 'naive-ui'
-import { setContentRef } from './modules/router'
 
 // Dark mode
 const { isDark, darkOverrides } = useDarks()
@@ -16,7 +15,7 @@ const sidebarLayoutStyle = computed(() =>
 
 // Scroll behavior
 const contentRef = ref()
-setContentRef(contentRef)
+useCustomScroll().setContentRef(contentRef)
 
 // HMR
 const hotUpdateKey = ref(0)
