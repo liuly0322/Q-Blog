@@ -1,23 +1,15 @@
 <script setup lang="ts">
-const _summary = useSummary()
-const summary = computed(() =>
-  _summary.value.map(post => ({
-    title: post.title.toLowerCase(),
-    url: post.url,
-  })),
-)
+const summary = useSummary()
 
 const searchPattern = ref('')
 const searchOptions = computed(() => {
-  if (!searchPattern.value)
-    return []
   const pattern = searchPattern.value.toLowerCase().slice(0, 20)
-  return summary.value
-    .filter(post => post.title.includes(pattern))
+  return (pattern && summary.value
+    .filter(post => post.title.toLowerCase().includes(pattern))
     .map(post => ({
       label: post.title,
       value: post.url,
-    }))
+    }))) || []
 })
 
 const router = useRouter()
