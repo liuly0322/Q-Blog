@@ -32,6 +32,13 @@ interface Anime {
   private: boolean
 }
 
+interface Collections {
+  total: number
+  limit: number
+  offset: number
+  data: Anime[]
+}
+
 const animeList: Ref<Anime[]> = ref([])
 const PAGE_SIZE = 12
 const loading = ref(true)
@@ -48,7 +55,7 @@ const fetchAnimeList = ((page = 0) => async () => {
     if (!res.ok)
       throw new Error('Network response was not ok')
 
-    const data = await res.json()
+    const data: Collections = await res.json()
     const totalSize = data.total
     animeList.value = animeList.value.concat(data.data)
     if (offset + data.data.length >= totalSize)
