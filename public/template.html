@@ -7,11 +7,20 @@
     <meta property="og:type" content="article">
     <meta property="og:title" content="{{title}}">
     <meta property="og:locale" content="zh_CN">
-    <link rel="alternate" href="{{textPath}}" title="llyのblog" type="text/html">
     <meta property="article:author" content="liuly">
     {{each tags}}<meta property="article:tag" content="{{$value}}">
     {{/each}}
+  </head>
+  <body>
+    <main style="display: none;">
+      {{@content}}
+    </main>
     <script type="text/javascript">
+      // inject body html content to sessionStorage
+      var main = document.querySelector('main');
+      var content = main.innerHTML;
+      sessionStorage.setItem('{{url}}', content);
+      
       // Single Page Apps for GitHub Pages
       // MIT License
       // https://github.com/rafgraph/spa-github-pages
@@ -26,7 +35,5 @@
         l.hash
       );
     </script>
-  </head>
-  <body>
   </body>
 </html>

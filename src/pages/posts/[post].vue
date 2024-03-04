@@ -25,12 +25,22 @@ function getRand(min: number, max: number): number {
 }
 const loading = ref(true)
 const data = asyncComputed(async (onCancel) => {
+  const postName = (parts => parts.pop() || parts.pop() || '')(props.post.split('/')).split('.')[0]
   loading.value = true
 
   const abortController = new AbortController()
   onCancel(() => abortController.abort())
 
-  const url = `./${props.post}.htm`
+  // session storage injected?
+  if (sessionStorage) {
+    const injected = sessionStorage.getItem(postName)
+    if (injected) {
+      loading.value = false
+      return injected
+    }
+  }
+
+  const url = `/posts/${postName}.htm`
   const data = await fetch(url, { signal: abortController.signal }).then(res => res.text())
 
   loading.value = false

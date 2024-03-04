@@ -118,11 +118,6 @@ async function generateSitemap(posts: Post[]) {
     language: 'zh-cn',
   })
 
-  for (const post of posts) {
-    const rendered = postRenderer.render(post.content)
-    await fs.writeFile(path.join(publicPosts, `${post.url}.htm`), rendered)
-  }
-
   const htmlTemplate = await fs.readFile(path.join('public', 'template.html'), {
     encoding: 'utf-8',
   })
@@ -133,14 +128,17 @@ async function generateSitemap(posts: Post[]) {
       description: descriptionRenderer.render(truncate(post.content, 100)),
       date: post.date,
     })
+    const rendered = postRenderer.render(post.content)
+    await fs.writeFile(path.join(publicPosts, `${post.url}.htm`), rendered)
     const html = template.render(htmlTemplate, {
       title: post.title,
+      url: post.url,
       description: post.content
         .replace(/[#*~`><!-]/g, '')
         .replace(/\s+/g, ' ')
         .slice(0, 160),
-      textPath: `/posts/${post.url}.htm`,
       tags: post.tags,
+      content: rendered,
     })
     await fs.writeFile(path.join('public', 'posts', `${post.url}.html`), html)
   }
