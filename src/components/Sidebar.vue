@@ -42,24 +42,9 @@ const { data } = useFetch('https://v1.hitokoto.cn').json()
         <i-carbon:haze-night v-if="isDark" class="text-3xl" />
         <i-carbon:sun v-if="!isDark" class="text-3xl" />
       </span>
-      <p class="mt-3">
-        Copyright © 2021 - 2024 liuly
-      </p>
-      <p>
-        License:
-        <a
-          href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-          class="blue-link"
-          target="_blank"
-        >CC-BY-NC-SA 4.0</a>
-      </p>
       <p>
         Powered by
-        <a
-          href="https://github.com/liuly0322/Q-Blog"
-          class="blue-link"
-          target="_blank"
-        >Q-Blog</a>
+        <a href="https://github.com/liuly0322/Q-Blog" class="blue-link" target="_blank">Q-Blog</a>
       </p>
     </div>
   </div>

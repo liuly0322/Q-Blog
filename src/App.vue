@@ -48,6 +48,16 @@ if (import.meta.hot) {
             @click="() => phoneNavToggle()"
           />
         </main>
+        <footer class="flex flex-col items-center justify-center pb-15 leading-8">
+          <p>
+            License: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="blue-link" target="_blank">CC-BY-NC-SA 4.0</a>
+          </p>
+          <p>© 2021 - 2024 liuly</p>
+          <div class="flex items-center justify-center">
+            <img src="/icp.gov.moe.png" alt="moe-icp" width="32" height="32">
+            <a href="https://icp.gov.moe/?keyword=20240322" class="pl-4 blue-link" target="_blank">萌 ICP 备 20240322 号</a>
+          </div>
+        </footer>
       </n-layout-content>
       <n-layout-sider
         class="z-3"
