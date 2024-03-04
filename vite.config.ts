@@ -100,4 +100,11 @@ export default defineConfig({
     // 打包体积分析
     visualizer(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        experimentalMinChunkSize: 10_000,
+      },
+    },
+  },
 })
