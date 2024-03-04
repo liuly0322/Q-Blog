@@ -15,15 +15,18 @@ const title = computed(() => {
   return `${currPost.value.title} | llyのblog`
 })
 useTitle(title)
+const { setToc, enableToc } = useToc()
 onBeforeUnmount(() => {
   if (document)
     document.title = 'llyのblog'
+  enableToc.value = false
 })
 
 function getRand(min: number, max: number): number {
   return min + Math.round(Math.random() * (max - min))
 }
 const loading = ref(true)
+const postContentEle = ref<HTMLElement | null>(null)
 const data = asyncComputed(async (onCancel) => {
   const postName = (parts => parts.pop() || parts.pop() || '')(props.post.split('/')).split('.')[0]
   loading.value = true
@@ -49,7 +52,10 @@ const data = asyncComputed(async (onCancel) => {
 
 const { deferScroll } = useCustomScroll()
 watch(data, () => {
-  nextTick(deferScroll)
+  nextTick(() => {
+    deferScroll()
+    postContentEle.value && setToc(postContentEle.value)
+  })
 })
 </script>
 
@@ -62,7 +68,7 @@ watch(data, () => {
     </template>
   </div>
   <!-- eslint-disable-next-line vue/no-v-html -->
-  <div v-show="!loading" class="md-blog m-auto text-left" v-html="data" />
+  <div v-show="!loading" ref="postContentEle" class="md-blog m-auto text-left" v-html="data" />
   <PostFooter :post="currPost.url" />
   <Comment :post="currPost" />
 </template>
