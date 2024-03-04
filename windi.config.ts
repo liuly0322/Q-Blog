@@ -1,4 +1,5 @@
 import Typography from 'windicss/plugin/typography'
+import animationPlugin from '@windicss/plugin-animations'
 import { defineConfig } from 'windicss/helpers'
 import plugin from 'windicss/plugin'
 
@@ -7,6 +8,7 @@ export default defineConfig({
   attributify: true,
   plugins: [
     Typography(),
+    animationPlugin(),
     plugin(({ addComponents }) => {
       const components = {
         '.card': {

@@ -14,6 +14,9 @@ devDependencies:
   '@iconify-json/carbon':
     specifier: ^1.1.30
     version: 1.1.31
+  '@iconify-json/fluent-emoji-flat':
+    specifier: ^1.1.16
+    version: 1.1.16
   '@types/markdown-it':
     specifier: ^13.0.7
     version: 13.0.7
@@ -44,6 +47,9 @@ devDependencies:
   '@vueuse/core':
     specifier: ^10.9.0
     version: 10.9.0(vue@3.4.21)
+  '@windicss/plugin-animations':
+    specifier: ^1.0.9
+    version: 1.0.9
   aplayer-ts:
     specifier: 1.10.1-3
     version: 1.10.1-3
@@ -1760,6 +1766,12 @@ packages:
       '@iconify/types': 2.0.0
     dev: true
 
+  /@iconify-json/fluent-emoji-flat@1.1.16:
+    resolution: {integrity: sha512-rfag8s2Ippaos57BC8huT6cVc0oWkvYaLDl0lokVX2EsS7VakKEvUlJ20CqaKiPTuaccWRthlCbjEq8XfLHDHw==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
   /@iconify/types@2.0.0:
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
     dev: true
@@ -2600,6 +2612,10 @@ packages:
       windicss: 3.5.6
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@windicss/plugin-animations@1.0.9:
+    resolution: {integrity: sha512-9WsQsPzLurkwV5zaMCwmylxfSHlQ1pPmzud4ysvMkMBRB7obub9ESmqlHefcCjEhatz/ZROi1U1XOuOPPUO1nA==}
     dev: true
 
   /@windicss/plugin-utils@1.9.3:
