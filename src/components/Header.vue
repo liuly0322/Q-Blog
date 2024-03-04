@@ -5,18 +5,19 @@ const routePath = useRoute()
 </script>
 
 <template>
-  <header class="flex items-center justify-between border-b-[0.8px] dark:border-white/9 p-7.5">
-    <div class="flex items-center">
-      <router-link to="/">
+  <header class="flex items-center justify-between border-b-[0.8px] dark:border-white/9 p-3.5">
+    <div class="<sm:flex-grow flex items-center">
+      <router-link to="/" class="flex-shrink-0">
         <img
           src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
           alt="liuly"
           class="rounded-full cursor-pointer"
-          height="48"
-          width="48"
+          height="32"
+          width="32"
         >
       </router-link>
-      <span class="pl-5 text-lg">Life is but code.</span>
+      <span class="<sm:hidden pl-2 text-lg flex-shrink-0">llyのblog</span>
+      <PostSearch class="px-4" />
     </div>
     <div v-if="!isMobile" class="inline-flex">
       <RouterLink

@@ -15,8 +15,6 @@ const { data } = useFetch('https://v1.hitokoto.cn').json()
       </router-link>
     </div>
 
-    <SidebarSearch class="mb-6" />
-
     <div v-if="!isMobile && data?.hitokoto" class="mb-6 mx-1.25 card p-6">
       <h2 class="font-medium text-lg mb-4">
         一言

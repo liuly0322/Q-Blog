@@ -31,17 +31,17 @@ const data = asyncComputed(async (onCancel) => {
   const abortController = new AbortController()
   onCancel(() => abortController.abort())
 
-  // session storage injected?
-  if (sessionStorage) {
-    const injected = sessionStorage.getItem(postName)
-    if (injected) {
-      loading.value = false
-      return injected
-    }
+  // session storage cached?
+  const cached = sessionStorage.getItem(postName)
+  if (cached) {
+    loading.value = false
+    return cached
   }
 
   const url = `/posts/${postName}.htm`
   const data = await fetch(url, { signal: abortController.signal }).then(res => res.text())
+
+  sessionStorage.setItem(postName, data)
 
   loading.value = false
   return data

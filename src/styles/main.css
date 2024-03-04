@@ -9,7 +9,7 @@ body,
 }
 
 html {
-  --header-height: 110px;
+  --header-height: 64px;
 }
 
 html.nav-overflow-hidden {
