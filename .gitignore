@@ -10,3 +10,5 @@
 /public/page.json
 /public/summary.json
 /public/posts
+/src/types/auto-imports.d.ts
+/src/types/components.d.ts
