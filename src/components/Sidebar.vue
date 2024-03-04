@@ -9,7 +9,7 @@ const { data } = useFetch('https://v1.hitokoto.cn').json()
 
 <template>
   <div>
-    <div v-if="isMobile" class="flex flex-wrap rounded-lg shadow-md custom-card p-4 mb-6 mx-1.25">
+    <div v-if="isMobile" class="flex flex-wrap card p-4 mb-6 mx-1.25">
       <router-link v-for="(v, k, i) in mobileNavigation" :key="i" class="mx-3 my-1" :to="v">
         {{ k }}
       </router-link>
@@ -17,7 +17,7 @@ const { data } = useFetch('https://v1.hitokoto.cn').json()
 
     <SidebarSearch class="mb-6" />
 
-    <div v-if="!isMobile && data?.hitokoto" class="mb-6 mx-1.25 rounded-lg shadow-md custom-card p-6">
+    <div v-if="!isMobile && data?.hitokoto" class="mb-6 mx-1.25 card p-6">
       <h2 class="font-medium text-lg mb-4">
         一言
       </h2>
@@ -29,7 +29,7 @@ const { data } = useFetch('https://v1.hitokoto.cn').json()
 
     <APlayer song-server="netease" song-id="373425292" />
 
-    <div class="mt-6 mx-1.25 text-center rounded-lg shadow-md custom-card p-4">
+    <div class="mt-6 mx-1.25 text-center card p-4">
       <a class="m-0.5 inline-block" href="/feed.xml" target="_blank">
         <i-carbon:rss style="font-size: xx-large" />
       </a>

@@ -3,7 +3,7 @@ const { page, pageMax, postsOnPage } = usePage()
 </script>
 
 <template>
-  <div v-for="post in postsOnPage" :key="post" class="mb-4 p-7 rounded-lg shadow-md custom-card">
+  <div v-for="post in postsOnPage" :key="post" class="mb-4 p-7 card">
     <div class="text-3xl font-medium my-4">
       <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`">
         {{

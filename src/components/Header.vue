@@ -5,7 +5,7 @@ const routePath = useRoute()
 </script>
 
 <template>
-  <header class="flex items-center justify-between rounded-lg custom-card p-7.5">
+  <header class="flex items-center justify-between border-b-[0.8px] dark:border-white/9 p-7.5">
     <div class="flex items-center">
       <router-link to="/">
         <img
@@ -34,9 +34,3 @@ const routePath = useRoute()
     </button>
   </header>
 </template>
-
-<style scoped>
-html:not(.dark) header {
-  border-bottom: 0.8px solid #e2e8f0;
-}
-</style>

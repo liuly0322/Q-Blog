@@ -28,7 +28,7 @@ onUnmounted(() => {
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-5">
     <div
       v-for="anime in animeList" :key="anime.subject.id"
-      class="flex flex-col justify-between rounded-lg shadow-md custom-card p-3 <sm:flex-row <sm:items-center"
+      class="flex flex-col justify-between card p-3 <sm:flex-row <sm:items-center"
     >
       <a class="mb-2 <sm:flex-shrink-0 <sm:basis-2/5" :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer">
         <img :src="anime.subject.images.medium" :alt="anime.subject.name" class="rounded-lg w-full">

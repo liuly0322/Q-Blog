@@ -14,7 +14,7 @@ const props = defineProps<{
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <router-link
       v-for="post in props.summary" :key="post.url"
-      class="mb-2 rounded-lg shadow-md custom-card p-4 flex flex-col justify-between" :to="`/posts/${post.url}`"
+      class="mb-2 card p-4 flex flex-col justify-between" :to="`/posts/${post.url}`"
     >
       <h2 class="font-medium text-base mb-4 mt-2">
         {{ post.title }}
