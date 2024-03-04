@@ -24,6 +24,7 @@ const customAplayerOptions: APlayerOptions = {
   audio: {
     name: '正在加载...',
     artist: '正在加载...',
+    lrc: 'data:,loading...',
   },
 }
 
