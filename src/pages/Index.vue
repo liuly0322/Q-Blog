@@ -27,15 +27,3 @@ const { page, pageMax, postsOnPage } = usePage()
     <n-pagination v-model:page="page" :page-count="pageMax" />
   </div>
 </template>
-
-<style scoped>
-.show-more {
-  line-height: 1em;
-  padding: 6px 15px;
-  border-radius: 15px;
-  color: #fff;
-  background: #258fb8;
-  text-shadow: 0 1px #1e7293;
-  text-decoration: none;
-}
-</style>

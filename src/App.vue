@@ -29,11 +29,8 @@ if (import.meta.hot) {
 <template>
   <n-config-provider :theme="isDark ? darkTheme : null" :theme-overrides="isDark ? darkOverrides : null">
     <n-layout-header
-      style="
-      height: var(--header-height);
-      position: relative;
-      z-index: 3;
-    "
+      class="relative z-3"
+      style="height: var(--header-height);"
     >
       <Header />
     </n-layout-header>
@@ -53,7 +50,8 @@ if (import.meta.hot) {
         </main>
       </n-layout-content>
       <n-layout-sider
-        content-style="padding: 24px;"
+        class="z-3"
+        style="height: calc(100vh - var(--header-height) - 1px);"
         :collapsed-width="isMobile ? 0 : 14"
         :width="320"
         :native-scrollbar="false"
@@ -61,7 +59,7 @@ if (import.meta.hot) {
         show-trigger="arrow-circle"
         bordered
       >
-        <Sidebar />
+        <Sidebar class="p-6" />
       </n-layout-sider>
     </n-layout>
     <button
@@ -73,10 +71,3 @@ if (import.meta.hot) {
     </button>
   </n-config-provider>
 </template>
-
-<style scoped>
-.n-layout-sider {
-  z-index: 3;
-  height: calc(100vh - var(--header-height) - 1px);
-}
-</style>

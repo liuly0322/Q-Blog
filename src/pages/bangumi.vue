@@ -38,7 +38,7 @@ onUnmounted(() => {
         <div class="mt-2">
           <a
             :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer"
-            class="text-lg text-hex-258fb8 font-bold"
+            class="text-lg blue-link font-bold"
           >
             {{ anime.subject.name_cn || anime.subject.name }}
           </a>
