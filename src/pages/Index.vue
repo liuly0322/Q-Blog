@@ -1,19 +1,9 @@
 <script setup lang="ts">
-const { summary, firstPageAbstracts } = useSummary()
-const { data, page, pageMax } = usePage()
-const posts = computed(() => {
-  const currSummary = data.value ?? firstPageAbstracts.value
-  return currSummary
-    .map((detail: string, i: number) => ({
-      detail,
-      summary: summary.value[i],
-    }))
-    .slice((page.value - 1) * 10, page.value * 10)
-})
+const { page, pageMax, postsOnPage } = usePage()
 </script>
 
 <template>
-  <div v-for="post in posts" :key="post" class="mb-4 p-7 rounded-lg shadow-md custom-card">
+  <div v-for="post in postsOnPage" :key="post" class="mb-4 p-7 rounded-lg shadow-md custom-card">
     <div class="text-3xl font-medium my-4">
       <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`">
         {{
