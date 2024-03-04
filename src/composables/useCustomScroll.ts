@@ -13,28 +13,47 @@ function isScrollBottom() {
   return element.scrollHeight - element.scrollTop <= element.clientHeight + errorMargin
 }
 
-const { page } = usePage()
-watch(page, () => {
-  if (isMobile.value)
-    window.scrollTo(0, 0)
-  else
-    contentRef.value?.scrollTo(0, 0)
-})
+interface scrollPosition {
+  left: number
+  top: number
+}
 
-function customScrollBehavior(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded, position: { left: number, top: number }, isSavedPosition: boolean) {
-  if (to.path === '/' && !isSavedPosition)
-    page.value = 1
-
+function scroll(position: scrollPosition, phoneNav?: boolean) {
   if (isMobile.value) {
     window.scrollTo(position.left, position.top)
-    phoneNavToggle(false)
+    if (phoneNav !== undefined)
+      phoneNavToggle(phoneNav)
   }
   else {
     contentRef.value?.scrollTo(position.left, position.top)
   }
 }
 
-function getScrollPosition() {
+const { page } = usePage()
+watch(page, () => {
+  scroll({ left: 0, top: 0 })
+})
+
+let deferedScrollPosition: scrollPosition = { left: 0, top: 0 }
+
+function deferScroll() {
+  scroll(deferedScrollPosition)
+  deferedScrollPosition = { left: 0, top: 0 }
+}
+
+function customScrollBehavior(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded, position: { left: number, top: number }, isSavedPosition: boolean) {
+  // if /posts/..., defer the scroll
+  if (to.path.startsWith('/posts/')) {
+    deferedScrollPosition = position
+    return
+  }
+  // if homepage and not from go back, reset the page
+  if (to.path === '/' && !isSavedPosition)
+    page.value = 1
+  scroll(position, false)
+}
+
+function getScrollPosition(): scrollPosition {
   if (isMobile.value)
     return { left: window.scrollX, top: window.scrollY }
   const element = contentRef.value?.scrollbarInstRef.containerRef
@@ -46,9 +65,9 @@ function saveScrollPostion(to: RouteLocationNormalized, from: RouteLocationNorma
   sessionStorage.setItem(from.path, JSON.stringify(position))
 }
 
-function getSavedScrollPosition(path: string) {
+function getSavedScrollPosition(path: string): scrollPosition | null {
   const position = sessionStorage.getItem(path)
   return position ? JSON.parse(position) : null
 }
 
-export default () => ({ setContentRef, isScrollBottom, saveScrollPostion, getSavedScrollPosition, customScrollBehavior })
+export default () => ({ setContentRef, isScrollBottom, saveScrollPostion, getSavedScrollPosition, customScrollBehavior, deferScroll })

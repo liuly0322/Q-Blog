@@ -46,6 +46,11 @@ const data = asyncComputed(async (onCancel) => {
   loading.value = false
   return data
 }, '')
+
+const { deferScroll } = useCustomScroll()
+watch(data, () => {
+  nextTick(deferScroll)
+})
 </script>
 
 <template>
