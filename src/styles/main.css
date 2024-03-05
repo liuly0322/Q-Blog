@@ -71,41 +71,13 @@ html.dark ::-webkit-scrollbar-thumb {
   background-color: #343a40;
 }
 
+/* katex displayMode */
 .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
 }
 
-/* Aplayer */
-html.dark .aplayer {
-  background: rgb(24, 24, 28);
-}
-
-html.dark .aplayer .aplayer-list ol li {
-  border-top: 1px solid #161616;
-}
-
-html.dark .aplayer .aplayer-list ol li.aplayer-list-light {
-  background: #161616;
-}
-
-html.dark .aplayer.aplayer-withlist .aplayer-info {
-  border-bottom: 1px solid #161616;
-}
-
-html.dark .aplayer .aplayer-lrc::before,
-html.dark .aplayer .aplayer-lrc::after {
-  background: linear-gradient(
-    180deg,
-    hsla(240, 7.7%, 10.2%, 0) 0,
-    hsla(240, 7.7%, 10.2%, 0.8)
-  );
-}
-
-html.dark .aplayer .aplayer-list ol li:hover {
-  background: #101010;
-}
-
+/* markdown blockquote */
 blockquote {
   margin: 10px 0;
   padding-left: 15px;
@@ -113,6 +85,7 @@ blockquote {
   border-left: 3px solid #ccc;
 }
 
+/* （移动端）遮罩层 */
 .mdui-overlay {
   position: fixed;
   top: 0;
@@ -129,7 +102,6 @@ blockquote {
   will-change: opacity;
 }
 
-/* 显示遮罩层 */
 .mdui-overlay-show {
   display: unset;
   opacity: 1;

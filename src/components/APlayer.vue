@@ -2,6 +2,7 @@
 import type { APlayerOptions } from 'aplayer-ts'
 import APlayer from 'aplayer-ts'
 import 'aplayer-ts/dist/APlayer.min.css'
+import '~/styles/aplayer-dark.css'
 
 const props = withDefaults(defineProps<{
   songServer?: 'netease' | 'tencent' | 'kugou' | 'xiami' | 'baidu'
