@@ -1,14 +1,15 @@
 <script setup lang="ts">
+import type { AsyncComputedOnCancel } from '@vueuse/core'
+
 const props = defineProps<{ post: string }>()
 const { summary } = useSummary()
-const currPost = computed(
-  () =>
-    summary.value.find(post => props.post.includes(post.url)) ?? {
-      url: '',
-      title: '',
-      tags: [],
-      date: '',
-    },
+const currPost = computed(() =>
+  summary.value.find(post => props.post.includes(post.url)) ?? {
+    url: '',
+    title: '',
+    tags: [],
+    date: '',
+  },
 )
 
 const title = computed(() => {
@@ -25,32 +26,31 @@ onBeforeUnmount(() => {
 function getRand(min: number, max: number): number {
   return min + Math.round(Math.random() * (max - min))
 }
-const loading = ref(true)
-const postContentEle = ref<HTMLElement | null>(null)
-const data = asyncComputed(async (onCancel) => {
-  const postName = (parts => parts.pop() || parts.pop() || '')(props.post.split('/')).split('.')[0]
-  loading.value = true
 
+async function getPostData(postName: string, onCancel: AsyncComputedOnCancel) {
   const abortController = new AbortController()
   onCancel(() => abortController.abort())
+  return fetch(`/posts/${postName}.htm`, { signal: abortController.signal })
+    .then(res => res.text())
+}
 
-  // session storage cached?
+const loading = ref(true)
+const data = asyncComputed(async (onCancel) => {
+  const postName = (parts => parts.pop() || parts.pop() || '')(props.post.split('/')).split('.')[0]
   const cached = sessionStorage.getItem(postName)
-  if (cached) {
-    loading.value = false
+  if (cached)
     return cached
-  }
 
-  const url = `/posts/${postName}.htm`
-  const data = await fetch(url, { signal: abortController.signal }).then(res => res.text())
+  loading.value = true
+  const data = await getPostData(postName, onCancel)
+  loading.value = false
 
   sessionStorage.setItem(postName, data)
-
-  loading.value = false
   return data
 }, '')
 
 const { deferScroll } = useCustomScroll()
+const postContentEle = ref<HTMLElement | null>(null)
 watch(data, () => {
   nextTick(() => {
     deferScroll()
