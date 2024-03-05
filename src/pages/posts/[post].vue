@@ -27,25 +27,25 @@ function getRand(min: number, max: number): number {
   return min + Math.round(Math.random() * (max - min))
 }
 
-async function getPostData(postName: string, onCancel: AsyncComputedOnCancel) {
-  const abortController = new AbortController()
-  onCancel(() => abortController.abort())
-  return fetch(`/posts/${postName}.htm`, { signal: abortController.signal })
-    .then(res => res.text())
-}
-
-const loading = ref(true)
-const data = asyncComputed(async (onCancel) => {
+async function getPostData(onCancel: AsyncComputedOnCancel) {
   const postName = (parts => parts.pop() || parts.pop() || '')(props.post.split('/')).split('.')[0]
   const cached = sessionStorage.getItem(postName)
   if (cached)
     return cached
 
-  loading.value = true
-  const data = await getPostData(postName, onCancel)
-  loading.value = false
-
+  const abortController = new AbortController()
+  onCancel(() => abortController.abort())
+  const data = await fetch(`/posts/${postName}.htm`, { signal: abortController.signal })
+    .then(res => res.text())
   sessionStorage.setItem(postName, data)
+  return data
+}
+
+const loading = ref(true)
+const data = asyncComputed(async (onCancel) => {
+  loading.value = true
+  const data = await getPostData(onCancel)
+  loading.value = false
   return data
 }, '')
 
