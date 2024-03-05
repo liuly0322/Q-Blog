@@ -45,24 +45,11 @@ async function appendAplayerData() {
   instance.list.add(audioList)
 }
 
-// APlayer's lrc switch bug
-// https://github.com/DIYgod/APlayer/issues/283
-function APlayerMonkeyPatch(instance: APlayer) {
-  const _switch = instance.lrc.switch
-  const _update = instance.lrc.update
-  instance.lrc.switch = (index) => {
-    instance.lrc.update = () => {}
-    _switch.call(instance.lrc, index)
-    instance.lrc.update = _update
-  }
-}
-
 function APlayerInit() {
   instance = new APlayer({
     ...customAplayerOptions,
     container: playerRef.value,
   })
-  APlayerMonkeyPatch(instance)
   appendAplayerData()
 }
 
