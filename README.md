@@ -21,8 +21,7 @@
 [My personal blog](https://blog.liuly.moe), [RSS](https://blog.liuly.moe/feed.xml)
 
 - Vite5, Vue3, TypeScript, Naive UI
-- Responsive Web Design, Dark Mode
-- PWA
+- Responsive Web Design, Dark Mode, PWA
 
 ## Usage
 
