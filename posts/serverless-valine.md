@@ -72,7 +72,7 @@ Valine 系统便是依此完成了评论的上传，下载，显示。
 </div>
 ```
 
-js 部分需要用到 md5（为了使用 Gravatar 头像） ，直接调库： `https://cdn.jsdelivr.net/npm/md5@2.3.0/dist/md5.min.js`
+JS 部分需要用到 md5（为了使用 Gravatar 头像） ，直接调库： `https://cdn.jsdelivr.net/npm/md5@2.3.0/dist/md5.min.js`
 
 其余直接调接口就行了
 
@@ -180,7 +180,7 @@ const timeAgo = (date) => {
 
 #### 异步处理
 
-这里 `const url = comment.get('url');` 在得到评论对应页面的 url 后，还需要加载这些页面内容，然后提取标题（后面一大段逻辑都是在处理这个）。
+这里 `const url = comment.get('url');` 在得到评论对应页面的 URL 后，还需要加载这些页面内容，然后提取标题（后面一大段逻辑都是在处理这个）。
 
 这里是采用轮询的方式，利用 `n` 记录评论总数（初始是设定的默认值，但是如果实际从后端获取到满足条件的评论数少于这一默认值的话，会更新 `n` ）。如果目前已经获取的标题数量恰好等于 `n` ，那么就可以进行最后的输出了。 ~~尝试使用 Promise 重构结果失败了~~
 
@@ -188,7 +188,7 @@ const timeAgo = (date) => {
 
 > 2021.9.18 更新：
 
-现在成功采用 `Promise.all()` 重构了一遍。 `Promise.all()` 需要参数是 `Promise` 数组，所以先对每一个 comment，取标题所对应的 url，再通过 `fetch` 获取对象后使用 `text` 方法，返回带有网页文本的 `Promise` 对象。这些对象组合而成的 `Promise` 数组就是 `Promise.all()` 的对象。随后， `Promise.all()` 方法会等待所有的请求完成，再在此时处理文本，即可拿到所有的标题。之后即可得出评论对应的 html。
+现在成功采用 `Promise.all()` 重构了一遍。 `Promise.all()` 需要参数是 `Promise` 数组，所以先对每一个 comment，取标题所对应的 URL，再通过 `fetch` 获取对象后使用 `text` 方法，返回带有网页文本的 `Promise` 对象。这些对象组合而成的 `Promise` 数组就是 `Promise.all()` 的对象。随后， `Promise.all()` 方法会等待所有的请求完成，再在此时处理文本，即可拿到所有的标题。之后即可得出评论对应的 HTML。
 
 对应代码如下：
 
@@ -199,7 +199,7 @@ query.find().then((comments) => {
       fetch(comment.get("url")).then((resp) => resp.text())
     )
   ).then((texts) => {
-    let res = ""; //最终内部 html
+    let res = ""; //最终内部 HTML
     texts.forEach((text, i) => {
       let title = text.slice(text.indexOf("og:title") + 19);
       title = title.slice(0, title.indexOf('"')); //获取标题
@@ -215,7 +215,7 @@ query.find().then((comments) => {
                     <div class="vtime">${timeAgo(get("insertedAt"))}</div>
                     <div class="comment-text">${get("comment")}</div>
                 </div>
-            </div>`; //这是第 i 条评论的 html，追加到 res 上
+            </div>`; //这是第 i 条评论的 HTML，追加到 res 上
     });
     document.querySelector("#recent-comment").innerHTML = res; //渲染
   });

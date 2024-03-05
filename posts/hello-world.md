@@ -13,7 +13,7 @@ category: web
 - 全局搜索（标题支持）
 - 单页面应用带来的良好路由体验（指可以一直听歌）
 - RSS 支持
-- markdown 部分
+- Markdown 部分
   - mathjax 支持
   - 锚点支持
   - 高亮支持
@@ -28,7 +28,7 @@ category: web
 
 ## 技术支持
 
-- Github Pages
+- GitHub Pages
 - Cloudflare（可能快了一点吧（大概））
 - Vue3
 - Vite2

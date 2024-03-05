@@ -1,11 +1,11 @@
 ---
-title: Github Actions 持续集成体验
+title: GitHub Actions 持续集成体验
 date: 2022-08-23 19:10:20
 tags: [笔记]
 category: web
 ---
 
-咕了快小半年，今天更新一期关于 Github Actions 在项目部署测试中的应用
+咕了快小半年，今天更新一期关于 GitHub Actions 在项目部署测试中的应用
 
 ## 介绍
 
@@ -17,15 +17,15 @@ GitHub 提供 Linux、Windows 和 macOS 虚拟机来运行工作流程，或者�
 
 <!-- more -->
 
-概括一下其实就是 Github 给你送了台虚拟机的免费使用权，你可以利用它在项目有新 push, pull request 时或者定时执行某些构建，测试，部署的任务
+概括一下其实就是 GitHub 给你送了台虚拟机的免费使用权，你可以利用它在项目有新 push, pull request 时或者定时执行某些构建，测试，部署的任务
 
 - 构建：如果项目需要构建出 release 版本，可以使用它自动发布
 - 测试：运行测试脚本，监测项目的可用性及正确性
-- 部署：例如与 Github Pages 配合使用，可以自动将静态网页部署到 Github Pages 上
+- 部署：例如与 GitHub Pages 配合使用，可以自动将静态网页部署到 GitHub Pages 上
 
 ## 构建与部署
 
-首先介绍下 Github Actions 的 yaml 格式，需要包含：
+首先介绍下 GitHub Actions 的 YAML 格式，需要包含：
 
 - 触发事件，决定什么时候运行虚拟机，可选 push/pull request/手动运行等
 - 运行流程，决定具体虚拟机内执行的程序
@@ -70,7 +70,7 @@ jobs:
 
 ```
 
-例如以上是一个 workflow 文件，该 actions 的功能是在仓库内的博客 md 文件更新后，自动构建生成静态网页并 push 到 main 分支（随后这一 push 会由 Github Pages 负责自动更新静态网页）
+例如以上是一个 workflow 文件，该 actions 的功能是在仓库内的博客 md 文件更新后，自动构建生成静态网页并 push 到 main 分支（随后这一 push 会由 GitHub Pages 负责自动更新静态网页）
 
 - 触发事件：posts 分支的 push 请求
 - 运行流程：一个 actions 可以由几个 job 组成，这些 job 可以根据需求并行或者串行，这里只有一个 job
@@ -87,7 +87,7 @@ jobs:
 
 with 相当于传入需要的参数
 
-别人的 actions 可以在 github 提供的 [marketplace](https://github.com/marketplace?type=actions) 找到
+别人的 actions 可以在 GitHub 提供的 [marketplace](https://github.com/marketplace?type=actions) 找到
 
 例如这一 step 是配置 node 和 pnpm 环境
 
@@ -108,9 +108,9 @@ with 相当于传入需要的参数
 
 ## 测试
 
-Github Actions 的另一大常见用途便是用于测试，我们经常能看见别人的开源项目会有一个 ![test passing](https://github.com/liuly0322/l-plugin/actions/workflows/test.yml/badge.svg?branch=main) 的标识，甚至还有测试覆盖率，这都可以通过 Github Actions 实现，例如上面的图标表示的就是某个 workflow 上次运行的测试是否通过
+GitHub Actions 的另一大常见用途便是用于测试，我们经常能看见别人的开源项目会有一个 ![test passing](https://github.com/liuly0322/l-plugin/actions/workflows/test.yml/badge.svg?branch=main) 的标识，甚至还有测试覆盖率，这都可以通过 GitHub Actions 实现，例如上面的图标表示的就是某个 workflow 上次运行的测试是否通过
 
-例如这个暑假摸了一个 QQ 机器人的插件 <https://github.com/liuly0322/l-plugin>（js 写的），就尝试配合 js 的 mocha 测试框架玩了下 Github Actions 用于 push 后自动测试
+例如这个暑假摸了一个 QQ 机器人的插件 <https://github.com/liuly0322/l-plugin>（js 写的），就尝试配合 JS 的 mocha 测试框架玩了下 GitHub Actions 用于 push 后自动测试
 
 只需要将测试脚本作为一个 step 执行即可：
 
@@ -176,4 +176,4 @@ describe('骰子', function () {
 
 非常方便（~~而且挺好看的~~
 
-可以在 Actions 界面选择 workflow 后再选择获取对应的图标 url，实时显示该 workflow 的通过状态，再贴到自己的 `README.md` 里就大功告成了
+可以在 Actions 界面选择 workflow 后再选择获取对应的图标 URL，实时显示该 workflow 的通过状态，再贴到自己的 `README.md` 里就大功告成了

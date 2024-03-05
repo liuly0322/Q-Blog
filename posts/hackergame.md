@@ -47,7 +47,7 @@ tocbot: true
 
 4. 请找出在 Linux 内核 master 分支（torvalds/linux.git）下，首个变动此行为的 commit 的 hash 吧喵！
 
-   在 Linux 的 Github 仓库中搜索 `argc` 并按时间排序，第二页就能找到对应 commit
+   在 Linux 的 GitHub 仓库中搜索 `argc` 并按时间排序，第二页就能找到对应 commit
 
    ![image-20221022184813334](./hackergame/image-20221022184813334.png)
 
@@ -218,7 +218,7 @@ var guess = Double.parseDouble(event.asCharacters().getData());
 
 https://github.com/splitbrain/dokuwiki/issues/3421
 
-根据讨论内容：页面 url 后追加 `&do=diff` 即可
+根据讨论内容：页面 URL 后追加 `&do=diff` 即可
 
 ## 安全的在线测评
 
@@ -289,7 +289,7 @@ path2 = "dev/shm/flag2"
 - 这个 StackOverflow 回答：<https://stackoverflow.com/questions/410980/include-a-text-file-in-a-c-program-as-a-char>
   - 高赞第一使用了 `xxd`，显然我们用不了
   - 后面连续几个高赞都需要 C++ 特性，`std::embed` 或者字符串字面量
-- 一个 Github 文档：<https://github.com/welchbj/ctf/blob/master/docs/miscellaneous.md>
+- 一个 GitHub 文档：<https://github.com/welchbj/ctf/blob/master/docs/miscellaneous.md>
   - 需要知道包含的字符串的前缀，如 flag
 
 ~~当时把整个人都查自闭了~~
@@ -424,7 +424,7 @@ score = driver.execute_script(f"return document.querySelector('#score').textCont
 
 姓名输入 `<img src=1 onerror="document.querySelector('#greeting').textContent=document.cookie">`
 
-随后提交 url 即可获取 flag
+随后提交 URL 即可获取 flag
 
 ## 杯窗鹅影
 
@@ -1072,7 +1072,7 @@ int8_t port_to_int8(char *port) {
 
 先放一只可爱的企鹅
 
-这题源代码要看懂并不难，原理就是根据 `chals` 文件夹下的 json 文件获取每个分支对应的可能的操作，然后每次根据输入的某个比特位具体决定进入的分支
+这题源代码要看懂并不难，原理就是根据 `chals` 文件夹下的 JSON 文件获取每个分支对应的可能的操作，然后每次根据输入的某个比特位具体决定进入的分支
 
 第一问枚举可得 1000，第二问因为只有 16 个比特也可以写个程序暴力跑，这里放个代码：
 

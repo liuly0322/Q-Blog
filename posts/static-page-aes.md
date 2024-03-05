@@ -41,7 +41,7 @@ tocbot: true
 ></script>
 ```
 
-再查阅该 js 的 AES 相关 API：
+再查阅该 JS 的 AES 相关 API：
 
 ```javascript
 var CryptoJS = require("crypto-js");
@@ -71,7 +71,7 @@ console.log(originalText); // 'my message'
 
 这个成品的正确密钥可以在文末获取（括弧笑
 
-~~由于懒得写 css 所以很丑~~
+~~由于懒得写 CSS 所以很丑~~
 
 #### 预加密处理
 
@@ -92,7 +92,7 @@ temp = CryptoJS.AES.encrypt("stDkxwE", "password").toString();
 //获取本文的试探密文
 ```
 
-对于明文部分，我们可以选择使用 html 文本，这样只要后面 JavaScript 采用 innerHTML 方法替换文本就可以保留需要的格式。
+对于明文部分，我们可以选择使用 HTML 文本，这样只要后面 JavaScript 采用 innerHTML 方法替换文本就可以保留需要的格式。
 
 #### 界面部分
 
@@ -113,7 +113,7 @@ temp = CryptoJS.AES.encrypt("stDkxwE", "password").toString();
 
 提交按钮会传入 `this` 参数，指示当前按钮。
 
-#### js 逻辑
+#### JS 逻辑
 
 ```javascript
 function crypto(sub) {

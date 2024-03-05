@@ -18,15 +18,15 @@ tocbot: true
 
 于是问题主要被分解成了：
 
-- 前端 html 和 css 的实现
-- 通过 js 调用后端接口
+- 前端 HTML 和 CSS 的实现
+- 通过 JS 调用后端接口
 - 后端 php 接口的实现
 
 下面将逐一介绍。
 
 <!-- more -->
 
-## 前端 html 和 css 的实现
+## 前端 HTML 和 CSS 的实现
 
 本人的网页主要由 [USTC 导航](https://ustc.life/)修改而来。采用了列布局：
 
@@ -53,13 +53,13 @@ tocbot: true
 </div>
 ```
 
-ul 中的内容要等待 js 添加。
+ul 中的内容要等待 JS 添加。
 
-## 通过 js 调用后端接口
+## 通过 JS 调用后端接口
 
 首先要完成的是从后端读取备忘信息。
 
-那么需要约定数据格式。这里约定 json 格式。
+那么需要约定数据格式。这里约定 JSON 格式。
 
 大体如下：
 
@@ -74,7 +74,7 @@ ul 中的内容要等待 js 添加。
 }
 ```
 
-然后就可以获取信息，并显示到网页上。获取信息通过 fetch，这是一个新标准的前端与后端通信的 js 函数。
+然后就可以获取信息，并显示到网页上。获取信息通过 fetch，这是一个新标准的前端与后端通信的 JS 函数。
 
 ```javascript
 function getTodoList() {
@@ -123,7 +123,7 @@ getTodoList();
 
 这里代码本人随便写的，指导思想能 work 就行（
 
-在 `index.php, del.php, add.php` 的目录下，存储文件 `memo.txt` 用于存储 json 字符串。
+在 `index.php, del.php, add.php` 的目录下，存储文件 `memo.txt` 用于存储 JSON 字符串。
 
 随后就是一堆文件读写和字符串处理：
 

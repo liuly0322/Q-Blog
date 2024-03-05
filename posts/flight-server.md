@@ -12,7 +12,7 @@ mermaid: true
 
 实验最终成品可以参考已经部署至网页上的：[航空客运订票系统](http://home.ustc.edu.cn/~liuly0322/homework/flight/)
 
-实验源代码可以见附件，也可以见 [github 链接](https://github.com/liuly0322/Flight-Server) （包含项目具体部署方法）
+实验源代码可以见附件，也可以见 [GitHub 链接](https://github.com/liuly0322/Flight-Server) （包含项目具体部署方法）
 
 ![](./flight-server/front-end.png)
 
@@ -96,7 +96,7 @@ mermaid: true
 
 前端部分比较简单，动态数据都是通过 `axios.js` 请求后端后再解析返回的字符串得到。
 
-由于后端 C++ 没有找到好用的解码 URL 编码的库，所以这里还用到了一个汉字转拼音的 js，用于前端处理用户请求的城市。
+由于后端 C++ 没有找到好用的解码 URL 编码的库，所以这里还用到了一个汉字转拼音的 JS，用于前端处理用户请求的城市。
 
 ### 后端部分
 
@@ -142,7 +142,7 @@ mermaid: true
 └── readme.md
 ```
 
-在 `code/http` 目录中包含了对 Http 请求的解析，处理，和返回。
+在 `code/http` 目录中包含了对 HTTP 请求的解析，处理，和返回。
 
 这里对 `httprequest.cpp` 进行了修改，使得支持了 GET 请求查询参数的解析，对 `httpresponse.cpp` 进行了修改，使得其可以单独返回字符串。
 

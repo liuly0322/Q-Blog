@@ -169,7 +169,7 @@ function getInput(index) {
       s: "",
     };
   }
-  s = s.replace(/{|}/g, ""); // 便于处理 tex
+  s = s.replace(/{|}/g, ""); // 便于处理 TeX
   let array = s
     .replace(/-/g, "+-")
     .replace(/\^\+/g, "^")

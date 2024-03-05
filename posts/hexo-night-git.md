@@ -10,7 +10,7 @@ tocbot: true
 
 ## 基本思路
 
-要想实现夜间模式，就意味着应用 CSS 的改变。这里作为 js 练习，采用纯前端的方法实现：如果当前开启了夜间模式，那么就向根结点，即 html 结点增加一个类 `dark-theme`，再重写深色模式使用的样式表，放置在原有样式表最后即可。
+要想实现夜间模式，就意味着应用 CSS 的改变。这里作为 JS 练习，采用纯前端的方法实现：如果当前开启了夜间模式，那么就向根结点，即 HTML 结点增加一个类 `dark-theme`，再重写深色模式使用的样式表，放置在原有样式表最后即可。
 
 <!-- more -->
 
@@ -18,7 +18,7 @@ tocbot: true
 
 为了向某一结点增加 / 删除类，可以采用 `classList.toggle('dark-theme')`，toggle 本意便是在两种状态间切换。
 
-于是合并，就得到了第一版的 js 代码：
+于是合并，就得到了第一版的 JS 代码：
 
 ```javascript
 function changeDarkTheme() {
@@ -69,7 +69,7 @@ if (sessionStorage.getItem("hexoTheme") === null) {
 
 每次打开网页时，通过检测 sessionStorage 判断是否需要应用夜间模式。而夜间模式的切换按钮作用就是添加 / 删除 `dark-theme` 类，并更改 sessionStorage。
 
-<p class="tip info"> 注意：这个 js 应该放在 head 中加载，如果放在 footer 后加载会导致浅色样式生效后再应用深色模式 </p>
+<p class="tip info"> 注意：这个 JS 应该放在 head 中加载，如果放在 footer 后加载会导致浅色样式生效后再应用深色模式 </p>
 
 ## git 工作流
 

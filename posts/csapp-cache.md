@@ -9,7 +9,7 @@ tocbot: true
 
 博客摘几篇自己做的 CSAPP 发发（自认为可能有点参考价值）
 
-全部代码可以见 [github 仓库](https://github.com/liuly0322/CSAPP-LABS)
+全部代码可以见 [GitHub 仓库](https://github.com/liuly0322/CSAPP-LABS)
 
 本篇是 Cache Lab
 

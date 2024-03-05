@@ -8,19 +8,19 @@ tocbot: true
 
 这是本蒟蒻建的第一个站，发的第一篇 blog，没啥特别好说的，就记录下建站过程吧～
 
-~~话说 ubuntu 中文输入法居然直接联想出了蒟蒻，有点生草~~
+~~话说 Ubuntu 中文输入法居然直接联想出了蒟蒻，有点生草~~
 
 ---
 
 ## 准备工作
 
-服务器和域名直接白嫖 [妮可提供的](https://home.ustc.edu.cn)，因此接下来只需要选一个网页框架就行了。这里选用 [hexo](https://hexo.io)，又轻量又简单，官方文档有中文版本，看起来很舒服。
+服务器和域名直接白嫖 [妮可提供的](https://home.ustc.edu.cn)，因此接下来只需要选一个网页框架就行了。这里选用 [Hexo](https://hexo.io)，又轻量又简单，官方文档有中文版本，看起来很舒服。
 
 ---
 
-## 下载安装 hexo
+## 下载安装 Hexo
 
-本人目前使用 ubuntu，故下文的操作方法均为 ubuntu 下。实际上这里跟着官方文档走就行了，没啥大问题。在安装 hexo 之前，需要先安装 node.js 和 git。
+本人目前使用 Ubuntu，故下文的操作方法均为 Ubuntu 下。实际上这里跟着官方文档走就行了，没啥大问题。在安装 Hexo 之前，需要先安装 node.js 和 git。
 
 <!-- more -->
 
@@ -74,7 +74,7 @@ root: /~username/
 
 其中 username 是网络信息服务中心的用户名。
 
-此外，hexo 也提供了自动部署指令：`$ hexo deploy` 或 `$ hexo d`，需要提前在\_config.yml 下配置，参考 [hexo 部署](https://hexo.io/zh-cn/docs/one-command-deployment)。
+此外，Hexo 也提供了自动部署指令：`$ hexo deploy` 或 `$ hexo d`，需要提前在\_config.yml 下配置，参考 [Hexo 部署](https://hexo.io/zh-cn/docs/one-command-deployment)。
 
 不过本人按照说明配置完后，部署完会出现 ECONNRESET，不知道是啥 bug，初步怀疑与中文目录有关（？
 

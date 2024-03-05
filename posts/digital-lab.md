@@ -40,7 +40,7 @@ tocbot: true
 
 ![image-20220319213207916](./digital-lab/image-20220319213207916.png)
 
-个人感觉 verilator 更好用，当然 Vlab 虚拟机上默认是没有自带的，不过 ubuntu 通过包管理器安装还是很方便的：
+个人感觉 Verilator 更好用，当然 Vlab 虚拟机上默认是没有自带的，不过 Ubuntu 通过包管理器安装还是很方便的：
 
 ```bash
 apt update				// 这一步为了确保软件包是最新的
@@ -55,13 +55,13 @@ apt install verilator	// 安装
 
 ## 干掉 Vivado 之仿真篇
 
-仿真需要看波形，这个时候一个推荐是 `gtkwave`，ubuntu 下同样通过包管理器安装即可
+仿真需要看波形，这个时候一个推荐是 `gtkwave`，Ubuntu 下同样通过包管理器安装即可
 
 因为这个不能在没有图形界面的 Vlab 上运行，所以下文给出的仿真推荐都是配在本地环境的：
 
 ### Icarus Verilog
 
-大名鼎鼎的一个仿真工具，简称 iverilog, 如果你用 ubuntu 的包管理器装它还会自动帮你装上 gtkwave（~~捆绑消费~~）
+大名鼎鼎的一个仿真工具，简称 iverilog, 如果你用 Ubuntu 的包管理器装它还会自动帮你装上 gtkwave（~~捆绑消费~~）
 
 Digital IDE 自带了对于 Icarus Verilog 的快速仿真支持，见 [它的文档](https://zhuanlan.zhihu.com/p/365805011)
 
@@ -71,7 +71,7 @@ Digital IDE 自带了对于 Icarus Verilog 的快速仿真支持，见 [它的�
 
 很大的好处在于 C++ 作为高级语言很明显比 Verilog 的 testbench 写起来灵活
 
-ubuntu 包管理器装的版本比较旧，如果想要最新版可以自己下载它的 github 仓库按照说明编译，不过这样就麻烦一点了
+Ubuntu 包管理器装的版本比较旧，如果想要最新版可以自己下载它的 GitHub 仓库按照说明编译，不过这样就麻烦一点了
 
 具体使用方式可以参考 [这篇文章](http://www.sunnychen.top/2019/07/25/%E8%B7%A8%E8%AF%AD%E8%A8%80%E7%9A%84Verilator%E4%BB%BF%E7%9C%9F%EF%BC%9A%E4%BD%BF%E7%94%A8%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/) ，~~对着复制粘贴就行~~
 

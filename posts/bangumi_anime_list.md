@@ -13,11 +13,11 @@ category: web
 
 ![Anime List](bangumi_anime_list/my_anime_list.png)
 
-编码过程得到了 windicss 这一原子 css 框架和 copilot 的大力帮助。
+编码过程得到了 windicss 这一原子 CSS 框架和 Copilot 的大力帮助。
 
-## copilot
+## Copilot
 
-你可以直接往代码里粘贴 [bangumi 接口](https://bangumi.github.io/api/) 的返回数据示例，然后敲一个 `interface Anime`，后面就是 copilot 发挥了。
+你可以直接往代码里粘贴 [bangumi 接口](https://bangumi.github.io/api/) 的返回数据示例，然后敲一个 `interface Anime`，后面就是 Copilot 发挥了。
 
 ```typescript
 interface Anime {
@@ -94,11 +94,11 @@ interface Anime {
 </n-card>
 ```
 
-写个样式非常方便，而且也可以 copilot 生成类名（
+写个样式非常方便，而且也可以 Copilot 生成类名（
 
 ## 分页
 
-bangumi 的这个 api 是分页的，出于性能考虑可以写一个滚动加载。
+bangumi 的这个 API 是分页的，出于性能考虑可以写一个滚动加载。
 
 ```typescript
 const animeList = ref([] as Anime[])
