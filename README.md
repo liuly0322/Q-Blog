@@ -18,14 +18,14 @@
 
 <p align='center'>Q-Blog - Quicker and Cuter</p>
 
-[My personal blog](https://blog.liuly.moe), [RSS](https://blog.liuly.moe/feed.xml)
+[My personal blog site](https://blog.liuly.moe) ([RSS](https://blog.liuly.moe/feed.xml)).
 
 - Vite5, Vue3, TypeScript, Naive UI
 - Responsive Web Design, Dark Mode, PWA
 
 ## Usage
 
-See also [Github Actions](https://github.com/liuly0322/Q-Blog/blob/main/.github/workflows/build.yml)
+See also [GitHub Actions](https://github.com/liuly0322/Q-Blog/blob/main/.github/workflows/build.yml)
 
 Installation:
 
