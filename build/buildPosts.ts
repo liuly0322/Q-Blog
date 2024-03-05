@@ -123,7 +123,7 @@ async function generateRSS(posts: Post[]) {
       title: post.title,
       url: `${SITE_URL}/posts/${post.url}`,
       description: descriptionRenderer.render(truncate(post.content, 100)),
-      date: post.date,
+      date: `${post.date} UTC+8`,
     })
   }
   const xml = feed.xml()
