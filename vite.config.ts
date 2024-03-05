@@ -4,7 +4,6 @@ import { VitePWA } from 'vite-plugin-pwa'
 import Vue from '@vitejs/plugin-vue'
 import Pages from 'vite-plugin-pages'
 import Icons from 'unplugin-icons/vite'
-import Inspect from 'vite-plugin-inspect'
 import Windicss from 'vite-plugin-windicss'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
@@ -41,8 +40,6 @@ export default defineConfig({
     Pages({
       extensions: ['vue', 'md'],
     }),
-    // 调试工具
-    Inspect(),
     // windicss 插件
     Windicss({
       safelist: markdownWrapperClasses,
