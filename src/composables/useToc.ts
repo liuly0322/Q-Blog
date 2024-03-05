@@ -28,7 +28,7 @@ function updateToc(titleElements: HTMLElement[]) {
     tocElements.value.push({
       id: e.id,
       text: e.textContent ?? '',
-      tab: Number.parseInt(e.tagName[1]) - Number.parseInt(minTag),
+      tab: Number.parseInt(e.tagName[1]) - Number.parseInt(minTag) - 1,
     })
   }
 }

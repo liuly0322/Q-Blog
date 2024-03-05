@@ -21,26 +21,18 @@ function scrollIntoView(id: string) {
         v-for="(item, index) in elem"
         :id="`toc-${index}`"
         :key="`toc-${item.id}`"
+        class="hover:underline text-hex-42b883 pl-[1.5ch]"
         :style="{ 'margin-left': `${item.tab * 1.5}ch` }"
+        @click="scrollIntoView(item.id)"
       >
-        <span class="a" :href="`#${item.id}`" @click="scrollIntoView(item.id)">
-          {{ item.text }}
-        </span>
+        {{ item.text }}
       </li>
     </ul>
   </div>
 </template>
 
 <style scoped>
-ul > li > .a {
-  color: #42b883;
-  margin-left: -1.5ch;
-  padding-left: 1.5ch;
-}
-ul > li > .a:hover {
-  text-decoration: underline;
-}
-ul > li > .a:hover::before {
+ul > li:hover::before {
   content: '>';
   position: relative;
   float: left;
