@@ -11,6 +11,25 @@ category: web
 
 <!-- more -->
 
+作为对比，这是所有网站代码完整的打包大小列表：
+
+```
+dist/manifest.webmanifest                          0.33 kB
+dist/index.html                                    2.12 kB │ gzip:   1.03 kB
+dist/assets/APlayer-DAlhrki9.css                  12.04 kB │ gzip:   2.43 kB
+dist/assets/index-Cqzz0RsS.css                    14.76 kB │ gzip:   4.23 kB
+dist/assets/_tag_-Y1TS0-QP.js                      2.42 kB │ gzip:   1.08 kB
+dist/assets/links-Cr5UQd-_.js                      3.27 kB │ gzip:   1.50 kB
+dist/assets/workbox-window.prod.es5-DFjpnwFp.js    5.29 kB │ gzip:   2.20 kB
+dist/assets/_post_-DRL_Uk8T.js                     5.83 kB │ gzip:   2.70 kB
+dist/assets/Tag-C5CFFgI9.js                       12.76 kB │ gzip:   3.90 kB
+dist/assets/bangumi-BaGoA3xg.js                   13.31 kB │ gzip:   5.40 kB
+dist/assets/Popover-DKHvY7fu.js                   27.90 kB │ gzip:   9.67 kB
+dist/assets/APlayer-DKMi3BmX.js                   43.10 kB │ gzip:  11.27 kB
+dist/assets/Index-C6uhex3o.js                     60.32 kB │ gzip:  17.96 kB
+dist/assets/index-BYqrKbac.js                    375.40 kB │ gzip: 119.89 kB
+```
+
 简单来说过程就是把 APlayer 改写为原生 ESM 模块，去除 Webpack 相关代码。改写为模块形式就不用考虑导出的兼容性问题了，避免 Webpack 的一些兼容性代码（判断导出环境、class 的转译等等）。同时原生 ESM 模块也有利于 Tree-Shaking 做死代码消除（虽然只有一个导出成员，效果大概没有，不过还是可以介绍下这个技术）。
 
 不过，最主要让人想改的原因还是 APlayer 用的模板在打包时看起来是某处的处理出了问题，最终产物会有这么一堆：
@@ -91,6 +110,8 @@ fs.writeFileSync('some_prefix/list-item.js', compiledFunction)
 - `main` 是模块入口文件
 - `types` 是类型声明文件
 - `files` 指定了需要发布到 npm 的文件
+
+完工后的结果在 [这个仓库](https://github.com/liuly0322/aplayer-ts)。
 
 ## Tree-Shaking 简介
 
