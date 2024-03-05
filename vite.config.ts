@@ -100,6 +100,9 @@ export default defineConfig({
     // 打包体积分析
     visualizer(),
   ],
+  css: {
+    transformer: 'lightningcss',
+  },
   build: {
     rollupOptions: {
       output: {
