@@ -6,7 +6,7 @@ const { getCurrentYear, getCurrentSeason } = useYear()
 </script>
 
 <template>
-  <div v-for="post in postsOnPage" :key="post" class="mb-4 p-7 card">
+  <div v-for="post in postsOnPage" :key="post.summary.url" class="mb-4 p-7 card">
     <div class="text-3xl font-medium my-4">
       <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`">
         {{

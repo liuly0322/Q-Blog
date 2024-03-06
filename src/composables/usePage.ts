@@ -1,10 +1,12 @@
-const { data } = useFetch('/page.json').json()
+const { data }: { data: Ref<string[] | null> } = useFetch('/page.json').json()
 
 const { summary, firstPageAbstracts } = useSummary()
 const page = ref(1)
 const pageMax = computed(() => Math.ceil(summary.value.length / 10))
 
 const postsOnPage = computed(() => {
+  if (!firstPageAbstracts.value || !summary.value)
+    return []
   const currSummary = data.value ?? firstPageAbstracts.value
   return currSummary
     .map((detail: string, i: number) => ({
