@@ -13,7 +13,7 @@ category: web
 
 作为对比，这是所有网站代码完整的打包大小列表：
 
-```
+```shell
 dist/manifest.webmanifest                          0.33 kB
 dist/index.html                                    2.12 kB │ gzip:   1.03 kB
 dist/assets/APlayer-DAlhrki9.css                  12.04 kB │ gzip:   2.43 kB
