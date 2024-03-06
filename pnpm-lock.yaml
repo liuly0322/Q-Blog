@@ -54,8 +54,8 @@ devDependencies:
     specifier: ^1.0.9
     version: 1.0.9
   aplayer-ts:
-    specifier: 1.10.1-9
-    version: 1.10.1-9
+    specifier: ^2.0.0
+    version: 2.0.0
   art-template:
     specifier: ^4.13.2
     version: 4.13.2
@@ -2705,11 +2705,10 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /aplayer-ts@1.10.1-9:
-    resolution: {integrity: sha512-IWel8B1CT1qMQ+qJzQk9gu/irfJn+Ft++YwfSJAVNwS4E8AdfrAhatsxoAOibbQrlH/rZBdDDzDfGgCHYtO1GQ==}
+  /aplayer-ts@2.0.0:
+    resolution: {integrity: sha512-nE4JTqRE3asgYM5W7Qw13vJRl9lncDjnCkcx+aEYmyW76F8e85G28LOJnGAJP+8OY8m7PtZlDmxeDJtwOGabJQ==}
     dependencies:
       art-template: 4.12.2
-      promise-polyfill: 7.1.0
       smoothscroll: 0.4.0
     dev: true
 
@@ -5543,10 +5542,6 @@ packages:
   /prismjs@1.29.0:
     resolution: {integrity: sha512-Kx/1w86q/epKcmte75LNrEoT+lX8pBpavuAbvJWRXar7Hz8jrtF+e3vY751p0R8H9HdArwaCTNDDzHg/ScJK1Q==}
     engines: {node: '>=6'}
-    dev: true
-
-  /promise-polyfill@7.1.0:
-    resolution: {integrity: sha512-P6NJ2wU/8fac44ENORsuqT8TiolKGB2u0fEClPtXezn7w5cmLIjM/7mhPlTebke2EPr6tmqZbXvnX0TxwykGrg==}
     dev: true
 
   /prompts@2.4.2:

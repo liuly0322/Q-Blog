@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { APlayerOptions } from 'aplayer-ts'
 import APlayer from 'aplayer-ts'
-import 'aplayer-ts/dist/APlayer.min.css'
+import 'aplayer-ts/src/css/base.css'
 import '~/styles/aplayer-dark.css'
 
 const props = withDefaults(defineProps<{
