@@ -190,3 +190,45 @@ export default class A {
 这个时候只有第一种导出变量和函数的情况可以被良好的优化。
 
 关于类的讨论可以参考 [rollup#349](https://github.com/rollup/rollup/issues/349)。
+
+### Partial Evaluation
+
+这里可以再联想下其他的编译期优化。
+
+> 做软件的需要上 Computer Architecture 这门课吗？ - 圆角骑士魔理沙的回答 - 知乎 <https://www.zhihu.com/question/24975949/answer/370015097>
+>
+> 你学过编译器原理，知道语言分编译器解释器，但其实是语言的实现分编译器解释器，因为你动态编译再执行就是解释器，你把一个解释器的机器码跟被解释程序的字符串或者 AST 或者什么稀奇古怪的中间表示的机器码合并在一起你就是个编译器。你也知道一个叫二村映射的把给一个 Partial Evaluator 输入一个 Partial Evaluator 再输入一个 Partial Evaluator 就能得到一个 Interpreter to Compiler Converter 的东西，从而明白 Interpreter Compiler 的分别挺 trivial 的。
+
+这段话读着很爽，~~不明觉厉~~。Partial Evaluation 是一种编译器优化技术，它可以把一个解释器转换为编译器。这个技术的核心思想是，把一个程序的一部分（partial）的输入固定下来，然后对这个部分进行编译。这样可以把一部分的运行时计算提前到编译时，从而提高程序的运行效率。
+
+下面的 CPP 代码就是最简单的一种 Partial Evaluation：
+
+```cpp
+int add_one(int a) {
+    return a + 1;
+}
+
+int main() {
+    return add_one(1);
+}
+```
+
+用 g++ O3 选项：
+
+```asm
+main:
+.LFB1:
+  .cfi_startproc
+  endbr64
+  movl    $2, %eax
+  ret
+  .cfi_endproc
+```
+
+CPP 编译器在编译时就把 `add_one(1)` 的结果计算出来了。除此之外，CPP 的模板特性也能支持编译期运算。
+
+ESM 在静态导入导出声明的特性下，其实也是有机会做更激进的编译器优化的。可以想象，若某些模块的导出函数只会有唯一的调用，且输入确定，那么就可以据此在编译期对 AST 进行优化。在 CommonJS 时期，Facebook 曾经有过一个 [prepack](https://github.com/facebookarchive/prepack) 项目是试图做 Partial Evaluator 的，但可惜不再维护了。开发团队回应：
+
+> The biggest challenge with Prepack is that you need the whole program along with an accurate model of the environment it will run in. Even then, you can only really run it on global code (or code that is known to only depend on state that is set up by the global code and never modified later). This is a very specialized scenario and setting it up properly takes a considerable investment. So far, I am not aware of anyone currently pursuing such a scenario.
+
+ESM 时期这类项目应该是有机会有后续进展的，因为对 ESM 模块而言，静态的导入导出声明使得可以更简单的获取到模块的精确调用模型。值得期待。
