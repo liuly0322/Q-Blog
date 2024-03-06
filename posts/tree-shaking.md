@@ -184,7 +184,9 @@ export default class A {
     b() {}
     c() {}
 }
-// 类的方法和属性无法重命名
+// 类的方法和属性无法重命名或消除
 ```
 
 这个时候只有第一种导出变量和函数的情况可以被良好的优化。
+
+关于类的讨论可以参考 [rollup#349](https://github.com/rollup/rollup/issues/349)。
