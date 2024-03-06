@@ -21,6 +21,7 @@ useCustomScroll().setContentRef(contentRef)
 const hotUpdateKey = ref(0)
 if (import.meta.hot) {
   import.meta.hot.on('posts-build', () => {
+    sessionStorage.clear()
     hotUpdateKey.value++
   })
 }
