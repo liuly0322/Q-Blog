@@ -88,7 +88,7 @@ blockquote {
 /* （移动端）遮罩层 */
 .mdui-overlay {
   position: fixed;
-  top: 0;
+  top: var(--header-height);
   left: 0;
   width: 5000px;
   height: 5000px;

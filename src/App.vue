@@ -29,12 +29,12 @@ if (import.meta.hot) {
 
 <template>
   <n-config-provider :theme="isDark ? darkTheme : null" :theme-overrides="isDark ? darkOverrides : null">
-    <n-layout-header
+    <header
       class="relative z-3"
       style="height: var(--header-height);"
     >
       <Header />
-    </n-layout-header>
+    </header>
     <n-layout :style="mainLayoutStyle" has-sider sider-placement="right">
       <n-layout-content
         ref="contentRef"

@@ -5,7 +5,7 @@ const routePath = useRoute()
 </script>
 
 <template>
-  <header class="flex items-center justify-between border-b-[0.8px] dark:border-white/9 p-3.5">
+  <div class="flex items-center justify-between border-b-[0.8px] dark:border-white/9 p-3.5">
     <div class="<sm:flex-grow flex items-center">
       <router-link to="/" class="flex-shrink-0">
         <img
@@ -33,5 +33,5 @@ const routePath = useRoute()
     <button v-if="isMobile" class="mr-2 flex" @click="() => phoneNavToggle()">
       <i-carbon:menu />
     </button>
-  </header>
+  </div>
 </template>
