@@ -20,6 +20,9 @@ devDependencies:
   '@types/markdown-it':
     specifier: ^13.0.7
     version: 13.0.7
+  '@types/markdown-it-link-attributes':
+    specifier: ^3.0.4
+    version: 3.0.4
   '@types/node':
     specifier: ^20.11.22
     version: 20.11.24
@@ -86,6 +89,9 @@ devDependencies:
   markdown-it-anchor:
     specifier: ^8.6.7
     version: 8.6.7(@types/markdown-it@13.0.7)(markdown-it@14.0.0)
+  markdown-it-link-attributes:
+    specifier: ^4.0.1
+    version: 4.0.1
   markdown-it-prism:
     specifier: ^2.3.0
     version: 2.3.0
@@ -2176,6 +2182,12 @@ packages:
 
   /@types/lodash@4.14.202:
     resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
+    dev: true
+
+  /@types/markdown-it-link-attributes@3.0.4:
+    resolution: {integrity: sha512-Ky3wTFQurAF0wSfsYi+1J2yDvpZRtNBsd8CV0rwOSIgNmNX8q87FN9c9PBp+NljoQqWhJPy8eLrkQNcG86nbUQ==}
+    dependencies:
+      '@types/markdown-it': 13.0.7
     dev: true
 
   /@types/markdown-it@13.0.7:
@@ -5004,6 +5016,10 @@ packages:
     dependencies:
       '@types/markdown-it': 13.0.7
       markdown-it: 14.0.0
+    dev: true
+
+  /markdown-it-link-attributes@4.0.1:
+    resolution: {integrity: sha512-pg5OK0jPLg62H4k7M9mRJLT61gUp9nvG0XveKYHMOOluASo9OEF13WlXrpAp2aj35LbedAy3QOCgQCw0tkLKAQ==}
     dev: true
 
   /markdown-it-prism@2.3.0:

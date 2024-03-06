@@ -7,6 +7,7 @@ import markdownIt from 'markdown-it'
 import mdPrismPlugin from 'markdown-it-prism'
 import mdMathPlugin from 'markdown-it-texmath'
 import mdAnchorPlugin from 'markdown-it-anchor'
+import mdLinkAttrPlugin from 'markdown-it-link-attributes'
 import type { ViteDevServer } from 'vite'
 import mdImageSizePlugin from './mdImageSizePlugin'
 
@@ -18,6 +19,12 @@ const postRenderer = markdownIt({ html: true })
   .use(mdPrismPlugin)
   .use(mdMathPlugin)
   .use(mdAnchorPlugin)
+  .use(mdLinkAttrPlugin, {
+    attrs: {
+      target: '_blank',
+      rel: 'noopener',
+    },
+  })
   .use(mdImageSizePlugin())
 
 const publicImages = path.join('public', 'images')
