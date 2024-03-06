@@ -35,7 +35,7 @@
     "@vueuse/components": "^10.9.0",
     "@vueuse/core": "^10.9.0",
     "@windicss/plugin-animations": "^1.0.9",
-    "aplayer-ts": "1.10.1-8",
+    "aplayer-ts": "1.10.1-9",
     "art-template": "^4.13.2",
     "c8": "^9.1.0",
     "eslint": "^8.57.0",

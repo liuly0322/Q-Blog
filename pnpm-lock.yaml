@@ -51,8 +51,8 @@ devDependencies:
     specifier: ^1.0.9
     version: 1.0.9
   aplayer-ts:
-    specifier: 1.10.1-8
-    version: 1.10.1-8
+    specifier: 1.10.1-9
+    version: 1.10.1-9
   art-template:
     specifier: ^4.13.2
     version: 4.13.2
@@ -2693,8 +2693,8 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /aplayer-ts@1.10.1-8:
-    resolution: {integrity: sha512-flMOKf2Zpnji2ot826KNRQHlGfF/W91/DnBwm9D09KH/+nFuqmiQPblkZl1WuQa/zZPpTmxIFh+e/HYFdHKKsw==}
+  /aplayer-ts@1.10.1-9:
+    resolution: {integrity: sha512-IWel8B1CT1qMQ+qJzQk9gu/irfJn+Ft++YwfSJAVNwS4E8AdfrAhatsxoAOibbQrlH/rZBdDDzDfGgCHYtO1GQ==}
     dependencies:
       art-template: 4.12.2
       promise-polyfill: 7.1.0
