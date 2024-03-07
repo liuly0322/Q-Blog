@@ -54,8 +54,8 @@ devDependencies:
     specifier: ^1.0.9
     version: 1.0.9
   aplayer-ts:
-    specifier: ^2.0.1
-    version: 2.0.1
+    specifier: ^2.1.0
+    version: 2.1.0
   art-template:
     specifier: ^4.13.2
     version: 4.13.2
@@ -2711,8 +2711,8 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /aplayer-ts@2.0.1:
-    resolution: {integrity: sha512-//N3oT0qfM5g0ygCcHZrVpNbyMkSmEdSB3QOMQYmQFFgIx41Fj2IUa+naLSpdjH+3X5q0+u5ru//3NqG2i+Dmw==}
+  /aplayer-ts@2.1.0:
+    resolution: {integrity: sha512-rM/O0DHhkdHdHqoQWfqMYdLg8yUIDFcey1mAzAGsxl6tXttlMqKCoZTr4Dtr7EI4Kpytwn8579XKeSXTYdYJIA==}
     dependencies:
       art-template: 4.12.2
       smoothscroll: 0.4.0

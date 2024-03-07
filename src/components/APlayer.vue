@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { APlayerOptions } from 'aplayer-ts'
-import APlayer from 'aplayer-ts'
+import APlayer, { addToList, clearList } from 'aplayer-ts'
 import 'aplayer-ts/src/css/base.css'
 import '~/styles/aplayer-dark.css'
 
@@ -41,8 +41,8 @@ async function appendAplayerData() {
   const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
   const { data }: { data: Ref<Meting[] | null> } = await useFetch(url).get().json()
   const audioList = data.value?.map(value => ({ ...value, cover: value.pic })) ?? []
-  instance.list.remove(0)
-  instance.list.add(audioList)
+  clearList(instance)
+  addToList(instance, audioList)
 }
 
 function APlayerInit() {

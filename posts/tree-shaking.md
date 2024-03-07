@@ -7,7 +7,7 @@ category: web
 
 这段时间在改进自己的博客，做了很多有意思的事情（PWA，SSG，打包体积优化等等），写一篇记录一下最近的一次打包体积优化的过程。
 
-一般来说，打包体积优化无非就是合并小文件、减少依赖项；压缩代码和移除无用代码等可以由打包工具完成。但有的时候依赖本身就很大，比如博客右边的那个音乐播放器 [APlayer](https://github.com/DIYgod/APlayer)，以 `APlayer.min.js` 的单文件形式分发，体积就有 57.9KB。整合到博客的 Vue 组件后，经过 Rollup 再次打包为 58.2KB。这时候就需要自己动手了。这里的情况是 APlayer 已经很久没有更新了，所以可以考虑自己修改源码。最后优化到了 34.6 KB。
+一般来说，打包体积优化无非就是合并小文件、减少依赖项；压缩代码和移除无用代码等可以由打包工具完成。但有的时候依赖本身就很大，比如博客右边的那个音乐播放器 [APlayer](https://github.com/DIYgod/APlayer)，以 `APlayer.min.js` 的单文件形式分发，体积就有 57.9KB。整合到博客的 Vue 组件后，经过 Rollup 再次打包为 58.2KB。这时候就需要自己动手了。这里的情况是 APlayer 已经很久没有更新了，所以可以考虑自己修改源码。最后优化到了 31.5 KB。
 
 完工后的结果在 [这个仓库](https://github.com/liuly0322/aplayer-ts)。
 
@@ -19,17 +19,17 @@ category: web
 dist/manifest.webmanifest                          0.33 kB
 dist/index.html                                    2.12 kB │ gzip:   1.03 kB
 dist/assets/APlayer-DhvPXxPe.css                  10.25 kB │ gzip:   2.16 kB
-dist/assets/index-Cqzz0RsS.css                    14.76 kB │ gzip:   4.23 kB
-dist/assets/_tag_-3vs8mw7h.js                      2.42 kB │ gzip:   1.08 kB
-dist/assets/links-Nns49LO-.js                      3.27 kB │ gzip:   1.50 kB
+dist/assets/index-CRtL4x1c.css                    14.78 kB │ gzip:   4.24 kB
+dist/assets/_tag_-cGwZ-7N0.js                      2.42 kB │ gzip:   1.08 kB
+dist/assets/links-CG_Ktntm.js                      3.27 kB │ gzip:   1.50 kB
 dist/assets/workbox-window.prod.es5-DFjpnwFp.js    5.29 kB │ gzip:   2.20 kB
-dist/assets/_post_-BAPS11Gv.js                     5.83 kB │ gzip:   2.70 kB
-dist/assets/Tag-TzMXVhyJ.js                       12.76 kB │ gzip:   3.90 kB
-dist/assets/bangumi-IFe_6Ugg.js                   13.31 kB │ gzip:   5.40 kB
-dist/assets/Popover-C42Vuknb.js                   27.90 kB │ gzip:   9.67 kB
-dist/assets/APlayer-CLD8rEoV.js                   34.61 kB │ gzip:  10.06 kB
-dist/assets/Index-CM04Vxzs.js                     60.33 kB │ gzip:  17.96 kB
-dist/assets/index-Dc-0EKWT.js                    375.42 kB │ gzip: 119.90 kB
+dist/assets/_post_-Bk7OZ2kU.js                     5.83 kB │ gzip:   2.70 kB
+dist/assets/Tag-CndKAshl.js                       12.76 kB │ gzip:   3.90 kB
+dist/assets/bangumi-pv0vBN1_.js                   13.31 kB │ gzip:   5.40 kB
+dist/assets/Popover-D9bQVC9_.js                   27.90 kB │ gzip:   9.67 kB
+dist/assets/APlayer-BdWmGOkJ.js                   31.48 kB │ gzip:   9.66 kB
+dist/assets/Index-xN4V0yjd.js                     60.33 kB │ gzip:  17.96 kB
+dist/assets/index-CoCWtjYS.js                    373.90 kB │ gzip: 119.62 kB
 ```
 
 简单来说过程就是先去除 Webpack 相关打包代码，把 APlayer 改写成原生 ESM 模块；之后再重写一些代码，增加 Tree-Shaking 的支持。改写为标准 ESM 模块形式就不用考虑导出的兼容性问题了（而是由上层打包工具统一管理转译），避免 Webpack 的一些兼容性代码（判断导出环境、class 的转译等等）。同时，ESM 模块也有利于代码混淆，后文会具体介绍模块机制对打包的影响。
@@ -175,7 +175,7 @@ export default class A {
 
 ~~到了最激动人心的一节~~。
 
-增加 Tree-Shaking 支持其实就是去除运行时不需要的代码。在翻阅源代码后，可以发现 APlayer 有一个吸底模式是我们不需要的，而且占用了很大的空间。
+增加 Tree-Shaking 支持其实就是去除运行时不需要的代码。在翻阅源代码后，可以发现 APlayer 有一个吸底模式是我们不需要的，而且占用了很大的空间。我们就以这个为例说明怎么让模块代码可以被 Tree-Shaking。
 
 根据上文对 Tree-Shaking 原理的介绍，我们可以先设计一个导出，表示我们 opt-in 的需要吸底模式。最直观的声明方式：
 
