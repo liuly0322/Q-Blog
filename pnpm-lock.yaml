@@ -54,8 +54,8 @@ devDependencies:
     specifier: ^1.0.9
     version: 1.0.9
   aplayer-ts:
-    specifier: ^2.0.0
-    version: 2.0.0
+    specifier: ^2.0.1
+    version: 2.0.1
   art-template:
     specifier: ^4.13.2
     version: 4.13.2
@@ -2217,6 +2217,12 @@ packages:
       undici-types: 5.26.5
     dev: true
 
+  /@types/node@20.11.25:
+    resolution: {integrity: sha512-TBHyJxk2b7HceLVGFcpAUjsa5zIdsPWlR6XHfyGzd0SFu+/NFgQgMAl96MSDZgQDvJAvV6BKsFOrt6zIL09JDw==}
+    dependencies:
+      undici-types: 5.26.5
+    dev: true
+
   /@types/normalize-package-data@2.4.4:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
     dev: true
@@ -2228,7 +2234,7 @@ packages:
   /@types/resolve@1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
-      '@types/node': 20.11.24
+      '@types/node': 20.11.25
     dev: true
 
   /@types/rss@0.0.32:
@@ -2705,8 +2711,8 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /aplayer-ts@2.0.0:
-    resolution: {integrity: sha512-nE4JTqRE3asgYM5W7Qw13vJRl9lncDjnCkcx+aEYmyW76F8e85G28LOJnGAJP+8OY8m7PtZlDmxeDJtwOGabJQ==}
+  /aplayer-ts@2.0.1:
+    resolution: {integrity: sha512-//N3oT0qfM5g0ygCcHZrVpNbyMkSmEdSB3QOMQYmQFFgIx41Fj2IUa+naLSpdjH+3X5q0+u5ru//3NqG2i+Dmw==}
     dependencies:
       art-template: 4.12.2
       smoothscroll: 0.4.0
@@ -4648,7 +4654,7 @@ packages:
     resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.11.24
+      '@types/node': 20.11.25
       merge-stream: 2.0.0
       supports-color: 7.2.0
     dev: true
@@ -5721,7 +5727,7 @@ packages:
       jest-worker: 26.6.2
       rollup: 2.79.1
       serialize-javascript: 4.0.0
-      terser: 5.28.1
+      terser: 5.29.1
     dev: true
 
   /rollup-plugin-visualizer@5.12.0(rollup@2.79.1):
@@ -6136,8 +6142,8 @@ packages:
       unique-string: 2.0.0
     dev: true
 
-  /terser@5.28.1:
-    resolution: {integrity: sha512-wM+bZp54v/E9eRRGXb5ZFDvinrJIOaTapx3WUokyVGZu5ucVCK55zEgGd5Dl2fSr3jUo5sDiERErUWLY6QPFyA==}
+  /terser@5.29.1:
+    resolution: {integrity: sha512-lZQ/fyaIGxsbGxApKmoPTODIzELy3++mXhS5hOqaAWZjQtpq/hFHAc+rm29NND1rYRxRWKcjuARNwULNXa5RtQ==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
