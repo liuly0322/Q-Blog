@@ -17,6 +17,9 @@ devDependencies:
   '@iconify-json/fluent-emoji-flat':
     specifier: ^1.1.16
     version: 1.1.16
+  '@iconify-json/line-md':
+    specifier: ^1.1.36
+    version: 1.1.36
   '@types/markdown-it':
     specifier: ^13.0.7
     version: 13.0.7
@@ -1774,6 +1777,12 @@ packages:
 
   /@iconify-json/fluent-emoji-flat@1.1.16:
     resolution: {integrity: sha512-rfag8s2Ippaos57BC8huT6cVc0oWkvYaLDl0lokVX2EsS7VakKEvUlJ20CqaKiPTuaccWRthlCbjEq8XfLHDHw==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/line-md@1.1.36:
+    resolution: {integrity: sha512-DzZQm0qSEtjixdbTSX4+PvTPHWwYJrZFvOWITMkLG12XIEzDUpIRMcZ0bUhegU0qDIM5c6X2FKHCgjhK4fI7NA==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true

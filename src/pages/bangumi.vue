@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import LineMdLoadingLoop from '~icons/line-md/loading-loop?width=48px&height=48px'
+
 const { isScrollBottom } = useCustomScroll()
 const { animeList, loading, fetchAnimeList, timeToDate } = useBangumi()
 
@@ -68,6 +70,6 @@ onUnmounted(() => {
     </div>
   </div>
   <div v-if="loading" class="text-center mt-5">
-    <n-spin size="large" />
+    <LineMdLoadingLoop style="color: #18a058;" />
   </div>
 </template>

@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import IconRedHeart from '~icons/fluent-emoji-flat/red-heart'
+import LineMdLoadingLoop from '~icons/line-md/loading-loop?width=48px&height=48px'
 
 const { page, pageMax, postsOnPage } = usePage()
 const { getCurrentYear, getCurrentSeason } = useYear()
 </script>
 
 <template>
+  <div v-if="postsOnPage.length === 0" class="my-[64px]">
+    <LineMdLoadingLoop style="color: #18a058;" />
+    <p class="mt-4">加载中...</p>
+  </div>
   <div v-for="post in postsOnPage" :key="post.summary.url" class="mb-4 p-7 card">
     <div class="text-3xl font-medium my-4">
       <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`">

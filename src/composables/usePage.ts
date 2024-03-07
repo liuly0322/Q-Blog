@@ -5,7 +5,7 @@ const page = ref(1)
 const pageMax = computed(() => Math.ceil(summary.value.length / 10))
 
 const postsOnPage = computed(() => {
-  if (!firstPageAbstracts.value || !summary.value)
+  if (firstPageAbstracts.value.length === 0 || summary.value.length === 0)
     return []
   const currSummary = data.value ?? firstPageAbstracts.value
   return currSummary
