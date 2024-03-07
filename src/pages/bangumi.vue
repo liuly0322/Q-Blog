@@ -24,7 +24,7 @@ onUnmounted(() => {
     动画列表
   </h1>
   <p class="mt-5">
-    我在 <a href="https://bangumi.tv/user/undef_baka" target="_blank" rel="noopener noreferrer">bangumi</a>
+    我在 <a href="https://bangumi.tv/user/undef_baka" class="blue-link" target="_blank" rel="noopener noreferrer">bangumi</a>
     上对部分看过动画的评分与短评（Optional）。
   </p>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-5">
