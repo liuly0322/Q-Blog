@@ -10,6 +10,12 @@
   line-height: 1.6em;
   margin: 1.6em 0;
 }
+.md-blog blockquote {
+  margin: 10px 0;
+  padding-left: 15px;
+  padding-right: 10px;
+  border-left: 3px solid #ccc;
+}
 .md-blog blockquote p {
   margin: 0;
 }
