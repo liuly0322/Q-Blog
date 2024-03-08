@@ -46,7 +46,7 @@ async function appendAplayerData() {
 }
 
 function APlayerInit() {
-  instance = new APlayer({
+  instance = APlayer().init({
     ...customAplayerOptions,
     container: playerRef.value,
   })

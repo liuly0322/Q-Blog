@@ -7,7 +7,7 @@ category: web
 
 这段时间在改进自己的博客，做了很多有意思的事情（PWA，SSG，打包体积优化等等），写一篇记录一下最近的一次打包体积优化的过程。
 
-一般来说，打包体积优化无非就是合并小文件、减少依赖项；压缩代码和移除无用代码等可以由打包工具完成。但有的时候依赖本身就很大，比如博客右边的那个音乐播放器 [APlayer](https://github.com/DIYgod/APlayer)，以 `APlayer.min.js` 的单文件形式分发，体积就有 57.9KB。整合到博客的 Vue 组件后，经过 Rollup 再次打包为 58.2KB。这时候就需要自己动手了。这里的情况是 APlayer 已经很久没有更新了，所以可以考虑自己修改源码。最后优化到了 31.5 KB。
+一般来说，打包体积优化无非就是合并小文件、减少依赖项；压缩代码和移除无用代码等可以由打包工具完成。但有的时候依赖本身就很大，比如博客右边的那个音乐播放器 [APlayer](https://github.com/DIYgod/APlayer)，以 `APlayer.min.js` 的单文件形式分发，体积就有 57.9KB。整合到博客的 Vue 组件后，经过 Rollup 再次打包为 58.2KB。这时候就需要自己动手了。这里的情况是 APlayer 已经很久没有更新了，所以可以考虑自己修改源码。最后优化到了 30.8 KB。
 
 完工后的结果在 [这个仓库](https://github.com/liuly0322/aplayer-ts)。
 
@@ -20,16 +20,16 @@ dist/manifest.webmanifest                          0.33 kB
 dist/index.html                                    2.12 kB │ gzip:   1.03 kB
 dist/assets/APlayer-DhvPXxPe.css                  10.25 kB │ gzip:   2.16 kB
 dist/assets/index-Db96JfM_.css                    14.42 kB │ gzip:   4.16 kB
-dist/assets/_tag_-CP4zv6dy.js                      2.42 kB │ gzip:   1.08 kB
-dist/assets/links-4AksG4ZL.js                      3.27 kB │ gzip:   1.50 kB
+dist/assets/_tag_-B54RYnIS.js                      2.42 kB │ gzip:   1.08 kB
+dist/assets/links-DPUbrnqk.js                      3.27 kB │ gzip:   1.50 kB
 dist/assets/workbox-window.prod.es5-DFjpnwFp.js    5.29 kB │ gzip:   2.20 kB
-dist/assets/_post_-Da45SqyM.js                     5.83 kB │ gzip:   2.70 kB
-dist/assets/bangumi-ByQ9fDTm.js                   10.16 kB │ gzip:   4.46 kB
-dist/assets/Tag-BKyf6Ugl.js                       12.76 kB │ gzip:   3.90 kB
-dist/assets/loading-loop_-YyQu_8_H.js             28.49 kB │ gzip:   9.98 kB
-dist/assets/APlayer-B2XhmGe4.js                   31.48 kB │ gzip:   9.66 kB
-dist/assets/Index-CcnRjQJ5.js                     60.53 kB │ gzip:  18.09 kB
-dist/assets/index-By6tc77b.js                    373.88 kB │ gzip: 119.63 kB
+dist/assets/_post_-bzJP6r47.js                     5.83 kB │ gzip:   2.70 kB
+dist/assets/bangumi-D-jf-m72.js                   10.16 kB │ gzip:   4.46 kB
+dist/assets/Tag-B0tggpZZ.js                       12.76 kB │ gzip:   3.90 kB
+dist/assets/loading-loop-DtSYMvLp.js   28.49 kB            │ gzip:   9.98 kB
+dist/assets/APlayer-SQ4smMwq.js                   30.82 kB │ gzip:   9.54 kB
+dist/assets/Index-nvtvxUo-.js                     60.53 kB │ gzip:  18.09 kB
+dist/assets/index-EGlibs-O.js                    373.88 kB │ gzip: 119.69 kB
 ```
 
 简单来说过程就是先去除 Webpack 相关打包代码，把 APlayer 改写成原生 ESM 模块；之后再重写一些代码，增加 Tree-Shaking 的支持。改写为标准 ESM 模块形式就不用考虑导出的兼容性问题了（而是由上层打包工具统一管理转译），避免 Webpack 的一些兼容性代码（判断导出环境、class 的转译等等）。同时，ESM 模块也有利于代码混淆，后文会具体介绍模块机制对打包的影响。
@@ -177,121 +177,92 @@ export default class A {
 
 增加 Tree-Shaking 支持其实就是去除运行时不需要的代码。在翻阅源代码后，可以发现 APlayer 有一个吸底模式是我们不需要的，而且占用了很大的空间。我们就以这个为例说明怎么让模块代码可以被 Tree-Shaking。
 
-根据上文对 Tree-Shaking 原理的介绍，我们可以先设计一个导出，表示我们 opt-in 的需要吸底模式。最直观的声明方式：
+根据上文对 Tree-Shaking 原理的介绍，我们可以先设计一个导出，表示我们 opt-in 的需要吸底模式，例如：
 
 ```javascript
 import { APlayer, APlayerFixedModePlugin } from 'aplayer-ts';
+import 'aplayer-ts/src/css/base.css'
+import 'aplayer-ts/src/css/fixed.css'
+// 注: CSS 的 Tree-Shaking 是比较好处理的
+// 把原来的 CSS 拆分一下，如果不需要吸底模式，不引入 `fixed.css` 就行。
 
-const instance = APlayer().use(APlayerFixedModePlugin)
-instance.mount(document.getElementById('player'));
+const instance = APlayer()
+  .use(APlayerFixedModePlugin)
+  .init({
+    container: document.getElementById('player'),
+    // ...
+  });
 ```
 
-（参考了 [markdown-it](https://github.com/markdown-it/markdown-it/) 的处理）
+> 参考了 [markdown-it](https://github.com/markdown-it/markdown-it/) 的处理。
 
-可惜 APlayer 原生的声明方式是：
+可惜 APlayer 原生提供的初始化方式是：
 
 ```javascript
 import APlayer from 'aplayer';
 
 const instance = new APlayer({
-    container: document.getElementById('player'),
-    ...
+  container: document.getElementById('player'),
+  // ...
 });
 ```
 
-直接绑定到某个元素上并创建播放器，这样就没有使用插件动态修改的时间了。这个初始化方法到上面的优雅一点的代码距离有点远，因此最后采取了一个折中一点的方式：
+直接绑定到某个元素上并创建播放器，这样就没有使用插件动态修改的时间了。这个初始化方法到上面的优雅一点的代码距离有点远，我们需要先转换一下 `APlayer` 构造函数，把它变成 `() => APlayer` 的构造方式：
 
 ```javascript
-import APlayer from 'aplayer-ts'
-import 'aplayer-ts/src/css/base.css'
-import 'aplayer-ts/src/css/fixed.css'
+// 只引入需要的普通模式的渲染函数
+// 这样打包时吸底模式的渲染函数就会被删除
+import { notFixedModeTplRenderers } from '../template/player';
 
-// 用 enableFixedModeOnce 表示下一次构造的时候使用吸底模式
-enableFixedModeOnce()
-const instance = new APlayer({ /* refer to the aplayer doc */ })
-```
-
-（顺便可以看到，CSS 的 Tree-Shaking 是比较好处理的，把原来的 CSS 拆分一下，然后如果不需要吸底模式，不引入 `fixed.css` 就行）
-
-吸底模式和普通模式相比，最大的区别是模板的渲染函数。所以这里 `enableFixedModeOnce` 需要完成的任务就是通知 APlayer 下次构造的时候使用它提供的吸底模式的模板渲染函数。可以想象，如果不引入 `enableFixedModeOnce`，那么吸底模式的模板渲染函数就不会被引用，也就不会被打包进来。
-
-下面示意一下各个文件改造后的关系：
-
-`render.js`：
-
-```javascript
-export function notFixedModeTplRenderers() {
-  return {
-    patchA: function() {},
-    patchB: function() {},
-    patchC: function() {},
+const getPlayerStruct = () => {
+  const struct = {
+    // 原来类中的属性可以写在这里，方便类型推导
+    // 需要被插件修改的属性则必须写在这里，这样才能在 init 之前被修改
+    tplRenderers: notFixedModeTplRenderers,
   }
+  return struct
 }
 
-export function fixedModeTplRenderers() {
-  return {
-    patchA: function() {},
-    patchB: function() {},
-    patchC: function() {},
+const APlayer = () => {
+  // APlayer 的很多子组件需要使用 APlayer 的方法
+  // 原来是传入 this，现在改成传入一个对象
+  // 把原来类的所有方法都挂载到这个对象上
+  const player = getPlayerStruct()
+
+  // inner class methods
+  function initAudio() {...}
+  // ......
+
+  // public methods
+  player.init = () => {
+    // 这里才初始化并挂载到 DOM 上
+    // do init
+    return player
   }
-}
+  player.use = (plugin) => {
+    // 提供插件修改 player 的机会
+    plugin(player)
+    return player
+  }
+  // ...
 
-function render(..., renderers) {
-  // ...
-  renderers.patchA()
-  // ...
-  renderers.patchB()
-  // ...
-  renderers.patchC()
-  // ...
+  return player
 }
 ```
 
-当然，完全可以吸底模式和普通模式分成两个不同的渲染（`render`）函数。不过因为这里的情景是渲染函数有些部分可以复用，所以通过上面的代码实现了一种多态。
-
-`player.js`
+这里的关键是 `init` 函数推迟了初始化；`use` 函数则向插件暴露了修改 `player` 的机会。这样就可以在 `init` 之前修改 `player` 的属性了。
 
 ```javascript
-// 这里不引入 opt-in 的 fixedModeTplRenderers
-import { notFixedModeTplRenderers } from './render.js'
+import { fixedModeTplRenderer } from '../template/player';
 
-let getTplRenderers = notFixedModeTplRenderers
-export function setTplRenderers(renderers) {
-    getTplRenderers = renderers
-}
-
-class APlayer {
-  constructor(options) {
-    options.fixed = false;
-    const tplRenderers = getTplRenderers()
-    if (getTplRenderers != notFixedModeTplRenderers) {
-      options.fixed = true;
-      getTplRenderers = notFixedModeTplRenderers
-    }
-    // ......
-    render(..., tplRenderers)
-  }
+// 这里就是能提供吸底模式的插件了
+export function APlayerFixedModePlugin(player) {
+  player.tplRenderers = fixedModeTplRenderer
+  // 也可以在这里任意修改 player 的属性或包装 player 的方法
 }
 ```
 
-这里默认采用 `notFixedModeTplRenderers`。为了能允许 `enableFixedModeOnce` 修改渲染函数，提供一个 `setTplRenderers` 方法。
-
-`index.js`
-
-```javascript
-import APlayer from './player';
-
-import { setTplRenderers } from './player';
-import { fixedModeTplRenderer } from './render';
-
-export const enableFixedModeOnce = () => {
-    setTplRenderers(fixedModeTplRenderer)
-}
-
-export default APlayer;
-```
-
-实现一下 `enableFixedModeOnce` 就好了。如果不引入 `enableFixedModeOnce`，Tree-Shaking 时，随着 `enableFixedModeOnce` 被除去，`fixedModeTplRenderer` 也会被除去，就达到了我们的目的。
+可以看到，如果不引入 `APlayerFixedModePlugin`，`fixedModeTplRenderer` 就不会被引入，也就不会被打包，达到了 Tree-Shaking 的效果。
 
 ### Partial Evaluation
 
