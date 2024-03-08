@@ -9,7 +9,9 @@ const { getCurrentYear, getCurrentSeason } = useYear()
 <template>
   <div v-if="postsOnPage.length === 0" class="my-[64px]">
     <LineMdLoadingLoop style="color: #18a058;" />
-    <p class="mt-4">加载中...</p>
+    <p class="mt-4">
+      加载中...
+    </p>
   </div>
   <div v-for="post in postsOnPage" :key="post.summary.url" class="mb-4 p-7 card">
     <div class="text-3xl font-medium my-4">
