@@ -39,11 +39,6 @@ interface Collections {
   data: Anime[]
 }
 
-const animeList: Ref<Anime[]> = ref([])
-const PAGE_SIZE = 12
-const loading = ref(true)
-let ticking = false
-
 function prettyAnimeDates(animes: Anime[]) {
   return animes.map((anime) => {
     const date = new Date(anime.updated_at)
@@ -55,7 +50,9 @@ function prettyAnimeDates(animes: Anime[]) {
   })
 }
 
-async function fetchBangumiData(page: number) {
+const PAGE_SIZE = 12
+const animeList: Ref<Anime[]> = ref([])
+async function updateBangumiData(page: number) {
   const offset = page * PAGE_SIZE
   const res = await fetch(
     `https://api.bgm.tv/v0/users/undef_baka/collections?subject_type=2&type=2&limit=${PAGE_SIZE}&offset=${offset}`,
@@ -71,9 +68,10 @@ async function fetchBangumiData(page: number) {
 }
 
 let page = 0
-async function fetchNewPage() {
+const loading = ref(true)
+async function updateNewPage() {
   try {
-    await fetchBangumiData(page)
+    await updateBangumiData(page)
     page++
   }
   catch (error) {
@@ -81,11 +79,12 @@ async function fetchNewPage() {
   }
 }
 
+let ticking = false
 async function updateAnimeList() {
   if (ticking || !loading.value)
     return
   ticking = true
-  await fetchNewPage()
+  await updateNewPage()
   ticking = false
 }
 
