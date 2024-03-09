@@ -116,6 +116,10 @@ function truncate(s: string, len: number) {
     return s.length > len ? s.slice(0, len) : s
 }
 
+function removeRSSLastBuildDate(xml: string) {
+  return xml.replace(/<lastBuildDate>.*<\/lastBuildDate>/, '')
+}
+
 async function generateRSS(posts: Post[]) {
   const feed = new RSS({
     title: 'liuly\'s Blog',
@@ -133,7 +137,7 @@ async function generateRSS(posts: Post[]) {
       date: `${post.date} UTC+8`,
     })
   }
-  const xml = feed.xml()
+  const xml = removeRSSLastBuildDate(feed.xml())
   await fs.writeFile(path.join('public', 'feed.xml'), xml)
 }
 
