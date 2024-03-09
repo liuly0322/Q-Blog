@@ -11,7 +11,6 @@ function updateOnBottom() {
 
 let timer: number
 onMounted(() => {
-  updateOnBottom()
   timer = window.setInterval(updateOnBottom, 100)
 })
 onUnmounted(() => {

@@ -8,7 +8,7 @@ function setContentRef(ref: Ref) {
 }
 
 function isScrollBottom() {
-  const errorMargin = 24
+  const errorMargin = 200
   const element = isMobile.value ? document.documentElement : contentRef.value?.scrollbarInstRef.containerRef
   return element.scrollHeight - element.scrollTop <= element.clientHeight + errorMargin
 }
