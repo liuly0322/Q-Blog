@@ -43,35 +43,50 @@ const animeList: Ref<Anime[]> = ref([])
 const PAGE_SIZE = 12
 const loading = ref(true)
 let ticking = false
-const fetchAnimeList = ((page = 0) => async () => {
-  if (ticking || !loading.value)
-    return
-  ticking = true
+
+function prettyAnimeDates(animes: Anime[]) {
+  return animes.map((anime) => {
+    const date = new Date(anime.updated_at)
+    const update_time = `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`
+    return {
+      ...anime,
+      updated_at: update_time,
+    }
+  })
+}
+
+async function fetchBangumiData(page: number) {
   const offset = page * PAGE_SIZE
+  const res = await fetch(
+    `https://api.bgm.tv/v0/users/undef_baka/collections?subject_type=2&type=2&limit=${PAGE_SIZE}&offset=${offset}`,
+  )
+  if (!res.ok)
+    throw new Error('Network response was not ok')
+
+  const data: Collections = await res.json()
+  const totalSize = data.total
+  animeList.value = animeList.value.concat(prettyAnimeDates(data.data))
+  if (offset + data.data.length >= totalSize)
+    throw new Error('No more data')
+}
+
+let page = 0
+async function fetchNewPage() {
   try {
-    const res = await fetch(
-        `https://api.bgm.tv/v0/users/undef_baka/collections?subject_type=2&type=2&limit=${PAGE_SIZE}&offset=${offset}`,
-    )
-    if (!res.ok)
-      throw new Error('Network response was not ok')
-
-    const data: Collections = await res.json()
-    const totalSize = data.total
-    animeList.value = animeList.value.concat(data.data)
-    if (offset + data.data.length >= totalSize)
-      loading.value = false
-
+    await fetchBangumiData(page)
     page++
   }
   catch (error) {
     loading.value = false
   }
-  ticking = false
-})()
-
-function timeToDate(time: string) {
-  const date = new Date(time)
-  return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`
 }
 
-export default () => ({ animeList, loading, fetchAnimeList, timeToDate })
+async function updateAnimeList() {
+  if (ticking || !loading.value)
+    return
+  ticking = true
+  await fetchNewPage()
+  ticking = false
+}
+
+export default () => ({ animeList, loading, updateAnimeList })

@@ -2,11 +2,11 @@
 import LineMdLoadingLoop from '~icons/line-md/loading-loop?width=48px&height=48px'
 
 const { isScrollBottom } = useCustomScroll()
-const { animeList, loading, fetchAnimeList, timeToDate } = useBangumi()
+const { animeList, loading, updateAnimeList } = useBangumi()
 
 function updateOnBottom() {
   if (isScrollBottom())
-    fetchAnimeList()
+    updateAnimeList()
 }
 
 let timer: number
@@ -63,7 +63,7 @@ onUnmounted(() => {
         <div class="text-sm mt-4 flex flex-wrap justify-center">
           <n-rate :default-value="anime.rate / 2" readonly allow-half />
           <span class="text-gray-500 ml-2 text-xs mt-1 <sm:hidden">
-            {{ timeToDate(anime.updated_at) }}
+            {{ anime.updated_at }}
           </span>
         </div>
       </div>
