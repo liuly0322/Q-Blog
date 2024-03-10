@@ -52,7 +52,7 @@ if (import.meta.hot) {
       </n-layout-content>
       <n-layout-sider
         class="z-3"
-        style="max-height: calc(100vh - var(--header-height) - 1px);"
+        style="height: calc(100dvh - var(--header-height) - 1px);"
         :collapsed-width="isMobile ? 0 : 14"
         :width="320"
         :native-scrollbar="false"

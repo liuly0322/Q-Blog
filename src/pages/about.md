@@ -10,10 +10,6 @@ USTC 20 级本科少年班学院，计算机科学与技术专业在读。
 
 爱好 System/PL/Security 及其他任何 CS 相关的有趣知识~
 
-<script setup>
-import { RouterLink } from 'vue-router'
-</script>
-
 ~~已看 Anime List 绝赞咕咕中。~~ <RouterLink to="/bangumi">已上线</RouterLink>！
 
 ## 联系方式
