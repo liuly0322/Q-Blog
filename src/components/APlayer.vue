@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import type { APlayerOptions } from 'aplayer-ts'
-import APlayer, { addToList, clearList } from 'aplayer-ts'
+import APlayer, { addMusicPlugin, clearMusicPlugin } from 'aplayer-ts'
 import 'aplayer-ts/src/css/base.css'
 import '~/styles/aplayer-dark.css'
 
@@ -14,20 +13,7 @@ const props = withDefaults(defineProps<{
 })
 
 const playerRef = ref()
-let instance: APlayer
-
-const customAplayerOptions: APlayerOptions = {
-  theme: 'rgba(255,255,255,0.2)',
-  preload: 'none',
-  lrcType: 3,
-  listFolded: true,
-  listMaxHeight: '250px',
-  audio: {
-    name: '正在加载...',
-    artist: '正在加载...',
-    lrc: 'data:,loading...',
-  },
-}
+const instance = APlayer().use(addMusicPlugin).use(clearMusicPlugin)
 
 interface Meting {
   artist?: string
@@ -41,14 +27,23 @@ async function appendAplayerData() {
   const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
   const { data }: { data: Ref<Meting[] | null> } = await useFetch(url).get().json()
   const audioList = data.value?.map(value => ({ ...value, cover: value.pic })) ?? []
-  clearList(instance)
-  addToList(instance, audioList)
+  instance.list.clear()
+  instance.list.add(audioList)
 }
 
 function APlayerInit() {
-  instance = APlayer().init({
-    ...customAplayerOptions,
+  instance.init({
     container: playerRef.value,
+    theme: 'rgba(255,255,255,0.2)',
+    preload: 'none',
+    lrcType: 3,
+    listFolded: true,
+    listMaxHeight: '250px',
+    audio: {
+      name: '正在加载...',
+      artist: '正在加载...',
+      lrc: 'data:,loading...',
+    },
   })
   appendAplayerData()
 }
