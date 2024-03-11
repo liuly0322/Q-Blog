@@ -35,16 +35,25 @@ function deferScroll() {
   deferedScrollPosition = { left: 0, top: 0 }
 }
 
-function customScrollBehavior(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded, position: { left: number, top: number }, isSavedPosition: boolean) {
-  // if /posts/..., defer the scroll
-  if (to.path.startsWith('/posts/')) {
+function setDeferScroll(path: string, position: scrollPosition): boolean {
+  if (path.startsWith('/posts/')) {
     deferedScrollPosition = position
-    return
+    return true
   }
-  // if homepage and not from go back, reset the page
-  if (to.path === '/' && !isSavedPosition)
+  return false
+}
+
+function resetIndexPageNumber(path: string, isSavedPosition: boolean) {
+  if (path === '/' && !isSavedPosition)
     page.value = 1
-  scroll(position, false)
+}
+
+function customScrollBehavior(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded, savedPosition: scrollPosition | null): false {
+  const isSavedPosition = savedPosition !== null
+  const position = getSavedScrollPosition(to.path, isSavedPosition)
+  resetIndexPageNumber(to.path, isSavedPosition)
+  setDeferScroll(to.path, position) || scroll(position, false)
+  return false
 }
 
 function getScrollPosition(): scrollPosition {
@@ -59,9 +68,11 @@ function saveScrollPostion(to: RouteLocationNormalized, from: RouteLocationNorma
   sessionStorage.setItem(from.path, JSON.stringify(position))
 }
 
-function getSavedScrollPosition(path: string): scrollPosition | null {
+function getSavedScrollPosition(path: string, enable: boolean): scrollPosition {
+  if (!enable)
+    return { left: 0, top: 0 }
   const position = sessionStorage.getItem(path)
-  return position ? JSON.parse(position) : null
+  return position ? JSON.parse(position) : { left: 0, top: 0 }
 }
 
-export default () => ({ setContentRef, saveScrollPostion, getSavedScrollPosition, customScrollBehavior, deferScroll })
+export default () => ({ setContentRef, saveScrollPostion, customScrollBehavior, deferScroll })
