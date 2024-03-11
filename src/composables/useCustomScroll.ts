@@ -7,12 +7,6 @@ function setContentRef(ref: Ref) {
   contentRef = ref
 }
 
-function isScrollBottom() {
-  const errorMargin = 200
-  const element = isMobile.value ? document.documentElement : contentRef.value?.scrollbarInstRef.containerRef
-  return element.scrollHeight - element.scrollTop <= element.clientHeight + errorMargin
-}
-
 interface scrollPosition {
   left: number
   top: number
@@ -70,4 +64,4 @@ function getSavedScrollPosition(path: string): scrollPosition | null {
   return position ? JSON.parse(position) : null
 }
 
-export default () => ({ setContentRef, isScrollBottom, saveScrollPostion, getSavedScrollPosition, customScrollBehavior, deferScroll })
+export default () => ({ setContentRef, saveScrollPostion, getSavedScrollPosition, customScrollBehavior, deferScroll })

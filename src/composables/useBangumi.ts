@@ -88,7 +88,4 @@ async function updateAnimeList() {
   ticking = false
 }
 
-export default () => {
-  updateAnimeList()
-  return { animeList, loading, updateAnimeList }
-}
+export default () => ({ animeList, loading, updateAnimeList })

@@ -50,7 +50,7 @@ const data = asyncComputed(async (onCancel) => {
 }, '')
 
 const { deferScroll } = useCustomScroll()
-const postContentEle = ref<HTMLElement | null>(null)
+const postContentEle = ref<HTMLElement>()
 watch(data, () => {
   nextTick(() => {
     deferScroll()

@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import LineMdLoadingLoop from '~icons/line-md/loading-loop?width=48px&height=48px'
 
-const { isScrollBottom } = useCustomScroll()
 const { animeList, loading, updateAnimeList } = useBangumi()
 
-function updateOnBottom() {
-  if (isScrollBottom())
-    updateAnimeList()
-}
-
-let timer: number
+const loadingElement = ref<HTMLElement>()
+const intersectionObserver = new IntersectionObserver(
+  ([entry]) => {
+    if (entry.isIntersecting)
+      updateAnimeList()
+  },
+)
 onMounted(() => {
-  timer = window.setInterval(updateOnBottom, 100)
+  loadingElement.value && intersectionObserver.observe(loadingElement.value)
 })
 onUnmounted(() => {
-  window.clearInterval(timer)
+  intersectionObserver.disconnect()
 })
 </script>
 
@@ -68,7 +68,7 @@ onUnmounted(() => {
       </div>
     </div>
   </div>
-  <div v-if="loading" class="text-center mt-5">
+  <div v-if="loading" ref="loadingElement" class="text-center pt-5">
     <LineMdLoadingLoop style="color: #18a058;" />
   </div>
 </template>
