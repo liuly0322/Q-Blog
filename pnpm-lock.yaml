@@ -57,8 +57,8 @@ devDependencies:
     specifier: ^1.0.9
     version: 1.0.9
   aplayer-ts:
-    specifier: ^2.4.1
-    version: 2.4.1
+    specifier: ^2.4.2
+    version: 2.4.2
   art-template:
     specifier: ^4.13.2
     version: 4.13.2
@@ -2792,10 +2792,8 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /aplayer-ts@2.4.1:
-    resolution: {integrity: sha512-IjuCvYFIkP4coplIYe7IZ6FLCsXyTsQukNW1T0OL2kffH9cRJuMpmVVfr906oIhcnZxVzmxpXbTv0dQLxze+ig==}
-    dependencies:
-      art-template: 4.12.2
+  /aplayer-ts@2.4.2:
+    resolution: {integrity: sha512-jwa5JJQH+aMzv9Pffc8x7oinsR95Jjt0n01yk29d+mM37kbpsE0qVqvlSX0V87hxBfJ0OgEI1ei4IRbCPRcP7Q==}
     dev: true
 
   /are-docs-informative@0.0.2:
@@ -2838,21 +2836,6 @@ packages:
       get-intrinsic: 1.2.4
       is-array-buffer: 3.0.4
       is-shared-array-buffer: 1.0.3
-    dev: true
-
-  /art-template@4.12.2:
-    resolution: {integrity: sha512-xc5L6uk4gR7TJ6dL2CBrytJgith8WXtyKixEIxDo1yhabVzoulPaAkwI6QypXxp/O7CCifl1z5S55nIoc/KcKw==}
-    engines: {node: '>= 1.0.0'}
-    dependencies:
-      acorn: 5.7.4
-      detect-node: 2.1.0
-      escodegen: 1.14.3
-      estraverse: 4.3.0
-      html-minifier: 3.5.21
-      is-keyword-js: 1.0.3
-      js-tokens: 3.0.2
-      merge-source-map: 1.1.0
-      source-map: 0.5.7
     dev: true
 
   /art-template@4.13.2:
@@ -3304,10 +3287,6 @@ packages:
     resolution: {integrity: sha512-pGjwhsmsp4kL2RTz08wcOlGN83otlqHeD/Z5T8GXZB+/YcpQ/dgo+lbU8ZsGxV0HIvqqxo9l7mqYwyYMD9bKDg==}
     engines: {node: '>=0.10'}
     hasBin: true
-    dev: true
-
-  /detect-node@2.1.0:
-    resolution: {integrity: sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==}
     dev: true
 
   /dir-glob@3.0.1:
