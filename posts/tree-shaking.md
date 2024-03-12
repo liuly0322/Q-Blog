@@ -19,17 +19,17 @@ category: web
 dist/manifest.webmanifest                          0.33 kB
 dist/index.html                                    2.12 kB │ gzip:   1.03 kB
 dist/assets/APlayer-DhvPXxPe.css                  10.25 kB │ gzip:   2.16 kB
-dist/assets/index-Db96JfM_.css                    14.42 kB │ gzip:   4.16 kB
-dist/assets/_tag_-B54RYnIS.js                      2.42 kB │ gzip:   1.08 kB
-dist/assets/links-DPUbrnqk.js                      3.27 kB │ gzip:   1.50 kB
+dist/assets/index-YzzauC0t.css                    14.55 kB │ gzip:   4.18 kB
+dist/assets/_tag_-D5JvQQ1v.js                      2.42 kB │ gzip:   1.09 kB
+dist/assets/links-Cc6ATmio.js                      3.27 kB │ gzip:   1.50 kB
 dist/assets/workbox-window.prod.es5-DFjpnwFp.js    5.29 kB │ gzip:   2.20 kB
-dist/assets/_post_-bzJP6r47.js                     5.83 kB │ gzip:   2.70 kB
-dist/assets/bangumi-D-jf-m72.js                   10.16 kB │ gzip:   4.46 kB
-dist/assets/Tag-B0tggpZZ.js                       12.76 kB │ gzip:   3.90 kB
-dist/assets/loading-loop-DtSYMvLp.js   28.49 kB            │ gzip:   9.98 kB
-dist/assets/APlayer-SQ4smMwq.js                   30.82 kB │ gzip:   9.54 kB
-dist/assets/Index-nvtvxUo-.js                     60.53 kB │ gzip:  18.09 kB
-dist/assets/index-EGlibs-O.js                    373.88 kB │ gzip: 119.69 kB
+dist/assets/_post_-DxdpUo0Q.js                     6.01 kB │ gzip:   2.78 kB
+dist/assets/bangumi-BZSpw182.js                   10.21 kB │ gzip:   4.47 kB
+dist/assets/Tag-Q72F9XZg.js                       12.76 kB │ gzip:   3.90 kB
+dist/assets/date-CiKA8spf.js                      28.75 kB │ gzip:  10.13 kB
+dist/assets/APlayer-C10QaDNw.js                   29.84 kB │ gzip:   9.48 kB
+dist/assets/Index-BDfBoDaZ.js                     60.28 kB │ gzip:  17.94 kB
+dist/assets/index-B_TRGQK9.js                    373.75 kB │ gzip: 119.61 kB
 ```
 
 简单来说过程就是先去除 Webpack 相关打包代码，把 APlayer 改写成原生 ESM 模块；之后再重写一些代码，增加 Tree-Shaking 的支持。改写为标准 ESM 模块形式就不用考虑导出的兼容性问题了（而是由上层打包工具统一管理转译），避免 Webpack 的一些兼容性代码（判断导出环境、class 的转译等等）。同时，ESM 模块也有利于代码混淆，后文会具体介绍模块机制对打包的影响。

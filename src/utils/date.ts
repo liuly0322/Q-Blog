@@ -1,8 +1,8 @@
-function getCurrentYear() {
+export function getCurrentYear() {
   return new Date().getFullYear()
 }
 
-function getCurrentSeason() {
+export function getCurrentSeason() {
   const month = new Date().getMonth()
   if (month >= 2 && month <= 4)
     return '春'
@@ -13,4 +13,7 @@ function getCurrentSeason() {
   return '冬'
 }
 
-export default () => ({ getCurrentYear, getCurrentSeason })
+export function formatDate(date: string) {
+  const d = new Date(date)
+  return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`
+}

@@ -1,3 +1,5 @@
+import { formatDate } from '~/utils/date'
+
 interface Anime {
   updated_at: string
   comment: string
@@ -41,8 +43,7 @@ interface Collections {
 
 function prettyAnimeDates(animes: Anime[]) {
   return animes.map((anime) => {
-    const date = new Date(anime.updated_at)
-    const update_time = `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`
+    const update_time = formatDate(anime.updated_at)
     return {
       ...anime,
       updated_at: update_time,

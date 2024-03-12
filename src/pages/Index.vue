@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { getCurrentSeason, getCurrentYear } from '~/utils/date'
 import IconRedHeart from '~icons/fluent-emoji-flat/red-heart'
 import LineMdLoadingLoop from '~icons/line-md/loading-loop?width=48px&height=48px'
 
 const { page, pageMax, postsOnPage } = usePage()
-const { getCurrentYear, getCurrentSeason } = useYear()
 </script>
 
 <template>
