@@ -57,8 +57,8 @@ devDependencies:
     specifier: ^1.0.9
     version: 1.0.9
   aplayer-ts:
-    specifier: ^2.4.0
-    version: 2.4.0
+    specifier: ^2.4.1
+    version: 2.4.1
   art-template:
     specifier: ^4.13.2
     version: 4.13.2
@@ -1847,8 +1847,8 @@ packages:
     engines: {node: '>=6.0.0'}
     dev: true
 
-  /@jridgewell/source-map@0.3.5:
-    resolution: {integrity: sha512-UTYAUj/wviwdsMfzoSJspJxbkH5o1snzwX0//0ENX1u/55kkZZkcTZP6u9bwKGkv+dkk9at4m1Cpt0uY80kcpQ==}
+  /@jridgewell/source-map@0.3.6:
+    resolution: {integrity: sha512-1ZJTZebgqllO79ue2bm3rIGud/bOe0pP5BjSRCRxxYkEZS8STV7zN84UBbiYu7jy+eCKSnVIUgoWWE/tt+shMQ==}
     dependencies:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
@@ -2792,11 +2792,10 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /aplayer-ts@2.4.0:
-    resolution: {integrity: sha512-TgGzGnb0XzJDZtT2wcHJdyfUDikoYTTdpGVqHiU6L5GhiP8Pqwcnv25MxI0hvAZaeWCsz83t19V9Lu0W+Jn9zg==}
+  /aplayer-ts@2.4.1:
+    resolution: {integrity: sha512-IjuCvYFIkP4coplIYe7IZ6FLCsXyTsQukNW1T0OL2kffH9cRJuMpmVVfr906oIhcnZxVzmxpXbTv0dQLxze+ig==}
     dependencies:
       art-template: 4.12.2
-      smoothscroll: 0.4.0
     dev: true
 
   /are-docs-informative@0.0.2:
@@ -6004,10 +6003,6 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /smoothscroll@0.4.0:
-    resolution: {integrity: sha512-sggQ3U2Un38b3+q/j1P4Y4fCboCtoUIaBYoge+Lb6Xg1H8RTIif/hugVr+ErMtIDpvBbhQfTjtiTeYAfbw1ZGQ==}
-    dev: true
-
   /source-map-js@1.0.2:
     resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
@@ -6235,7 +6230,7 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      '@jridgewell/source-map': 0.3.5
+      '@jridgewell/source-map': 0.3.6
       acorn: 8.11.3
       commander: 2.20.3
       source-map-support: 0.5.21
