@@ -32,7 +32,7 @@ onUnmounted(() => {
       class="flex flex-col justify-between card p-3 <sm:flex-row <sm:items-center"
     >
       <a class="mb-2 <sm:flex-shrink-0 <sm:basis-2/5" :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer">
-        <img :src="anime.subject.images.medium" :alt="anime.subject.name" class="rounded-lg w-full">
+        <img :src="anime.subject.images.medium" :alt="anime.subject.name" class="rounded-lg w-full" style="aspect-ratio: 5 / 7;">
       </a>
 
       <div class="<sm:ml-4 flex flex-col justify-between flex-grow">
