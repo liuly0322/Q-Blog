@@ -110,7 +110,7 @@ type B = {
 
 注意 TypeScript/JavaScript 的结构体本身是一个对象，所以其实隐含了所有其他未被注明的属性都是可选的。这么一看，`B` 可取值集合显然是 `A` 的子集了，因为 `A` 没有对 `b` 属性做出要求：`A` 的可取值相当于 `[number, any, any, ...]`，而 `B` 的可取值相当于 `[number, string, any, ...]`。可以想象，不同结构类型的 Intersection 运算就是将所有注明的属性取交集，所得结果也会是任意原来类型的子类型。到这里，上文遗留的第二个问题已经解决了。
 
-### unknown, never, any
+### unknown, never, void
 
 理解了类型和集合的对应之后，我们终于可以解决遗留的第一个问题，开始讨论 TypeScript 中的 `unknown` 和 `never` 了。
 
