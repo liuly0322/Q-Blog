@@ -75,4 +75,4 @@ function getSavedScrollPosition(path: string, enable: boolean): scrollPosition {
   return position ? JSON.parse(position) : { left: 0, top: 0 }
 }
 
-export default () => ({ setContentRef, saveScrollPostion, customScrollBehavior, deferScroll })
+export default () => ({ setContentRef, saveScrollPostion, customScrollBehavior, scroll, deferScroll })

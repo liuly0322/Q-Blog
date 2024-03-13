@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LineMdLoadingLoop from '~icons/line-md/loading-loop?width=48px&height=48px'
 import type { PostSummary } from '~/composables/useSummary'
 
 const props = defineProps<{
@@ -6,9 +7,9 @@ const props = defineProps<{
 }>()
 
 const { isDark } = useDarks()
-const vueUtterances = ref()
+const vueUtterances = ref<HTMLElement>()
 function init() {
-  vueUtterances.value.firstChild?.remove()
+  vueUtterances.value?.firstChild?.remove()
 
   const utterances = document.createElement('script')
   utterances.async = true
@@ -20,7 +21,7 @@ function init() {
     utterances.setAttribute('theme', 'github-dark')
   else utterances.setAttribute('theme', 'github-light')
 
-  vueUtterances.value.appendChild(utterances)
+  vueUtterances.value?.appendChild(utterances)
 }
 
 onMounted(init)
@@ -28,7 +29,7 @@ watch(() => props.post, init)
 
 watch(isDark, (value, oldValue) => {
   if (value !== oldValue) {
-    vueUtterances.value.querySelector('iframe')?.contentWindow?.postMessage(
+    vueUtterances.value?.querySelector('iframe')?.contentWindow?.postMessage(
       {
         type: 'set-theme',
         theme: value ? 'github-dark' : 'github-light',
@@ -40,5 +41,10 @@ watch(isDark, (value, oldValue) => {
 </script>
 
 <template>
-  <div ref="vueUtterances" />
+  <div class="relative">
+    <div ref="vueUtterances" class="min-h-268px relative z-2" />
+    <div class="absolute inset-0 flex items-center justify-center">
+      <LineMdLoadingLoop style="color: #18a058;" />
+    </div>
+  </div>
 </template>

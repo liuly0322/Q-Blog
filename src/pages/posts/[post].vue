@@ -23,8 +23,11 @@ const data = asyncComputed(async (onCancel) => {
   return data
 }, '')
 
-const { deferScroll } = useCustomScroll()
+const { scroll, deferScroll } = useCustomScroll()
 const postContentEle = ref<HTMLElement>()
+watchEffect(() => {
+  props.post && scroll({ left: 0, top: 0 })
+})
 watch(data, () => {
   nextTick(() => {
     deferScroll()
