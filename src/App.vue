@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { darkTheme } from 'naive-ui'
-
 // Dark mode
-const { isDark, darkOverrides } = useDarks()
+const { isDark, darkTheme, darkOverrides } = useDarks()
 
 // Phone
 const { isMobile, phoneNavToggle } = usePhone()
