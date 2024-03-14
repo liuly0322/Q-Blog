@@ -1,15 +1,17 @@
 <script setup lang="ts">
+import type { TagProps } from 'naive-ui'
+
 const { tagCount } = useSummary()
-
-const largeTagBreakpoint = tagCount[Math.floor(tagCount.length / 3)].times
-const smallTagBreakpoint = tagCount[Math.floor((tagCount.length * 2) / 3)].times
-
-function computeSize(times: number) {
-  if (times > largeTagBreakpoint)
-    return 'large'
-  if (times < smallTagBreakpoint)
-    return 'small'
-  return 'medium'
+const breakpoints: [TagProps['size'], number][] = [
+  ['large', tagCount[Math.floor(tagCount.length / 3)].times],
+  ['medium', tagCount[Math.floor((tagCount.length * 2) / 3)].times - 1],
+  ['small', -1],
+]
+function computeSize(times: number): TagProps['size'] {
+  for (const [size, breakpoint] of breakpoints) {
+    if (times > breakpoint)
+      return size
+  }
 }
 </script>
 
