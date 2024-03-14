@@ -3,6 +3,7 @@
 
 .md-blog {
   max-width: 1000px;
+  overflow-wrap: break-word;
 }
 
 .md-blog p,
