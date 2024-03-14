@@ -1,21 +1,14 @@
-const { data }: { data: Ref<SiteSummary | null> } = useFetch('/summary.json').json()
+import data from '~/jsons/summary.json'
+
 export interface PostSummary {
   title: string
   date: string
   tags: string[]
   url: string
 }
-interface SiteSummary {
-  firstPageAbstracts: string[]
-  posts: PostSummary[]
-}
 
-const summary = computed(() => {
-  return data.value?.posts || []
-})
-const firstPageAbstracts = computed(() => {
-  return data.value?.firstPageAbstracts || []
-})
+const summary: PostSummary[] = data.posts
+const firstPageAbstracts = data.firstPageAbstracts
 
 function counter<T>(arr: Array<T>) {
   return arr.reduce(
@@ -24,11 +17,9 @@ function counter<T>(arr: Array<T>) {
   )
 }
 
-const tagCount = computed(() => {
-  const tags = summary.value.map(post => post.tags).flat()
-  return [...counter(tags).entries()]
-    .sort((tag_a, tag_b) => tag_b[1] - tag_a[1])
-    .map(([s, n]) => ({ content: s, times: n }))
-})
+const tags = summary.map(post => post.tags).flat()
+const tagCount = [...counter(tags).entries()]
+  .sort((tag_a, tag_b) => tag_b[1] - tag_a[1])
+  .map(([s, n]) => ({ content: s, times: n }))
 
 export default () => ({ summary, firstPageAbstracts, tagCount })

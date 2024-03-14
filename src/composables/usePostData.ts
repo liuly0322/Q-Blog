@@ -25,7 +25,7 @@ async function getCachedPostData(post: string, onCancel?: AsyncComputedOnCancel)
 
 const { summary } = useSummary()
 function getCurrentPostSummary(post: string) {
-  return summary.value.find(post_ => post.includes(post_.url)) ?? {
+  return summary.find(post_ => post.includes(post_.url)) ?? {
     url: '',
     title: '',
     tags: [],

@@ -1,16 +1,13 @@
 <script setup lang="ts">
 const { tagCount } = useSummary()
 
-const largeTagBreakpoint = computed(
-  () => tagCount.value[Math.floor(tagCount.value.length / 3)].times,
-)
-const smallTagBreakpoint = computed(
-  () => tagCount.value[Math.floor((tagCount.value.length * 2) / 3)].times,
-)
+const largeTagBreakpoint = tagCount[Math.floor(tagCount.length / 3)].times
+const smallTagBreakpoint = tagCount[Math.floor((tagCount.length * 2) / 3)].times
+
 function computeSize(times: number) {
-  if (times > largeTagBreakpoint.value)
+  if (times > largeTagBreakpoint)
     return 'large'
-  if (times < smallTagBreakpoint.value)
+  if (times < smallTagBreakpoint)
     return 'small'
   return 'medium'
 }

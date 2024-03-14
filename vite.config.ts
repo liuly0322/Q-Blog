@@ -69,7 +69,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,ico,svg}', 'friends.json'],
+        globPatterns: ['**/*.{js,css,ico,svg}'],
         // https://github.com/vite-pwa/vite-plugin-pwa/issues/120
         navigateFallback: null,
       },

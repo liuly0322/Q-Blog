@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /.vscode
-/assets
+/src/jsons/summary.json
 /.vscode
 /public/images
 /public/details

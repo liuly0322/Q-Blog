@@ -2,7 +2,7 @@
 const props = defineProps<{ tag: string }>()
 const { summary } = useSummary()
 const curSummary = computed(() =>
-  summary.value.filter(post => post.tags.includes(props.tag)),
+  summary.filter(post => post.tags.includes(props.tag)),
 )
 </script>
 

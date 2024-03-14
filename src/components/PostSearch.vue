@@ -4,7 +4,7 @@ const { summary } = useSummary()
 const searchPattern: Ref<string | undefined> = ref('')
 const searchOptions = computed(() => {
   const pattern = searchPattern.value?.toLowerCase().slice(0, 20)
-  return (pattern && summary.value
+  return (pattern && summary
     .filter(post => post.title.toLowerCase().includes(pattern))
     .map(post => ({
       label: post.title,

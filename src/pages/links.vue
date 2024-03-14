@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const friends = useFetch('/friends.json').json().data
+import friends from '~/jsons/friends.json'
 </script>
 
 <template>

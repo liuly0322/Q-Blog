@@ -171,7 +171,7 @@ async function generateSiteSummary(posts: Post[], firstPageAbstracts: string[]) 
     }),
     firstPageAbstracts,
   }
-  await fs.writeFile(path.join('public', 'summary.json'), JSON.stringify(summary))
+  await fs.writeFile(path.join('src/jsons', 'summary.json'), JSON.stringify(summary))
 }
 
 async function generatePostAbstracts(abstracts: string[]) {
