@@ -27,7 +27,7 @@
     "@iconify-json/line-md": "^1.1.36",
     "@types/markdown-it": "^13.0.7",
     "@types/markdown-it-link-attributes": "^3.0.4",
-    "@types/node": "^20.11.26",
+    "@types/node": "^20.11.27",
     "@types/nprogress": "^0.2.3",
     "@types/rss": "^0.0.32",
     "@typescript-eslint/parser": "^7.2.0",
