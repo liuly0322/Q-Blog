@@ -43,8 +43,11 @@ watch(isDark, (value, oldValue) => {
 <template>
   <div class="relative">
     <div ref="vueUtterances" class="min-h-268px relative z-2" />
-    <div class="absolute inset-0 flex items-center justify-center">
+    <div class="absolute inset-0 flex flex-col items-center justify-center">
       <LineMdLoadingLoop style="color: #18a058;" />
+      <p class="mt-4">
+        评论加载中...
+      </p>
     </div>
   </div>
 </template>
