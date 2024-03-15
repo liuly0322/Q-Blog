@@ -15,20 +15,13 @@ const props = withDefaults(defineProps<{
 const playerRef = ref()
 const instance = APlayer().use(addMusicPlugin).use(clearMusicPlugin)
 
-interface Meting {
-  artist?: string
-  name: string
-  url: string
-  pic?: string
-  lrc?: string
-}
-
 async function appendAplayerData() {
   const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
-  const { data }: { data: Ref<Meting[] | null> } = await useFetch(url).get().json()
-  const audioList = data.value?.map(value => ({ ...value, cover: value.pic })) ?? []
+  const audios = await fetch(url)
+    .then(response => response.json())
+    .catch(() => [])
   instance.list.clear()
-  instance.list.add(audioList)
+  instance.list.add(audios)
 }
 
 function APlayerInit() {
