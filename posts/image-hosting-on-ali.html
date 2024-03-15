@@ -1,0 +1,36 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>阿里云服务器搭建个人图床 | llyのblog</title><meta name="description" content=" 本篇博客将简单介绍从阿里云白嫖服务器以及搭建简单图床的过程。 本文基本过时，不适宜作为参考 阿里云学生优惠 这玩意以前是叫阿里云学生机 云翼计划的，不过现在被改名成了开发者成长计划（听上去套路满满 网页链接：[开发者成长计划 (aliyun.com)](https://developer.aliyun.com/pla"><meta property="og:type" content="article"><meta property="og:title" content="阿里云服务器搭建个人图床"><meta property="og:locale" content="zh_CN"><meta property="article:author" content="liuly"> <meta property="article:tag" content="笔记">  </head><body><main style="display:none"> <p>本篇博客将简单介绍从阿里云白嫖服务器以及搭建简单图床的过程。</p>
+<blockquote>
+<p>本文基本过时，不适宜作为参考</p>
+</blockquote>
+<h2 id="%E9%98%BF%E9%87%8C%E4%BA%91%E5%AD%A6%E7%94%9F%E4%BC%98%E6%83%A0" tabindex="-1">阿里云学生优惠</h2>
+<p>这玩意以前是叫阿里云学生机 - 云翼计划的，不过现在被改名成了开发者成长计划~~（听上去套路满满~~</p>
+<p>网页链接：<a href="https://developer.aliyun.com/plan/grow-up" target="_blank" rel="noopener">开发者成长计划 (aliyun.com)</a></p>
+<p>活动有两个部分：</p>
+<p><img src="/images/zjrqz4.png" alt="爆款直降" width="1231" height="477"></p>
+<p>此部分是给一些优惠价格，最便宜的服务器一年大概 100（其实个人普通使用最便宜的那种似乎就够了</p>
+<p><img src="/images/zksspk.png" alt="学生专享" width="1233" height="413"></p>
+<p>第二部分的话看左边那个，完成一些小操作练习（都是些 Linux 和服务器的基本操作）后即可白嫖两个月</p>
+<!-- more -->
+<p>快到期时可以参加一个考试，10 道选择至少对 9 道，就可以再白嫖四个月（据说去年疫情期间 6 + 6，现在这 2 + 4 属实拉</p>
+<p>如果没有考过以及后续续费的话都是按照学生优惠，似乎一年 100+ ，还算合理</p>
+<h2 id="%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86" tabindex="-1">服务器管理</h2>
+<p>搞到了这样一台服务器之后看着光秃秃的命令行界面肯定会 <s>被水淹没不知所措</s></p>
+<p>这个时候可以安装宝塔：</p>
+<pre class="shiki shiki-themes vitesse-light vitesse-dark" style="background-color:#ffffff;--shiki-dark-bg:#121212;color:#393a34;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#59873A;--shiki-dark:#80A665">yum</span><span style="color:#B56959;--shiki-dark:#C98A7D"> install</span><span style="color:#A65E2B;--shiki-dark:#C99076"> -y</span><span style="color:#B56959;--shiki-dark:#C98A7D"> wget</span><span style="color:#999999;--shiki-dark:#666666"> &#x26;&#x26;</span><span style="color:#59873A;--shiki-dark:#80A665"> wget</span><span style="color:#A65E2B;--shiki-dark:#C99076"> -O</span><span style="color:#B56959;--shiki-dark:#C98A7D"> install.sh</span><span style="color:#B56959;--shiki-dark:#C98A7D"> http://download.bt.cn/install/install_6.0.sh</span><span style="color:#999999;--shiki-dark:#666666"> &#x26;&#x26;</span><span style="color:#59873A;--shiki-dark:#80A665"> bash</span><span style="color:#B56959;--shiki-dark:#C98A7D"> install.sh</span></span></code></pre>
+<p>提示确认安装时输入 y，并回车。然后就等待安装完成，有点漫长</p>
+<p>装完后宝塔的默认端口是 8888，进入阿里云管理界面把这个端口开放</p>
+<p>然后进入：<code>http://{服务器IP}:8888/{8位宝塔提供的安全入口字符}</code>，输入宝塔命令行提示的账户密码，即可进入宝塔管理界面</p>
+<p><img src="/images/10pxkjg.png" alt="宝塔管理界面" width="1899" height="964"></p>
+<p>后续配置部分参考：<a href="https://blog.csdn.net/weixin_44535476/article/details/98218087" target="_blank" rel="noopener">宝塔面板 安装与使用教程<em>Yan 小铁匠-CSDN 博客</em>宝塔面板</a></p>
+<p>安装软件的时候建议还是安装最新版，宝塔一键安装提供的版本并不是最新的。</p>
+<h2 id="%E7%AE%80%E5%8D%95%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA" tabindex="-1">简单图床搭建</h2>
+<p><a href="https://github.com/icret/easyImages2.0" target="_blank" rel="noopener">icret/EasyImages2.0: 新版简单强大的无数据库的图床 2.0 版 演示地址： (github.com)</a></p>
+<p>如上所示，简单图床是一个开源的图床~~（GitHub 上有轮子那当然直接用~~</p>
+<p>按照使用说明，更改<code>config/config.php</code>下的<code>domain,imgurl,password</code></p>
+<p>然后在宝塔系统里网站目录下点击添加站点，设置域名的时候就写上自己的 ip 就好了（如果你有域名可以用自己的域名，要注意国内域名需要备案</p>
+<p>然后把本地的整个目录复制过去就行了。访问网页默认是 80 端口，需要在阿里云和宝塔的配置中开放这一端口。</p>
+<p>如果选择别的端口，则在访问时最后需要加上端口号。</p>
+<p><img src="/images/10ulqzq.png" alt="简单图床 - EasyImage" width="1197" height="678"></p>
+<p>然后就可以愉悦的上传图片了 w</p>
+<p><s>本文所有图片均存在这一图床</s> 现在搬迁到 Cloudflare 白嫖了</p>
+ </main><script type="text/javascript">var main=document.querySelector("main"),content=main.innerHTML;sessionStorage.setItem("image-hosting-on-ali",content),sessionStorage.setItem("image-hosting-on-ali__time",Date.now().toString());var pathSegmentsToKeep=0,l=window.location;l.replace(l.protocol+"//"+l.hostname+(l.port?":"+l.port:"")+l.pathname.split("/").slice(0,1+pathSegmentsToKeep).join("/")+"/?/"+l.pathname.slice(1).split("/").slice(pathSegmentsToKeep).join("/").replace(/&/g,"~and~")+(l.search?"&"+l.search.slice(1).replace(/&/g,"~and~"):"")+l.hash)</script></body></html>

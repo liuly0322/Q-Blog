@@ -1,0 +1,106 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>数电计组实验 Vscode 配置指南 | llyのblog</title><meta name="description" content=" 本篇博客将带来优雅的 Vscode 编写数字电路实验 / 计算机组成原理实验的 Verilog 一键式配置方案，让你编写代码全程远离 Vivado（新建工程还是要见一面的） 主要还是介绍一些名词和工具，读者看上去了哪些可以自己挑 [image20220319212215367](./digitallab/image2"><meta property="og:type" content="article"><meta property="og:title" content="数电计组实验 Vscode 配置指南"><meta property="og:locale" content="zh_CN"><meta property="article:author" content="liuly"> <meta property="article:tag" content="笔记">  </head><body><main style="display:none"> <p>本篇博客将带来优雅的 Vscode 编写数字电路实验 / 计算机组成原理实验的 Verilog 一键式配置方案，让你编写代码全程远离 Vivado（<s>新建工程还是要见一面的</s>）</p>
+<p>主要还是介绍一些名词和工具，读者看上去了哪些可以自己挑</p>
+<p><img src="/images/image-20220319212215367.png" alt="image-20220319212215367" width="625" height="533"></p>
+<!-- more -->
+<h2 id="vscode-%E6%8F%92%E4%BB%B6" tabindex="-1">Vscode 插件</h2>
+<p>首先可能需要连接远程的 Vlab 服务器，这个时候需要使用 Vscode-remote 插件</p>
+<p><img src="/images/image-20220319212513260.png" alt="image-20220319212513260" width="1362" height="479"></p>
+<p>这个插件主要作用就是能在本地通过 SSH 连接操作 Vlab 虚拟机</p>
+<p>具体配置过程不再赘述，配置完之后可以很方便的浏览远程文件</p>
+<p><img src="/images/image-20220319212941961.png" alt="image-20220319212941961" width="738" height="642"></p>
+<p>这个时候已经能愉快的在 Vscode 上写 Verilog 了，但是仅仅能写肯定不够，我们还需要一个 linter(检查语法) 还有一个 formatter(代码格式化)</p>
+<p>这里推荐一个插件：Digital IDE</p>
+<p><img src="/images/image-20220319212315831.png" alt="image-20220319212315831" width="1321" height="662"></p>
+<p>插件来自 <a href="https://github.com/ysy-phoenix" target="_blank" rel="noopener">ysy-phoenix</a> 的推荐，在此感谢</p>
+<p>配置完之后应该已经默认有代码格式化和端口的各种提示信息了，上图的代码就是这个插件格式后的成果</p>
+<p>但 linter 还需要额外配置，这里我们打开插件的设置：</p>
+<p><img src="/images/image-20220319213207916.png" alt="image-20220319213207916" width="1058" height="192"></p>
+<p>个人感觉 Verilator 更好用，当然 Vlab 虚拟机上默认是没有自带的，不过 Ubuntu 通过包管理器安装还是很方便的：</p>
+<pre class="shiki shiki-themes vitesse-light vitesse-dark" style="background-color:#ffffff;--shiki-dark-bg:#121212;color:#393a34;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#59873A;--shiki-dark:#80A665">apt</span><span style="color:#B56959;--shiki-dark:#C98A7D"> update</span><span style="color:#B56959;--shiki-dark:#C98A7D">				//</span><span style="color:#B56959;--shiki-dark:#C98A7D"> 这一步为了确保软件包是最新的</span></span>
+<span class="line"><span style="color:#59873A;--shiki-dark:#80A665">apt</span><span style="color:#B56959;--shiki-dark:#C98A7D"> install</span><span style="color:#B56959;--shiki-dark:#C98A7D"> verilator</span><span style="color:#B56959;--shiki-dark:#C98A7D">	//</span><span style="color:#B56959;--shiki-dark:#C98A7D"> 安装</span></span></code></pre>
+<p>两下就好了，之后写代码时一保存文件就可以自动帮你检查语法错误了：</p>
+<p><img src="/images/image-20220319213412728.png" alt="image-20220319213412728" width="787" height="303"></p>
+<p>（这里报错会显示在一行上是因为装了另一个插件 Error Lens，很美观，亲测好用）</p>
+<h2 id="%E5%B9%B2%E6%8E%89-vivado-%E4%B9%8B%E4%BB%BF%E7%9C%9F%E7%AF%87" tabindex="-1">干掉 Vivado 之仿真篇</h2>
+<p>仿真需要看波形，这个时候一个推荐是 <code>gtkwave</code>，Ubuntu 下同样通过包管理器安装即可</p>
+<p>因为这个不能在没有图形界面的 Vlab 上运行，所以下文给出的仿真推荐都是配在本地环境的：</p>
+<h3 id="icarus-verilog" tabindex="-1">Icarus Verilog</h3>
+<p>大名鼎鼎的一个仿真工具，简称 iverilog, 如果你用 Ubuntu 的包管理器装它还会自动帮你装上 gtkwave（<s>捆绑消费</s>）</p>
+<p>Digital IDE 自带了对于 Icarus Verilog 的快速仿真支持，见 <a href="https://zhuanlan.zhihu.com/p/365805011" target="_blank" rel="noopener">它的文档</a></p>
+<h3 id="verilator" tabindex="-1">Verilator</h3>
+<p>这里还是要安利 Verilator，因为用它做仿真可以 <strong>不写 Verilog</strong> ，Verilator 会生成高层次的 C++ 代码模拟模块的行为，然后你只需要用 C++ 编写 top 模块进行测试就行了</p>
+<p>很大的好处在于 C++ 作为高级语言很明显比 Verilog 的 testbench 写起来灵活</p>
+<p>Ubuntu 包管理器装的版本比较旧，如果想要最新版可以自己下载它的 GitHub 仓库按照说明编译，不过这样就麻烦一点了</p>
+<p>具体使用方式可以参考 <a href="http://www.sunnychen.top/2019/07/25/%E8%B7%A8%E8%AF%AD%E8%A8%80%E7%9A%84Verilator%E4%BB%BF%E7%9C%9F%EF%BC%9A%E4%BD%BF%E7%94%A8%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" target="_blank" rel="noopener">这篇文章</a> ，<s>对着复制粘贴就行</s></p>
+<p>如果你发现 Vscode 找不到头文件 <code>verilated.h</code> ，那就找到这个设置（直接在 Vscode 的设置里搜索即可），路径添加以下两个中的一个（根据你自己的情况而定，自己看哪个目录能进，如果是包管理器装的应该是下面那个路径）</p>
+<p><img src="/images/image-20220319214751930.png" alt="image-20220319214751930" width="941" height="210"></p>
+<p>然后就可以愉悦的编写 C++ 代码仿真了，以下是一个对 ALU 模块 100% 覆盖率的测试示例：</p>
+<p><img src="/images/image-20220319215151766.png" alt="image-20220319215151766" width="702" height="642"></p>
+<p>根据上面那篇链接里教程的步骤，即可判断仿真结果是否正确，并生成波形</p>
+<h2 id="%E5%B9%B2%E6%8E%89-vivado-%E4%B9%8B%E6%AF%94%E7%89%B9%E6%B5%81" tabindex="-1">干掉 Vivado 之比特流</h2>
+<p>写完代码我们还需要 Vivado 这个<s>工具人</s>帮我们生成比特流</p>
+<p>但每次打开 VNC 操作 Vivado 显然太过笨重，这个时候我们可以利用 Vivado 自带的 TCL 命令行工具来构建项目</p>
+<p>这里直接贴一个 Vlab 能用的脚本（如果在本地跑可能需要一些修改）<a href="https://github.com/WuTianming" target="_blank" rel="noopener">作者链接</a></p>
+<pre class="shiki shiki-themes vitesse-light vitesse-dark" style="background-color:#ffffff;--shiki-dark-bg:#121212;color:#393a34;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-bash"><span class="line"><span style="color:#A0ADA0;--shiki-dark:#758575DD">#!/bin/bash</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#998418;--shiki-dark:#B8A965">echo</span><span style="color:#B5695999;--shiki-dark:#C98A7D99"> "</span><span style="color:#B56959;--shiki-dark:#C98A7D">Initiating project build ...</span><span style="color:#B5695999;--shiki-dark:#C98A7D99">"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B07D48;--shiki-dark:#BD976A">ProjName</span><span style="color:#999999;--shiki-dark:#666666">=</span><span style="color:#999999;--shiki-dark:#666666">$(</span><span style="color:#59873A;--shiki-dark:#80A665">find</span><span style="color:#B56959;--shiki-dark:#C98A7D"> . </span><span style="color:#A65E2B;--shiki-dark:#C99076">-type</span><span style="color:#B56959;--shiki-dark:#C98A7D"> f </span><span style="color:#A65E2B;--shiki-dark:#C99076">-iname</span><span style="color:#B5695999;--shiki-dark:#C98A7D99"> "</span><span style="color:#B56959;--shiki-dark:#C98A7D">*.xpr</span><span style="color:#B5695999;--shiki-dark:#C98A7D99">"</span><span style="color:#999999;--shiki-dark:#666666">)</span></span>
+<span class="line"><span style="color:#1E754F;--shiki-dark:#4D9375">if</span><span style="color:#999999;--shiki-dark:#666666"> [</span><span style="color:#AB5959;--shiki-dark:#CB7676"> -z</span><span style="color:#B5695999;--shiki-dark:#C98A7D99"> "</span><span style="color:#B56959;--shiki-dark:#C98A7D">$ProjName</span><span style="color:#B5695999;--shiki-dark:#C98A7D99">"</span><span style="color:#999999;--shiki-dark:#666666"> ];</span><span style="color:#1E754F;--shiki-dark:#4D9375"> then</span></span>
+<span class="line"><span style="color:#998418;--shiki-dark:#B8A965">    echo</span><span style="color:#B5695999;--shiki-dark:#C98A7D99"> "</span><span style="color:#B56959;--shiki-dark:#C98A7D">xpr file not found. Exiting</span><span style="color:#B5695999;--shiki-dark:#C98A7D99">"</span></span>
+<span class="line"><span style="color:#998418;--shiki-dark:#B8A965">    exit</span><span style="color:#2F798A;--shiki-dark:#4C9A91"> 1</span></span>
+<span class="line"><span style="color:#1E754F;--shiki-dark:#4D9375">fi</span></span>
+<span class="line"><span style="color:#998418;--shiki-dark:#B8A965">echo</span><span style="color:#B5695999;--shiki-dark:#C98A7D99"> "</span><span style="color:#B56959;--shiki-dark:#C98A7D">Found project file </span><span style="color:#999999;--shiki-dark:#666666">${</span><span style="color:#B56959;--shiki-dark:#C98A7D">ProjName</span><span style="color:#999999;--shiki-dark:#666666">}</span><span style="color:#B56959;--shiki-dark:#C98A7D">.</span><span style="color:#B5695999;--shiki-dark:#C98A7D99">"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#998418;--shiki-dark:#B8A965">echo</span><span style="color:#B5695999;--shiki-dark:#C98A7D99"> "</span><span style="color:#B56959;--shiki-dark:#C98A7D">Creating build script ...</span><span style="color:#B5695999;--shiki-dark:#C98A7D99">"</span></span>
+<span class="line"><span style="color:#59873A;--shiki-dark:#80A665">cat</span><span style="color:#B56959;--shiki-dark:#C98A7D"> -</span><span style="color:#AB5959;--shiki-dark:#CB7676"> ></span><span style="color:#B56959;--shiki-dark:#C98A7D"> automation_genbitstream.tcl</span><span style="color:#AB5959;--shiki-dark:#CB7676"> &#x3C;&#x3C;</span><span style="color:#B5695999;--shiki-dark:#C98A7D99"> EOF</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">set_param general.maxThreads 2</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">open_project </span><span style="color:#999999;--shiki-dark:#666666">${</span><span style="color:#B56959;--shiki-dark:#C98A7D">ProjName</span><span style="color:#999999;--shiki-dark:#666666">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">reset_run synth_1</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">launch_run synth_1</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">wait_on_run synth_1</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">open_run synth_1</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D"># report_timing_summary</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">launch_run -to_step write_bitstream impl_1</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">wait_on_run impl_1</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D"># open_run impl_1</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D"># report_timing_summary</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D"># report_utilization > utilization.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">quit</span></span>
+<span class="line"><span style="color:#B5695999;--shiki-dark:#C98A7D99">EOF</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#59873A;--shiki-dark:#80A665">cat</span><span style="color:#B56959;--shiki-dark:#C98A7D"> -</span><span style="color:#AB5959;--shiki-dark:#CB7676"> ></span><span style="color:#B56959;--shiki-dark:#C98A7D"> wrapper.tcl</span><span style="color:#AB5959;--shiki-dark:#CB7676"> &#x3C;&#x3C;</span><span style="color:#B5695999;--shiki-dark:#C98A7D99"> EOF</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">if {[catch {source automation_genbitstream.tcl} errorstring]} {</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">    puts "Error - $errorstring"</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">    exit 1</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">}</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">quit</span></span>
+<span class="line"><span style="color:#B5695999;--shiki-dark:#C98A7D99">EOF</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#59873A;--shiki-dark:#80A665">cat</span><span style="color:#B56959;--shiki-dark:#C98A7D"> -</span><span style="color:#AB5959;--shiki-dark:#CB7676"> ></span><span style="color:#B56959;--shiki-dark:#C98A7D"> build_remote.sh</span><span style="color:#AB5959;--shiki-dark:#CB7676"> &#x3C;&#x3C;</span><span style="color:#B5695999;--shiki-dark:#C98A7D99"> EOF</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">#!/bin/bash</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D"># source /extra/vivado2016/Vivado/2016.3/settings64.sh</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">source /opt/vlab/path.sh</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">if ! time vivado2019 -mode tcl -source wrapper.tcl; then</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">	grep --color=always "ERROR" vivado.log</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">fi</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">rm -f *.log *.jou</span></span>
+<span class="line"><span style="color:#B56959;--shiki-dark:#C98A7D">printf "\a"</span></span>
+<span class="line"><span style="color:#B5695999;--shiki-dark:#C98A7D99">EOF</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#998418;--shiki-dark:#B8A965">echo</span><span style="color:#B5695999;--shiki-dark:#C98A7D99"> "</span><span style="color:#B56959;--shiki-dark:#C98A7D">Running job ...</span><span style="color:#B5695999;--shiki-dark:#C98A7D99">"</span></span>
+<span class="line"><span style="color:#59873A;--shiki-dark:#80A665">bash</span><span style="color:#B56959;--shiki-dark:#C98A7D"> build_remote.sh</span></span>
+<span class="line"><span style="color:#998418;--shiki-dark:#B8A965">echo</span><span style="color:#B5695999;--shiki-dark:#C98A7D99"> "</span><span style="color:#B56959;--shiki-dark:#C98A7D">Build done.</span><span style="color:#B5695999;--shiki-dark:#C98A7D99">"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#59873A;--shiki-dark:#80A665">rm</span><span style="color:#B56959;--shiki-dark:#C98A7D"> automation_genbitstream.tcl</span><span style="color:#B56959;--shiki-dark:#C98A7D"> wrapper.tcl</span><span style="color:#B56959;--shiki-dark:#C98A7D"> build_remote.sh</span></span></code></pre>
+<p>放在和 xpr 文件同一个目录（也就是项目目录下即可）</p>
+<p>怎么运行脚本这里不再赘述</p>
+<p><img src="/images/image-20220319220158821.png" alt="image-20220319220158821" width="529" height="437"></p>
+<p>可以很漂亮的在命令行里得到结果并看到各种 report</p>
+<p>具体设置可以自己看脚本被注释掉的一些部分</p>
+<p>至此我们成功构建了一套还算趁手的 Verilog 开发工具链</p>
+ </main><script type="text/javascript">var main=document.querySelector("main"),content=main.innerHTML;sessionStorage.setItem("digital-lab",content),sessionStorage.setItem("digital-lab__time",Date.now().toString());var pathSegmentsToKeep=0,l=window.location;l.replace(l.protocol+"//"+l.hostname+(l.port?":"+l.port:"")+l.pathname.split("/").slice(0,1+pathSegmentsToKeep).join("/")+"/?/"+l.pathname.slice(1).split("/").slice(pathSegmentsToKeep).join("/").replace(/&/g,"~and~")+(l.search?"&"+l.search.slice(1).replace(/&/g,"~and~"):"")+l.hash)</script></body></html>

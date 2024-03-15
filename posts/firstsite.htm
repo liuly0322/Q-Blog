@@ -1,0 +1,43 @@
+<p>这是本蒟蒻建的第一个站，发的第一篇 blog，没啥特别好说的，就记录下建站过程吧～</p>
+<p><s>话说 Ubuntu 中文输入法居然直接联想出了蒟蒻，有点生草</s></p>
+<hr>
+<h2 id="%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C" tabindex="-1">准备工作</h2>
+<p>服务器和域名直接白嫖 <a href="https://home.ustc.edu.cn" target="_blank" rel="noopener">妮可提供的</a>，因此接下来只需要选一个网页框架就行了。这里选用 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a>，又轻量又简单，官方文档有中文版本，看起来很舒服。</p>
+<hr>
+<h2 id="%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85-hexo" tabindex="-1">下载安装 Hexo</h2>
+<p>本人目前使用 Ubuntu，故下文的操作方法均为 Ubuntu 下。实际上这里跟着官方文档走就行了，没啥大问题。在安装 Hexo 之前，需要先安装 node.js 和 git。</p>
+<!-- more -->
+<p>git:
+<code>$ sudo apt-get install git-core</code></p>
+<p>node.js:
+<code>$ curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - sudo apt-get install -y nodejs</code></p>
+<p>之后即可安装 hexo:
+<code>$ npm install -g hexo-cli</code></p>
+<hr>
+<h2 id="%E6%9C%AC%E5%9C%B0%E5%BB%BA%E7%AB%99%E5%8F%8A%E7%BC%96%E8%BE%91" tabindex="-1">本地建站及编辑</h2>
+<p>确认自己需要建站的目录 (folder)，之后执行</p>
+<pre class="shiki shiki-themes vitesse-light vitesse-dark" style="background-color:#ffffff;--shiki-dark-bg:#121212;color:#393a34;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-shell"><span class="line"><span style="color:#59873A;--shiki-dark:#80A665">$</span><span style="color:#B56959;--shiki-dark:#C98A7D"> hexo</span><span style="color:#B56959;--shiki-dark:#C98A7D"> init</span><span style="color:#AB5959;--shiki-dark:#CB7676"> &#x3C;</span><span style="color:#B56959;--shiki-dark:#C98A7D">folde</span><span style="color:#393A34;--shiki-dark:#DBD7CAEE">r</span><span style="color:#AB5959;--shiki-dark:#CB7676">></span></span>
+<span class="line"><span style="color:#59873A;--shiki-dark:#80A665">$</span><span style="color:#B56959;--shiki-dark:#C98A7D"> cd</span><span style="color:#AB5959;--shiki-dark:#CB7676"> &#x3C;</span><span style="color:#B56959;--shiki-dark:#C98A7D">folde</span><span style="color:#393A34;--shiki-dark:#DBD7CAEE">r</span><span style="color:#AB5959;--shiki-dark:#CB7676">></span></span>
+<span class="line"><span style="color:#59873A;--shiki-dark:#80A665">$</span><span style="color:#B56959;--shiki-dark:#C98A7D"> npm</span><span style="color:#B56959;--shiki-dark:#C98A7D"> install</span></span></code></pre>
+<p>此时一个网页就已经在本地建好了。</p>
+<p>使用 <code>$ hexo server</code> 或 <code>$ hexo s</code> 后即可通过 localhost:4000 进行本地的网页预览。</p>
+<p>对于网页编辑，可以参考官方文档进行主题下载，下载之后可以参考主题之内的说明进行修改。</p>
+<p>本站目前使用官方自带 landscape 主题，进行了如下修改：</p>
+<ol>
+<li>文字部分实现汉化</li>
+<li>更换 banner 至<s>二次元萌妹</s></li>
+<li>标题由居中改为居左，去除阴影，同时添加左边间隔，优化视觉体验</li>
+<li>删除 RSS 订阅</li>
+<li>根据主题文档说明，增加了 Valine 提供的留言功能，欢迎来<s>对线</s>探讨交流</li>
+</ol>
+<p>在本地预览完成后，通过 <code>$ hexo generate</code> 或 <code>$ hexo g</code> 即可将网页生成为静态形式（hexo 是一个纯前段的框架）</p>
+<hr>
+<h2 id="%E9%83%A8%E7%BD%B2%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8" tabindex="-1">部署到服务器</h2>
+<p>依据 <a href="https://ustcnet.ustc.edu.cn/2015/0324/c11130a120792/page.htm" target="_blank" rel="noopener">USTC 网络服务中心的这则说明</a>，个人主页仅能通过 ftp 连接，因此可以通过手动复制生成后的静态网页至 <code>/public_html</code> 下。值得注意的是，由于科大主页的路径限制，前面在生成静态网页时的部分配置（_config.yml）也需要修改如下：</p>
+<pre class="shiki shiki-themes vitesse-light vitesse-dark" style="background-color:#ffffff;--shiki-dark-bg:#121212;color:#393a34;--shiki-dark:#dbd7caee" tabindex="0"><code class="language-"><span class="line"><span>url: http://home.ustc.edu.cn/~username</span></span>
+<span class="line"><span>root: /~username/</span></span></code></pre>
+<p>其中 username 是网络信息服务中心的用户名。</p>
+<p>此外，Hexo 也提供了自动部署指令：<code>$ hexo deploy</code> 或 <code>$ hexo d</code>，需要提前在_config.yml 下配置，参考 <a href="https://hexo.io/zh-cn/docs/one-command-deployment" target="_blank" rel="noopener">Hexo 部署</a>。</p>
+<p>不过本人按照说明配置完后，部署完会出现 ECONNRESET，不知道是啥 bug，初步怀疑与中文目录有关（？</p>
+<p>解决方式：（供参考）利用 vscode 的 ftp-sync 扩展实现自动同步。</p>
+<p>部署完成后即可打开 <a href="https://home.ustc.edu.cn/~username" target="_blank" rel="noopener">https://home.ustc.edu.cn/~username</a>，进入自己的主页～</p>
