@@ -19,17 +19,15 @@ category: web
 dist/registerSW.js                  0.13 kB
 dist/manifest.webmanifest           0.33 kB
 dist/index.html                     2.19 kB │ gzip:   1.06 kB
+dist/assets/index-DnflnPy4.css      9.32 kB │ gzip:   3.03 kB
 dist/assets/APlayer-DhvPXxPe.css   10.25 kB │ gzip:   2.16 kB
-dist/assets/index-YzzauC0t.css     14.55 kB │ gzip:   4.18 kB
-dist/assets/_tag_-IXma0vnu.js       2.42 kB │ gzip:   1.08 kB
-dist/assets/links-BbukVwc8.js       3.27 kB │ gzip:   1.50 kB
-dist/assets/_post_-_t5YPXzq.js      6.01 kB │ gzip:   2.77 kB
-dist/assets/bangumi-nIzPBjqR.js    10.26 kB │ gzip:   4.50 kB
-dist/assets/Tag-C5CF8bLC.js        12.76 kB │ gzip:   3.90 kB
-dist/assets/APlayer-BQRx06IR.js    28.32 kB │ gzip:   8.84 kB
-dist/assets/date-BYISHQHj.js       28.75 kB │ gzip:  10.13 kB
-dist/assets/Index-DrtYdiXo.js      60.28 kB │ gzip:  17.94 kB
-dist/assets/index-6CQRvp70.js     320.82 kB │ gzip: 107.35 kB
+dist/assets/_tag_-D5YJ__D8.js       2.39 kB │ gzip:   1.09 kB
+dist/assets/links-DnK0_i2X.js       4.05 kB │ gzip:   1.85 kB
+dist/assets/_post_-GCRPtuxU.js      6.53 kB │ gzip:   3.05 kB
+dist/assets/Tag-Ii4ai_om.js        12.76 kB │ gzip:   3.90 kB
+dist/assets/APlayer-49cITrz4.js    28.25 kB │ gzip:   8.80 kB
+dist/assets/bangumi-BsRcH3p4.js    38.33 kB │ gzip:  13.60 kB
+dist/assets/index-DQE8FFi8.js     324.43 kB │ gzip: 113.56 kB
 ```
 
 简单来说过程就是先去除 Webpack 相关打包代码，把 APlayer 改写成原生 ESM 模块；之后再重写一些代码，增加 Tree-Shaking 的支持。改写为标准 ESM 模块形式就不用考虑导出的兼容性问题了（而是由上层打包工具统一管理转译），避免 Webpack 的一些兼容性代码（判断导出环境、class 的转译等等）。同时，ESM 模块也有利于代码混淆，后文会具体介绍模块机制对打包的影响。
