@@ -288,7 +288,7 @@ int main() {
 
 用 g++ O3 选项：
 
-```asm6502
+```asm
 main:
 .LFB1:
   .cfi_startproc

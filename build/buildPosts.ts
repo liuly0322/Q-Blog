@@ -4,7 +4,7 @@ import frontmatter from 'frontmatter'
 import RSS from 'rss'
 import template from 'art-template'
 import markdownIt from 'markdown-it'
-import mdPrismPlugin from 'markdown-it-prism'
+import Shiki from '@shikijs/markdown-it'
 import mdMathPlugin from 'markdown-it-texmath'
 import mdAnchorPlugin from 'markdown-it-anchor'
 import mdLinkAttrPlugin from 'markdown-it-link-attributes'
@@ -16,7 +16,12 @@ const SITE_URL = 'https://blog.liuly.moe'
 const descriptionRenderer = markdownIt()
   .use(mdImageSizePlugin(SITE_URL))
 const postRenderer = markdownIt({ html: true })
-  .use(mdPrismPlugin)
+  .use(await Shiki({
+    themes: {
+      light: 'vitesse-light',
+      dark: 'vitesse-dark',
+    },
+  }))
   .use(mdMathPlugin)
   .use(mdAnchorPlugin)
   .use(mdLinkAttrPlugin, {
