@@ -16,10 +16,10 @@
       {{@content}}
     </main>
     <script type="text/javascript">
-      // inject body html content to sessionStorage
       var main = document.querySelector('main');
       var content = main.innerHTML;
       sessionStorage.setItem('{{url}}', content);
+      sessionStorage.setItem('{{url}}__time', Date.now().toString());
       
       // Single Page Apps for GitHub Pages
       // MIT License
