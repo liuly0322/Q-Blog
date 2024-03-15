@@ -2,7 +2,7 @@
 import { getRandInt } from '~/utils/math'
 
 const props = defineProps<{ post: string }>()
-const { getCachedPostData, getCurrentPostSummary } = usePostData()
+const { getPostData, getCurrentPostSummary } = usePostData()
 const currPost = computed(() => getCurrentPostSummary(props.post))
 
 const title = computed(() => {
@@ -18,7 +18,7 @@ onBeforeUnmount(() => {
 const loading = ref(true)
 const data = asyncComputed(async (onCancel) => {
   loading.value = true
-  const data = await getCachedPostData(props.post, onCancel)
+  const data = await getPostData(props.post, onCancel)
   loading.value = false
   return data
 }, '')
