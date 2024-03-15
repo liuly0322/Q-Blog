@@ -72,20 +72,6 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,ico,svg}'],
         // https://github.com/vite-pwa/vite-plugin-pwa/issues/120
         navigateFallback: null,
-        runtimeCaching: [{
-          urlPattern: /\.htm$/,
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'blog-post-content',
-            expiration: {
-              maxEntries: 10,
-              maxAgeSeconds: 60 * 60, // <== 1 hour
-            },
-            cacheableResponse: {
-              statuses: [0, 200],
-            },
-          },
-        }],
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {

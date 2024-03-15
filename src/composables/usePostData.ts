@@ -4,12 +4,23 @@ function getPostName(post: string) {
   return (parts => parts.pop() || parts.pop() || '')(post.split('/')).split('.')[0]
 }
 
-async function getPostData(post: string, onCancel?: AsyncComputedOnCancel) {
-  const postName = getPostName(post)
+async function getPostData(postName: string, onCancel?: AsyncComputedOnCancel) {
   const abortController = new AbortController()
   onCancel && onCancel(() => abortController.abort())
   return fetch(`/posts/${postName}.htm`, { signal: abortController.signal })
     .then(res => res.text())
+}
+
+async function getCachedPostData(post: string, onCancel?: AsyncComputedOnCancel) {
+  const postName = getPostName(post)
+  const cached = sessionStorage.getItem(postName)
+  if (cached)
+    return cached
+
+  const data = await getPostData(postName, onCancel)
+
+  sessionStorage.setItem(postName, data)
+  return data
 }
 
 const { summary } = useSummary()
@@ -22,4 +33,4 @@ function getCurrentPostSummary(post: string) {
   }
 }
 
-export default () => ({ getPostData, getCurrentPostSummary })
+export default () => ({ getCachedPostData, getCurrentPostSummary })
