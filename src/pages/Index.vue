@@ -2,7 +2,7 @@
 import { getCurrentSeason, getCurrentYear } from '~/utils/date'
 import IconRedHeart from '~icons/fluent-emoji-flat/red-heart'
 
-const { page, pageMax, postsOnPage } = usePage()
+const { postsOnPage } = usePage()
 </script>
 
 <template>
@@ -27,7 +27,7 @@ const { page, pageMax, postsOnPage } = usePage()
     </div>
   </div>
   <div class="my-10 inline-block">
-    <n-pagination v-model:page="page" :page-count="pageMax" />
+    <Pagination />
   </div>
   <footer class="flex flex-col items-center justify-center pt-8 pb-12 leading-8 border-t-[0.8px] dark:border-white/9">
     <p>
