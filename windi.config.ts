@@ -2,6 +2,7 @@ import Typography from 'windicss/plugin/typography'
 import animationPlugin from '@windicss/plugin-animations'
 import { defineConfig } from 'windicss/helpers'
 import plugin from 'windicss/plugin'
+import lineClampPlugin from 'windicss/plugin/line-clamp'
 
 export default defineConfig({
   darkMode: 'class',
@@ -9,6 +10,7 @@ export default defineConfig({
   plugins: [
     Typography(),
     animationPlugin(),
+    lineClampPlugin,
     plugin(({ addComponents }) => {
       const components = {
         '.card': {

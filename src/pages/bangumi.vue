@@ -16,6 +16,15 @@ onMounted(() => {
 onUnmounted(() => {
   intersectionObserver.disconnect()
 })
+
+function lineClamp(event: MouseEvent) {
+  const el = event.target as HTMLElement
+  const lineClamp = Array.from(el.classList).find(cls => cls.startsWith('line-clamp-'))?.split('-')[2]
+  if (lineClamp) {
+    const webkitLineClamp = el.style.getPropertyValue('-webkit-line-clamp') || lineClamp
+    el.style.setProperty('-webkit-line-clamp', webkitLineClamp === lineClamp ? 'unset' : lineClamp)
+  }
+}
 </script>
 
 <template>
@@ -35,31 +44,25 @@ onUnmounted(() => {
         <img :src="anime.subject.images.medium" :alt="anime.subject.name" class="rounded-lg w-full" style="aspect-ratio: 5 / 7;">
       </a>
 
-      <div class="<sm:ml-4 flex flex-col justify-between flex-grow">
-        <div class="mt-2">
-          <a
-            :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer"
-            class="text-lg blue-link font-bold"
-          >
-            {{ anime.subject.name_cn || anime.subject.name }}
-          </a>
-          <n-ellipsis
-            class="text-sm text-gray-500 mt-4 whitespace-pre-line" expand-trigger="click" line-clamp="2"
-            :tooltip="false"
-          >
-            {{ anime.subject.short_summary }}
-          </n-ellipsis>
+      <div class="<sm:ml-4 flex flex-col justify-between flex-grow text-sm">
+        <a
+          :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer"
+          class="mt-2 text-lg blue-link font-bold"
+        >
+          {{ anime.subject.name_cn || anime.subject.name }}
+        </a>
+
+        <div class="cursor-pointer line-clamp-2 text-gray-500 mt-4 mb-2 whitespace-pre-line" @click="lineClamp">
+          {{ anime.subject.short_summary }}
         </div>
 
         <hr>
 
-        <p v-if="anime.comment" class="mt-4 text-sm">
-          <n-ellipsis expand-trigger="click" line-clamp="3" :tooltip="false">
-            {{ anime.comment }}
-          </n-ellipsis>
-        </p>
+        <div v-if="anime.comment" class="cursor-pointer line-clamp-3 mt-4" @click="lineClamp">
+          {{ anime.comment }}
+        </div>
 
-        <div class="text-sm mt-4 flex flex-wrap justify-center">
+        <div class="mt-4 flex flex-wrap justify-center">
           <n-rate :default-value="anime.rate / 2" readonly allow-half />
           <span class="text-gray-500 ml-2 text-xs mt-1 <sm:hidden">
             {{ anime.updated_at }}
