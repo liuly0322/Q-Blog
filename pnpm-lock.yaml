@@ -21,8 +21,8 @@ devDependencies:
     specifier: ^1.1.36
     version: 1.1.36
   '@shikijs/markdown-it':
-    specifier: ^1.1.7
-    version: 1.1.7
+    specifier: ^1.2.0
+    version: 1.2.0
   '@types/markdown-it':
     specifier: ^13.0.7
     version: 13.0.7
@@ -2097,22 +2097,22 @@ packages:
     dev: true
     optional: true
 
-  /@shikijs/core@1.1.7:
-    resolution: {integrity: sha512-gTYLUIuD1UbZp/11qozD3fWpUTuMqPSf3svDMMrL0UmlGU7D9dPw/V1FonwAorCUJBltaaESxq90jrSjQyGixg==}
+  /@shikijs/core@1.2.0:
+    resolution: {integrity: sha512-OlFvx+nyr5C8zpcMBnSGir0YPD6K11uYhouqhNmm1qLiis4GA7SsGtu07r9gKS9omks8RtQqHrJL4S+lqWK01A==}
     dev: true
 
-  /@shikijs/markdown-it@1.1.7:
-    resolution: {integrity: sha512-OGfr16nWTGtGx9iBpNtKJm6AWwZAUYlzeqpdgHpNWVoH4cFaPGiciZjHMiGLBO2fIHgQlBbC4RsV2F9nPQD5kQ==}
+  /@shikijs/markdown-it@1.2.0:
+    resolution: {integrity: sha512-XH+Qg4yJtEPe1S8tzRkeIKNu6G/6YlipISqzVuOxU5IpNEMAiEd40NHeU7XKpQsTVwJ2+rhMPaXKF4Ohz/Rrkg==}
     dependencies:
-      '@shikijs/transformers': 1.1.7
+      '@shikijs/transformers': 1.2.0
       markdown-it: 14.0.0
-      shiki: 1.1.7
+      shiki: 1.2.0
     dev: true
 
-  /@shikijs/transformers@1.1.7:
-    resolution: {integrity: sha512-lXz011ao4+rvweps/9h3CchBfzb1U5OtP5D51Tqc9lQYdLblWMIxQxH6Ybe1GeGINcEVM4goMyPrI0JvlIp4UQ==}
+  /@shikijs/transformers@1.2.0:
+    resolution: {integrity: sha512-xKn7DtA65DQV4FOfYsrvqM80xOy2xuXnxWWKsZmHv1VII/IOuDUDsWDu3KnpeLH6wqNJWp1GRoNUsHR1aw/VhQ==}
     dependencies:
-      shiki: 1.1.7
+      shiki: 1.2.0
     dev: true
 
   /@stylistic/eslint-plugin-js@1.7.0(eslint@8.57.0):
@@ -5895,10 +5895,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /shiki@1.1.7:
-    resolution: {integrity: sha512-9kUTMjZtcPH3i7vHunA6EraTPpPOITYTdA5uMrvsJRexktqP0s7P3s9HVK80b4pP42FRVe03D7fT3NmJv2yYhw==}
+  /shiki@1.2.0:
+    resolution: {integrity: sha512-xLhiTMOIUXCv5DqJ4I70GgQCtdlzsTqFLZWcMHHG3TAieBUbvEGthdrlPDlX4mL/Wszx9C6rEcxU6kMlg4YlxA==}
     dependencies:
-      '@shikijs/core': 1.1.7
+      '@shikijs/core': 1.2.0
     dev: true
 
   /side-channel@1.0.6:
