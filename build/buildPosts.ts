@@ -44,20 +44,9 @@ export default () => ({
   async buildStart() {
     await buildPosts()
   },
-  async handleHotUpdate({ file, server }: { file: string, server: ViteDevServer }) {
-    if (file.includes('posts') && !file.includes('public')) {
+  async handleHotUpdate({ file }: { file: string }) {
+    if (file.includes('posts') && !file.includes('public'))
       await buildPosts()
-      server.hot.send({
-        type: 'custom',
-        event: 'posts-build',
-      })
-    }
-  },
-  async closeBundle() {
-    if (await fileExists(publicImages))
-      await fs.rm(publicImages, { recursive: true })
-    if (await fileExists(publicPosts))
-      await fs.rm(publicPosts, { recursive: true })
   },
 })
 
@@ -146,7 +135,17 @@ async function generateRSS(posts: Post[]) {
   await fs.writeFile(path.join('public', 'feed.xml'), xml)
 }
 
+async function checkPostHasChanged(post: Post) {
+  const src = path.join('posts', `${post.url}.md`)
+  const dst = path.join(publicPosts, `${post.url}.htm`)
+  const srcStat = await fs.stat(src)
+  const dstStat = await fs.stat(dst).catch(() => null)
+  return dstStat === null || srcStat.mtime > dstStat.mtime
+}
+
 async function generateStaticPost(htmlTemplate: string, post: Post) {
+  if (!await checkPostHasChanged(post))
+    return
   const rendered = postRenderer.render(post.content)
   await fs.writeFile(path.join(publicPosts, `${post.url}.htm`), rendered)
   const html = template.render(htmlTemplate, {

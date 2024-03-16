@@ -16,13 +16,8 @@ const contentRef = ref()
 useCustomScroll().setContentRef(contentRef)
 
 // HMR
-const hotUpdateKey = ref(0)
-if (import.meta.hot) {
-  import.meta.hot.on('posts-build', () => {
-    sessionStorage.clear()
-    hotUpdateKey.value++
-  })
-}
+if (import.meta.hot)
+  sessionStorage.clear()
 </script>
 
 <template>
@@ -40,7 +35,7 @@ if (import.meta.hot) {
         :content-style="contentLayoutStyle"
       >
         <main class="mt-10 pb-10 text-center text-gray-700 dark:text-gray-200">
-          <router-view :key="hotUpdateKey" />
+          <router-view />
           <div
             v-if="isMobile"
             class="mdui-overlay"
