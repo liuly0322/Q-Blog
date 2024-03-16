@@ -84,8 +84,8 @@ devDependencies:
     specifier: ^1.1.1
     version: 1.1.1
   katex:
-    specifier: 0.15.2
-    version: 0.15.2
+    specifier: ^0.16.9
+    version: 0.16.9
   lightningcss:
     specifier: ^1.24.1
     version: 1.24.1
@@ -4802,8 +4802,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /katex@0.15.2:
-    resolution: {integrity: sha512-FfZ/f6f8bQdLmJ3McXDNTkKenQkoXkItpW0I9bsG2wgb+8JAY5bwpXFtI8ZVrg5hc1wo1X/UIhdkVMpok46tEQ==}
+  /katex@0.16.9:
+    resolution: {integrity: sha512-fsSYjWS0EEOwvy81j3vRA8TEAhQhKiqO+FQaKWp0m39qwOzHVBgAUBIXWj1pB+O2W3fIpNa6Y9KSKCVbfPhyAQ==}
     hasBin: true
     dependencies:
       commander: 8.3.0
