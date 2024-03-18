@@ -34,5 +34,11 @@
     "name": "PRO",
     "introduction": "很多 emoji 的博客",
     "url": "https://pro-2684.github.io/"
+  },
+  {
+    "avatar": "https://sproutnan.github.io/static/assets/img/photo.jpg",
+    "name": "SproutNan",
+    "introduction": "Societal AI",
+    "url": "https://sproutnan.github.io/"
   }
 ]
