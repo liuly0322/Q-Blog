@@ -25,6 +25,13 @@ html.dark {
   background: rgb(24, 24, 28);
 }
 
+.utterances {
+  background: white;
+}
+html.dark .utterances {
+  background: rgb(24, 24, 28);
+}
+
 #nprogress {
   pointer-events: none;
 }
