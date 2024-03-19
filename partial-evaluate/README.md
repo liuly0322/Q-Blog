@@ -26,7 +26,7 @@ In this case, you import this plugin and use it like this:
 
 ```javascript
 // vite.config.js
-import partialEvaluate from 'rollup-plugin-partial-evaluate'
+import PartialEvaluate from 'rollup-plugin-partial-evaluate'
 
 export default {
   plugins: [
@@ -49,6 +49,12 @@ export default {
 ```
 
 Then your output `dist/assets/Tag-xxxxxxx.js` will be magically smaller than before! In my case, it's 12.76kb to 9.22kb.
+
+## Context
+
+[rollup#4466](https://github.com/rollup/rollup/issues/4466) discusses the possibility of remove unused default function arguments. This plugin is a proof of concept of a relative idea: We can explicitly specify the values of some props of **Vue components**, and remove the unused code at build time.
+
+[WIP] Although tracking exports and imports is not a trivial task, and consumes a lot of time, we can still do some simple work: For those only **exported once and used once**, we can safely replace arguments with their caller's provided values. In this case, redundant code can be removed.
 
 ## How it works
 
