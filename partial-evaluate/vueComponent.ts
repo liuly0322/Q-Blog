@@ -35,14 +35,13 @@ export function vueComponentMJSTraverseHandler(componentName: string, userConfig
         })
 
         logger.log(`Optimizing props for ${componentName}:`)
+        const PropsWithKnownValue = userConfig.components[componentName]
         if (setupNode) {
-          const PropsWithKnownValue = userConfig.components[componentName]
           replaceMemberExpression(setupNode, 'props', PropsWithKnownValue)
           replaceDestructure(setupNode, 'props', PropsWithKnownValue)
         }
 
         if (renderNode) {
-          const PropsWithKnownValue = userConfig.components[componentName]
           replaceMemberExpression(renderNode, 'this', PropsWithKnownValue)
           replaceDestructure(renderNode, 'this', PropsWithKnownValue)
         }

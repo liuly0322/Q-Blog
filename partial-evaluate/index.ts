@@ -27,7 +27,7 @@ export default (config?: Config) => {
       vueComponentMJSEvaluate(ast, id, userConfig)
 
       const { code: transformedCode } = generator(ast, { retainLines: true })
-      const log = await saveFiles(id, code, transformedCode)
+      const log = saveFiles(id, code, transformedCode)
       logger.log(`${log}\n`)
       return code === transformedCode
         ? null

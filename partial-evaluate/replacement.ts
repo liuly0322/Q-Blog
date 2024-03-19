@@ -59,7 +59,8 @@ function replaceDestructureWithOneConst(
     return
   const propName = key.node.name
   if (propName in consts) {
-    const newVariableDeclarator = babel.template.statement.ast(`${propName} = ${consts[propName]};`)
+    const value = babel.template.expression.ast(`${consts[propName]}`)
+    const newVariableDeclarator = t.variableDeclarator(t.identifier(propName), value)
     root.replaceWith(newVariableDeclarator)
   }
   else {
