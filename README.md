@@ -22,7 +22,7 @@ Welcome to [my personal blog site](https://blog.liuly.moe) ([subscribe](https://
 
 - Vite5, Vue3, TypeScript, Naive UI
 - Responsive Web Design, Dark Mode, PWA
-- [WIP] Rollup [partial evaluate plugin](./partial-evaluate/)
+- [WIP] **(Have a look!) Rollup [partial evaluate plugin](./partial-evaluate/)**
 
 ## Usage
 
