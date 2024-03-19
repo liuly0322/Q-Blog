@@ -22,7 +22,7 @@ function isValidDestructure(node: NodePath<VariableDeclarator>, constObjectName:
  * @param constObjectName Name of the object that contains the constants
  * @param consts Map of constants
  */
-export function replaceMemberExpression(node: NodePath, constObjectName: string, consts: Record<string, any>) {
+export function replaceMemberExpression(node: NodePath, constObjectName: string, consts: Record<string, unknown>) {
   const memberExpressions: NodePath<MemberExpression>[] = []
   const potentialOptimizeProps: Set<string> = new Set()
   node.traverse({
@@ -39,7 +39,7 @@ export function replaceMemberExpression(node: NodePath, constObjectName: string,
       return
     const propName = propNode.name
     if (propName in consts) {
-      nodePath.replaceWithSourceString(consts[propName])
+      nodePath.replaceWithSourceString(`${consts[propName]}`)
       potentialOptimizeProps.delete(propName)
     }
   })
@@ -49,7 +49,7 @@ export function replaceMemberExpression(node: NodePath, constObjectName: string,
 function replaceDestructureWithOneConst(
   root: NodePath,
   property: NodePath<ObjectProperty | RestElement>,
-  consts: Record<string, any>,
+  consts: Record<string, unknown>,
   potentialOptimizeProps: Set<string>,
 ) {
   if (!property.isObjectProperty())
@@ -70,7 +70,7 @@ function replaceDestructureWithOneConst(
 function replaceDestructureWithMultiDeclarations(
   root: NodePath,
   properties: NodePath<ObjectProperty | RestElement>[],
-  consts: Record<string, any>,
+  consts: Record<string, unknown>,
   potentialOptimizeProps: Set<string>,
 ) {
   const deleteProperties: NodePath<ObjectProperty>[] = []
@@ -91,7 +91,7 @@ function replaceDestructureWithMultiDeclarations(
     if (!key.isIdentifier())
       throw new Error('Unexpected property key type')
     const propName = key.node.name
-    const value = babel.template.expression.ast(consts[propName].toString())
+    const value = babel.template.expression.ast(`${consts[propName]}`)
     return t.variableDeclarator(t.identifier(propName), value)
   })
   deleteProperties.forEach(property => property.remove())
@@ -104,7 +104,7 @@ function replaceDestructureWithMultiDeclarations(
  * @param constObjectName Name of the object that contains the constants
  * @param consts Map of constants
  */
-export function replaceDestructure(node: NodePath, constObjectName: string, consts: Record<string, any>) {
+export function replaceDestructure(node: NodePath, constObjectName: string, consts: Record<string, unknown>) {
   const potentialOptimizeProps: Set<string> = new Set()
   node.traverse({
     VariableDeclarator(nodePath) {

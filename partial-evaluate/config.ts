@@ -2,7 +2,7 @@ import path from 'node:path'
 
 export interface Config {
   components: {
-    [componentName: string]: Record<string, any>
+    [componentName: string]: Record<string, unknown>
   }
 }
 

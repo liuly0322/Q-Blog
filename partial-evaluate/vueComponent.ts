@@ -1,7 +1,8 @@
 import path from 'node:path'
 import type { NodePath } from '@babel/traverse'
 import _traverse from '@babel/traverse'
-import type { CallExpression } from '@babel/types'
+import type { CallExpression, File } from '@babel/types'
+import type { ParseResult } from '@babel/parser'
 import { replaceDestructure, replaceMemberExpression } from './replacement'
 import type { Config } from './config'
 import logger from './log'
@@ -49,7 +50,7 @@ export function vueComponentMJSTraverseHandler(componentName: string, userConfig
   }
 }
 
-export function vueComponentMJSEvaluate(ast: any, id: string, userConfig: Config) {
+export function vueComponentMJSEvaluate(ast: ParseResult<File>, id: string, userConfig: Config) {
   const componentName = path.basename(id).replace(/\.mjs$/, '')
   traverse(ast, vueComponentMJSTraverseHandler(componentName, userConfig))
 }
