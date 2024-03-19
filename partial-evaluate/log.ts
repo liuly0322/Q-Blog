@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-export default () => {
+export default (() => {
   const logs: string[] = []
   return {
     log: (message: string) => logs.push(message),
@@ -9,4 +9,4 @@ export default () => {
     },
     clear: () => logs.length = 0,
   }
-}
+})()
