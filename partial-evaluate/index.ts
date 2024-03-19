@@ -6,7 +6,8 @@ import type { Config } from './config'
 import { vueComponentMJSEvaluate } from './vueComponent'
 import { shouldBeTransformed } from './config'
 
-const generator = ((_generator as any as { default: any }).default) as typeof _generator
+// @ts-expect-error: https://github.com/babel/babel/issues/15269
+const generator = _generator.default as typeof _generator
 
 export default (config?: Config) => {
   const userConfig: Config = config || {

@@ -7,7 +7,8 @@ import { replaceDestructure, replaceMemberExpression } from './replacement'
 import type { Config } from './config'
 import logger from './log'
 
-const traverse = ((_traverse as any as { default: any }).default) as typeof _traverse
+// @ts-expect-error: https://github.com/babel/babel/issues/15269
+const traverse = _traverse.default as typeof _traverse
 
 export function vueComponentMJSTraverseHandler(componentName: string, userConfig: Config) {
   return {
