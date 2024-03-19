@@ -15,7 +15,7 @@ import {
   VueUseComponentsResolver,
 } from 'unplugin-vue-components/resolvers'
 import Markdown from 'unplugin-vue-markdown/vite'
-import PartialEvaluator from './partialEvaluate'
+import PartialEvaluator from './partial-evaluate'
 import BuildPosts from './build/buildPosts'
 
 const markdownWrapperClasses = 'md-blog m-auto text-left'
