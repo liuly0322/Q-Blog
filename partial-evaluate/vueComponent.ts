@@ -16,24 +16,33 @@ export function vueComponentMJSTraverseHandler(componentName: string, userConfig
         && path.parentPath.isExportDefaultDeclaration()
       ) {
         let setupNode: NodePath | null = null
+        let renderNode: NodePath | null = null
         path.traverse({
           ObjectMethod(nodePath) {
             const key = nodePath.node.key
             if (key.type !== 'Identifier')
               return
             const name = key.name
-            if (name === 'setup') {
+            if (name === 'setup')
               setupNode = nodePath
+            if (name === 'render')
+              renderNode = nodePath
+            if (setupNode && renderNode)
               return false
-            }
           },
         })
 
+        logger.log(`Optimizing props for ${componentName}:`)
         if (setupNode) {
-          logger.log(`Optimizing props for ${componentName}:`)
           const PropsWithKnownValue = userConfig.components[componentName]
-          replaceMemberExpression(setupNode, PropsWithKnownValue)
-          replaceDestructure(setupNode, PropsWithKnownValue)
+          replaceMemberExpression(setupNode, 'props', PropsWithKnownValue)
+          replaceDestructure(setupNode, 'props', PropsWithKnownValue)
+        }
+
+        if (renderNode) {
+          const PropsWithKnownValue = userConfig.components[componentName]
+          replaceMemberExpression(renderNode, 'this', PropsWithKnownValue)
+          replaceDestructure(renderNode, 'this', PropsWithKnownValue)
         }
       }
     },

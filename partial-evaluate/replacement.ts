@@ -1,37 +1,59 @@
 import type { NodePath } from '@babel/traverse'
-import type { MemberExpression } from '@babel/types'
+import type { MemberExpression, VariableDeclarator } from '@babel/types'
 import babel from '@babel/core'
 import logger from './log'
 
-// replace `props.prop` with given const
-export function replaceMemberExpression(node: NodePath, props: Record<string, any>) {
-  const propsAssignmentNode: NodePath<MemberExpression>[] = []
+function isValidMemberExpression(node: NodePath<MemberExpression>, constObjectName: string) {
+  if (constObjectName === 'this')
+    return node.get('object').isThisExpression()
+  return node.get('object').isIdentifier({ name: constObjectName })
+}
+
+function isValidDestructure(node: NodePath<VariableDeclarator>, constObjectName: string) {
+  if (constObjectName === 'this')
+    return node.get('init').isThisExpression()
+  return node.get('init').isIdentifier({ name: constObjectName })
+}
+
+/**
+ *  Replace `props.prop` with given const
+ * @param node Root node of function body needs to be optimized
+ * @param constObjectName Name of the object that contains the constants
+ * @param consts Map of constants
+ */
+export function replaceMemberExpression(node: NodePath, constObjectName: string, consts: Record<string, any>) {
+  const memberExpressions: NodePath<MemberExpression>[] = []
   const potentialOptimizeProps: Set<string> = new Set()
   node.traverse({
     MemberExpression(nodePath) {
-      if (nodePath.get('object').isIdentifier({ name: 'props' })) {
-        propsAssignmentNode.push(nodePath)
+      if (isValidMemberExpression(nodePath, constObjectName)) {
+        memberExpressions.push(nodePath)
         potentialOptimizeProps.add(nodePath.toString().split('.')[1])
       }
     },
   })
   logger.log(`Potential optimize member expression: ${Array.from(potentialOptimizeProps).join(', ')}`)
-  propsAssignmentNode.forEach((nodePath) => {
+  memberExpressions.forEach((nodePath) => {
     const propNode = nodePath.get('property').node
     if (propNode.type !== 'Identifier')
       return
     const propName = propNode.name
-    if (propName in props)
-      nodePath.replaceWithSourceString(props[propName])
+    if (propName in consts)
+      nodePath.replaceWithSourceString(consts[propName])
   })
 }
 
-// replace `const { prop } = props` with given const
-export function replaceDestructure(node: NodePath, props: Record<string, any>) {
+/**
+ * replace `const { prop } = props` with given const
+ * @param node Root node of function body needs to be optimized
+ * @param constObjectName Name of the object that contains the constants
+ * @param props Map of constants
+ */
+export function replaceDestructure(node: NodePath, constObjectName: string, props: Record<string, any>) {
   const potentialOptimizeProps: Set<string> = new Set()
   node.traverse({
     VariableDeclarator(nodePath) {
-      if (!nodePath.get('init').isIdentifier({ name: 'props' }))
+      if (!isValidDestructure(nodePath, constObjectName))
         return
       const id = nodePath.get('id')
       if (!id.isObjectPattern())
