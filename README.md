@@ -18,10 +18,11 @@
 
 <p align='center'>Q-Blog - Quicker and Cuter</p>
 
-[My personal blog site](https://blog.liuly.moe) ([RSS](https://blog.liuly.moe/feed.xml)).
+Welcome to [my personal blog site](https://blog.liuly.moe) ([subscribe](https://blog.liuly.moe/feed.xml)).
 
 - Vite5, Vue3, TypeScript, Naive UI
 - Responsive Web Design, Dark Mode, PWA
+- [WIP] Rollup [partial evaluate plugin](./partial-evaluate/)
 
 ## Usage
 
@@ -51,4 +52,3 @@ pnpm preview # preview the production build
 
 - [tov-template](https://github.com/dishait/tov-template)
 - [Vite PWA](https://github.com/vite-pwa/vite-plugin-pwa)
-
