@@ -83,6 +83,7 @@ export default defineConfig({
         Tag: {
           disabled: false,
           checkable: false,
+          closable: false,
           onClose: undefined,
         },
         Rate: {
