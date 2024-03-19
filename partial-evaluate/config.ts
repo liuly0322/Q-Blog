@@ -1,6 +1,7 @@
 import path from 'node:path'
 
 export interface Config {
+  silent?: boolean
   components: {
     [componentName: string]: Record<string, unknown>
   }

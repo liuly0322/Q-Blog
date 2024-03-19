@@ -68,6 +68,7 @@ export default defineConfig({
     }),
     // 部分求值插件
     PartialEvaluator({
+      silent: true,
       components: {
         AutoComplete: {
           append: false,

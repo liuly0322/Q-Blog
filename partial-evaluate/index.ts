@@ -12,6 +12,8 @@ export default (config?: Config) => {
   const userConfig: Config = config || {
     components: {},
   }
+  if (userConfig.silent === true)
+    logger.print = () => {}
 
   return {
     name: 'partial-evaluate-optimizer-plugin',
