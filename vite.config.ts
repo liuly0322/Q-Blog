@@ -15,6 +15,7 @@ import {
   VueUseComponentsResolver,
 } from 'unplugin-vue-components/resolvers'
 import Markdown from 'unplugin-vue-markdown/vite'
+import PartialEvaluator from './partialEvaluate'
 import BuildPosts from './build/buildPosts'
 
 const markdownWrapperClasses = 'md-blog m-auto text-left'
@@ -64,6 +65,31 @@ export default defineConfig({
       dirs: [
         './src/composables',
       ],
+    }),
+    // 部分求值插件
+    PartialEvaluator({
+      components: {
+        AutoComplete: {
+          append: false,
+          showEmpty: false,
+          clearAfterSelect: true,
+          blurAfterSelect: true,
+          defaultValue: null,
+          getShow: undefined,
+          onSelect: undefined,
+          onBlur: undefined,
+          onFocus: undefined,
+        },
+        Tag: {
+          disabled: false,
+          checkable: false,
+          onClose: undefined,
+        },
+        Rate: {
+          allowHalf: true,
+          clearable: false,
+        },
+      },
     }),
     // PWA
     VitePWA({
