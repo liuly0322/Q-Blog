@@ -8,6 +8,7 @@ import Windicss from 'vite-plugin-windicss'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
+import Terser from '@rollup/plugin-terser'
 import { visualizer } from 'rollup-plugin-visualizer'
 
 import {
@@ -93,6 +94,8 @@ export default defineConfig({
         },
       },
     }),
+    // Terser
+    Terser(),
     // PWA
     VitePWA({
       registerType: 'autoUpdate',

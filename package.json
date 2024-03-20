@@ -30,6 +30,7 @@
     "@iconify-json/carbon": "^1.1.31",
     "@iconify-json/fluent-emoji-flat": "^1.1.16",
     "@iconify-json/line-md": "^1.1.36",
+    "@rollup/plugin-terser": "^0.4.4",
     "@shikijs/markdown-it": "^1.2.0",
     "@types/babel__core": "^7.20.5",
     "@types/babel__generator": "^7.6.8",
