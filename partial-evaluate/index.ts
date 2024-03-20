@@ -18,7 +18,6 @@ export default (config?: Config) => {
 
   return {
     name: 'partial-evaluate-optimizer-plugin',
-    enforce: 'pre',
     async transform(code: string, id: string) {
       if (!shouldBeTransformed(id, userConfig))
         return null
