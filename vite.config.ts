@@ -71,22 +71,15 @@ export default defineConfig({
     PartialEvaluator({
       silent: true,
       components: {
-        AutoComplete: {
-          append: false,
-          showEmpty: false,
-          clearAfterSelect: true,
-          blurAfterSelect: true,
-          defaultValue: null,
-          getShow: undefined,
-          onSelect: undefined,
-          onBlur: undefined,
-          onFocus: undefined,
+        Input: {
+          loading: undefined,
+          showCount: false,
+          type: '\'text\'',
         },
         Tag: {
           disabled: false,
           checkable: false,
           closable: false,
-          onClose: undefined,
         },
         Rate: {
           allowHalf: true,

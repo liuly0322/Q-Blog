@@ -6,7 +6,7 @@ A Rollup plugin to partially evaluate expressions at build time.
 
 ### TODO
 
-- [ ] Try adding more passes like `dead code elimination` and `constant folding`
+- [ ] Try adding more passes like dead code elimination and constant folding
 - [ ] Try `renderChunk` hook to optimize other mjs files with function only exported once and used once
 
 ## Why this
