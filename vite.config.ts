@@ -74,6 +74,8 @@ export default defineConfig({
         Input: {
           loading: undefined,
           showCount: false,
+          maxlength: undefined,
+          pair: false,
           type: '\'text\'',
         },
         Tag: {
