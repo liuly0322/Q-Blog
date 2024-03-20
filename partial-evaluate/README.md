@@ -55,6 +55,21 @@ export default {
 
 Then your output `dist/assets/Tag-xxxxxxx.js` will be magically smaller than before! In my case, it's 12.76kb to 9.22kb.
 
+Another example is `n-auto-complete`. After configuration:
+
+```typescript
+// If you don't need features below
+Input: {
+  loading: undefined,
+  showCount: false,
+  maxlength: undefined,
+  pair: false,
+  type: '\'text\'',
+}
+```
+
+It reduces 8.22kb after bundling!
+
 ## Context
 
 [rollup#4466](https://github.com/rollup/rollup/issues/4466) discusses the possibility of remove unused default function arguments. This plugin is a proof of concept of a relative idea: We can explicitly specify the values of some props of **Vue components**, and remove the unused code at build time.
