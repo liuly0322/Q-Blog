@@ -4,11 +4,6 @@
 
 A Rollup plugin to partially evaluate expressions at build time.
 
-### TODO
-
-- [ ] Try adding more passes like dead code elimination and constant folding
-- [ ] Try `renderChunk` hook to optimize other mjs files with function only exported once and used once
-
 ## Why this
 
 Third-party Vue components often expose many props, and it's common to use them with static values. For example, you might use a `n-tag` component fron [naive-ui](https://github.com/tusen-ai/naive-ui) like this:
