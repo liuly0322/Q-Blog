@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { vueComponentMJSEvaluate } from './vueComponent'
 
 export interface Config {
   silent?: boolean
@@ -7,9 +8,12 @@ export interface Config {
   }
 }
 
-export function shouldBeTransformed(id: string, userConfig: Config): boolean {
-  if (!id.endsWith('.mjs'))
-    return false
-  const componentName = path.basename(id).replace(/\.mjs$/, '')
-  return !!userConfig.components[componentName]
+export function getTransformers(id: string, userConfig: Config) {
+  const transformers = []
+  if (id.endsWith('.mjs')) {
+    const componentName = path.basename(id).replace(/\.mjs$/, '')
+    if (userConfig.components[componentName])
+      transformers.push(vueComponentMJSEvaluate)
+  }
+  return transformers
 }
