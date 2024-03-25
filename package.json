@@ -65,7 +65,7 @@
     "nprogress": "^0.2.0",
     "rollup-plugin-visualizer": "^5.12.0",
     "rss": "^1.2.2",
-    "typescript": "^5.4.2",
+    "typescript": "^5.4.3",
     "unplugin-auto-import": "^0.17.5",
     "unplugin-icons": "^0.18.5",
     "unplugin-vue-components": "^0.26.0",
