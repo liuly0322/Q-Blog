@@ -5,7 +5,7 @@
 import path from 'node:path'
 import imageSize from 'image-size'
 import type markdownIt from 'markdown-it'
-import type Token from 'markdown-it/lib/token'
+import type { Token } from 'markdown-it'
 
 export default (absolutePathPrefix = '') =>
   function markdownItImageSize(md: markdownIt): void {
