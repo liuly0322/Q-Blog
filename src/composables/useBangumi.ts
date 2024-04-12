@@ -57,7 +57,7 @@ async function updateBangumiData(page: number) {
   const offset = page * PAGE_SIZE
   // https://gist.github.com/liuly0322/7100018ad6cd9f82aff3fee1e9bcd6f3
   const res = await fetch(
-    `https://api.liuly.moe/v0/users/undef_baka/collections?subject_type=2&type=2&limit=${PAGE_SIZE}&offset=${offset}`,
+    `https://bgm.liuly.moe/v0/users/undef_baka/collections?subject_type=2&type=2&limit=${PAGE_SIZE}&offset=${offset}`,
   )
   if (!res.ok)
     throw new Error('Network response was not ok')
