@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const APlayer = defineAsyncComponent(() => import('./APlayer.vue'))
-
 const { isMobile } = usePhone()
 const { mobileNavigation } = useSiteNavigation()
 const { enableToc } = useToc()
