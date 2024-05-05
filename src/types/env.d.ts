@@ -16,3 +16,7 @@ declare module 'markdown-it-texmath' {
   const plugin: PluginWithOptions
   export default plugin
 }
+
+declare module 'vite-plugin-vsharp' {
+  export default function vsharp(config: any): any
+}

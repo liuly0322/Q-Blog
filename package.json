@@ -73,6 +73,7 @@
     "vite": "^5.2.10",
     "vite-plugin-pages": "^0.32.1",
     "vite-plugin-pwa": "^0.20.0",
+    "vite-plugin-vsharp": "^1.7.3",
     "vite-plugin-windicss": "^1.9.3",
     "vue": "^3.4.26",
     "vue-router": "^4.3.2",
