@@ -7,6 +7,8 @@ on:
       - main
     paths:
       - posts/**
+      - src/components/**
+      - src/pages/**
 
 jobs:
   build-and-push:
