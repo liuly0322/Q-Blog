@@ -30,9 +30,6 @@ const { postsOnPage } = usePage()
     <Pagination />
   </div>
   <footer class="flex flex-col items-center justify-center pt-8 pb-12 leading-8 border-t-[0.8px] dark:border-white/9">
-    <p>
-      License: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="blue-link" target="_blank">CC-BY-NC-SA 4.0</a>
-    </p>
     <p class="flex items-center">
       <span>© 2021 - {{ getCurrentYear() }}</span>
       <span class="px-2.5 mt-1 animate-heartBeat animate-infinite"><IconRedHeart /></span>

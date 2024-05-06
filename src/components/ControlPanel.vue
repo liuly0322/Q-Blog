@@ -7,7 +7,7 @@ const { isDark, toggleDark } = useDarks()
     <a class="m-0.5 inline-block" href="/feed.xml" target="_blank">
       <i-carbon:rss class="text-3xl" />
     </a>
-    <a class="m-0.5 inline-block" href="https://github.com/liuly0322" target="_blank">
+    <a class="m-0.5 inline-block" href="https://github.com/liuly0322/Q-Blog" target="_blank">
       <i-ant-design:github-filled class="text-3xl" />
     </a>
     <span class="m-0.5 inline-block" @click="toggleDark()">
@@ -15,8 +15,7 @@ const { isDark, toggleDark } = useDarks()
       <i-carbon:sun v-if="!isDark" class="text-3xl" />
     </span>
     <p>
-      Powered by
-      <a href="https://github.com/liuly0322/Q-Blog" class="blue-link" target="_blank">Q-Blog</a>
+      License: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="blue-link" target="_blank">CC BY-NC-SA 4.0</a>
     </p>
   </div>
 </template>
