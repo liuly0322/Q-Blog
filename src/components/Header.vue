@@ -14,8 +14,8 @@ const routePath = useRoute()
           src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
           alt="liuly"
           class="rounded-full cursor-pointer"
-          height="32"
-          width="32"
+          height="34"
+          width="34"
         >
       </router-link>
       <span class="<sm:hidden pl-2 text-lg flex-shrink-0">llyのblog</span>
