@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const PostSearch = defineAsyncComponent(() => import('./PostSearch.vue'))
+
 const { isMobile, phoneNavToggle } = usePhone()
 const { navOptions } = useSiteNavigation()
 const routePath = useRoute()
@@ -17,7 +19,9 @@ const routePath = useRoute()
         >
       </router-link>
       <span class="<sm:hidden pl-2 text-lg flex-shrink-0">llyのblog</span>
-      <PostSearch class="px-4" />
+      <Suspense>
+        <PostSearch class="px-4" />
+      </Suspense>
     </div>
     <div v-if="!isMobile" class="inline-flex">
       <RouterLink
