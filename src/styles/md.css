@@ -99,7 +99,6 @@
 }
 code[class*=language-] {
   padding: 1em;
-  border-radius: .3em;
   background-color: #fbfbfb;
   display: block;
   overflow: auto;
