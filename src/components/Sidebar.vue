@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const APlayer = defineAsyncComponent(() => import('./APlayer.vue'))
+
 const { isMobile } = usePhone()
 const { mobileNavigation } = useSiteNavigation()
 const { enableToc } = useToc()
@@ -15,7 +17,12 @@ const { enableToc } = useToc()
       <Toc v-show="enableToc" />
       <Hitokoto v-show="!enableToc" />
     </div>
-    <APlayer song-server="netease" song-id="373425292" />
+    <Suspense>
+      <APlayer song-server="netease" song-id="373425292" />
+      <template #fallback>
+        <div class="aplayer h-90px" />
+      </template>
+    </Suspense>
     <ControlPanel />
   </div>
 </template>
