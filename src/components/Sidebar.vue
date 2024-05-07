@@ -19,9 +19,6 @@ const { enableToc } = useToc()
     </div>
     <Suspense>
       <APlayer song-server="netease" song-id="373425292" />
-      <template #fallback>
-        <div class="aplayer h-90px" />
-      </template>
     </Suspense>
     <ControlPanel />
   </div>
