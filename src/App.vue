@@ -58,6 +58,7 @@ if (import.meta.hot)
     </n-layout>
     <button
       v-if="isMobile"
+      aria-label="go-top"
       class="z-4 fixed bottom-4 right-4 rounded-full border-solid border-1 w-8 h-8 inline-flex items-center justify-center"
       onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
     >

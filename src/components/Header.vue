@@ -34,7 +34,7 @@ const routePath = useRoute()
         {{ option.label }}
       </RouterLink>
     </div>
-    <button v-if="isMobile" class="mr-2 flex" @click="() => phoneNavToggle()">
+    <button v-if="isMobile" aria-label="menu" class="mr-2 flex" @click="() => phoneNavToggle()">
       <i-carbon:menu />
     </button>
   </div>
