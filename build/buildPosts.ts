@@ -161,7 +161,7 @@ async function generateStaticPost(htmlTemplate: string, post: Post) {
 }
 
 async function generateStaticPosts(posts: Post[]) {
-  const htmlTemplate = await fs.readFile(path.join('public', 'template.html'), {
+  const htmlTemplate = await fs.readFile(path.join('build', 'template.html'), {
     encoding: 'utf-8',
   })
   await Promise.all(posts.map(post => generateStaticPost(htmlTemplate, post)))
