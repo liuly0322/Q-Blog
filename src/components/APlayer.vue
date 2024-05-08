@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import APlayer, { addMusicPlugin, clearMusicPlugin } from 'aplayer-ts'
+import APlayer from 'aplayer-ts'
 import 'aplayer-ts/src/css/base.css'
 import '~/styles/aplayer-dark.css'
 
@@ -13,16 +13,9 @@ const props = withDefaults(defineProps<{
 })
 
 const playerRef = ref()
-const instance = APlayer().use(addMusicPlugin).use(clearMusicPlugin)
-
-async function appendAplayerData() {
-  const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
-  const audios = await fetch(url)
-    .then(response => response.json())
-    .catch(() => [])
-  instance.list.clear()
-  instance.list.add(audios)
-}
+const instance = APlayer()
+const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
+const audios = await fetch(url).then(response => response.json())
 
 function APlayerInit() {
   instance.init({
@@ -32,13 +25,8 @@ function APlayerInit() {
     lrcType: 3,
     listFolded: true,
     listMaxHeight: '250px',
-    audio: {
-      name: '正在加载...',
-      artist: '正在加载...',
-      lrc: 'data:,loading...',
-    },
+    audio: audios,
   })
-  appendAplayerData()
 }
 
 onMounted(APlayerInit)
