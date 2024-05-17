@@ -53,7 +53,7 @@ function formatDate(date: Date) {
   return date
     .toISOString()
     .replace(/T/g, ' ')
-    .replace(/\.[\d]{3}Z/, '')
+    .replace(/\.\d{3}Z/, '')
 }
 
 interface Post {
