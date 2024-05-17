@@ -26,8 +26,6 @@ Welcome to [my personal blog site](https://blog.liuly.moe) ([subscribe](https://
 
 ## Usage
 
-See also [GitHub Actions](https://github.com/liuly0322/Q-Blog/blob/main/.github/workflows/build.yml)
-
 Installation:
 
 ```bash
