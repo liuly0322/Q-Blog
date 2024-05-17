@@ -137,6 +137,7 @@ export default defineConfig({
     transformer: 'lightningcss',
   },
   build: {
+    minify: 'terser',
     rollupOptions: {
       output: {
         experimentalMinChunkSize: 10_000,

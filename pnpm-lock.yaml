@@ -143,6 +143,9 @@ importers:
       rss:
         specifier: ^1.2.2
         version: 1.2.2
+      terser:
+        specifier: ^5.31.0
+        version: 5.31.0
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
