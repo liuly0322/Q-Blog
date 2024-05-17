@@ -14,17 +14,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: pnpm/action-setup@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies and build
+        uses: pnpm/action-setup@v4
         with:
-          version: 8
-
-      - uses: actions/checkout@v4
-
-      - name: install dependencies
-        run: pnpm i
-
-      - name: build
-        run: pnpm build
+          version: 9
+          run_install: true
 
       - name: Push
         uses: s0/git-publish-subdir-action@develop
