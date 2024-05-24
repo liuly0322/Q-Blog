@@ -17,6 +17,7 @@ import {
   VueUseComponentsResolver,
 } from 'unplugin-vue-components/resolvers'
 import Markdown from 'unplugin-vue-markdown/vite'
+import mdLinkAttrPlugin from 'markdown-it-link-attributes'
 import PartialEvaluator from './partial-evaluate'
 import BuildPosts from './build/buildPosts'
 
@@ -36,6 +37,14 @@ export default defineConfig({
     // markdown 编译插件
     Markdown({
       wrapperClasses: markdownWrapperClasses,
+      markdownItSetup(md) {
+        md.use(mdLinkAttrPlugin, {
+          attrs: {
+            target: '_blank',
+            rel: 'noopener',
+          },
+        })
+      },
     }),
     // 自动构建文件
     BuildPosts(),
