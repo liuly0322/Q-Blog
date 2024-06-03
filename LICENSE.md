@@ -1,3 +1,11 @@
+# License
+
+## Blog posts, i.e. posts under `posts/` folder
+
+CC BY-NC-SA 4.0
+
+## Source code of the software
+
 MIT LICENSE
 
 Copyright (c) 2022 liuly
