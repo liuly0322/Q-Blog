@@ -137,6 +137,7 @@ export default defineConfig({
       ],
       includePublic: [
         'public/images/*.png',
+        'public/images/*.jpg',
       ]
     }),
     // 打包体积分析
