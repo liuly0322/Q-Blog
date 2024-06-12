@@ -6,7 +6,7 @@
 
 <p align="center">
 
-  <a href="https://github.com/liuly0322/Q-Blog/blob/main/LICENSE">
+  <a href="https://github.com/liuly0322/Q-Blog/blob/main/LICENSE.md">
     <img src="https://img.shields.io/github/license/liuly0322/Q-Blog?color=blue">
   </a>
 
