@@ -11,7 +11,7 @@ const routePath = useRoute()
     <div class="<sm:flex-grow flex items-center">
       <router-link to="/" class="flex-shrink-0">
         <img
-          src="https://q2.qlogo.cn/g?b=qq&nk=453026205&s=100"
+          src="/avatar_192.webp"
           alt="liuly"
           class="rounded-full cursor-pointer"
           height="34"
@@ -24,13 +24,13 @@ const routePath = useRoute()
       <RouterLink
         v-for="option in navOptions"
         :key="option.to"
-        class="block px-3"
+        class="block mx-3"
         :style="routePath.path.match(option.match) ? 'color: #42b883' : ''"
         :to="option.to"
       >
         {{ option.label }}
       </RouterLink>
-      <button v-if="isMobile" aria-label="menu" class="mr-2 flex" @click="() => phoneNavToggle()">
+      <button v-if="isMobile" aria-label="menu" class="mx-3 flex" @click="() => phoneNavToggle()">
         <i-carbon:menu />
       </button>
     </div>

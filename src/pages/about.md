@@ -2,7 +2,7 @@
 title: 关于
 ---
 
-<img src="/public/pwa-192x192.png" alt="avatar">
+<img src="/avatar_192.webp" alt="avatar" height="192" width="192">
 
 <div style="max-width:65ch; margin:auto; padding: 1em 0">
 

@@ -6,6 +6,15 @@ const { isDark, toggleDark } = useDarks()
 
 <template>
   <div class="mb-6 mx-1.25 text-center card p-4">
+    <div class="flex justify-center mb-2">
+      <img
+        src="/avatar_192.webp"
+        alt="liuly"
+        class="rounded-full cursor-pointer"
+        height="100"
+        width="100"
+      >
+    </div>
     <p class="text-xl">
       lly | undef_baka
     </p>
