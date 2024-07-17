@@ -5,7 +5,7 @@ const { postsOnPage } = usePage()
 <template>
   <div v-for="post in postsOnPage" :key="post.summary.url" class="mb-4 p-7 card">
     <div class="text-3xl font-medium my-4">
-      <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`">
+      <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`" class="hover:text-hex-42b883">
         {{
           post.summary.title
         }}
