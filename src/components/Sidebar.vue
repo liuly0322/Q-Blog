@@ -8,7 +8,7 @@ const { enableToc } = useToc()
 <template>
   <div>
     <Toc v-if="!isMobile" v-show="enableToc" />
-    <ControlPanel />
+    <ControlPanel v-show="isMobile || !enableToc" />
     <Suspense>
       <APlayer song-server="netease" song-id="373425292" />
     </Suspense>
