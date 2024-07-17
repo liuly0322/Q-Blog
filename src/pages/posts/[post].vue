@@ -48,4 +48,5 @@ watch(data, () => {
   <div v-show="!loading" ref="postContentEle" class="md-blog m-auto text-left" v-html="data" />
   <PostFooter :post="currPost.url" />
   <Comment :post="currPost" />
+  <CommonFooter />
 </template>

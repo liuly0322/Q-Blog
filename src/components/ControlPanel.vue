@@ -14,8 +14,5 @@ const { isDark, toggleDark } = useDarks()
       <i-carbon:haze-night v-if="isDark" class="text-3xl" />
       <i-carbon:sun v-if="!isDark" class="text-3xl" />
     </span>
-    <p>
-      License: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="blue-link" target="_blank">CC BY-NC-SA 4.0</a>
-    </p>
   </div>
 </template>
