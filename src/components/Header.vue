@@ -19,23 +19,20 @@ const routePath = useRoute()
         >
       </router-link>
       <span class="<sm:hidden pl-2 text-lg flex-shrink-0">llyのblog</span>
-      <Suspense>
-        <PostSearch class="px-4" />
-      </Suspense>
     </div>
-    <div v-if="!isMobile" class="inline-flex">
+    <div class="inline-flex items-center">
       <RouterLink
         v-for="option in navOptions"
         :key="option.to"
-        class="block px-5"
+        class="block px-3"
         :style="routePath.path.match(option.match) ? 'color: #42b883' : ''"
         :to="option.to"
       >
         {{ option.label }}
       </RouterLink>
+      <button v-if="isMobile" aria-label="menu" class="mr-2 flex" @click="() => phoneNavToggle()">
+        <i-carbon:menu />
+      </button>
     </div>
-    <button v-if="isMobile" aria-label="menu" class="mr-2 flex" @click="() => phoneNavToggle()">
-      <i-carbon:menu />
-    </button>
   </div>
 </template>

@@ -12,7 +12,7 @@ function scrollIntoView(id: string) {
 </script>
 
 <template>
-  <div class="mb-6 mx-1.25 card p-6">
+  <div class="my-6 mx-1.25 card p-6">
     <h2 class="font-medium text-lg mb-4">
       目录
     </h2>
