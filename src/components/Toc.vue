@@ -9,6 +9,29 @@ function scrollIntoView(id: string) {
     behavior: 'smooth',
   })
 }
+let observer: IntersectionObserver | null = null
+let garbage: HTMLElement | null = null
+watchEffect(() => {
+  observer?.disconnect()
+  garbage = null
+  observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const id = entry.target.id
+      const tocItem = document.getElementById(`toc-${id}`)!
+      garbage?.classList.remove('text-hex-42b883')
+      garbage = null
+      if (entry.isIntersecting) {
+        tocItem.classList.add('text-hex-42b883')
+      }
+      else {
+        garbage = tocItem
+      }
+    })
+  })
+  elem.value.forEach((item) => {
+    observer?.observe(document.getElementById(item.id)!)
+  })
+})
 </script>
 
 <template>
@@ -18,10 +41,10 @@ function scrollIntoView(id: string) {
     </h2>
     <ul>
       <li
-        v-for="(item, index) in elem"
-        :id="`toc-${index}`"
+        v-for="item in elem"
+        :id="`toc-${item.id}`"
         :key="`toc-${item.id}`"
-        class="hover:underline text-hex-42b883 pl-[1.5ch]"
+        class="hover:underline pl-[1.5ch]"
         :style="{ 'margin-left': `${item.tab * 1.5}ch` }"
         @click="scrollIntoView(item.id)"
       >
