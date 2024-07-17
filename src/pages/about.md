@@ -2,15 +2,15 @@
 title: 关于
 ---
 
+<img src="/public/pwa-192x192.png" alt="avatar">
+
 <div style="max-width:65ch; margin:auto; padding: 1em 0">
 
-# 关于我
-
-USTC 20 级本科少年班学院，计算机科学与技术专业在读。
+## 关于我
 
 爱好 System/PL/Security 及其他任何 CS 相关的有趣知识~
 
-~~已看 Anime List 绝赞咕咕中。~~ <RouterLink to="/bangumi">已上线</RouterLink>！
+我的 <RouterLink to="/bangumi">Anime List</RouterLink>。
 
 ## 联系方式
 
