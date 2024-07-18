@@ -1,11 +1,6 @@
 import type { RouteLocationNormalized, RouteLocationNormalizedLoaded } from 'vue-router'
 
-const { isMobile, phoneNavToggle } = usePhone()
-
-let contentRef: Ref
-function setContentRef(ref: Ref) {
-  contentRef = ref
-}
+const { phoneNavToggle } = usePhone()
 
 interface scrollPosition {
   left: number
@@ -13,14 +8,9 @@ interface scrollPosition {
 }
 
 function scroll(position: scrollPosition, phoneNav?: boolean) {
-  if (isMobile.value) {
-    window.scrollTo(position.left, position.top)
-    if (phoneNav !== undefined)
-      phoneNavToggle(phoneNav)
-  }
-  else {
-    contentRef.value?.scrollTo(position.left, position.top)
-  }
+  window.scrollTo(position.left, position.top)
+  if (phoneNav !== undefined)
+    phoneNavToggle(phoneNav)
 }
 
 const { page } = usePage()
@@ -57,10 +47,7 @@ function customScrollBehavior(to: RouteLocationNormalized, from: RouteLocationNo
 }
 
 function getScrollPosition(): scrollPosition {
-  if (isMobile.value)
-    return { left: window.scrollX, top: window.scrollY }
-  const element = contentRef.value?.scrollbarInstRef.containerRef
-  return { left: element?.scrollLeft ?? 0, top: element?.scrollTop ?? 0 }
+  return { left: window.scrollX, top: window.scrollY }
 }
 
 function saveScrollPostion(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded) {
@@ -75,4 +62,4 @@ function getSavedScrollPosition(path: string, enable: boolean): scrollPosition {
   return position ? JSON.parse(position) : { left: 0, top: 0 }
 }
 
-export default () => ({ setContentRef, saveScrollPostion, customScrollBehavior, scroll, deferScroll })
+export default () => ({ saveScrollPostion, customScrollBehavior, scroll, deferScroll })

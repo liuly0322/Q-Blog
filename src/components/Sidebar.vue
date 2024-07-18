@@ -1,16 +1,14 @@
 <script setup lang="ts">
 const APlayer = defineAsyncComponent(() => import('./APlayer.vue'))
-
-const { isMobile } = usePhone()
-const { enableToc } = useToc()
 </script>
 
 <template>
-  <div>
-    <Toc v-if="!isMobile" v-show="enableToc" />
-    <ControlPanel v-show="isMobile || !enableToc" />
-    <Suspense>
-      <APlayer song-server="netease" song-id="373425292" />
-    </Suspense>
+  <div class="pt-6 px-2">
+    <div class="sticky top-22 w-[256px]">
+      <ControlPanel />
+      <Suspense>
+        <APlayer song-server="netease" song-id="373425292" />
+      </Suspense>
+    </div>
   </div>
 </template>

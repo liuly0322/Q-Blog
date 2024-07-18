@@ -1,34 +1,32 @@
-const { width } = useWindowSize()
-const isMobile = computed(() => width.value < 768)
+let mduiElement: HTMLElement | null = null
+function getMduiElement() {
+  mduiElement ??= document.querySelector('.mdui-overlay')
+  return mduiElement
+}
 
-/**
- * 用于手机端切换导航栏
- * @param open   用于显式指定是打开还是关闭
- */
+let sidebarElement: HTMLElement | null = null
+function getSidebarElement() {
+  sidebarElement ??= document.querySelector('#sidebar')
+  return sidebarElement
+}
+
+function openSidebar() {
+  getMduiElement()?.classList.add('mdui-overlay-show')
+  getSidebarElement()?.classList.add('sidebar-open')
+}
+function closeSidebar() {
+  getMduiElement()?.classList.remove('mdui-overlay-show')
+  getSidebarElement()?.classList.remove('sidebar-open')
+}
+
 function phoneNavToggle(open?: boolean) {
-  const openNav = () => {
-    document.querySelector('.mdui-overlay')?.classList.add('mdui-overlay-show')
-    document.documentElement.classList.add('nav-overflow-hidden')
-  }
-  const closeNav = () => {
-    document
-      .querySelector('.mdui-overlay')
-      ?.classList.remove('mdui-overlay-show')
-    document.documentElement.classList.remove('nav-overflow-hidden')
-  }
-  const toggle = () =>
-    (document.querySelector('.n-layout-toggle-button') as HTMLElement).click()
-
-  const currNavOpen = !document.querySelector('.n-layout-sider--collapsed')
   if (typeof open !== 'undefined') {
-    open ? openNav() : closeNav()
-    if (open !== currNavOpen)
-      toggle()
+    open ? openSidebar() : closeSidebar()
   }
   else {
-    currNavOpen ? closeNav() : openNav()
-    toggle()
+    const currNavOpen = getSidebarElement()?.classList.contains('sidebar-open')
+    currNavOpen ? closeSidebar() : openSidebar()
   }
 }
 
-export default () => ({ isMobile, phoneNavToggle })
+export default () => ({ phoneNavToggle })

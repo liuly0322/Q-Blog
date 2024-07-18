@@ -37,7 +37,7 @@ watch(data, () => {
 </script>
 
 <template>
-  <article>
+  <article class="card px-6">
     <PostHeader :post="currPost" />
     <div v-show="loading" class="mt-1.6em text-left">
       <template v-for="i in 4" :key="i">

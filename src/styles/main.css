@@ -8,14 +8,6 @@ body,
   padding: 0;
 }
 
-html {
-  --header-height: 64px;
-}
-
-html.nav-overflow-hidden {
-  overflow: hidden;
-}
-
 body {
   max-width: 1200px;
 }
@@ -55,7 +47,7 @@ html.dark .utterances {
 /* （移动端）遮罩层 */
 .mdui-overlay {
   position: fixed;
-  top: var(--header-height);
+  top: 64.8px;
   left: 0;
   width: 5000px;
   height: 5000px;
@@ -74,8 +66,6 @@ html.dark .utterances {
   opacity: 1;
 }
 
-@media screen and (max-width: 767px) {
-  .n-layout-toggle-button {
-    display: none !important;
-  }
+.sidebar-open {
+  right: 0 !important;
 }

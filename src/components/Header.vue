@@ -1,20 +1,18 @@
 <script setup lang="ts">
-const PostSearch = defineAsyncComponent(() => import('./PostSearch.vue'))
-
-const { isMobile, phoneNavToggle } = usePhone()
+const { phoneNavToggle } = usePhone()
 const { navOptions } = useSiteNavigation()
 const routePath = useRoute()
 </script>
 
 <template>
-  <div class="flex items-center justify-between border-b-[0.8px] dark:border-white/9 p-3.5">
+  <header class="sticky top-0 backdrop-filter backdrop-blur bg-hex-fff dark:bg-hex-18181c bg-opacity-70 z-3 flex items-center justify-between border-b-[0.8px] dark:border-white/9 p-2">
     <router-link to="/" class="flex items-center hover:text-hex-42b883">
       <img
         src="/avatar_192.webp"
         alt="liuly"
         class="rounded-full cursor-pointer"
-        height="34"
-        width="34"
+        height="48"
+        width="48"
       >
       <span class="<sm:hidden pl-2 text-lg flex-shrink-0">llyのblog</span>
     </router-link>
@@ -28,9 +26,9 @@ const routePath = useRoute()
       >
         {{ option.label }}
       </RouterLink>
-      <button v-if="isMobile" aria-label="menu" class="mx-3 flex" @click="() => phoneNavToggle()">
+      <button aria-label="menu" class="lg:hidden mx-3 flex" @click="() => phoneNavToggle()">
         <i-carbon:menu />
       </button>
     </div>
-  </div>
+  </header>
 </template>

@@ -2,9 +2,9 @@
 title: 关于
 ---
 
-<img src="/avatar_192.webp" alt="avatar" height="192" width="192" class="rounded-full">
+<div class="card p-6">
 
-<div style="max-width:65ch; margin:auto; padding: 1em 0">
+<img src="/avatar_192.webp" alt="avatar" height="192" width="192" class="rounded-full">
 
 ## 关于我
 

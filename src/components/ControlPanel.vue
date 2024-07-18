@@ -35,7 +35,7 @@ const { isDark, toggleDark } = useDarks()
     <Suspense>
       <PostSearch class="px-4 pb-4" />
       <template #fallback>
-        <div class="mx-4 h-10.5">
+        <div class="mx-4 h-12.5">
           <div class="h-8.5 bg-hex-fafafc dark:bg-hex-303033 border border-hex-e5e7eb dark:border-hex-000" />
         </div>
       </template>
