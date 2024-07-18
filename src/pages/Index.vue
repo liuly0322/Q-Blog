@@ -3,7 +3,7 @@ const { postsOnPage } = usePage()
 </script>
 
 <template>
-  <div v-for="post in postsOnPage" :key="post.summary.url" class="mb-4 p-7 card">
+  <article v-for="post in postsOnPage" :key="post.summary.url" class="mb-4 p-7 card">
     <div class="text-3xl font-medium my-4">
       <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`" class="hover:text-hex-42b883">
         {{
@@ -22,7 +22,7 @@ const { postsOnPage } = usePage()
         <router-link :to="`/tags/${encodeURIComponent(tag)}`">#{{ tag }}</router-link>
       </span>
     </div>
-  </div>
+  </article>
   <div class="my-10 inline-block">
     <Pagination />
   </div>

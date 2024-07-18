@@ -37,16 +37,18 @@ watch(data, () => {
 </script>
 
 <template>
-  <PostHeader :post="currPost" />
-  <div v-show="loading" class="mt-1.6em text-left">
-    <template v-for="i in 4" :key="i">
-      <n-skeleton text :repeat="getRandInt(1, 3)" />
-      <n-skeleton text :style="`width: ${getRandInt(20, 80)}%`" />
-    </template>
-  </div>
-  <!-- eslint-disable-next-line vue/no-v-html -->
-  <div v-show="!loading" ref="postContentEle" class="md-blog m-auto text-left" v-html="data" />
-  <PostFooter :post="currPost.url" />
-  <Comment :post="currPost" />
-  <CommonFooter />
+  <article>
+    <PostHeader :post="currPost" />
+    <div v-show="loading" class="mt-1.6em text-left">
+      <template v-for="i in 4" :key="i">
+        <n-skeleton text :repeat="getRandInt(1, 3)" />
+        <n-skeleton text :style="`width: ${getRandInt(20, 80)}%`" />
+      </template>
+    </div>
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <div v-show="!loading" ref="postContentEle" class="md-blog m-auto text-left" v-html="data" />
+    <PostFooter :post="currPost.url" />
+    <Comment :post="currPost" />
+    <CommonFooter />
+  </article>
 </template>
