@@ -2,7 +2,7 @@
 <!-- License: MIT -->
 
 <script setup lang="ts">
-const { getToc } = useToc()
+const { getToc, enableToc } = useToc()
 const elem = getToc()
 function scrollIntoView(id: string) {
   document.getElementById(id)?.scrollIntoView({
@@ -35,7 +35,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <nav class="mb-6 mx-1.25 card p-6">
+  <nav v-show="enableToc" class="mb-6 mx-1.25 card pl-6 p-4">
     <h2 class="font-medium text-lg mb-4">
       目录
     </h2>
