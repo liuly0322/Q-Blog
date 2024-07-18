@@ -1,13 +1,9 @@
-let mduiElement: HTMLElement | null = null
 function getMduiElement() {
-  mduiElement ??= document.querySelector('.mdui-overlay')
-  return mduiElement
+  return document.querySelector('.mdui-overlay')
 }
 
-let sidebarElement: HTMLElement | null = null
 function getSidebarElement() {
-  sidebarElement ??= document.querySelector('#sidebar')
-  return sidebarElement
+  return document.querySelector('#sidebar')
 }
 
 function openSidebar() {
