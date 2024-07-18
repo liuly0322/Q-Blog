@@ -7,11 +7,15 @@
 <p align="center">
 
   <a href="https://github.com/liuly0322/Q-Blog/blob/main/LICENSE.md">
-    <img src="https://img.shields.io/github/license/liuly0322/Q-Blog?color=blue">
+    <img src="https://img.shields.io/badge/License-MIT-68be8d">
+  </a>
+
+  <a href="https://github.com/liuly0322/Q-Blog/blob/main/LICENSE.md">
+    <img src="https://img.shields.io/badge/license-CC_BY--NC--SA_4.0-68be8d">
   </a>
 
   <a href="https://www.codefactor.io/repository/github/liuly0322/q-blog">
-    <img src="https://img.shields.io/codefactor/grade/github/liuly0322/q-blog/main">
+    <img src="https://img.shields.io/codefactor/grade/github/liuly0322/q-blog/main?color=68be8d">
   </a>
 
 </p>
