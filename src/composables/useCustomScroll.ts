@@ -1,16 +1,14 @@
 import type { RouteLocationNormalized, RouteLocationNormalizedLoaded } from 'vue-router'
 
-const { phoneNavToggle } = usePhone()
+const { closeSidebar } = useMobileSidebar()
 
 interface scrollPosition {
   left: number
   top: number
 }
 
-function scroll(position: scrollPosition, phoneNav?: boolean) {
-  window.scrollTo(position.left, position.top)
-  if (phoneNav !== undefined)
-    phoneNavToggle(phoneNav)
+function scroll(position: scrollPosition) {
+  window.scrollTo(position)
 }
 
 const { page } = usePage()
@@ -42,7 +40,7 @@ function customScrollBehavior(to: RouteLocationNormalized, from: RouteLocationNo
   const isSavedPosition = savedPosition !== null
   const position = getSavedScrollPosition(to.path, isSavedPosition)
   resetIndexPageNumber(to.path, isSavedPosition)
-  setDeferScroll(to.path, position) || scroll(position, false)
+  setDeferScroll(to.path, position) || scroll(position) || closeSidebar()
   return false
 }
 

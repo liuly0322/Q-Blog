@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { isDark, darkTheme, darkOverrides } = useDarks()
-const { phoneNavToggle } = usePhone()
+const { toggleSidebar } = useMobileSidebar()
 
 // HMR
 if (import.meta.hot)
@@ -16,7 +16,7 @@ if (import.meta.hot)
         <router-view />
         <div
           class="lg:hidden mdui-overlay"
-          @click="() => phoneNavToggle()"
+          @click="() => toggleSidebar()"
         />
       </main>
       <Toc class="min-w-[256px] w-[256px] sticky top-20 <xl:hidden ml-4 h-full overflow-scroll max-h-[80vh]" />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { phoneNavToggle } = usePhone()
+const { toggleSidebar } = useMobileSidebar()
 const { navOptions } = useSiteNavigation()
 const routePath = useRoute()
 </script>
@@ -26,7 +26,7 @@ const routePath = useRoute()
       >
         {{ option.label }}
       </RouterLink>
-      <button aria-label="menu" class="lg:hidden mx-3 flex" @click="() => phoneNavToggle()">
+      <button aria-label="menu" class="lg:hidden mx-3 flex" @click="() => toggleSidebar()">
         <i-carbon:menu />
       </button>
     </div>

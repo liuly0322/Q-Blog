@@ -19,14 +19,9 @@ function closeSidebar() {
   getSidebarElement()?.classList.remove('sidebar-open')
 }
 
-function phoneNavToggle(open?: boolean) {
-  if (typeof open !== 'undefined') {
-    open ? openSidebar() : closeSidebar()
-  }
-  else {
-    const currNavOpen = getSidebarElement()?.classList.contains('sidebar-open')
-    currNavOpen ? closeSidebar() : openSidebar()
-  }
+function toggleSidebar() {
+  const currNavOpen = getSidebarElement()?.classList.contains('sidebar-open')
+  currNavOpen ? closeSidebar() : openSidebar()
 }
 
-export default () => ({ phoneNavToggle })
+export default () => ({ openSidebar, closeSidebar, toggleSidebar })
