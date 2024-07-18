@@ -47,7 +47,7 @@ html.dark .utterances {
 /* （移动端）遮罩层 */
 .mdui-overlay {
   position: fixed;
-  top: 64.8px;
+  top: 64px;
   left: 0;
   width: 5000px;
   height: 5000px;
