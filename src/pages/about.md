@@ -2,7 +2,7 @@
 title: 关于
 ---
 
-<div class="card p-6">
+<div class="lg:card p-6">
 
 <img src="/avatar_192.webp" alt="avatar" height="192" width="192" class="rounded-full">
 
