@@ -19,7 +19,7 @@ if (import.meta.hot)
           @click="() => toggleSidebar()"
         />
       </main>
-      <Toc class="<xl:hidden w-[256px] flex-shrink-0 sticky top-20 overflow-scroll max-h-[80vh] ml-4" />
+      <Toc class="<xl:hidden w-[256px] flex-shrink-0 sticky top-20 overflow-scroll h-full max-h-[80vh] ml-4" />
     </div>
   </n-config-provider>
 </template>
