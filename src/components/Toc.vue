@@ -36,7 +36,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <nav v-show="enableToc" class="mb-6 mx-1.25 card pl-6 p-4">
+  <nav v-show="enableToc" class="card pl-6 p-4 ml-5 mr-1">
     <h2 class="font-medium text-lg mb-4">
       目录
     </h2>

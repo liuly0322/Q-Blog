@@ -5,7 +5,7 @@ const { isDark, toggleDark } = useDarks()
 </script>
 
 <template>
-  <div class="mb-6 mx-1.25 text-center card p-4">
+  <div class="m-1 mt-0 text-center lg:card p-4">
     <div class="flex justify-center mb-2">
       <img
         src="/avatar_192.webp"
