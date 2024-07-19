@@ -45,10 +45,12 @@ watch(data, () => {
         <n-skeleton text :style="`width: ${getRandInt(20, 80)}%`" />
       </template>
     </div>
-    <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-show="!loading" ref="postContentEle" class="md-blog m-auto text-left" v-html="data" />
-    <PostFooter :post="currPost.url" />
-    <Comment :post="currPost" />
-    <CommonFooter />
+    <div v-show="!loading">
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <div ref="postContentEle" class="md-blog m-auto text-left" v-html="data" />
+      <PostFooter :post="currPost.url" />
+      <Comment :post="currPost" />
+      <CommonFooter />
+    </div>
   </article>
 </template>
