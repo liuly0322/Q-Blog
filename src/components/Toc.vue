@@ -5,9 +5,10 @@
 const { getToc, enableToc } = useToc()
 const elem = getToc()
 function scrollIntoView(id: string) {
-  document.getElementById(id)?.scrollIntoView({
-    behavior: 'smooth',
-  })
+  const element = document.getElementById(id)!
+  const headerOffset = 80
+  const offsetPosition = element.offsetTop - headerOffset
+  window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
 }
 let observer: IntersectionObserver | null = null
 let garbage: HTMLElement | null = null
