@@ -35,7 +35,7 @@ function lineClamp(event: MouseEvent) {
     我在 <a href="https://bangumi.tv/user/undef_baka" class="blue-link" target="_blank" rel="noopener noreferrer">bangumi</a>
     上对部分看过动画的评分与短评（Optional）。
   </p>
-  <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4  gap-4 mt-5">
+  <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-5">
     <div
       v-for="anime in animeList" :key="anime.subject.id"
       class="flex flex-col justify-between card p-3 <sm:flex-row <sm:items-center"
