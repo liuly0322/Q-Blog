@@ -5,7 +5,7 @@ import Vue from '@vitejs/plugin-vue'
 import Pages from 'vite-plugin-pages'
 import Icons from 'unplugin-icons/vite'
 import Windicss from 'vite-plugin-windicss'
-import vsharp from 'vite-plugin-vsharp';
+import vsharp from 'vite-plugin-vsharp'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
@@ -133,12 +133,12 @@ export default defineConfig({
     // 压缩图片
     vsharp({
       excludePublic: [
-        'public/*'
+        'public/*',
       ],
       includePublic: [
         'public/images/*.png',
         'public/images/*.jpg',
-      ]
+      ],
     }),
     // 打包体积分析
     visualizer(),
