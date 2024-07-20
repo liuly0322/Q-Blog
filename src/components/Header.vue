@@ -14,7 +14,7 @@ const routePath = useRoute()
         height="48"
         width="48"
       >
-      <span class="<sm:hidden pl-2 text-lg flex-shrink-0">llyのblog</span>
+      <span class="<sm:hidden pl-2 text-lg">llyのblog</span>
     </router-link>
     <div class="inline-flex items-center">
       <RouterLink
