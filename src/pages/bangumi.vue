@@ -35,43 +35,40 @@ function lineClamp(event: MouseEvent) {
     我在 <a href="https://bangumi.tv/user/undef_baka" class="blue-link" target="_blank" rel="noopener noreferrer">bangumi</a>
     上对部分看过动画的评分与短评（Optional）。
   </p>
-  <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-5">
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-5">
     <div
       v-for="anime in animeList" :key="anime.subject.id"
-      class="flex flex-col justify-between card p-3 <sm:flex-row <sm:items-center"
+      class="flex justify-between items-center card p-3"
     >
-      <a class="mb-2 <sm:flex-shrink-0 <sm:basis-2/5" :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer">
+      <a class="flex-shrink-0 basis-4/9" :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer">
         <img :src="anime.subject.images.medium" :alt="anime.subject.name" class="rounded-lg w-full" style="aspect-ratio: 5 / 7;">
       </a>
 
-      <div class="<sm:ml-4 flex flex-col justify-between flex-grow text-sm">
+      <div class="h-full ml-2 flex flex-col justify-between flex-grow text-sm">
         <a
           :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer"
-          class="mt-2 text-lg blue-link font-bold"
+          class="text-lg blue-link font-bold hover:underline"
         >
           {{ anime.subject.name_cn || anime.subject.name }}
         </a>
 
-        <div class="cursor-pointer line-clamp-2 text-gray-500 mt-4 mb-2 whitespace-pre-line" @click="lineClamp">
+        <div class="cursor-pointer line-clamp-2 text-gray-500 my-2 whitespace-pre-line" @click="lineClamp">
           {{ anime.subject.short_summary }}
         </div>
 
         <hr>
 
-        <div v-if="anime.comment" class="cursor-pointer line-clamp-3 mt-4" @click="lineClamp">
+        <div v-if="anime.comment" class="cursor-pointer line-clamp-3 my-2" @click="lineClamp">
           {{ anime.comment }}
         </div>
 
-        <div class="mt-4 flex flex-wrap justify-center">
+        <div>
           <n-rate :default-value="anime.rate / 2" readonly allow-half />
-          <span class="text-gray-500 ml-2 text-xs mt-1 <sm:hidden">
-            {{ anime.updated_at }}
-          </span>
         </div>
       </div>
     </div>
   </div>
-  <div v-if="loading" ref="loadingElement" class="text-center pt-5">
+  <div v-if="loading" ref="loadingElement" class="pt-5">
     <LineMdLoadingLoop style="color: #18a058;" />
   </div>
 </template>
