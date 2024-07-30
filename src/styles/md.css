@@ -39,10 +39,10 @@
 
 .md-blog a {
   color: #258fb8;
-  text-decoration: none;
+  text-decoration: underline;
 }
 .md-blog a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 .md-blog ul,
 .md-blog ol,
