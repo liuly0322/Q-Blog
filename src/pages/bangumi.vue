@@ -38,10 +38,10 @@ function lineClamp(event: MouseEvent) {
   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-5">
     <div
       v-for="anime in animeList" :key="anime.subject.id"
-      class="flex justify-between items-center card p-3"
+      class="flex items-center card p-3"
     >
-      <a class="flex-shrink-0 basis-4/9" :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer">
-        <img :src="anime.subject.images.medium" :alt="anime.subject.name" class="rounded-lg w-full" style="aspect-ratio: 5 / 7;">
+      <a class="flex-shrink-0" :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer">
+        <img :src="anime.subject.images.medium" :alt="anime.subject.name" class="rounded-lg" width="130" height="182">
       </a>
 
       <div class="h-full ml-2 flex flex-col justify-between flex-grow text-sm">
