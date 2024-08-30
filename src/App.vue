@@ -13,7 +13,7 @@ if (import.meta.hot)
     <div class="flex">
       <Sidebar
         id="sidebar"
-        class="<lg:fixed <lg:z-3 <lg:right-[-300px] w-[256px] flex-shrink-0 sticky top-20 <lg:top-16 overflow-scroll h-full lg:mr-4 duration-300 bg-hex-fff dark:bg-hex-18181c"
+        class="<lg:fixed <lg:z-3 <lg:right-[-300px] w-[256px] flex-shrink-0 sticky top-20 <lg:top-16 overflow-auto h-full lg:mr-4 duration-300 bg-hex-fff dark:bg-hex-18181c"
         style="max-height: calc(100vh - 80px)"
       />
       <main class="flex-grow min-w-0 pb-10 text-center text-gray-700 dark:text-gray-200">
