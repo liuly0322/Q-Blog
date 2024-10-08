@@ -7,7 +7,7 @@ const loadingElement = ref<HTMLElement>()
 const intersectionObserver = new IntersectionObserver(
   ([entry]) => {
     if (entry.isIntersecting)
-      updateAnimeList()
+      updateAnimeListWithIntersectionCheck()
   },
 )
 onMounted(() => {
@@ -24,6 +24,19 @@ function lineClamp(event: MouseEvent) {
     const webkitLineClamp = el.style.getPropertyValue('-webkit-line-clamp') || lineClamp
     el.style.setProperty('-webkit-line-clamp', webkitLineClamp === lineClamp ? 'unset' : lineClamp)
   }
+}
+
+async function updateAnimeListWithIntersectionCheck() {
+  await updateAnimeList()
+  requestAnimationFrame(() => {
+    if (loadingElement.value && isInView(loadingElement.value))
+      updateAnimeListWithIntersectionCheck()
+  })
+}
+
+function isInView(el: HTMLElement) {
+  const box = el.getBoundingClientRect()
+  return box.top < window.innerHeight && box.bottom >= 0
 }
 </script>
 
