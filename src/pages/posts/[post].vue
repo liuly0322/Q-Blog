@@ -2,10 +2,12 @@
 import { getRandInt } from '~/utils/math'
 
 const props = defineProps<{ post: string }>()
-const { getCachedPostData, getCurrentPostSummary } = usePostData()
+const { emptySummary, getCachedPostData, getCurrentPostSummary } = usePostData()
 const currPost = computed(() => getCurrentPostSummary(props.post))
 
 const title = computed(() => {
+  if (currPost.value === emptySummary)
+    return 'llyのblog'
   return `${currPost.value.title} | llyのblog`
 })
 useTitle(title)
@@ -18,7 +20,11 @@ onBeforeUnmount(() => {
 const loading = ref(true)
 const data = asyncComputed(async (onCancel) => {
   loading.value = true
-  const data = await getCachedPostData(props.post, onCancel)
+  const data = await (async () => {
+    if (currPost.value === emptySummary)
+      return '<p><strong>找不到页面了 :(</strong></p>'
+    return await getCachedPostData(props.post, onCancel)
+  })()
   loading.value = false
   return data
 }, '')

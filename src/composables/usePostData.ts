@@ -31,14 +31,11 @@ async function getCachedPostData(post: string, onCancel?: AsyncComputedOnCancel)
   return data
 }
 
+const emptySummary = Object.freeze({ url: '', title: '404 Not Found', tags: [], date: '' })
+
 const { summary } = useSummary()
 function getCurrentPostSummary(post: string) {
-  return summary.find(post_ => post.includes(post_.url)) ?? {
-    url: '',
-    title: '',
-    tags: [],
-    date: '',
-  }
+  return summary.find(post_ => post.includes(post_.url)) ?? emptySummary
 }
 
-export default () => ({ getCachedPostData, getCurrentPostSummary })
+export default () => ({ emptySummary, getCachedPostData, getCurrentPostSummary })
