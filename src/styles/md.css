@@ -1,0 +1,121 @@
+.md-blog {
+  max-width: 1000px;
+  overflow-wrap: break-word;
+}
+
+.md-blog p,
+.md-blog table {
+  line-height: 1.6em;
+  margin: 1.6em 0;
+}
+.md-blog blockquote {
+  margin: 10px 0;
+  padding-left: 15px;
+  padding-right: 10px;
+  border-left: 3px solid #ccc;
+}
+.md-blog blockquote p {
+  margin: 0;
+}
+.md-blog h1 {
+  font-size: 2em;
+}
+.md-blog h2 {
+  font-size: 1.5em;
+}
+.md-blog h3 {
+  font-size: 1.2em;
+}
+.md-blog h1,
+.md-blog h2,
+.md-blog h3,
+.md-blog h4,
+.md-blog h5,
+.md-blog h6 {
+  font-weight: bold;
+  line-height: 1.1em;
+  margin: 1.1em 0;
+}
+
+.md-blog a {
+  color: #258fb8;
+  text-decoration: underline;
+}
+.md-blog a:hover {
+  text-decoration: none;
+}
+.md-blog ul,
+.md-blog ol,
+.md-blog dl {
+  padding-left: 20px;
+  margin-top: 1.6em;
+  margin-bottom: 1.6em;
+}
+.md-blog ul {
+  list-style: circle;
+}
+.md-blog ol {
+  list-style: decimal;
+}
+.md-blog ul ul,
+.md-blog ol ul,
+.md-blog ul ol,
+.md-blog ol ol {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.md-blog img,
+.md-blog video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+}
+.md-blog iframe {
+  border: none;
+}
+.md-blog table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.md-blog th {
+  font-weight: bold;
+  border-bottom: 3px solid #ddd;
+  padding-bottom: 0.5em;
+}
+.md-blog td {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+.md-blog td footer {
+  font-size: 14px;
+  margin: 1.6em 0;
+  font-family: font-sans;
+}
+.md-blog td footer cite:before {
+  content: "—";
+  padding: 0 0.5em;
+}
+code[class*=language-] {
+  padding: 1em;
+  background-color: #fbfbfb;
+  display: block;
+  overflow: auto;
+}
+html.dark code[class*=language-] {
+  background-color: #151515;
+}
+.md-blog code:not(pre>code) {
+  color: #2f8a89;
+  background-color: #fbfbfb;
+  padding: 0.2em 0.4em;
+}
+html.dark .md-blog code:not(pre>code) {
+  color: #429988;
+  background-color: #151515;
+}
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark) !important;
+}

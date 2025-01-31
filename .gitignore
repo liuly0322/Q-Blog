@@ -1,0 +1,11 @@
+/.vscode
+/node_modules
+/dist
+/stats.html
+/public/posts
+/public/images
+/public/page.json
+/public/feed.xml
+/src/jsons/summary.json
+/src/types/auto-imports.d.ts
+/src/types/components.d.ts
