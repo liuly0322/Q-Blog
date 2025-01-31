@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import LineMdLoadingLoop from '~icons/line-md/loading-loop?width=48px&height=48px'
 import type { PostSummary } from '~/composables/useSummary'
+import LineMdLoadingLoop from '~icons/line-md/loading-loop?width=48px&height=48px'
 
 const props = defineProps<{
   post: PostSummary

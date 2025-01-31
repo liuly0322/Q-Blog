@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { getCurrentSeason, getCurrentYear } from '~/utils/date'
 import IconRedHeart from '~icons/fluent-emoji-flat/red-heart'
+import { getCurrentSeason, getCurrentYear } from '~/utils/date'
 </script>
 
 <template>

@@ -2,10 +2,10 @@
 // Author: boyum
 // License: Apache-2.0 license
 
-import path from 'node:path'
-import imageSize from 'image-size'
 import type markdownIt from 'markdown-it'
 import type { Token } from 'markdown-it'
+import path from 'node:path'
+import imageSize from 'image-size'
 
 export default (absolutePathPrefix = '') =>
   function markdownItImageSize(md: markdownIt): void {
