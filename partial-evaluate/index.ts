@@ -1,9 +1,9 @@
-import * as parser from '@babel/parser'
+import type { Config } from './config'
 import _generator from '@babel/generator'
+import * as parser from '@babel/parser'
+import { getTransformers } from './config'
 import logger from './log'
 import saveFiles from './utils'
-import type { Config } from './config'
-import { getTransformers } from './config'
 
 // @ts-expect-error: https://github.com/babel/babel/issues/15269
 const generator = _generator.default as typeof _generator

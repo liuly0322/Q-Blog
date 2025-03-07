@@ -1,8 +1,8 @@
-import Typography from 'windicss/plugin/typography'
 import animationPlugin from '@windicss/plugin-animations'
 import { defineConfig } from 'windicss/helpers'
 import plugin from 'windicss/plugin'
 import lineClampPlugin from 'windicss/plugin/line-clamp'
+import Typography from 'windicss/plugin/typography'
 
 export default defineConfig({
   darkMode: 'class',

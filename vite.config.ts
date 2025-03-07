@@ -1,25 +1,25 @@
 import { resolve } from 'node:path'
-import { defineConfig } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
+import Terser from '@rollup/plugin-terser'
 import Vue from '@vitejs/plugin-vue'
-import Pages from 'vite-plugin-pages'
-import Icons from 'unplugin-icons/vite'
-import Windicss from 'vite-plugin-windicss'
-import vsharp from 'vite-plugin-vsharp'
+import mdLinkAttrPlugin from 'markdown-it-link-attributes'
+import { visualizer } from 'rollup-plugin-visualizer'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
-import Components from 'unplugin-vue-components/vite'
-import Terser from '@rollup/plugin-terser'
-import { visualizer } from 'rollup-plugin-visualizer'
-
+import Icons from 'unplugin-icons/vite'
 import {
   NaiveUiResolver,
   VueUseComponentsResolver,
 } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
 import Markdown from 'unplugin-vue-markdown/vite'
-import mdLinkAttrPlugin from 'markdown-it-link-attributes'
-import PartialEvaluator from './partial-evaluate'
+import { defineConfig } from 'vite'
+import Pages from 'vite-plugin-pages'
+
+import { VitePWA } from 'vite-plugin-pwa'
+import vsharp from 'vite-plugin-vsharp'
+import Windicss from 'vite-plugin-windicss'
 import BuildPosts from './build/buildPosts'
+import PartialEvaluator from './partial-evaluate'
 
 const markdownWrapperClasses = 'md-blog m-auto text-left'
 

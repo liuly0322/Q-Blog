@@ -1,11 +1,11 @@
-import path from 'node:path'
-import type { NodePath } from '@babel/traverse'
-import _traverse from '@babel/traverse'
-import type { CallExpression, File } from '@babel/types'
 import type { ParseResult } from '@babel/parser'
-import { replaceDestructure, replaceMemberExpression } from './replacement'
+import type { NodePath } from '@babel/traverse'
+import type { CallExpression, File } from '@babel/types'
 import type { Config } from './config'
+import path from 'node:path'
+import _traverse from '@babel/traverse'
 import logger from './log'
+import { replaceDestructure, replaceMemberExpression } from './replacement'
 
 // @ts-expect-error: https://github.com/babel/babel/issues/15269
 const traverse = _traverse.default as typeof _traverse
