@@ -24,7 +24,7 @@ if (import.meta.hot)
         />
       </main>
       <Toc
-        class="<xl:hidden w-[256px] flex-shrink-0 sticky top-20 overflow-scroll h-full"
+        class="<xl:hidden w-[256px] flex-shrink-0 sticky top-20 overflow-auto h-full"
         style="max-height: calc(100vh - 80px)"
       />
     </div>
