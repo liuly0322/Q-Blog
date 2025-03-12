@@ -41,9 +41,9 @@ function getIdentityElement<T>(): T {
 
 给定集合 $T$：
 
-- 有一个二元运算 $*: T \times T \to T$；
-- $*$ 满足结合律：$(a * b) * c = a * (b * c)$；
-- 有一个单位元素 $1 \in T$，使得对于任意 $a \in T$，$a * 1 = 1 * a = a$。
+- 有一个二元运算 $*: T \times T \to T$
+- $*$ 满足结合律：$(a * b) * c = a * (b * c)$
+- 有一个单位元素 $1 \in T$，使得对于任意 $a \in T$，$a * 1 = 1 * a = a$
 
 在这里，`Product` 就是「二元运算」，`getIdentityElement` 就是得到一个「单位元素」。可以验证上面的例子满足结合律和单位元素的要求。
 
@@ -275,8 +275,10 @@ function fmap<A, B>(f: Hom<A, B>): (list: List<A>) => List<B> {
   return (list: List<A>) => list.map(f)
 }
 
+// List ○ List 是 List 自函子的复合
+// 它的 fmap_ll 函数由 List 的 fmap 函数复合得到
 function fmap_ll<A, B>(f: Hom<A, B>): (list: List<List<A>>) => List<List<B>> {
-  return (list: List<List<A>>) => list.map((x: List<A>) => x.map(f))
+  return fmap(fmap(f))
 }
 
 // List ○ List -> List
@@ -284,43 +286,55 @@ function join<T>(list: List<List<T>>): List<T> {
   return list.reduce((acc, x) => acc.concat(x), [])
 }
 
-// 应该满足：
-// join ○ fmap_ll(f) = fmap(f) ○ join
+// 应该满足：join ○ fmap_ll(f) = fmap(f) ○ join
 let x: List<List<number>> = [[1, 2], [3, 4]]
-// left 和 right 应该相等，即 ['1', '2', '3', '4']
 let left = join(fmap_ll(number_to_string)(x))
 let right = fmap(number_to_string)(join(x))
+
+console.assert(JSON.stringify(left) === JSON.stringify(right));
 ```
 
-换言之，我们要确保 `join` 和 `fmap` 之间的关系是可以交换的。同样的事情对 `unit` 也需要验证。这样才能保证上面代码的 `left` 和 `right` 是相等的。
+你可以在 [TypeScript Playground](https://www.typescriptlang.org/play/?#code/C4TwDgpgBAEg9gWwDwEEA0UBCA+KBeKACgEMAuKFASn10wChRIoAZASwGdgkAVXA7gNoBdBuGisAJjz5RudOgBsIwKADsArggBGEAE4B9YHH2ddrVQHN8RAB7kN2vdTy4bAOiMBlYGcuFK8gBm6qoAxsCscKpQgQjEYKgYOISB5PDI6FjYlOSEChzA5GycqNk0LAVIOFAA3nRQULrK6rrReQVFlShlLlD5nG5xYCkBAL5BIeGR0bHx+goKiVkpaYhLODlE-YUVJcVc3T24+0gnOLh1DU3ALTNDKfeBlGPyAPSvuyqA06SfUAC0xwKdGCYQiUSgACs4OZpO1OJ09pVeNkEVxeLV6o1mq0+gU3E0JOpQhBCCRQqEMDZnLhiOS3KEoqFiMBCFSMMIXnR3lBACl6gFPowCHdoBm2MAWP9Q8xQH6zMDzBQjazS+U-cWqRTKKB2T6nSoOHS6bAyAQCACMGAATEJ2QBmDAAFiEIiUKiUgRUBBVDzmC0Iur0hmMpnMFkorOeapUZgsAAs3TF7r6DEYTD4gyGPVSAnQGap2HAlG5iOx2HoWQApTwAeQAcm5A5ZWIEQHkIK7nHgCOXq7WU-XG4RIzHngBuIA) 中验证代码。
+
+代码说的事情就是，对一个多层的 monad，下面两种操作应该是等价的：
+
+- 先整体应用某个操作（`fmap_ll`），再合并成一层（`join`）；
+- 先合并成一层（`join`），再对每个元素应用某个操作（`fmap`）。
+
+也就是确保 `join` 和 `fmap` 之间可交换，这样才能保证上面代码的 `left` 和 `right` 是相等的。同样的事情对 `unit` 也可以验证，对一个 `List<T>`，下面两种操作等价：
+
+- 先再包装一层（`unit`），再整体应用某个操作（`fmap_ll`）；
+- 先应用某个操作（`fmap`），再再包装一层（`unit`）。
 
 ### 定义 Monad
 
 理解了自然变换后，可以得到 monad 的定义：
 
-$U$ 范畴上的单子就是函子 $T: U \to U$，连同两个自然变换：
-- $\text{unit}: id \to T$，对应函数 $\text{unit}_a: a \to T(a)$
-- $\text{join}: T \circ T \to T$，对应函数 $\text{join}_a: T(T(a)) \to T(a)$
+$U$ 范畴上的单子就是函子 $F: U \to U$，连同两个自然变换：
+- $\text{unit}: \text{id} \to F$，对应函数 $\text{unit}_a: a \to F(a)$
+- $\text{join}: F \circ F \to F$，对应函数 $\text{join}_a: F(F(a)) \to F(a)$
 
-然而这还不够。我们还要求这两个自然变换满足一些性质。直观感受：
+我们要求这些自然变换满足一些性质。直观感受：
 
 - 对于 `List<List<List<T>>>`，先对内层应用 `join`，再应用 `join`，应该等于先对外层应用 `join`，再应用 `join`；
-- 对于 `List<T>`，先应用 `unit`，再应用 `join`，应该等于 `id`；
-- 对于 `List<T>`，先应用 `fmap(unit)`，再应用 `join`，应该等于 `id`。
+- 对于 `List<T>`，先应用 `unit`，再应用 `join`，应该不变；
+- 对于 `List<T>`，先应用 `fmap(unit)`，再应用 `join`，应该不变。
+
+不变换言之就是恒等变换，这是 $F$ 到 $F$ 之间天然存在的。我们把它记作 $1_F$。
 
 写成定义：
 
-- $\text{join}_a \circ \text{fmap}(\text{join}_a) = \text{join}_a \circ \text{join}_{T(a)}$
-- $\text{join}_a \circ \text{unit}_{T(a)} = \text{id}_{T(a)}$
-- $\text{join}_a \circ \text{fmap}(\text{unit}_a) = \text{id}_{T(a)}$
+- $\text{join}_a \circ \text{fmap}(\text{join}_a) = \text{join}_a \circ \text{join}_{F(a)}$
+- $\text{join}_a \circ \text{unit}_{F(a)} = 1_{F}$
+- $\text{join}_a \circ \text{fmap}(\text{unit}_a) = 1_{F}$
 
 ### 自函子范畴上的幺半群
 
 最后，你可以开始理解「一个单子（Monad）说白了不过就是自函子范畴上的一个幺半群而已」这句话了。
 
-首先要注意，自函子范畴并不是我们一直在说的 $U$。自函子范畴是一个更高阶的范畴，它的对象是自函子，态射是自然变换。那这就有了自函子 $id$，自函子 $T$ 和自然变换 $\text{unit}$、自然变换 $\text{join}$。
+首先要注意，自函子范畴并不是我们一直在说的 $U$。自函子范畴是一个更高阶的范畴，它的对象是自函子，态射是自然变换。那这就有了自函子 $\text{id}$，自函子 $F$ 作为对象和自然变换 $\text{unit}$、自然变换 $\text{join}$ 作为态射。
 
-可见，「自函子范畴」五个字就概括了「函子 $T: U \to U$，连同两个自然变换」这些 monad 的要素了。
+可见，「自函子范畴」五个字就概括了「函子 $F: U \to U$，连同两个自然变换」这些 monad 的要素了。
 
 这里的「幺半群」是一个令人困惑的点，因为它是我们前面介绍的代数结构中的幺半群的推广。它的定义是：
 
@@ -329,12 +343,33 @@ $U$ 范畴上的单子就是函子 $T: U \to U$，连同两个自然变换：
 - $\mu: M \circ M \to M$
 - $\eta: I \to M$
 
-那么，代数结构中的幺半群的性质被移植如下（下面不严谨地写了交换图的箭头）：
+代数结构中的幺半群的性质被移植如下（下面不严谨地写了交换图的箭头）：
 
 - 二元运算 $*$ 被 $\mu$ 取代；
 - $\mu$ 满足结合律：$(M \circ M) \circ M \to M \circ (M \circ M)$
 - 有一个单位元素 $I \in C$
-  - 左结合：$I \circ M \to M$
-  - 右结合：$M \circ I \to M$
+  - 左单位律：$I \circ M \to M$
+  - 右单位律：$M \circ I \to M$
 
-这部分和程序语言没太大关系，不做深究。
+对应到自函子范畴上：
+
+- $F$ 自函子作为**幺半群对象** $M$；
+- $\text{join}$ 自然变换作为态射 $\mu$；
+- $\text{unit}$ 自然变换作为态射 $\eta$。
+- $\text{id}$ 自函子作为单位元素 $I$。
+
+检查 monad 的 $\text{join}$ 和 $\text{unit}$ 满足的条件：
+
+$$\text{join}_a \circ \text{fmap}(\text{join}_a) = \text{join}_a \circ \text{join}_{F(a)}$$
+
+两边分别把 $F \circ (F \circ F)$ 和 $(F \circ F) \circ F$ 映射到 $F$。这就是结合律。
+
+$$\text{join}_a \circ \text{unit}_{F(a)} = 1_{F}$$
+
+两边分别把 $\text{id} \circ F$ 和 $F$ 映射到 $F$。这就是左单位律。
+
+$$\text{join}_a \circ \text{fmap}(\text{unit}_a) = 1_{F}$$
+
+两边分别把 $F \circ \text{id}$ 和 $F$ 映射到 $F$。这就是右单位律。
+
+自然，单子是一个自函子范畴上的幺半群（对象）。
