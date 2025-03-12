@@ -329,6 +329,35 @@ $U$ 范畴上的单子就是函子 $F: U \to U$，连同两个自然变换：
 - $\text{join}_a \circ \text{unit}_{F(a)} = 1_{F}$
 - $\text{join}_a \circ \text{fmap}(\text{unit}_a) = 1_{F}$
 
+同样，你可以用代码验证这几条性质的作用。你可以在 [TypeScript Playground](https://www.typescriptlang.org/play/?#code/C4TwDgpgBAEg9gWwDwEEA0UBCA+KBeKACgEMAuKFASn10wChRIoAZASwGdgkAVXA7gNoBdOnQBmAVwB2AY2Cs4UqGITEwqDDkJjy8ZOizZK5QgBsOwcm06ojNFhaQ4oAbzpQoAJwjAJnpWYWVo4odni45pwAdKpg2pR0AL6iAPQpDpxQgNOkGcBQALS41sDi0nIKSgBWcKxSPNiBnME2xfVGzVy8ru5ePn5KkcBR3gAmEjIQhCQyMhgAHtThUMQzUTKKMsTAhAsYwgnJpbLyisqmW8AQUgDMACIA+gBuAIz1jZa5SK2tvNjtn103B5vL5-FBqrVCBCpO9KJQANxJUSSY4VM4XK53J4AJjegw6X0cPz+-2J3WBfTB0O0sShNSklFhCKRdHWUkycwJ30cUgkCAARhBPCT8FABD1xR4PAJnhhsRhrkI0D1pQAWDAAVhEHiVEpVYoAbLqpWKAOwYAAcGAAnNqoCIhIjWYp2HBTBAosR2OwhdsAFIAZQA8gA5KKcTy1ADmrDEIG052AlxuDxeOzh+DwBEDofDwEjUhjcYTGJTOPTcPhQA) 中验证第一条性质。
+
+```typescript
+function flatten3D_v1<T>(list: List<List<List<T>>>): List<T> {
+  return join(join(list));
+}
+
+function flatten3D_v2<T>(list: List<List<List<T>>>): List<T> {
+  return join(fmap(join)(list));
+}
+
+const x: List<List<List<number>>> = [
+  [
+    [1, 2, 3],
+    [4, 5]
+  ],
+  [
+    [6],
+    [7, 8, 9]
+  ]
+];
+
+const left = JSON.stringify(flatten3D_v1(x))
+const right = JSON.stringify(flatten3D_v2(x))
+console.assert(left === right);
+```
+
+除了保证语义之外，monad 的性质还保证了这里有基于规则重写或其他手段的自动优化 `flatten3D` 函数实现的可能性。
+
 ### 自函子范畴上的幺半群
 
 最后，你可以开始理解「一个单子（Monad）说白了不过就是自函子范畴上的一个幺半群而已」这句话了。
