@@ -231,6 +231,7 @@ function and_then<A, B>(f: Hom<A, List<B>>): (list: List<A>) => List<List<B>> {
 函数返回类型 `List<List<B>>`，而不是希望的 `List<B>`。这就启发我们，monad 应该能合并多层的 `List`。我们把这个方法叫做 `join`：
 
 ```typescript
+// id 是恒等自函子
 type id<T> = T
 
 // id -> F
@@ -296,12 +297,12 @@ console.assert(JSON.stringify(left) === JSON.stringify(right));
 
 你可以在 [TypeScript Playground](https://www.typescriptlang.org/play/?#code/C4TwDgpgBAEg9gWwDwEEA0UBCA+KBeKACgEMAuKFASn10wChRIoAZASwGdgkAVXA7gNoBdBuGisAJjz5RudOgBsIwKADsArggBGEAE4B9YHH2ddrVQHN8RAB7kN2vdTy4bAOiMBlYGcuFK8gBm6qoAxsCscKpQgQjEYKgYOISB5PDI6FjYlOSEChzA5GycqNk0LAVIOFAA3nRQULrK6rrReQVFlShlLlD5nG5xYCkBAL5BIeGR0bHx+goKiVkpaYhLODlE-YUVJcVc3T24+0gnOLh1DU3ALTNDKfeBlGPyAPSvuyqA06SfUAC0xwKdGCYQiUSgACs4OZpO1OJ09pVeNkEVxeLV6o1mq0+gU3E0JOpQhBCCRQqEMDZnLhiOS3KEoqFiMBCFSMMIXnR3lBACl6gFPowCHdoBm2MAWP9Q8xQH6zMDzBQjazS+U-cWqRTKKB2T6nSoOHS6bAyAQCACMGAATEJ2QBmDAAFiEIiUKiUgRUBBVDzmC0Iur0hmMpnMFkorOeapUZgsAAs3TF7r6DEYTD4gyGPVSAnQGap2HAlG5iOx2HoWQApTwAeQAcm5A5ZWIEQHkIK7nHgCOXq7WU-XG4RIzHngBuIA) 中验证代码。
 
-代码说的事情就是，对一个多层的 monad，下面两种操作应该是等价的：
+代码说的事情就是，我们希望 `join` 这个 $List \circ List$ 到 $List$ 的映射能够保证，对一个 `List<List<T>>`，以下两种操作等价：
 
 - 先整体应用某个操作（`fmap_ll`），再合并成一层（`join`）；
 - 先合并成一层（`join`），再对每个元素应用某个操作（`fmap`）。
 
-也就是确保 `join` 和 `fmap` 之间可交换，这样才能保证上面代码的 `left` 和 `right` 是相等的。同样的事情对 `unit` 也可以验证，对一个 `List<T>`，下面两种操作等价：
+这样可以保证上面代码的 `left` 和 `right` 是相等的。同样的事情对 `unit` 也可以验证，对一个 `List<T>`，下面两种操作等价：
 
 - 先再包装一层（`unit`），再整体应用某个操作（`fmap_ll`）；
 - 先应用某个操作（`fmap`），再再包装一层（`unit`）。
@@ -311,7 +312,7 @@ console.assert(JSON.stringify(left) === JSON.stringify(right));
 理解了自然变换后，可以得到 monad 的定义：
 
 $U$ 范畴上的单子就是函子 $F: U \to U$，连同两个自然变换：
-- $\text{unit}: \text{id} \to F$，对应函数 $\text{unit}_a: a \to F(a)$
+- $\text{unit}: \text{id} \to F$，对应函数 $\text{unit}_a: \text{id}(a) \to F(a)$
 - $\text{join}: F \circ F \to F$，对应函数 $\text{join}_a: F(F(a)) \to F(a)$
 
 我们要求这些自然变换满足一些性质。直观感受：
@@ -336,20 +337,25 @@ $U$ 范畴上的单子就是函子 $F: U \to U$，连同两个自然变换：
 
 可见，「自函子范畴」五个字就概括了「函子 $F: U \to U$，连同两个自然变换」这些 monad 的要素了。
 
-这里的「幺半群」是一个令人困惑的点，因为它是我们前面介绍的代数结构中的幺半群的推广。它的定义是：
+这里的「幺半群」是一个令人困惑的点，因为它是我们前面介绍的代数结构中的幺半群的推广。它的严格定义需要先引入张量积、自然同构等概念，构造出一个张量范畴，然后再在张量范畴上定义幺半群。本文不打算作为一个严谨的数学教材把这些概念都先定义一遍，因此直接给出结论：
 
-给定一个范畴 $C$，$C$ 上的幺半群（幺半群对象）是一个**对象** $M \in C$，连同两个态射:
+- 自函子范畴是一个张量范畴；
+- 自函子范畴上的函子复合就是张量积。
 
-- $\mu: M \circ M \to M$
+> 范畴 $C$ 上的张量积一般写成 $\otimes: C \times C \to C$，它是范畴 $C$ 上的一个二元运算。这里的自函子范畴就取函子复合作为张量积。因为我们这里没有给出张量积的定义，所以不严谨地，你可以先用「函子复合」这个模型来理解。
+
+给定一个张量范畴 $C$，$C$ 上的幺半群（幺半群对象）是一个**对象** $M \in C$，连同两个态射:
+
+- $\mu: M \otimes M \to M$
 - $\eta: I \to M$
 
 代数结构中的幺半群的性质被移植如下（下面不严谨地写了交换图的箭头）：
 
 - 二元运算 $*$ 被 $\mu$ 取代；
-- $\mu$ 满足结合律：$(M \circ M) \circ M \to M \circ (M \circ M)$
+- $\mu$ 满足结合律：$(M \otimes M) \otimes M \to M \otimes (M \otimes M)$
 - 有一个单位元素 $I \in C$
-  - 左单位律：$I \circ M \to M$
-  - 右单位律：$M \circ I \to M$
+  - 左单位律：$I \otimes M \to M$
+  - 右单位律：$M \otimes I \to M$
 
 对应到自函子范畴上：
 
@@ -358,18 +364,44 @@ $U$ 范畴上的单子就是函子 $F: U \to U$，连同两个自然变换：
 - $\text{unit}$ 自然变换作为态射 $\eta$。
 - $\text{id}$ 自函子作为单位元素 $I$。
 
-检查 monad 的 $\text{join}$ 和 $\text{unit}$ 满足的条件：
+回顾 monad 的 $\text{join}$ 和 $\text{unit}$ 满足的条件。第一条：
 
 $$\text{join}_a \circ \text{fmap}(\text{join}_a) = \text{join}_a \circ \text{join}_{F(a)}$$
 
-两边分别把 $F \circ (F \circ F)$ 和 $(F \circ F) \circ F$ 映射到 $F$。这就是结合律。
+等号左边：
+
+$$
+\begin{align*}
+\text{join}_a&: (F \otimes F)(a) \to F(a)\\
+\text{fmap}(\text{join}_a)&: (F \otimes (F \otimes F))(a) \to (F \otimes F)(a)\\
+\text{join}_a \circ \text{fmap}(\text{join}_a)&: (F \otimes (F \otimes F))(a) \to F(a)
+\end{align*}
+$$
+
+所以它们的复合是一个 $F \otimes (F \otimes F)$ 到 $F$ 的自然变换。
+
+等号右边：
+
+$$
+\begin{align*}
+\text{join}_{F(a)}&: (F \otimes F)(F(a)) \to F(F(a))\\
+\text{join}_{F(a)}&: ((F \otimes F) \otimes F)(a) \to (F \otimes F)(a)\\
+\text{join}_a \circ \text{join}_{F(a)}&: ((F \otimes F) \otimes F)(a) \to F(a)
+\end{align*}
+$$
+
+所以它们的复合是一个 $(F \otimes F) \otimes F$ 到 $F$ 的自然变换。
+
+等式的意义是 $F \otimes (F \otimes F)$ 和 $(F \otimes F) \otimes F$ 到 $F$ 存在一个相等的自然变换（并且我们给出了这个自然变换）。这就是为什么 monad 的第一条规则又叫做结合律。
+
+类似推导：
 
 $$\text{join}_a \circ \text{unit}_{F(a)} = 1_{F}$$
 
-两边分别把 $\text{id} \circ F$ 和 $F$ 映射到 $F$。这就是左单位律。
+说明 $\text{id} \otimes F$ 和 $F$ 到 $F$ 存在一个相等的自然变换。这就是左单位律。
 
 $$\text{join}_a \circ \text{fmap}(\text{unit}_a) = 1_{F}$$
 
-两边分别把 $F \circ \text{id}$ 和 $F$ 映射到 $F$。这就是右单位律。
+说明 $F \otimes \text{id}$ 和 $F$ 到 $F$ 存在一个相等的自然变换。这就是右单位律。
 
 自然，单子是一个自函子范畴上的幺半群（对象）。
