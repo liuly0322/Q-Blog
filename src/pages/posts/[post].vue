@@ -35,11 +35,9 @@ watchEffect(() => {
   props.post && scroll({ left: 0, top: 0 })
 })
 watch(data, () => {
-  nextTick(() => {
-    deferScroll()
-    postContentEle.value && setToc(postContentEle.value)
-  })
-})
+  postContentEle.value && setToc(postContentEle.value)
+  nextTick(deferScroll)
+}, { flush: 'post' })
 </script>
 
 <template>
