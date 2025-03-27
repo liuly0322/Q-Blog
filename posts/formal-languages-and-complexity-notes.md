@@ -387,4 +387,82 @@ $$
 
 ## 丘奇-图灵论题
 
+### 图灵机
+
+理解定义：
+
+- 把 PDA 的栈拓展为 **无限** 的纸带（内存）；
+- 相对 PDA，输入字符串被放在纸带上，而不是顺次读入。初始时纸带上只有输入字符串，其余部分是空白字符 $\sqcup \notin \Sigma$, $\sqcup \in \Gamma$, $\Sigma \subseteq \Gamma$；
+- $\delta: Q \times \Gamma \to Q \times \Gamma \times \{L, R\}$，每次根据当前状态和纸带上的字符，决定下一步的状态、写入的字符、磁头移动方向（要么向左要么向右移动一格）；
+- $q_0$ 是初始状态，$q_{\text{accept}}$ 是接受状态，$q_{\text{reject}}$ 是拒绝状态。
+
+> *[Advice to a Beginning Graduate Student](https://www.cs.cmu.edu/~mblum/research/pdf/grad.html)*
+> STUDYING:
+> You are all computer scientists.
+> You know what FINITE AUTOMATA can do.
+> You know what TURING MACHINES can do.
+> For example, Finite Automata can add but not multiply.
+> Turing Machines can compute any computable function.
+> Turing machines are incredibly more powerful than Finite Automata.
+> Yet the only difference between a FA and a TM is that
+> the TM, unlike the FA, has paper and pencil.
+> Think about it.
+> It tells you something about the power of writing.
+> Without writing, you are reduced to a finite automaton.
+> With writing you have the extraordinary power of a Turing machine.
+
+Configuration（格局/配置）指明了图灵机当前的（运行）状态。它由当前状态、纸带内容、纸带上的读写头位置组成。
+
+- 自动机都可以有这样的配置，例如 PDA 的一个配置由当前状态、栈内容、剩余的输入串组成；
+- 因为图灵机计算能力相当于通用计算机（除开无限纸带），所以我们可以把每台图灵机都看成一个程序，带有某个具体配置（运行状态）的图灵机看成一个进程。
+
+图灵机和之前的 DFA、PDA 的一个很大区别在于，图灵机不保证能进入 $q_{\text{accept}}$ 或 $q_{\text{reject}}$。换言之，图灵机的运行结果有三种：接受、拒绝、两者皆非（不停机）。
+
+不停机可以被形式化为不存在这样的 $n$，使得图灵机在 $n$ 步转移后进入 $q_{\text{accept}}$ 或 $q_{\text{reject}}$。例如一台无限循环的图灵机就是不停机的。
+
+如果我们想要类似 DFA 或 PDA，也给出图灵机对应的语言，就需要做出一点调整。一个方向是，我们只考虑要么输出接受，要么输出拒绝的图灵机。这样的图灵机被称为 **Deciders**。每个 Decider 可以 decide 对应的语言。如果一个语言 $L$ 能被某个 Decider decide，那么 $L$ 是 **decidable**（或 **Turing-decidable**）的。
+
+另一个方向是，对于某个图灵机 $M$，它所接受的字符串也构成一个语言。称这个语言能被 $M$ recognize（识别），记作 $L(M)$。
+
+如果一个语言 $L$ 能被某个图灵机 recognize，那么 $L$ 是 **Turing-recognizable** 的。
+
+根据定义，显然有所有 decidable 的语言都是 Turing-recognizable 的，反之则不一定。下一章将会具体讨论 Turing-recognizable 但不 decidable 的语言。
+
+### 图灵机变种
+
+这一节我们先介绍多纸带图灵机和非确定性图灵机。它们看似是对图灵机的拓展，但我们会证明图灵机可以 **模拟** 它们，所以它们的能力和图灵机是等价的。
+
+这里有一个细节的问题，那就是机器的等价是通过两个机器 recognize 的语言相同来定义，因为 recognize 相比较 decide 更具有一般性。然而我们将看到，我们的构造过程也能用来说明，如果一个多纸带图灵机/非确定性图灵机能 decide 某个语言，那么对应的图灵机也能 decide 这个语言。
+
+换言之，我们最后能同时得到关于 Turing-recognizable 和 Turing-decidable 的结论。以非确定性图灵机为例：
+
+- $L$ is Turing-recognizable $\iff$ 某个非确定性图灵机 recognizes $L$；
+- $L$ is Turing-decidable $\iff$ 某个非确定性图灵机 decides $L$。
+
+前者对应图灵机，后者对应其他计算模型（这里的例子是对图灵机的某种拓展）。这就说明它们的能力是等价的。
+
+简单介绍模拟过程。
+
+多纸带图灵机：允许图灵机同时操作多条纸带。同时显然应该允许磁头不变，否则就是简单的状态笛卡尔积无实际意义。模拟思路就是在图灵机的纸带上引入分隔符号，这样就可以同时保存多条纸带，然后模拟多纸带图灵机的转移函数。需要注意如果增长到分隔符号所处位置，就要把分隔符号和后面的内容一起向右移动一格。这样就能模拟多纸带图灵机了。
+
+非确定性图灵机：允许图灵机在某个时刻有多个转移。这样一来就形成一个状态树，任务就是搜索状态树上有没有 $q_{\text{accept}}$。我们可以用 BFS。这里比较节约的实现是，用一个纸带保存初始输入、一个纸带保存当前所在状态树结点的路径、一个纸带用于模拟当前结点对应的非确定性图灵机的状态。这样，我们只需要从短到长遍历所有路径，直到找到 $q_{\text{accept}}$。
+
+同理，我们还可以模拟 enumerator。这是一个能输出字符串的图灵机，它可能会一直输出，也可能会停下来。它输出的所有字符串的集合称为它枚举的语言。可以证明它枚举的语言和图灵机识别的语言是等价的。
+
+### 算法的定义
+
+我们还可以再考虑很多计算模型，但是最终会惊奇地发现，只要这些计算模型满足一定的要求（例如一步只能做有限的工作），那么它们都能被图灵机模拟。换言之，在一种机器上能实现的算法，在另外一种机器上也应当能实现（考虑上文关于 decidable 的表达）。
+
+> 丘奇-图灵论题就是在说，任何「通过直观的有效方法进行的计算」，都能被某个图灵机或者等价的计算模型模拟。这个问题无法被正式证明，因为它的表述本来就不形式化。但我们相信这一点。这个论题是在丘奇提出的 lambda calculus 被证明和图灵机等价后提出的。并且那时人们也发现，它们的计算能力和 μ-递归函数也是等价的。
+
+既然我们已经相信了这个论题，那么我们在研究 **算法（某个机器能做成的事情）** 时，就可以可靠的 **把图灵机作为一个算法实现的模型** 使用，因为我们相信它已经足够强大。
+
+当然，很多时候我们不想直接描述图灵机的具体所有状态和转移，这样低层次的编程很折磨。所以我们抽象出更多的描述层次：
+
+- formal description: 严格定义图灵机的状态和转移函数等；
+- implementation description：使用自然语言描述图灵机怎么移动磁头、读写纸带；
+- high-level description：使用自然语言描述算法的步骤。
+
+每一个层次的描述都不需要关注更底层的细节。书上给出了一个判断图联通性的算法的例子，给出了它的 high-level description 和一些 implementation description，并且介绍了一些书写约定。例如 high-level description 可将输入 $O$ 编码成字符串 $\langle O \rangle$，有缩进的按照不同 stage 描述算法。
+
 未完待续。
