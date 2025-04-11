@@ -539,7 +539,7 @@ $$
 这是因为如果 $A_\text{TM}$ 可判定，那么我们就可以构造出一台图灵机 $M$，使得：
 
 $$
-L(M) = \{ \langle M \rangle | M \text{ not accepts } \langle M \rangle \}
+L(M) = \{ \langle T \rangle | T \text{ not accepts } \langle T \rangle \}
 $$
 
 > 注1：构造方法是取 $A_\text{TM}$ 的 decider，然后反转它的输出。
