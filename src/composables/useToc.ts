@@ -19,19 +19,16 @@ function setToc(element: HTMLElement) {
 
 function updateToc(titleElements: HTMLElement[]) {
   tocElements.value = []
-  // Find minimum header level more efficiently
-  let minTag = 9
+  let minTag = '9'
   for (const e of titleElements) {
-    const level = Number(e.tagName[1])
-    if (level < minTag)
-      minTag = level
+    if (minTag > e.tagName[1])
+      minTag = e.tagName[1]
   }
-  // Build TOC with tab offset
   for (const e of titleElements) {
     tocElements.value.push({
       id: e.id,
       text: e.textContent ?? '',
-      tab: Number(e.tagName[1]) - minTag - 1,
+      tab: Number.parseInt(e.tagName[1]) - Number.parseInt(minTag) - 1,
     })
   }
 }
