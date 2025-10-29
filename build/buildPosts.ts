@@ -103,11 +103,10 @@ async function collectPostsAndImages(): Promise<Post[]> {
 }
 
 function truncate(s: string, len: number) {
-  const index = s.indexOf('<!-- more -->')
-  if (index !== -1)
-    return s.slice(0, index)
-  else
-    return s.length > len ? s.slice(0, len) : s
+  const moreIndex = s.indexOf('<!-- more -->')
+  if (moreIndex !== -1)
+    return s.slice(0, moreIndex)
+  return s.length > len ? s.slice(0, len) : s
 }
 
 function removeRSSLastBuildDate(xml: string) {
@@ -143,6 +142,13 @@ async function checkPostHasChanged(post: Post) {
   return dstStat === null || srcStat.mtime > dstStat.mtime
 }
 
+function generateDescription(content: string, maxLength = 160): string {
+  return content
+    .replace(/[#*~`><!-]/g, '')
+    .replace(/\s+/g, ' ')
+    .slice(0, maxLength)
+}
+
 async function generateStaticPost(htmlTemplate: string, post: Post) {
   if (!await checkPostHasChanged(post))
     return
@@ -151,10 +157,7 @@ async function generateStaticPost(htmlTemplate: string, post: Post) {
   const html = template.render(htmlTemplate, {
     title: post.title,
     url: post.url,
-    description: post.content
-      .replace(/[#*~`><!-]/g, '')
-      .replace(/\s+/g, ' ')
-      .slice(0, 160),
+    description: generateDescription(post.content),
     tags: post.tags,
     content: rendered,
   })

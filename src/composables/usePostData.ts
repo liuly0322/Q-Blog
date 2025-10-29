@@ -1,7 +1,9 @@
 import type { AsyncComputedOnCancel } from '@vueuse/core'
 
 function getPostName(post: string) {
-  return (parts => parts.pop() || parts.pop() || '')(post.split('/')).split('.')[0]
+  const parts = post.split('/')
+  const lastPart = parts[parts.length - 1] || parts[parts.length - 2] || ''
+  return lastPart.split('.')[0]
 }
 
 async function getPostData(postName: string, onCancel?: AsyncComputedOnCancel) {

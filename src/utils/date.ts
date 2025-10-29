@@ -4,6 +4,7 @@ export function getCurrentYear() {
 
 export function getCurrentSeason() {
   const month = new Date().getMonth()
+  // Optimize with switch-case or lookup table
   if (month >= 2 && month <= 4)
     return '春'
   if (month >= 5 && month <= 7)
