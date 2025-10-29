@@ -82,11 +82,10 @@ async function collectEachPostAndImages(file: string): Promise<Post | void> {
   else if (!path.extname(file)) {
     const dirname = path.join('posts', file)
     const images = await fs.readdir(dirname)
-    for (const image of images) {
-      const src = path.join(dirname, image)
-      const dst = path.join(publicImages, image)
-      await fs.copyFile(src, dst)
-    }
+    // Copy images in parallel for better performance
+    await Promise.all(images.map(image =>
+      fs.copyFile(path.join(dirname, image), path.join(publicImages, image)),
+    ))
   }
 }
 
