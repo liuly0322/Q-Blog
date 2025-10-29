@@ -48,7 +48,7 @@ function getScrollPosition(): scrollPosition {
   return { left: window.scrollX, top: window.scrollY }
 }
 
-function saveScrollPostion(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded) {
+function saveScrollPosition(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded) {
   const position = getScrollPosition()
   sessionStorage.setItem(from.path, JSON.stringify(position))
 }
@@ -60,4 +60,4 @@ function getSavedScrollPosition(path: string, enable: boolean): scrollPosition {
   return position ? JSON.parse(position) : { left: 0, top: 0 }
 }
 
-export default () => ({ saveScrollPostion, customScrollBehavior, scroll, deferScroll })
+export default () => ({ saveScrollPosition, customScrollBehavior, scroll, deferScroll })
