@@ -1,6 +1,13 @@
-# Ascend C 开发环境之 VS Code 指北
+---
+title: Ascend C 开发环境之 VS Code 指北
+date: 2025-11-11 16:00:00
+tags: [C/C++, 开发环境]
+category: 笔记
+---
 
 本文档介绍如何在 VS Code 中配置 Ascend C 开发环境的代码提示工具，以提供代码补全和智能提示。
+
+<!-- more -->
 
 ## 工具下载安装
 
@@ -27,7 +34,7 @@ clangd 的一些好处：
 
 示意：
 
-![host clangd](./docs/host_clangd.png)
+![host clangd](./vscode-ascendc-clangd/docs-host-clangd.png)
 
 clangd 可以自动识别 CMake 项目，并根据 `CMakeLists.txt` 文件生成的编译数据库（build/compile_commands.json）提供代码补全和语义分析。我们只需要指示 CMake 生成该编译数据库即可。
 
@@ -67,7 +74,7 @@ CompileFlags:
 
 示意：
 
-![device clangd](./docs/device_clangd.png)
+![device clangd](./vscode-ascendc-clangd/docs-device-clangd.png)
 
 device 侧使用的是 bisheng 编译工具链，clangd 无法自动识别。而且 AscendC 对 C++ 有一定修改，头文件也不能正确自动识别。因此需要手动创建一个 `stub.h` 头文件，用于提供补全需要的声明。该文件不会在编译时被实际引入。
 
