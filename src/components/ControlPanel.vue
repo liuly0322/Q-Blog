@@ -15,12 +15,8 @@ const { isDark, toggleDark } = useDarks()
         width="100"
       >
     </div>
-    <p class="text-xl">
-      lly | undef_baka
-    </p>
-    <p class="mt-2 mb-6">
-      愛の形骸 追う絵 覆う手を
-    </p>
+    <p class="text-xl">lly | undef_baka</p>
+    <p class="mt-2 mb-6">愛の形骸<br>追う絵 覆う手を</p>
     <div class="flex justify-around my-4">
       <router-link to="/archive" class="flex flex-col items-center hover:text-hex-42b883">
         <p class="text-[11px]">
