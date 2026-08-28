@@ -1,0 +1,23 @@
+name: Update Profile After Deploy
+
+on:
+  check_run:
+    types: [completed]
+
+jobs:
+  update-profile:
+    if: >
+      github.event.check_run.app.slug == 'cloudflare-pages' &&
+      github.event.check_run.conclusion == 'success' &&
+      github.event.check_run.check_suite.head_branch == 'main'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger profile update
+        env:
+          GH_TOKEN: ${{ secrets.PROFILE_ACTION_TOKEN }}
+        run: |
+          gh workflow run update.yml \
+            --repo liuly0322/liuly0322 \
+            --ref main
