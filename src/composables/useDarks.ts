@@ -6,8 +6,8 @@ const isDark = useDark()
 const toggleDark = useToggle(isDark)
 const darkTheme = createTheme([autoCompleteDark, dividerDark, rateDark, tagDark, skeletonDark])
 const darkOverrides = {
-  Layout: {
-    color: 'rgb(24, 24, 28)',
+  common: {
+    popoverColor: '#1e1e1e',
   },
 }
 

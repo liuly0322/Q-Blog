@@ -5,7 +5,7 @@ const routePath = useRoute()
 </script>
 
 <template>
-  <header class="sticky top-0 backdrop-filter backdrop-blur bg-hex-fff dark:bg-hex-18181c bg-opacity-70 z-3 flex items-center justify-between border-b-[0.8px] dark:border-white/9 p-2">
+  <header class="sticky top-0 backdrop-filter backdrop-blur bg-white/70 dark:bg-hex-1e1e1e/70 z-3 flex items-center justify-between border-b-[0.8px] dark:border-white/9 p-2">
     <router-link to="/" class="flex items-center hover:text-hex-42b883">
       <img
         src="/avatar_192.webp"

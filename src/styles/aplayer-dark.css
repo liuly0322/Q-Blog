@@ -1,5 +1,5 @@
 html.dark .aplayer {
-  background: rgb(24, 24, 28);
+  background: #1e1e1e;
 }
 
 html.dark .aplayer .aplayer-list ol li {
@@ -17,8 +17,8 @@ html.dark .aplayer.aplayer-withlist .aplayer-info {
 html.dark .aplayer .aplayer-lrc::before,
 html.dark .aplayer .aplayer-lrc::after {
   background: linear-gradient(180deg,
-      hsla(240, 7.7%, 10.2%, 0) 0,
-      hsla(240, 7.7%, 10.2%, 0.8));
+      rgba(30, 30, 30, 0) 0,
+      rgba(30, 30, 30, 0.8));
 }
 
 html.dark .aplayer .aplayer-list ol li:hover {

@@ -13,16 +13,18 @@ body {
   font-size: 14px;
 }
 
+:root {
+  --card-bg: #fff;
+}
+
 html.dark {
+  --card-bg: #1e1e1e;
   color: #e5e7eb;
-  background: rgb(24, 24, 28);
+  background: #121212;
 }
 
 .utterances {
-  background: white;
-}
-html.dark .utterances {
-  background: rgb(24, 24, 28);
+  background: var(--card-bg);
 }
 
 #nprogress {
