@@ -19,7 +19,7 @@ category: web
 
 下面是 Mastodon 上的效果：
 
-![Mastodon 上的博客账号与文章](https://github.com/user-attachments/assets/edf9078b-dccf-4c04-b0e9-d902223bf03e)
+![Mastodon 上的博客账号与文章](./cloudflare-workers-activitypub/activitypub-mastodon-profile.png)
 
 这个账号背后就是我的静态博客。每篇新文章会变成动态出现在时间线上，点击「阅读原文」就会进到博客文章。固定选取最近三篇文章作为置顶集合。
 
