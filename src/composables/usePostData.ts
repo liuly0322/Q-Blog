@@ -3,14 +3,18 @@ import type { AsyncComputedOnCancel } from '@vueuse/core'
 function getPostName(post: string) {
   const parts = post.split('/')
   const lastPart = parts[parts.length - 1] || parts[parts.length - 2] || ''
-  return lastPart.split('.')[0]
+  return lastPart.replace(/\.html?$/, '')
 }
 
 async function getPostData(postName: string, onCancel?: AsyncComputedOnCancel) {
   const abortController = new AbortController()
   onCancel && onCancel(() => abortController.abort())
   return fetch(`/posts/${postName}.htm`, { signal: abortController.signal })
-    .then(res => res.text())
+    .then((res) => {
+      if (!res.ok)
+        throw new Error(`Post request failed: ${res.status}`)
+      return res.text()
+    })
 }
 
 function getCachedSeconds(postName: string) {
@@ -37,7 +41,7 @@ const emptySummary = Object.freeze({ url: '', title: '404 Not Found', tags: [], 
 
 const { summary } = useSummary()
 function getCurrentPostSummary(post: string) {
-  return summary.find(post_ => post.includes(post_.url)) ?? emptySummary
+  return summary.find(post_ => getPostName(post) === post_.url) ?? emptySummary
 }
 
-export default () => ({ emptySummary, getCachedPostData, getCurrentPostSummary })
+export default () => ({ emptySummary, getCachedPostData, getCurrentPostSummary, getPostName })

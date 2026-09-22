@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import Shiki from '@shikijs/markdown-it'
-import template from 'art-template'
 import frontmatter from 'frontmatter'
 import markdownIt from 'markdown-it'
 import mdAnchorPlugin from 'markdown-it-anchor'
@@ -133,41 +132,13 @@ async function generateRSS(posts: Post[]) {
   await fs.writeFile(path.join('public', 'feed.xml'), xml)
 }
 
-async function checkPostHasChanged(post: Post) {
-  const src = path.join('posts', `${post.url}.md`)
-  const dst = path.join(publicPosts, `${post.url}.htm`)
-  const srcStat = await fs.stat(src)
-  const dstStat = await fs.stat(dst).catch(() => null)
-  return dstStat === null || srcStat.mtime > dstStat.mtime
-}
-
-function generateDescription(content: string, maxLength = 160): string {
-  return content
-    .replace(/[#*~`><!-]/g, '')
-    .replace(/\s+/g, ' ')
-    .slice(0, maxLength)
-}
-
-async function generateStaticPost(htmlTemplate: string, post: Post) {
-  if (!await checkPostHasChanged(post))
-    return
-  const rendered = postRenderer.render(post.content)
-  await fs.writeFile(path.join(publicPosts, `${post.url}.htm`), rendered)
-  const html = template.render(htmlTemplate, {
-    title: post.title,
-    url: post.url,
-    description: generateDescription(post.content),
-    tags: post.tags,
-    content: rendered,
-  })
-  await fs.writeFile(path.join('public', 'posts', `${post.url}.html`), html)
-}
-
 async function generateStaticPosts(posts: Post[]) {
-  const htmlTemplate = await fs.readFile(path.join('build', 'template.html'), {
-    encoding: 'utf-8',
-  })
-  await Promise.all(posts.map(post => generateStaticPost(htmlTemplate, post)))
+  await fs.rm(publicPosts, { recursive: true, force: true })
+  await fs.mkdir(publicPosts, { recursive: true })
+  await Promise.all(posts.map(post => fs.writeFile(
+    path.join(publicPosts, `${post.url}.htm`),
+    postRenderer.render(post.content),
+  )))
 }
 
 async function generateSiteSummary(posts: Post[], firstPageAbstracts: string[]) {

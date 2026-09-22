@@ -1,14 +1,15 @@
-import type { App } from 'vue'
 import routes from 'virtual:generated-pages'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 
 const { saveScrollPosition, customScrollBehavior } = useCustomScroll()
 
-export const router = createRouter({
-  routes,
-  history: createWebHistory(),
-  scrollBehavior: customScrollBehavior,
-})
-router.beforeEach(saveScrollPosition)
-
-export default (app: App) => app.use(router)
+export function createSiteRouter() {
+  const router = createRouter({
+    routes,
+    history: import.meta.env.SSR ? createMemoryHistory() : createWebHistory(),
+    scrollBehavior: customScrollBehavior,
+  })
+  if (!import.meta.env.SSR)
+    router.beforeEach(saveScrollPosition)
+  return router
+}

@@ -1,7 +1,7 @@
+import type { Router } from 'vue-router'
 import NProgress from 'nprogress'
-import { router } from './router'
 
-export default () => {
+export default (router: Router) => {
   router.beforeEach(() => {
     NProgress.start()
   })

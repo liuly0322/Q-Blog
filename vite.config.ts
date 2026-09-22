@@ -1,5 +1,4 @@
 import { resolve } from 'node:path'
-import Terser from '@rollup/plugin-terser'
 import Vue from '@vitejs/plugin-vue'
 import mdLinkAttrPlugin from 'markdown-it-link-attributes'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -16,10 +15,17 @@ import { VitePWA } from 'vite-plugin-pwa'
 import vsharp from 'vite-plugin-vsharp'
 import Windicss from 'vite-plugin-windicss'
 import BuildPosts from './build/buildPosts'
+import { getCurrentSeason, getCurrentYear } from './src/utils/date'
 
 const markdownWrapperClasses = 'md-blog m-auto text-left'
 
-export default defineConfig({
+const buildStamp = { year: getCurrentYear(), season: getCurrentSeason() }
+
+export default defineConfig(({ isSsrBuild }) => ({
+  define: {
+    __BUILD_YEAR__: String(buildStamp.year),
+    __BUILD_SEASON__: JSON.stringify(buildStamp.season),
+  },
   resolve: {
     alias: {
       '~/': `${resolve(__dirname, 'src')}/`,
@@ -43,7 +49,7 @@ export default defineConfig({
       },
     }),
     // 自动构建文件
-    BuildPosts(),
+    !isSsrBuild && BuildPosts(),
     // 文件路由
     Pages({
       extensions: ['vue', 'md'],
@@ -72,10 +78,8 @@ export default defineConfig({
         './src/composables',
       ],
     }),
-    // Terser
-    Terser(),
     // PWA
-    VitePWA({
+    !isSsrBuild && VitePWA({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,ico,svg}'],
@@ -104,7 +108,7 @@ export default defineConfig({
       },
     }),
     // 压缩图片
-    vsharp({
+    !isSsrBuild && vsharp({
       excludePublic: [
         'public/*',
       ],
@@ -114,17 +118,18 @@ export default defineConfig({
       ],
     }),
     // 打包体积分析
-    visualizer(),
+    !isSsrBuild && visualizer(),
   ],
   css: {
     transformer: 'lightningcss',
   },
   build: {
     minify: 'terser',
+    terserOptions: { compress: { passes: 2 } },
     rollupOptions: {
       output: {
         experimentalMinChunkSize: 10_000,
       },
     },
   },
-})
+}))

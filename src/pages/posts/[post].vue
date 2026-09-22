@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { getRandInt } from '~/utils/math'
+import { initialPageKey } from '~/ssg'
 
 const props = defineProps<{ post: string }>()
-const { emptySummary, getCachedPostData, getCurrentPostSummary } = usePostData()
+const { emptySummary, getCachedPostData, getCurrentPostSummary, getPostName } = usePostData()
 const currPost = computed(() => getCurrentPostSummary(props.post))
 
 const title = computed(() => {
@@ -17,48 +17,89 @@ onBeforeUnmount(() => {
   enableToc.value = false
 })
 
-const loading = ref(true)
-const data = asyncComputed(async (onCancel) => {
+const initialPage = inject(initialPageKey)
+const data = ref('')
+const loading = ref(false)
+
+const NOT_FOUND = '<p><strong>找不到页面了 :(</strong></p>'
+const LOAD_FAILED = '<p><strong>文章加载失败，请刷新重试。</strong></p>'
+
+function knownContent(postName: string) {
+  if (currPost.value === emptySummary)
+    return NOT_FOUND
+  if (initialPage?.post === postName)
+    return initialPage.content
+  return undefined
+}
+
+watch(() => props.post, async (post, _previous, onCleanup) => {
+  const known = knownContent(getPostName(post))
+  if (known !== undefined) {
+    data.value = known
+    loading.value = false
+    return
+  }
+
+  let cancelled = false
+  let abort: (() => void) | undefined
+  onCleanup(() => {
+    cancelled = true
+    abort?.()
+  })
+
   loading.value = true
-  const data = await (async () => {
-    if (currPost.value === emptySummary)
-      return '<p><strong>找不到页面了 :(</strong></p>'
-    return await getCachedPostData(props.post, onCancel)
-  })()
+  const content = await getCachedPostData(post, (callback) => {
+    abort = callback
+  }).catch(() => LOAD_FAILED)
+
+  if (cancelled)
+    return
+
+  data.value = content
   loading.value = false
-  return data
-}, '')
+}, { immediate: true })
 
 const { scroll, deferScroll } = useCustomScroll()
 const postContentEle = ref<HTMLElement>()
 watchEffect(() => {
   props.post && scroll({ left: 0, top: 0 })
 })
-watch(data, () => {
-  postContentEle.value && setToc(postContentEle.value)
-  nextTick(deferScroll)
-}, { flush: 'post' })
+function updatePostDom() {
+  if (postContentEle.value)
+    setToc(postContentEle.value)
+  nextTick(() => {
+    deferScroll()
+    if (window.location.hash) {
+      try {
+        document.getElementById(decodeURIComponent(window.location.hash.slice(1)))?.scrollIntoView()
+      }
+      catch { /* Ignore malformed URL fragments. */ }
+    }
+  })
+}
+onMounted(updatePostDom)
+watch(data, updatePostDom, { flush: 'post' })
 </script>
 
 <template>
   <article class="lg:card px-6">
     <PostHeader :post="currPost" />
-    <div v-show="loading" class="post-skeleton-list my-1.6em text-left">
+    <div v-if="loading" class="post-skeleton-list my-1.6em text-left">
       <template v-for="i in 4" :key="i">
         <div
-          v-for="line in getRandInt(1, 3)"
+          v-for="line in (i % 3) + 1"
           :key="`skeleton-${i}-${line}`"
           class="post-skeleton-line"
         />
         <div
           class="post-skeleton-line"
-          :style="{ width: `${getRandInt(20, 80)}%` }"
+          :style="{ width: `${30 + i * 12}%` }"
         />
       </template>
     </div>
     <div v-show="!loading">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div ref="postContentEle" class="md-blog m-auto text-left" v-html="data" />
+      <div ref="postContentEle" class="md-blog m-auto text-left" data-post-body v-html="data" />
       <PostFooter :post="currPost.url" />
       <Comment :post="currPost" />
       <CommonFooter />

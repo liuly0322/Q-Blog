@@ -8,7 +8,8 @@ interface scrollPosition {
 }
 
 function scroll(position: scrollPosition) {
-  window.scrollTo(position)
+  if (!import.meta.env.SSR)
+    window.scrollTo(position)
 }
 
 const { page } = usePage()

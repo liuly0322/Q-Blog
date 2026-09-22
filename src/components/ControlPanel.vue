@@ -2,7 +2,7 @@
 import PostSearch from './PostSearch.vue'
 
 const { summary, tagCount } = useSummary()
-const { isDark, toggleDark } = useDarks()
+const { toggleDark } = useDarks()
 </script>
 
 <template>
@@ -34,8 +34,8 @@ const { isDark, toggleDark } = useDarks()
     </div>
     <PostSearch class="px-4 pb-4" />
     <span class="m-0.5 inline-block" @click="toggleDark()">
-      <i-carbon:haze-night v-if="isDark" class="text-2xl" />
-      <i-carbon:sun v-if="!isDark" class="text-2xl" />
+      <i-carbon:haze-night class="text-2xl hidden dark:block" />
+      <i-carbon:sun class="text-2xl dark:hidden" />
     </span>
     <a aria-label="source-code" class="m-0.5 inline-block hover:text-hex-42b883" href="https://github.com/liuly0322/Q-Blog" target="_blank">
       <i-ant-design:github-filled class="text-2xl" />

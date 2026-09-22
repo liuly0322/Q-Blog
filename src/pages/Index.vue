@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const { postsOnPage } = usePage()
+const { posts } = useHomePosts()
 </script>
 
 <template>
-  <article v-for="post in postsOnPage" :key="post.summary.url" class="mb-4 p-7 card">
+  <article v-for="post in posts" :key="post.summary.url" class="mb-4 p-7 card">
     <div class="text-3xl font-medium my-4">
       <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`" class="hover:text-hex-42b883">
         {{

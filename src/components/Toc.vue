@@ -12,27 +12,32 @@ function scrollIntoView(id: string) {
 }
 let observer: IntersectionObserver | null = null
 let garbage: HTMLElement | null = null
-watchEffect(() => {
-  observer?.disconnect()
-  garbage = null
-  observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      const id = entry.target.id
-      const tocItem = document.getElementById(`toc-${id}`)!
-      garbage?.classList.remove('text-hex-42b883')
-      garbage = null
-      if (entry.isIntersecting) {
-        tocItem.classList.add('text-hex-42b883')
-      }
-      else {
-        garbage = tocItem
-      }
+onMounted(() => {
+  watchEffect(() => {
+    observer?.disconnect()
+    garbage = null
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const id = entry.target.id
+        const tocItem = document.getElementById(`toc-${id}`)!
+        garbage?.classList.remove('text-hex-42b883')
+        garbage = null
+        if (entry.isIntersecting) {
+          tocItem.classList.add('text-hex-42b883')
+        }
+        else {
+          garbage = tocItem
+        }
+      })
     })
-  })
-  elem.value.forEach((item) => {
-    observer?.observe(document.getElementById(item.id)!)
-  })
+    elem.value.forEach((item) => {
+      const heading = document.getElementById(item.id)
+      if (heading)
+        observer?.observe(heading)
+    })
+  }, { flush: 'post' })
 })
+onBeforeUnmount(() => observer?.disconnect())
 </script>
 
 <template>
