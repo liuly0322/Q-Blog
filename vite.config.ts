@@ -19,7 +19,6 @@ import { VitePWA } from 'vite-plugin-pwa'
 import vsharp from 'vite-plugin-vsharp'
 import Windicss from 'vite-plugin-windicss'
 import BuildPosts from './build/buildPosts'
-import PartialEvaluator from './partial-evaluate'
 
 const markdownWrapperClasses = 'md-blog m-auto text-left'
 
@@ -76,16 +75,6 @@ export default defineConfig({
       dirs: [
         './src/composables',
       ],
-    }),
-    // 部分求值插件
-    PartialEvaluator({
-      silent: true,
-      components: {
-        Rate: {
-          allowHalf: true,
-          clearable: false,
-        },
-      },
     }),
     // Terser
     Terser(),
