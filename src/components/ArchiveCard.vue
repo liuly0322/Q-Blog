@@ -23,11 +23,11 @@ const props = defineProps<{
         {{ post.date }}
       </div>
       <div class="mt-2 mx-2">
-        <n-tag v-for="tag in post.tags" :key="tag" class="m-0.5" type="success" size="small" round>
+        <BlogTag v-for="tag in post.tags" :key="tag" class="m-0.5" size="small">
           <router-link :to="`/tags/${encodeURIComponent(tag)}`">
             {{ tag }}
           </router-link>
-        </n-tag>
+        </BlogTag>
       </div>
     </router-link>
   </div>

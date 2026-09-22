@@ -81,11 +81,6 @@ export default defineConfig({
     PartialEvaluator({
       silent: true,
       components: {
-        Tag: {
-          disabled: false,
-          checkable: false,
-          closable: false,
-        },
         Rate: {
           allowHalf: true,
           clearable: false,

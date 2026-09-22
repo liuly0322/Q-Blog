@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import type { TagProps } from 'naive-ui'
+type BlogTagSize = 'small' | 'medium' | 'large'
 
 const { tagCount } = useSummary()
-const breakpoints: [TagProps['size'], number][] = [
+const breakpoints: [BlogTagSize, number][] = [
   ['large', tagCount[Math.floor(tagCount.length / 3)].times],
   ['medium', tagCount[Math.floor((tagCount.length * 2) / 3)].times - 1],
   ['small', -1],
 ]
-function computeSize(times: number): TagProps['size'] {
+function computeSize(times: number): BlogTagSize {
   for (const [size, breakpoint] of breakpoints) {
     if (times > breakpoint)
       return size
   }
+  return 'small'
 }
 </script>
 
@@ -20,8 +21,8 @@ function computeSize(times: number): TagProps['size'] {
     标签
   </n-divider>
   <router-link v-for="tag in tagCount" :key="tag.content" :to="`/tags/${encodeURIComponent(tag.content)}`">
-    <n-tag type="info" :size="computeSize(tag.times)" class="m-1 cursor-pointer" round>
+    <BlogTag :size="computeSize(tag.times)" class="m-1 cursor-pointer">
       {{ tag.content }}: {{ tag.times }}
-    </n-tag>
+    </BlogTag>
   </router-link>
 </template>
