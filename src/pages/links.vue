@@ -3,9 +3,7 @@ import friends from '~/jsons/friends.json'
 </script>
 
 <template>
-  <n-divider title-placement="left">
-    友情链接
-  </n-divider>
+  <SectionDivider title="友情链接" />
   <div class="overflow-hidden flex flex-wrap">
     <a v-for="friend in friends" :key="friend.name" :href="friend.url" target="_blank" class="flex-auto text-left m-2.5 flex card p-4">
       <img :src="friend.avatar" :alt="friend.name" class="mr-3 rounded-full" style="aspect-ratio: 1;" height="48" width="48">

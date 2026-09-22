@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const { isDark, darkTheme, darkOverrides } = useDarks()
 const { toggleSidebar } = useMobileSidebar()
 
 // HMR
@@ -8,7 +7,7 @@ if (import.meta.hot)
 </script>
 
 <template>
-  <n-config-provider :theme="isDark ? darkTheme : null" :theme-overrides="isDark ? darkOverrides : null">
+  <div>
     <Header class="mb-4 h-16 box-border" />
     <div class="flex">
       <Sidebar
@@ -28,7 +27,7 @@ if (import.meta.hot)
         style="max-height: calc(100vh - 80px)"
       />
     </div>
-  </n-config-provider>
+  </div>
 </template>
 
 <style>

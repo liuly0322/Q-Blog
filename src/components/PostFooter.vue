@@ -10,7 +10,7 @@ const postIndex = computed(() =>
 
 <template>
   <div class="overflow-hidden my-12 p-4 border-t border-b">
-    <div v-if="postIndex > 0" class="float-left my-2">
+    <div v-if="postIndex > 0" class="float-left my-2 mr-2">
       <router-link
         :to="`/posts/${encodeURIComponent(summary[postIndex - 1].url)}`"
       >

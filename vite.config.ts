@@ -6,10 +6,7 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
-import {
-  NaiveUiResolver,
-  VueUseComponentsResolver,
-} from 'unplugin-vue-components/resolvers'
+import { VueUseComponentsResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import Markdown from 'unplugin-vue-markdown/vite'
 import { defineConfig } from 'vite'
@@ -64,7 +61,6 @@ export default defineConfig({
       dts: resolve(__dirname, './src/types/components.d.ts'),
       resolvers: [
         IconsResolver(),
-        NaiveUiResolver(),
         VueUseComponentsResolver(),
       ],
     }),

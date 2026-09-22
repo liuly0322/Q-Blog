@@ -43,10 +43,17 @@ watch(data, () => {
 <template>
   <article class="lg:card px-6">
     <PostHeader :post="currPost" />
-    <div v-show="loading" class="mt-1.6em text-left">
+    <div v-show="loading" class="post-skeleton-list my-1.6em text-left">
       <template v-for="i in 4" :key="i">
-        <n-skeleton text :repeat="getRandInt(1, 3)" />
-        <n-skeleton text :style="`width: ${getRandInt(20, 80)}%`" />
+        <div
+          v-for="line in getRandInt(1, 3)"
+          :key="`skeleton-${i}-${line}`"
+          class="post-skeleton-line"
+        />
+        <div
+          class="post-skeleton-line"
+          :style="{ width: `${getRandInt(20, 80)}%` }"
+        />
       </template>
     </div>
     <div v-show="!loading">
@@ -58,3 +65,44 @@ watch(data, () => {
     </div>
   </article>
 </template>
+
+<style scoped>
+.post-skeleton-line {
+  width: 100%;
+  height: 14px;
+  margin-bottom: 7px;
+  background: linear-gradient(
+    90deg,
+    #dfdfdf 25%,
+    #f2f2f2 50%,
+    #dfdfdf 75%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.post-skeleton-list {
+  padding-top: 2px;
+}
+
+html.dark .post-skeleton-line {
+  background: linear-gradient(
+    90deg,
+    #464646 25%,
+    #5a5a5a 50%,
+    #464646 75%
+  );
+  background-size: 400% 100%;
+}
+
+@keyframes skeleton-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-skeleton-line {
+    animation: none;
+  }
+}
+</style>

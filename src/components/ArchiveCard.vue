@@ -8,9 +8,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <n-divider title-placement="left">
-    {{ props.title }}
-  </n-divider>
+  <SectionDivider :title="props.title" />
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <router-link
       v-for="post in props.summary" :key="post.url"

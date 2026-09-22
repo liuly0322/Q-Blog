@@ -58,7 +58,6 @@
     "markdown-it-anchor": "^9.2.0",
     "markdown-it-link-attributes": "^4.0.1",
     "markdown-it-texmath": "^1.0.0",
-    "naive-ui": "^2.41.0",
     "nprogress": "^0.2.0",
     "rollup-plugin-visualizer": "^5.14.0",
     "rss": "^1.2.2",
