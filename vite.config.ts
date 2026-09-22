@@ -81,13 +81,6 @@ export default defineConfig({
     PartialEvaluator({
       silent: true,
       components: {
-        Input: {
-          loading: undefined,
-          showCount: false,
-          maxlength: undefined,
-          pair: false,
-          type: '\'text\'',
-        },
         Tag: {
           disabled: false,
           checkable: false,

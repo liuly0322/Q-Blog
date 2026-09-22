@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const PostSearch = defineAsyncComponent(() => import('./PostSearch.vue'))
+import PostSearch from './PostSearch.vue'
+
 const { summary, tagCount } = useSummary()
 const { isDark, toggleDark } = useDarks()
 </script>
@@ -31,14 +32,7 @@ const { isDark, toggleDark } = useDarks()
         <p>{{ tagCount.length }}</p>
       </router-link>
     </div>
-    <Suspense>
-      <PostSearch class="px-4 pb-4" />
-      <template #fallback>
-        <div class="mx-4 h-12.5">
-          <div class="h-8.5 bg-hex-fafafc dark:bg-white/10 border border-hex-e5e7eb dark:border-white/24" />
-        </div>
-      </template>
-    </Suspense>
+    <PostSearch class="px-4 pb-4" />
     <span class="m-0.5 inline-block" @click="toggleDark()">
       <i-carbon:haze-night v-if="isDark" class="text-2xl" />
       <i-carbon:sun v-if="!isDark" class="text-2xl" />
