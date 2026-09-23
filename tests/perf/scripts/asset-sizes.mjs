@@ -4,7 +4,7 @@ import path from 'node:path'
 import { gzipSync } from 'node:zlib'
 
 const [directory, outputFile] = process.argv.slice(2)
-assert(directory, 'Usage: node perf/scripts/asset-sizes.mjs DIST_DIR [OUTPUT_JSON]')
+assert(directory, 'Usage: node tests/perf/scripts/asset-sizes.mjs DIST_DIR [OUTPUT_JSON]')
 
 const root = path.resolve(directory)
 const html = await fs.readFile(path.join(root, 'index.html'), 'utf8')

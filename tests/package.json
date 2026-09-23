@@ -1,0 +1,13 @@
+{
+  "name": "q-blog-ssg-tools",
+  "private": true,
+  "scripts": {
+    "e2e": "cd .. && node tests/e2e/routes.mjs",
+    "benchmark:articles": "cd .. && node tests/perf/scripts/benchmark-ssg.mjs",
+    "benchmark:home": "cd .. && node tests/perf/scripts/benchmark-home-ssg.mjs",
+    "benchmark:live": "cd .. && node tests/perf/scripts/benchmark-live.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

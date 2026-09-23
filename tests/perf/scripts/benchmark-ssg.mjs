@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import process from 'node:process'
-import { launchBrowser, mockExternalServices, startServer } from './ssg-browser-utils.mjs'
+import { launchBrowser, mockExternalServices, startServer } from '../../helpers/browser-utils.mjs'
 
 assert(process.argv[2], 'Usage: node scripts/benchmark-ssg.mjs BASELINE_DIST [OUTPUT_JSON]')
 const runs = Number(process.env.BENCH_RUNS || 3)

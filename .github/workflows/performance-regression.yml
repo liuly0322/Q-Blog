@@ -3,8 +3,6 @@ name: Performance regression
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -77,29 +75,26 @@ jobs:
 
       - name: Install browser tooling
         run: npm ci && npx playwright install --with-deps chromium
-        working-directory: perf
-
-      - name: Check prerendered pages and hydration
-        run: node perf/scripts/check-ssg.mjs
+        working-directory: tests
 
       - name: Benchmark homepage
         env:
           BENCH_RUNS: 3
-        run: node perf/scripts/benchmark-home-ssg.mjs "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/home.json" 3
+        run: node tests/perf/scripts/benchmark-home-ssg.mjs "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/home.json" 3
 
       - name: Benchmark representative articles
         env:
           BENCH_RUNS: 3
-        run: node perf/scripts/benchmark-ssg.mjs "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/articles.json"
+        run: node tests/perf/scripts/benchmark-ssg.mjs "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/articles.json"
 
       - name: Measure initial assets
         run: |
-          node perf/scripts/asset-sizes.mjs "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/base-assets.json"
-          node perf/scripts/asset-sizes.mjs dist "$RUNNER_TEMP/head-assets.json"
+          node tests/perf/scripts/asset-sizes.mjs "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/base-assets.json"
+          node tests/perf/scripts/asset-sizes.mjs dist "$RUNNER_TEMP/head-assets.json"
 
       - name: Build comparison report
         run: |
-          node perf/scripts/report.mjs \
+          node tests/perf/scripts/report.mjs \
             "$RUNNER_TEMP/home.json" \
             "$RUNNER_TEMP/articles.json" \
             "$RUNNER_TEMP/base-assets.json" \

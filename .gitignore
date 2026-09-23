@@ -1,6 +1,7 @@
 /.vscode
 /node_modules
-/perf/node_modules
+/tests/node_modules
+/tests/perf/node_modules
 /dist
 /stats.html
 /public/posts

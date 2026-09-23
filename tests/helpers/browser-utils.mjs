@@ -68,7 +68,7 @@ export async function startServer(directory) {
   }
 }
 export async function mockExternalServices(context) {
-  // Keep third-party availability, music, and comments out of reproducible measurements.
+  // Keep third-party services out of browser checks.
   await context.route('**/*', (route) => {
     if (new URL(route.request().url()).hostname === '127.0.0.1')
       return route.continue()

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 
 const [homeFile, articlesFile, baselineAssetsFile, currentAssetsFile, outputFile] = process.argv.slice(2)
-assert(homeFile && articlesFile, 'Usage: node perf/scripts/report.mjs HOME_JSON ARTICLES_JSON [BASE_ASSETS_JSON CURRENT_ASSETS_JSON [OUTPUT_MD]]')
+assert(homeFile && articlesFile, 'Usage: node tests/perf/scripts/report.mjs HOME_JSON ARTICLES_JSON [BASE_ASSETS_JSON CURRENT_ASSETS_JSON [OUTPUT_MD]]')
 
 const [home, articles] = await Promise.all([
   fs.readFile(homeFile, 'utf8').then(JSON.parse),
