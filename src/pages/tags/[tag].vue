@@ -7,5 +7,5 @@ const curSummary = computed(() =>
 </script>
 
 <template>
-  <ArchiveCard :title="props.tag" :summary="curSummary" />
+  <PostCardGrid :title="props.tag" :summary="curSummary" />
 </template>

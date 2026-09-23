@@ -10,12 +10,17 @@ const props = defineProps<{
 <template>
   <SectionDivider :title="props.title" />
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <router-link
+    <div
       v-for="post in props.summary" :key="post.url"
-      class="mb-2 card p-4 flex flex-col justify-between" :to="`/posts/${post.url}`"
+      class="mb-2 card p-4 flex flex-col justify-between"
     >
       <h2 class="font-medium text-base mb-4 mt-2">
-        {{ post.title }}
+        <router-link
+          :to="`/posts/${encodeURIComponent(post.url)}`"
+          class="transition-colors hover:text-hex-42b883"
+        >
+          {{ post.title }}
+        </router-link>
       </h2>
       <div class="text-xs text-gray-500">
         {{ post.date }}
@@ -27,6 +32,6 @@ const props = defineProps<{
           </router-link>
         </BlogTag>
       </div>
-    </router-link>
+    </div>
   </div>
 </template>
