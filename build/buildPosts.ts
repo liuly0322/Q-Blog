@@ -13,23 +13,35 @@ const SITE_URL = 'https://blog.liuly.moe'
 
 const descriptionRenderer = markdownIt()
   .use(mdImageSizePlugin(SITE_URL))
-const postRenderer = markdownIt({ html: true })
-  // eslint-disable-next-line antfu/no-top-level-await
-  .use(await Shiki({
+const abstractRenderer = configureMarkdownRenderer(markdownIt({ html: true }))
+
+async function createPostRenderer() {
+  const shiki = await Shiki({
     themes: {
       light: 'vitesse-light',
       dark: 'vitesse-dark',
     },
-  }))
-  .use(mdMathPlugin)
-  .use(mdAnchorPlugin)
-  .use(mdLinkAttrPlugin, {
-    attrs: {
-      target: '_blank',
-      rel: 'noopener',
-    },
   })
-  .use(mdImageSizePlugin())
+  return configureMarkdownRenderer(markdownIt({ html: true }).use(shiki))
+}
+
+function configureMarkdownRenderer(renderer: ReturnType<typeof markdownIt>) {
+  return renderer
+    .use(mdMathPlugin)
+    .use(mdAnchorPlugin)
+    .use(mdLinkAttrPlugin, {
+      attrs: {
+        target: '_blank',
+        rel: 'noopener',
+      },
+    })
+    .use(mdImageSizePlugin())
+}
+
+let postRendererPromise: ReturnType<typeof createPostRenderer> | undefined
+function getPostRenderer() {
+  return postRendererPromise ??= createPostRenderer()
+}
 
 const publicImages = path.join('public', 'images')
 const publicPosts = path.join('public', 'posts')
@@ -140,21 +152,24 @@ async function checkPostHasChanged(post: Post) {
   return dstStat === null || srcStat.mtimeMs > dstStat.mtimeMs
 }
 
+async function generateStaticPost(post: Post) {
+  if (!await checkPostHasChanged(post))
+    return
+
+  const postRenderer = await getPostRenderer()
+  await fs.writeFile(
+    path.join(publicPosts, `${post.url}.htm`),
+    postRenderer.render(post.content),
+  )
+}
+
 async function generateStaticPosts(posts: Post[], incremental: boolean) {
   if (!incremental) {
     await fs.rm(publicPosts, { recursive: true, force: true })
     await fs.mkdir(publicPosts, { recursive: true })
   }
 
-  await Promise.all(posts.map(async (post) => {
-    if (!await checkPostHasChanged(post))
-      return
-
-    await fs.writeFile(
-      path.join(publicPosts, `${post.url}.htm`),
-      postRenderer.render(post.content),
-    )
-  }))
+  await Promise.all(posts.map(generateStaticPost))
 }
 
 async function generateSiteSummary(posts: Post[], firstPageAbstracts: string[]) {
@@ -178,7 +193,7 @@ async function buildPosts(incremental: boolean) {
     await fs.mkdir(publicPosts)
 
   const posts = await collectPostsAndImages()
-  const abstracts = posts.map(post => postRenderer.render(truncate(post.content, 100)))
+  const abstracts = posts.map(post => abstractRenderer.render(truncate(post.content, 100)))
 
   await Promise.all([
     generateRSS(posts),
