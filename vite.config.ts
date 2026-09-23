@@ -21,7 +21,7 @@ const markdownWrapperClasses = 'md-blog m-auto text-left'
 
 const buildStamp = { year: getCurrentYear(), season: getCurrentSeason() }
 
-export default defineConfig(({ isSsrBuild }) => ({
+export default defineConfig(({ command, isSsrBuild }) => ({
   define: {
     __BUILD_YEAR__: String(buildStamp.year),
     __BUILD_SEASON__: JSON.stringify(buildStamp.season),
@@ -49,7 +49,7 @@ export default defineConfig(({ isSsrBuild }) => ({
       },
     }),
     // 自动构建文件
-    !isSsrBuild && BuildPosts(),
+    !isSsrBuild && BuildPosts({ incremental: command === 'serve' }),
     // 文件路由
     Pages({
       extensions: ['vue', 'md'],

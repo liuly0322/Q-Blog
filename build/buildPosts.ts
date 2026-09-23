@@ -38,14 +38,14 @@ async function fileExists(dir: string) {
   return fs.access(dir).then(() => true).catch(() => false)
 }
 
-export default () => ({
+export default ({ incremental = false }: { incremental?: boolean } = {}) => ({
   name: 'build-posts',
   async buildStart() {
-    await buildPosts()
+    await buildPosts(incremental)
   },
   async handleHotUpdate({ file }: { file: string }) {
     if (file.includes('posts') && !file.includes('public'))
-      await buildPosts()
+      await buildPosts(incremental)
   },
 })
 
@@ -132,13 +132,29 @@ async function generateRSS(posts: Post[]) {
   await fs.writeFile(path.join('public', 'feed.xml'), xml)
 }
 
-async function generateStaticPosts(posts: Post[]) {
-  await fs.rm(publicPosts, { recursive: true, force: true })
-  await fs.mkdir(publicPosts, { recursive: true })
-  await Promise.all(posts.map(post => fs.writeFile(
-    path.join(publicPosts, `${post.url}.htm`),
-    postRenderer.render(post.content),
-  )))
+async function checkPostHasChanged(post: Post) {
+  const src = path.join('posts', `${post.url}.md`)
+  const dst = path.join(publicPosts, `${post.url}.htm`)
+  const srcStat = await fs.stat(src)
+  const dstStat = await fs.stat(dst).catch(() => null)
+  return dstStat === null || srcStat.mtimeMs > dstStat.mtimeMs
+}
+
+async function generateStaticPosts(posts: Post[], incremental: boolean) {
+  if (!incremental) {
+    await fs.rm(publicPosts, { recursive: true, force: true })
+    await fs.mkdir(publicPosts, { recursive: true })
+  }
+
+  await Promise.all(posts.map(async (post) => {
+    if (!await checkPostHasChanged(post))
+      return
+
+    await fs.writeFile(
+      path.join(publicPosts, `${post.url}.htm`),
+      postRenderer.render(post.content),
+    )
+  }))
 }
 
 async function generateSiteSummary(posts: Post[], firstPageAbstracts: string[]) {
@@ -155,7 +171,7 @@ async function generatePostAbstracts(abstracts: string[]) {
   await fs.writeFile(path.join('public', 'page.json'), JSON.stringify(abstracts))
 }
 
-async function buildPosts() {
+async function buildPosts(incremental: boolean) {
   if (!await fileExists(publicImages))
     await fs.mkdir(publicImages)
   if (!await fileExists(publicPosts))
@@ -166,7 +182,7 @@ async function buildPosts() {
 
   await Promise.all([
     generateRSS(posts),
-    generateStaticPosts(posts),
+    generateStaticPosts(posts, incremental),
     generatePostAbstracts(abstracts),
     generateSiteSummary(posts, abstracts.slice(0, 10)),
   ])
