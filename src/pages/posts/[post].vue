@@ -68,6 +68,8 @@ function updatePostDom() {
   if (postContentEle.value)
     setToc(postContentEle.value)
   nextTick(() => {
+    if (loading.value)
+      return
     deferScroll()
     if (window.location.hash) {
       try {
