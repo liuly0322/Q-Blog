@@ -1,5 +1,6 @@
 /.vscode
 /node_modules
+/perf/node_modules
 /dist
 /stats.html
 /public/posts
@@ -9,4 +10,4 @@
 /src/jsons/summary.json
 /src/types/auto-imports.d.ts
 /src/types/components.d.ts
-package-lock.json
+/package-lock.json

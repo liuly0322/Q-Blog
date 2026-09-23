@@ -1,0 +1,183 @@
+name: Performance regression
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: performance-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    outputs:
+      base_sha: ${{ steps.revisions.outputs.base_sha }}
+      head_sha: ${{ steps.revisions.outputs.head_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.9.0
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Select comparison revisions
+        id: revisions
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            BASE_SHA="$PR_BASE_SHA"
+          else
+            BASE_SHA="$(git rev-parse "$HEAD_SHA^")"
+          fi
+          echo "base_sha=$BASE_SHA" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$HEAD_SHA" >> "$GITHUB_OUTPUT"
+          echo "Comparing $BASE_SHA to $HEAD_SHA"
+
+      - name: Create baseline checkout
+        env:
+          BASE_SHA: ${{ steps.revisions.outputs.base_sha }}
+        run: git worktree add --detach "$RUNNER_TEMP/q-blog-baseline" "$BASE_SHA"
+
+      - name: Install baseline dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+        working-directory: ${{ runner.temp }}/q-blog-baseline
+
+      - name: Build baseline
+        run: pnpm build
+        working-directory: ${{ runner.temp }}/q-blog-baseline
+
+      - name: Save baseline build
+        run: cp -a "$RUNNER_TEMP/q-blog-baseline/dist" "$RUNNER_TEMP/q-blog-baseline-dist"
+
+      - name: Install head dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Build head
+        run: pnpm build
+
+      - name: Install browser tooling
+        run: npm ci && npx playwright install --with-deps chromium
+        working-directory: perf
+
+      - name: Check prerendered pages and hydration
+        run: node perf/scripts/check-ssg.mjs
+
+      - name: Benchmark homepage
+        env:
+          BENCH_RUNS: 3
+        run: node perf/scripts/benchmark-home-ssg.mjs "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/home.json" 3
+
+      - name: Benchmark representative articles
+        env:
+          BENCH_RUNS: 3
+        run: node perf/scripts/benchmark-ssg.mjs "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/articles.json"
+
+      - name: Measure initial assets
+        run: |
+          node perf/scripts/asset-sizes.mjs "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/base-assets.json"
+          node perf/scripts/asset-sizes.mjs dist "$RUNNER_TEMP/head-assets.json"
+
+      - name: Build comparison report
+        run: |
+          node perf/scripts/report.mjs \
+            "$RUNNER_TEMP/home.json" \
+            "$RUNNER_TEMP/articles.json" \
+            "$RUNNER_TEMP/base-assets.json" \
+            "$RUNNER_TEMP/head-assets.json" \
+            "$RUNNER_TEMP/performance-report.md"
+          {
+            printf 'Compared base `%s` → head `%s`.\n\n' \
+              '${{ steps.revisions.outputs.base_sha }}' \
+              '${{ steps.revisions.outputs.head_sha }}'
+            cat "$RUNNER_TEMP/performance-report.md"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: performance-results-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/home.json
+            ${{ runner.temp }}/articles.json
+            ${{ runner.temp }}/base-assets.json
+            ${{ runner.temp }}/head-assets.json
+            ${{ runner.temp }}/performance-report.md
+          retention-days: 30
+
+  comment:
+    needs: benchmark
+    if: >-
+      needs.benchmark.result == 'success' &&
+      (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: performance-results-${{ github.run_id }}-${{ github.run_attempt }}
+          path: performance-results
+
+      - uses: actions/github-script@v7
+        env:
+          BASE_SHA: ${{ needs.benchmark.outputs.base_sha }}
+          HEAD_SHA: ${{ needs.benchmark.outputs.head_sha }}
+        with:
+          script: |
+            const fs = require('node:fs');
+            const report = fs.readFileSync('performance-results/performance-report.md', 'utf8');
+            const { owner, repo } = context.repo;
+            const isPullRequest = context.eventName === 'pull_request';
+            const marker = isPullRequest
+              ? `<!-- q-blog-performance-pr-${context.issue.number} -->`
+              : `<!-- q-blog-performance-commit-${process.env.HEAD_SHA} -->`;
+            const body = `${marker}\nCompared base \`${process.env.BASE_SHA}\` → head \`${process.env.HEAD_SHA}\`.\n\n${report}`;
+
+            if (isPullRequest) {
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner,
+                repo,
+                issue_number: context.issue.number,
+                per_page: 100,
+              });
+              const existing = comments.find(comment => comment.user?.type === 'Bot' && comment.body?.includes(marker));
+              if (existing) {
+                await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+              } else {
+                await github.rest.issues.createComment({ owner, repo, issue_number: context.issue.number, body });
+              }
+            } else {
+              const comments = await github.paginate(github.rest.repos.listCommentsForCommit, {
+                owner,
+                repo,
+                commit_sha: process.env.HEAD_SHA,
+                per_page: 100,
+              });
+              const existing = comments.find(comment => comment.user?.type === 'Bot' && comment.body?.includes(marker));
+              if (existing) {
+                await github.rest.repos.updateCommitComment({ owner, repo, comment_id: existing.id, body });
+              } else {
+                await github.rest.repos.createCommitComment({ owner, repo, commit_sha: process.env.HEAD_SHA, body });
+              }
+            }

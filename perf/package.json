@@ -1,0 +1,13 @@
+{
+  "name": "q-blog-ssg-tools",
+  "private": true,
+  "scripts": {
+    "check:ssg": "node scripts/check-ssg.mjs",
+    "benchmark:articles": "node scripts/benchmark-ssg.mjs",
+    "benchmark:home": "node scripts/benchmark-home-ssg.mjs",
+    "benchmark:live": "node scripts/benchmark-live.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}
