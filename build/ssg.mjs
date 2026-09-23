@@ -50,12 +50,9 @@ function generateDescription(content, maxLength = 160) {
 function getAssetLinks(template, modules, manifest) {
   const assets = new Set(modules.flatMap(id => manifest[id] ?? []))
   return [...assets]
-    .filter(asset => !template.includes(`"${asset}"`))
-    .map(asset => asset.endsWith('.css')
-      ? `<link rel="stylesheet" href="${escapeHtml(asset)}">`
-      : asset.endsWith('.js')
-        ? `<link rel="modulepreload" crossorigin href="${escapeHtml(asset)}">`
-        : '')
+    // Route JS is precached and served by the PWA service worker.
+    .filter(asset => asset.endsWith('.css') && !template.includes(`"${asset}"`))
+    .map(asset => `<link rel="stylesheet" href="${escapeHtml(asset)}">`)
     .join('\n')
 }
 
