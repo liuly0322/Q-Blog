@@ -41,7 +41,7 @@ withDefaults(defineProps<{
   font-size: var(--blog-tag-font-size);
   line-height: 1;
   white-space: nowrap;
-  cursor: default;
+  cursor: pointer;
   transition:
     border-color 0.3s cubic-bezier(.4, 0, .2, 1),
     background-color 0.3s cubic-bezier(.4, 0, .2, 1),

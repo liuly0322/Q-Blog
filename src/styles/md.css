@@ -18,7 +18,9 @@
   margin: 0;
 }
 .md-blog h1 {
-  font-size: 2em;
+  font-size: 1.8em;
+  line-height: 1.2 !important;
+  text-wrap: pretty;
 }
 .md-blog h2 {
   font-size: 1.5em;
