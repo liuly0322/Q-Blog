@@ -1,7 +1,9 @@
-const { data } = useFetch('/page.json').json<string[]>()
+const { summary, firstPageAbstracts } = useSummary()
+const { data } = import.meta.env.SSR
+  ? { data: ref<string[]>() }
+  : useFetch('/page.json').json<string[]>()
 
 const { page } = usePage()
-const { summary, firstPageAbstracts } = useSummary()
 
 const abstracts = computed(() => data.value ?? firstPageAbstracts)
 

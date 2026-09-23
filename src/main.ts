@@ -11,9 +11,9 @@ import 'virtual:windi-devtools'
 const root = document.querySelector<HTMLElement>('#app')!
 // Reuse the actual SSR body; do not ship it again in an inline JSON payload.
 const postBody = root.querySelector<HTMLElement>('[data-post-body]')
-const initialPage = root.dataset.post && postBody
+const initialPost = root.dataset.post && postBody
   ? { post: root.dataset.post, content: postBody.innerHTML }
   : undefined
-const { app, router } = createSiteApp(initialPage)
+const { app, router } = createSiteApp(root.dataset.ssg === 'true', initialPost)
 nprogress(router)
 router.isReady().then(() => app.mount(root))

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { initialPageKey } from '~/ssg'
+import { initialPostKey } from '~/ssg'
 
 const props = defineProps<{ post: string }>()
 const { emptySummary, getCachedPostData, getCurrentPostSummary, getPostName } = usePostData()
@@ -17,7 +17,7 @@ onBeforeUnmount(() => {
   enableToc.value = false
 })
 
-const initialPage = inject(initialPageKey)
+const initialPost = inject(initialPostKey)
 const data = ref('')
 const loading = ref(false)
 
@@ -27,8 +27,8 @@ const LOAD_FAILED = '<p><strong>文章加载失败，请刷新重试。</strong>
 function knownContent(postName: string) {
   if (currPost.value === emptySummary)
     return NOT_FOUND
-  if (initialPage?.post === postName)
-    return initialPage.content
+  if (initialPost?.post === postName)
+    return initialPost.content
   return undefined
 }
 

@@ -1,8 +1,8 @@
 import type { InjectionKey } from 'vue'
 
-export interface InitialPage {
+export interface InitialPost {
   post: string
   content: string
 }
 
-export const initialPageKey: InjectionKey<InitialPage | undefined> = Symbol('initial-page')
+export const initialPostKey: InjectionKey<InitialPost | undefined> = Symbol('initial-post')
