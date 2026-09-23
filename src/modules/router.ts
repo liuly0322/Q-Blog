@@ -9,6 +9,16 @@ export function createSiteRouter() {
     history: import.meta.env.SSR ? createMemoryHistory() : createWebHistory(),
     scrollBehavior: customScrollBehavior,
   })
+
+  router.beforeEach((to) => {
+    const path = to.path
+      .replace(/^\/index\.html$/i, '/')
+      .replace(/\.html$/i, '')
+
+    if (path !== to.path)
+      return { path, query: to.query, hash: to.hash, replace: true }
+  })
+
   if (!import.meta.env.SSR)
     router.beforeEach(saveScrollPosition)
   return router

@@ -2,7 +2,7 @@
 import { initialPostKey } from '~/ssg'
 
 const props = defineProps<{ post: string }>()
-const { emptySummary, getCachedPostData, getCurrentPostSummary, getPostName } = usePostData()
+const { emptySummary, getCachedPostData, getCurrentPostSummary } = usePostData()
 const currPost = computed(() => getCurrentPostSummary(props.post))
 
 const title = computed(() => {
@@ -33,7 +33,7 @@ function knownContent(postName: string) {
 }
 
 watch(() => props.post, async (post, _previous, onCleanup) => {
-  const known = knownContent(getPostName(post))
+  const known = knownContent(post)
   if (known !== undefined) {
     data.value = known
     loading.value = false

@@ -1,11 +1,5 @@
 import type { AsyncComputedOnCancel } from '@vueuse/core'
 
-function getPostName(post: string) {
-  const parts = post.split('/')
-  const lastPart = parts[parts.length - 1] || parts[parts.length - 2] || ''
-  return lastPart.replace(/\.html?$/, '')
-}
-
 async function getPostData(postName: string, onCancel?: AsyncComputedOnCancel) {
   const abortController = new AbortController()
   onCancel && onCancel(() => abortController.abort())
@@ -23,8 +17,7 @@ function getCachedSeconds(postName: string) {
   return (now - Number(cachedTime)) / 1000
 }
 
-async function getCachedPostData(post: string, onCancel?: AsyncComputedOnCancel) {
-  const postName = getPostName(post)
+async function getCachedPostData(postName: string, onCancel?: AsyncComputedOnCancel) {
   const cached = sessionStorage.getItem(postName)
   const cachedSeconds = getCachedSeconds(postName)
   if (cached && cachedSeconds < 3600)
@@ -40,8 +33,8 @@ async function getCachedPostData(post: string, onCancel?: AsyncComputedOnCancel)
 const emptySummary = Object.freeze({ url: '', title: '404 Not Found', tags: [], date: '' })
 
 const { summary } = useSummary()
-function getCurrentPostSummary(post: string) {
-  return summary.find(post_ => getPostName(post) === post_.url) ?? emptySummary
+function getCurrentPostSummary(postName: string) {
+  return summary.find(post_ => postName === post_.url) ?? emptySummary
 }
 
-export default () => ({ emptySummary, getCachedPostData, getCurrentPostSummary, getPostName })
+export default () => ({ emptySummary, getCachedPostData, getCurrentPostSummary })
