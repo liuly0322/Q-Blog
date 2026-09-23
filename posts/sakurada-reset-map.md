@@ -7,7 +7,7 @@ category: web
 
 生成地图在我看来其实是一件非常 cool 的事情，从模拟经营类游戏的玩家，到铁道迷，再到 oc 世界观创作，谁不想把自己的大作美美的展示出来呢！
 
-![GPT-Image-2 一次直出：只有一些小错误](./sakurada-reset-map/sakurada-reset-map-01-gpt-image-2.png)
+![GPT-Image-2 一次直出：只有一些小错误](./sakurada-reset-map/sakurada-reset-map-01-gpt-image-2.webp)
 
 *GPT-Image-2 一次直出：只有一些小错误*
 
@@ -17,7 +17,7 @@ category: web
 
 现有的 GPT-Image 模型已经能很好的满足美观的要求，然而为了管理地理元素信息，我们有必要搭建一条从数据到最终成图的 pipeline。本文就以现有小说《重启咲良田》为例，介绍一种可能的尝试。
 
-![工作 pipeline](./sakurada-reset-map/sakurada-reset-map-02-pipeline.png)
+![工作 pipeline](./sakurada-reset-map/sakurada-reset-map-02-pipeline.webp)
 
 *工作 pipeline*
 
@@ -29,7 +29,7 @@ GeoJSON 是一个相当 GIS（地理信息系统）的选择。GeoJSON 承载了
 
 当然从描述也可以看出，GeoJSON 其实相当枯燥：
 
-![GeoJSON 直接简单几何渲染](./sakurada-reset-map/sakurada-reset-map-03-geojson-render.png)
+![GeoJSON 直接简单几何渲染](./sakurada-reset-map/sakurada-reset-map-03-geojson-render.webp)
 
 *GeoJSON 直接简单几何渲染*
 
@@ -66,7 +66,7 @@ JSON 是一种同时方便人类和 LLM 修改编辑的结构化格式，这里�
 
 但这篇文章的饺子醋来了，我想打个广告，并不隆重的介绍一款内置 Agent 的 Web 地图编辑器：总之这是渲染出的效果，其实到这里整个地图生成的管线已经介绍完了，不想看广告的可以退出了。
 
-![初版渲染图](./sakurada-reset-map/sakurada-reset-map-06-initial-render.png)
+![初版渲染图](./sakurada-reset-map/sakurada-reset-map-06-initial-render.webp)
 
 *初版渲染图*
 
@@ -84,15 +84,15 @@ JSON 是一种同时方便人类和 LLM 修改编辑的结构化格式，这里�
 2. 如果你在做 GIS 可视化（真的会有看这篇文章的人做这个吗？），你可以用它载入数据完成一些可视化工作，修改底图和叠加数据层；
 3. ~~在地图上做一些鬼畜的事情（画动漫小人）。~~
 
-![“我想让你尝试按照原神地图的风格，构建你自己的幻想世界观”](./sakurada-reset-map/sakurada-reset-map-08-genshin-style-prompt.png)
+![“我想让你尝试按照原神地图的风格，构建你自己的幻想世界观”](./sakurada-reset-map/sakurada-reset-map-08-genshin-style-prompt.webp)
 
 *“我想让你尝试按照原神地图的风格，构建你自己的幻想世界观”*
 
-![“你自由发挥做我给你的数据集的可视化”](./sakurada-reset-map/sakurada-reset-map-09-visualization-prompt.png)
+![“你自由发挥做我给你的数据集的可视化”](./sakurada-reset-map/sakurada-reset-map-09-visualization-prompt.webp)
 
 *“你自由发挥做我给你的数据集的可视化”*
 
-![“画的更细致更像eva tv中的形象一点”……呃……](./sakurada-reset-map/sakurada-reset-map-10-eva-refinement-prompt.png)
+![“画的更细致更像eva tv中的形象一点”……呃……](./sakurada-reset-map/sakurada-reset-map-10-eva-refinement-prompt.webp)
 
 *“画的更细致更像eva tv中的形象一点”……呃……*
 
@@ -108,7 +108,7 @@ JSON 是一种同时方便人类和 LLM 修改编辑的结构化格式，这里�
 
 > 我感觉现在地图作为一个图片，文字还是不够清楚，你觉得呢，可以怎么改
 
-![嗯……总地图之前展示过了，这里来张放大后的看细节](./sakurada-reset-map/sakurada-reset-map-11-map-detail.png)
+![嗯……总地图之前展示过了，这里来张放大后的看细节](./sakurada-reset-map/sakurada-reset-map-11-map-detail.webp)
 
 *嗯……总地图之前展示过了，这里来张放大后的看细节*
 
@@ -116,7 +116,7 @@ JSON 是一种同时方便人类和 LLM 修改编辑的结构化格式，这里�
 
 总之最后一步就最简单了。直接把示意图丢给 GPT-Image-2，我们就得到最后的咲良田地图了。
 
-![收工！](./sakurada-reset-map/sakurada-reset-map-12-final-map.png)
+![收工！](./sakurada-reset-map/sakurada-reset-map-12-final-map.webp)
 
 *收工！*
 

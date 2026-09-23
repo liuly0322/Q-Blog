@@ -11,7 +11,7 @@ category: web
 
 目前在博客导航栏选择动画即可进入 Anime List 页面。
 
-![Anime List](bangumi_anime_list/my_anime_list.png)
+![Anime List](bangumi_anime_list/my_anime_list.webp)
 
 编码过程得到了 windicss 这一原子 CSS 框架和 Copilot 的大力帮助。
 

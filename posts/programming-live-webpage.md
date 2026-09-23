@@ -11,13 +11,13 @@ category: web
 
 这几天我搓了一个 [Maputnik-AI](https://github.com/liuly0322/Maputnik-AI)。它是地图样式编辑器 [Maputnik](https://github.com/maplibre/maputnik) 的一个实验性分支：导入一份 CSV，再告诉 Agent 想画成什么样，它就会直接修改眼前这张 MapLibre 地图。
 
-![Maputnik-AI Agent 工作区](./programming-live-webpage/20260828-agent-workspace.png)
+![Maputnik-AI Agent 工作区](./programming-live-webpage/20260828-agent-workspace.webp)
 
 <!-- more -->
 
 比如让它把热点数据画成绿色方格，按数值调整深浅，同时简化底图，得到的是下面这张还能继续编辑的地图：
 
-![Agent 生成的方格地图](./programming-live-webpage/20260828-agent-generated-grid-map.png)
+![Agent 生成的方格地图](./programming-live-webpage/20260828-agent-generated-grid-map.webp)
 
 项目本身可以在 [在线 Demo](https://liuly.moe/Maputnik-AI/) 里玩（需要自备支持 Responses API 的 API Key），不过这篇文章主要不是安利项目，而是讲讲它背后的交互方式：直接让网页成为 Agent 可以探索、编程的环境。
 

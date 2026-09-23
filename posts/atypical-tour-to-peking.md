@@ -31,13 +31,13 @@ tags: [杂谈]
 
 到颐和园地铁站后，本来打算吃顿肯德基早餐，一看是景点餐厅收费标准，一个套餐三十多，遂放弃。便利店买了一瓶拿铁和一瓶能量饮料，进园。不过果然头一天晚上硬卧休息不是很足，走路都轻飘飘的，好几次差点崴了脚。冬季的颐和园虽然没有夏天的绿意，但是也别有一番风味。
 
-![summer-palace](atypical-tour-to-peking/20250224-summer-palace.jpeg)
+![summer-palace](atypical-tour-to-peking/20250224-summer-palace.webp)
 
 中午路过凤凰汇，华润系商场，还是可以的，卫生间很干净。来都来了，尝了一顿小大董的北京烤鸭，鸭皮实在太肥了，一个人吃半只勉强。
 
 下午参观两座博物馆：
 
-![railway](atypical-tour-to-peking/20250224-railway.png)
+![railway](atypical-tour-to-peking/20250224-railway.webp)
 
 _环形铁路将我们分离，两个景点间嗯走了半个多小时_
 
