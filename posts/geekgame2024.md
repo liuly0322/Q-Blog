@@ -1,7 +1,7 @@
 ---
 title: GeekGame 2024 Writeup
 date: 2024-10-20 22:57:32
-tags: [ctf, 题解]
+tags: [CTF, 题解]
 category: 笔记
 mathjax: true
 tocbot: true

@@ -1,7 +1,7 @@
 ---
 title: 一次类型体操 & TypeScript 中的特殊类型
 date: 2024-03-13 17:33:33
-tags: [类型系统, typescript]
+tags: [类型系统, TypeScript]
 category: web
 ---
 

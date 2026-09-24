@@ -1,7 +1,7 @@
 ---
 title: Monad 101
 date: 2024-06-01 01:17:20
-tags: [函数式编程, typescript]
+tags: [函数式编程, TypeScript]
 category: web
 ---
 

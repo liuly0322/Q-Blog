@@ -1,7 +1,7 @@
 ---
 title: GeekGame 2023 个人题解
 date: 2023-10-20 13:18:59
-tags: [ctf, 题解]
+tags: [CTF, 题解]
 category: 笔记
 mathjax: true
 tocbot: true

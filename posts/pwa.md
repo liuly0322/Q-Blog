@@ -1,7 +1,7 @@
 ---
 title: PWA 补完计划
 date: 2024-02-26 19:59:23
-tags: [vite, pwa]
+tags: [Vite, PWA]
 category: web
 ---
 

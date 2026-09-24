@@ -1,7 +1,7 @@
 ---
 title: 从零开始的调试器编写！
 date: 2024-02-22 13:18:59
-tags: [os, binary, rust]
+tags: [OS, binary, Rust]
 category: 笔记
 mathjax: true
 tocbot: true

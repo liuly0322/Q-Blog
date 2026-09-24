@@ -1,7 +1,7 @@
 ---
 title: Hackergame 2022 个人题解
 date: 2022-10-29 18:18:40
-tags: [ctf, 题解]
+tags: [CTF, 题解]
 category: 笔记
 mathjax: true
 tocbot: true

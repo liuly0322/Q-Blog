@@ -1,7 +1,7 @@
 ---
 title: 记一次打包体积优化
 date: 2024-03-05 19:23:50
-tags: [编译, rollup]
+tags: [编译, Rollup]
 category: web
 ---
 

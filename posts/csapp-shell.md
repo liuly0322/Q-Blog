@@ -1,7 +1,7 @@
 ---
 title: CSAPP 之 Shell Lab
 date: 2022-03-19 22:27:56
-tags: [C-CPP, os]
+tags: [C-CPP, OS]
 category: 笔记
 mathjax: true
 tocbot: true
