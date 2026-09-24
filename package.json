@@ -5,7 +5,7 @@
   "description": "A blog built with Vite, Vue 3, and WindiCSS.",
   "scripts": {
     "dev": "vite",
-    "build": "node build/ssg.mjs",
+    "build": "node --experimental-strip-types --disable-warning=ExperimentalWarning build/ssg.ts",
     "postinstall": "npm run build",
     "dev:host": "vite --host",
     "dev:open": "vite --open",

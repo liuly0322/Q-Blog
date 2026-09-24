@@ -1,9 +1,13 @@
 /* eslint-disable antfu/no-top-level-await */
+import type { PostSummary } from '../src/composables/useSummary'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import frontmatter from 'frontmatter'
 import { build } from 'vite'
+
+type SsrManifest = Record<string, string[]>
+type RenderEntry = typeof import('../src/entry-server').render
 
 const siteUrl = 'https://blog.liuly.moe'
 const outputDir = path.resolve('dist')
@@ -31,24 +35,26 @@ const spaFallbackScript = `<script type="text/javascript">
   }(window.location))
 </script>`
 
-function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, char => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    '\'': '&#39;',
-  })[char])
+const htmlEscapes: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  '\'': '&#39;',
 }
 
-function generateDescription(content, maxLength = 160) {
+function escapeHtml(value: unknown): string {
+  return String(value).replace(/[&<>"']/g, char => htmlEscapes[char])
+}
+
+function generateDescription(content: string, maxLength = 160): string {
   return content
     .replace(/[#*~`><!-]/g, '')
     .replace(/\s+/g, ' ')
     .slice(0, maxLength)
 }
 
-function getAssetLinks(template, modules, manifest) {
+function getAssetLinks(template: string, modules: string[], manifest: SsrManifest): string {
   const assets = new Set(modules.flatMap(id => manifest[id] ?? []))
   return [...assets]
     // Route JS is precached and served by the PWA service worker.
@@ -70,10 +76,10 @@ try {
       minify: false,
     },
   })
-  const { render } = await import(pathToFileURL(path.join(serverDir, 'entry-server.js')).href)
+  const { render } = await import(pathToFileURL(path.join(serverDir, 'entry-server.js')).href) as { render: RenderEntry }
   const template = await fs.readFile(path.join(outputDir, 'index.html'), 'utf8')
-  const manifest = JSON.parse(await fs.readFile(path.join(outputDir, '.vite/ssr-manifest.json'), 'utf8'))
-  const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8'))
+  const manifest = JSON.parse(await fs.readFile(path.join(outputDir, '.vite/ssr-manifest.json'), 'utf8')) as SsrManifest
+  const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8')) as { posts: PostSummary[] }
   const tagPages = [...new Set(posts.flatMap(post => post.tags))].map((tag) => {
     return {
       url: `/tags/${tag}`,
