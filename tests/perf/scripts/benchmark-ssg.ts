@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import process from 'node:process'
-import { launchBrowser, mockExternalServices, startServer } from '../../helpers/browser-utils.mjs'
+import { launchBrowser, mockExternalServices, startServer } from '../../helpers/browser-utils.ts'
 
-assert(process.argv[2], 'Usage: node scripts/benchmark-ssg.mjs BASELINE_DIST [OUTPUT_JSON]')
+assert(process.argv[2], 'Usage: node scripts/benchmark-ssg.ts BASELINE_DIST [OUTPUT_JSON]')
 const runs = Number(process.env.BENCH_RUNS || 3)
 const browser = await launchBrowser()
 const baseline = await startServer(process.argv[2])
@@ -93,7 +93,8 @@ try {
             buffered: true,
           })
           new PerformanceObserver((list) => {
-            for (const e of list.getEntries()) {
+            for (const rawEntry of list.getEntries()) {
+              const e = rawEntry as LayoutShift
               if (!e.hadRecentInput)
                 window.bench.cls += e.value
             }
@@ -154,7 +155,7 @@ try {
           criticalJsBytes: criticalRequests.filter(r => r.type === 'Script').reduce((n, r) => n + r.bytes, 0),
           criticalCssBytes: criticalRequests.filter(r => r.type === 'Stylesheet').reduce((n, r) => n + r.bytes, 0),
           jsBytes: requests.filter(r => r.type === 'Script').reduce((n, r) => n + r.bytes, 0),
-          scriptMs: Math.round(metrics.metrics.find(m => m.name === 'ScriptDuration').value * 1000),
+          scriptMs: Math.round((metrics.metrics.find(m => m.name === 'ScriptDuration')?.value ?? 0) * 1000),
           errors,
         }
         results.push(row)

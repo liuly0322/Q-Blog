@@ -3,9 +3,12 @@ import http from 'node:http'
 import path from 'node:path'
 import process from 'node:process'
 import { gzipSync } from 'node:zlib'
+import type { OutgoingHttpHeaders } from 'node:http'
+import type { AddressInfo } from 'node:net'
+import type { Browser, BrowserContext } from 'playwright'
 
 // Optional test tooling, kept outside the application's dependency graph.
-export async function launchBrowser() {
+export async function launchBrowser(): Promise<Browser> {
   const {
     chromium,
   } = await import(process.env.Q_BLOG_PLAYWRIGHT || 'playwright')
@@ -13,9 +16,9 @@ export async function launchBrowser() {
     headless: true,
   })
 }
-export async function startServer(directory) {
+export async function startServer(directory: string) {
   const root = path.resolve(directory)
-  const types = {
+  const types: Record<string, string> = {
     '.html': 'text/html; charset=utf-8',
     '.htm': 'text/html; charset=utf-8',
     '.js': 'application/javascript',
@@ -32,7 +35,7 @@ export async function startServer(directory) {
   }
   const server = http.createServer(async (request, response) => {
     try {
-      const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname)
+      const pathname = decodeURIComponent(new URL(request.url ?? '/', 'http://localhost').pathname)
       const target = path.resolve(root, `.${pathname === '/' ? '/index.html' : pathname}`)
       if (!target.startsWith(`${root}${path.sep}`)) {
         response.writeHead(403).end()
@@ -48,11 +51,11 @@ export async function startServer(directory) {
       const status = file ? 200 : 404
       file ??= path.join(root, '404.html')
       let data = await fs.readFile(file)
-      const headers = {
+      const headers: OutgoingHttpHeaders = {
         'content-type': types[path.extname(file)] || 'application/octet-stream',
         'cache-control': 'no-store',
       }
-      if (/html|javascript|css|json|svg/.test(headers['content-type']) && /gzip/.test(request.headers['accept-encoding'] || '')) {
+      if (/html|javascript|css|json|svg/.test(String(headers['content-type'])) && /gzip/.test(String(request.headers['accept-encoding'] || ''))) {
         data = gzipSync(data)
         headers['content-encoding'] = 'gzip'
       }
@@ -63,13 +66,14 @@ export async function startServer(directory) {
       response.writeHead(500).end()
     }
   })
-  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
+  await new Promise<void>(resolve => server.listen({ port: 0, host: '127.0.0.1' }, resolve))
+  const address = server.address() as AddressInfo
   return {
-    origin: `http://127.0.0.1:${server.address().port}`,
-    close: () => new Promise(resolve => server.close(resolve)),
+    origin: `http://127.0.0.1:${address.port}`,
+    close: () => new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve())),
   }
 }
-export async function mockExternalServices(context) {
+export async function mockExternalServices(context: BrowserContext) {
   // Keep third-party availability, music, and comments out of reproducible measurements.
   await context.route('**/*', (route) => {
     if (new URL(route.request().url()).hostname === '127.0.0.1')
