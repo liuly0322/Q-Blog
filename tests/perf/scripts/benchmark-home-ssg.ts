@@ -2,9 +2,9 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
-import { launchBrowser, mockExternalServices, startServer } from './home-ssg-browser-utils.mjs'
+import { launchBrowser, mockExternalServices, startServer } from './home-ssg-browser-utils.ts'
 
-assert(process.argv[2], 'Usage: node benchmark-home-ssg.mjs BASELINE_DIST [OUTPUT_JSON] [RUNS]')
+assert(process.argv[2], 'Usage: node benchmark-home-ssg.ts BASELINE_DIST [OUTPUT_JSON] [RUNS]')
 const outputFile = process.argv[3] || '/tmp/q-blog-home-ssg/results.json'
 const runs = Number(process.argv[4] || 3)
 const browser = await launchBrowser()
@@ -88,7 +88,8 @@ try {
             window.homeBench.lcp = entry.startTime
         }).observe({ type: 'largest-contentful-paint', buffered: true })
         new PerformanceObserver((list) => {
-          for (const entry of list.getEntries()) {
+          for (const rawEntry of list.getEntries()) {
+            const entry = rawEntry as LayoutShift
             if (!entry.hadRecentInput)
               window.homeBench.cls += entry.value
           }

@@ -1,16 +1,17 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
-import { launchBrowser, mockExternalServices, startServer } from '../helpers/browser-utils.mjs'
+import { launchBrowser, mockExternalServices, startServer } from '../helpers/browser-utils.ts'
+import type { Page } from 'playwright'
 
 const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8'))
 const browser = await launchBrowser()
 const server = await startServer('dist')
-const errors = []
+const errors: string[] = []
 
-async function openHydratedPage(page, path, selector) {
+async function openHydratedPage(page: Page, path: string, selector?: string) {
   const response = await page.goto(`${server.origin}${path}`)
   assert.equal(response.status(), 200, `${path} should be served`)
-  await page.waitForFunction(() => !!document.querySelector('#app').__vue_app__)
+  await page.waitForFunction(() => !!document.querySelector('#app')?.__vue_app__, undefined, {})
   if (selector)
     await page.locator(selector).first().waitFor({ state: 'visible' })
 }
@@ -48,7 +49,7 @@ try {
   await page.locator('.md-blog').waitFor({ state: 'visible' })
 
   for (const post of posts) {
-    const requests = []
+    const requests: string[] = []
     const onRequest = request => requests.push(request.url())
     page.on('request', onRequest)
     await openHydratedPage(page, `/posts/${encodeURIComponent(post.url)}`, '[data-post-body]')
@@ -57,7 +58,7 @@ try {
     page.removeListener('request', onRequest)
   }
 
-  await openHydratedPage(page, '/')
+  await openHydratedPage(page, '/', undefined)
   const articleUrl = '/posts/sakurada-reset-map'
   await page.locator(`article a[href="${articleUrl}"]`).first().click()
   await page.waitForURL(`**${articleUrl}`)
@@ -70,7 +71,7 @@ try {
   await page.goForward()
   await page.waitForURL(`**${articleUrl}`)
   await page.locator('[data-post-body]').waitFor({ state: 'visible' })
-  await page.waitForFunction(expected => Math.abs(window.scrollY - expected) < 120, articleScrollY)
+  await page.waitForFunction(expected => Math.abs(window.scrollY - expected) < 120, articleScrollY, {})
 
   await openHydratedPage(page, '/archive', '.archive-item')
   await page.locator('.archive-item').first().click()
@@ -120,21 +121,21 @@ try {
   await mockExternalServices(mobile)
   const mobilePage = await mobile.newPage()
   mobilePage.on('pageerror', error => errors.push(String(error)))
-  await openHydratedPage(mobilePage, '/posts/hello-world')
+  await openHydratedPage(mobilePage, '/posts/hello-world', undefined)
   assert(await mobilePage.locator('html').evaluate(element => element.classList.contains('dark')))
   assert(await mobilePage.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
   await mobilePage.getByRole('button', { name: 'menu' }).click()
-  await mobilePage.waitForFunction(() => document.querySelector('#sidebar').classList.contains('sidebar-open'))
+  await mobilePage.waitForFunction(() => document.querySelector('#sidebar')?.classList.contains('sidebar-open'), undefined, {})
   await mobile.close()
 
   const sw = await browser.newContext()
   await mockExternalServices(sw)
   const swPage = await sw.newPage()
-  await openHydratedPage(swPage, '/posts/hello-world')
+  await openHydratedPage(swPage, '/posts/hello-world', undefined)
   await swPage.evaluate(() => navigator.serviceWorker.ready)
   await swPage.reload()
   await swPage.locator('[data-post-body]').waitFor({ state: 'visible' })
-  await swPage.waitForFunction(() => !!document.querySelector('#app').__vue_app__)
+  await swPage.waitForFunction(() => !!document.querySelector('#app')?.__vue_app__, undefined, {})
   await sw.close()
 }
 finally {

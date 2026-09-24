@@ -1,11 +1,12 @@
 {
   "name": "q-blog-ssg-tools",
   "private": true,
+  "type": "module",
   "scripts": {
-    "e2e": "cd .. && node tests/e2e/routes.mjs",
-    "benchmark:articles": "cd .. && node tests/perf/scripts/benchmark-ssg.mjs",
-    "benchmark:home": "cd .. && node tests/perf/scripts/benchmark-home-ssg.mjs",
-    "benchmark:live": "cd .. && node tests/perf/scripts/benchmark-live.mjs"
+    "e2e": "cd .. && node --experimental-strip-types tests/e2e/routes.ts",
+    "benchmark:articles": "cd .. && node --experimental-strip-types tests/perf/scripts/benchmark-ssg.ts",
+    "benchmark:home": "cd .. && node --experimental-strip-types tests/perf/scripts/benchmark-home-ssg.ts",
+    "benchmark:live": "cd .. && node --experimental-strip-types tests/perf/scripts/benchmark-live.ts"
   },
   "devDependencies": {
     "playwright": "^1.63.0"

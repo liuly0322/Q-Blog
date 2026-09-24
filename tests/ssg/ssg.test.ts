@@ -44,7 +44,7 @@ test('site pages include Bangumi and every tag page', async () => {
     ['tags.html', '/tags'],
     ['bangumi.html', '/bangumi'],
   ]
-  const tags = [...new Set(posts.flatMap(post => post.tags))]
+  const tags = [...new Set<string>(posts.flatMap(post => post.tags))]
 
   for (const [file, url] of staticPages) {
     const html = await fs.readFile(`dist/${file}`, 'utf8')

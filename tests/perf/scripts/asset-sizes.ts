@@ -4,7 +4,7 @@ import path from 'node:path'
 import { gzipSync } from 'node:zlib'
 
 const [directory, outputFile] = process.argv.slice(2)
-assert(directory, 'Usage: node tests/perf/scripts/asset-sizes.mjs DIST_DIR [OUTPUT_JSON]')
+assert(directory, 'Usage: node tests/perf/scripts/asset-sizes.ts DIST_DIR [OUTPUT_JSON]')
 
 const root = path.resolve(directory)
 const html = await fs.readFile(path.join(root, 'index.html'), 'utf8')
@@ -19,13 +19,15 @@ async function measure(assetPath) {
   return { path: assetPath, rawBytes: data.length, gzipBytes: gzipSync(data).length }
 }
 
+const entryJs = await measure(jsPath)
+const initialCss = await measure(cssPath)
 const result = {
-  entryJs: await measure(jsPath),
-  initialCss: await measure(cssPath),
-}
-result.initialJsCss = {
-  rawBytes: result.entryJs.rawBytes + result.initialCss.rawBytes,
-  gzipBytes: result.entryJs.gzipBytes + result.initialCss.gzipBytes,
+  entryJs,
+  initialCss,
+  initialJsCss: {
+    rawBytes: entryJs.rawBytes + initialCss.rawBytes,
+    gzipBytes: entryJs.gzipBytes + initialCss.gzipBytes,
+  },
 }
 
 const serialized = `${JSON.stringify(result, null, 2)}\n`

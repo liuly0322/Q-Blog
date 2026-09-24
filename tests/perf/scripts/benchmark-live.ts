@@ -55,7 +55,8 @@ async function newPage(throttled) {
       for (const e of list.getEntries()) window.bench.lcp = e.startTime
     }).observe({ type: 'largest-contentful-paint', buffered: true })
     new PerformanceObserver((list) => {
-      for (const e of list.getEntries()) {
+      for (const rawEntry of list.getEntries()) {
+        const e = rawEntry as LayoutShift
         if (!e.hadRecentInput)
           window.bench.cls += e.value
       }
@@ -138,9 +139,10 @@ async function load(origin, slug, throttled, warmup = false) {
     requests: requestMap.size,
     transferBytes: [...requestMap.values()].reduce((n, r) => n + r.bytes, 0),
     jsBytes: [...requestMap.values()].filter(r => r.type === 'Script').reduce((n, r) => n + r.bytes, 0),
-    scriptMs: Math.round(metrics.metrics.find(m => m.name === 'ScriptDuration').value * 1000),
+    scriptMs: Math.round((metrics.metrics.find(m => m.name === 'ScriptDuration')?.value ?? 0) * 1000),
     pending: pending.size,
     errors,
+    run: 0,
   }
   await context.close()
   return row
