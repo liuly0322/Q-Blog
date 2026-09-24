@@ -31,7 +31,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.13.0
+          node-version: 22.23.3
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
@@ -80,21 +80,21 @@ jobs:
       - name: Benchmark homepage
         env:
           BENCH_RUNS: 3
-        run: node tests/perf/scripts/benchmark-home-ssg.mjs "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/home.json" 3
+        run: node tests/perf/scripts/benchmark-home-ssg.ts "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/home.json" 3
 
       - name: Benchmark representative articles
         env:
           BENCH_RUNS: 3
-        run: node tests/perf/scripts/benchmark-ssg.mjs "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/articles.json"
+        run: node tests/perf/scripts/benchmark-ssg.ts "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/articles.json"
 
       - name: Measure initial assets
         run: |
-          node tests/perf/scripts/asset-sizes.mjs "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/base-assets.json"
-          node tests/perf/scripts/asset-sizes.mjs dist "$RUNNER_TEMP/head-assets.json"
+          node tests/perf/scripts/asset-sizes.ts "$RUNNER_TEMP/q-blog-baseline-dist" "$RUNNER_TEMP/base-assets.json"
+          node tests/perf/scripts/asset-sizes.ts dist "$RUNNER_TEMP/head-assets.json"
 
       - name: Build comparison report
         run: |
-          node tests/perf/scripts/report.mjs \
+          node tests/perf/scripts/report.ts \
             "$RUNNER_TEMP/home.json" \
             "$RUNNER_TEMP/articles.json" \
             "$RUNNER_TEMP/base-assets.json" \

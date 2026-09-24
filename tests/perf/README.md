@@ -14,14 +14,14 @@ pnpm build
 Build the comparison revision in a separate checkout or directory, then run:
 
 ```bash
-node --experimental-strip-types tests/perf/scripts/benchmark-home-ssg.ts /path/to/base/dist /tmp/home.json 3
-node --experimental-strip-types tests/perf/scripts/benchmark-ssg.ts /path/to/base/dist /tmp/articles.json
-node --experimental-strip-types tests/perf/scripts/asset-sizes.ts /path/to/base/dist /tmp/base-assets.json
-node --experimental-strip-types tests/perf/scripts/asset-sizes.ts dist /tmp/head-assets.json
-node --experimental-strip-types tests/perf/scripts/report.ts /tmp/home.json /tmp/articles.json /tmp/base-assets.json /tmp/head-assets.json /tmp/report.md
+node tests/perf/scripts/benchmark-home-ssg.ts /path/to/base/dist /tmp/home.json 3
+node tests/perf/scripts/benchmark-ssg.ts /path/to/base/dist /tmp/articles.json
+node tests/perf/scripts/asset-sizes.ts /path/to/base/dist /tmp/base-assets.json
+node tests/perf/scripts/asset-sizes.ts dist /tmp/head-assets.json
+node tests/perf/scripts/report.ts /tmp/home.json /tmp/articles.json /tmp/base-assets.json /tmp/head-assets.json /tmp/report.md
 ```
 
-To compare two deployed builds through the same browser/network profile, provide `PERF_BASELINE_URL` and `PERF_HEAD_URL` and run `node --experimental-strip-types tests/perf/scripts/benchmark-live.ts /tmp/live.json`. This live comparison is separate from CI because CDN caches, edge cold starts, and external network conditions are not stable enough for per-commit regression checks.
+To compare two deployed builds through the same browser/network profile, provide `PERF_BASELINE_URL` and `PERF_HEAD_URL` and run `node tests/perf/scripts/benchmark-live.ts /tmp/live.json`. This live comparison is separate from CI because CDN caches, edge cold starts, and external network conditions are not stable enough for per-commit regression checks.
 
 The article benchmark uses three representative posts: a short text article, an image-heavy post, and a long post with math and code. The homepage benchmark covers the image-rich feed. Both run Chromium at 1365 × 900 with 150 ms latency, 200 KiB/s download, 93 KiB/s upload, 4× CPU throttling, a fresh context per sample, and blocked service workers. External APIs are mocked. Three runs are summarized by their median.
 
