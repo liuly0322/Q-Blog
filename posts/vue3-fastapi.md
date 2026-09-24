@@ -1,5 +1,5 @@
 ---
-title: vue3-fastapi 简易开发体验
+title: Vue 3 + FastAPI 简易开发体验
 date: 2022-03-01 14:20:02
 tags: [Vue, FastAPI, 异步]
 category: web
@@ -7,7 +7,7 @@ mathjax: true
 tocbot: true
 ---
 
-温故而知新，本文将借助比较现代化的开发流程（vue-cli, vue3, fastapi）重构之前的一篇简易备忘系统
+温故而知新，本文将借助比较现代化的开发流程（Vue CLI, Vue 3, FastAPI）重构之前的一篇简易备忘系统
 
 <!-- more -->
 
@@ -25,11 +25,11 @@ vue create hello-world
 
 在介绍 Vue3 之前，首先需要介绍一下 Vue 框架的基本思想。
 
-原先，DOM (html 文档) 中显示的数据和 JS 中的变量并没有绑定关系，因此，每次变量改变（包括从后端获取数据）都需要重新操作 DOM, 更新数据
+原先，DOM (HTML 文档) 中显示的数据和 JS 中的变量并没有绑定关系，因此，每次变量改变（包括从后端获取数据）都需要重新操作 DOM, 更新数据
 
 Vue 对此进行了简化，这是怎么做到的呢？
 
-从逻辑上来说，设 State 是当前所有应用（网页）中所有数据的集合，View 是用户看到的 ui 界面，它们之间应该具备一个单向的函数关系 $View = f(state)$
+从逻辑上来说，设 State 是当前所有应用（网页）中所有数据的集合，View 是用户看到的 UI 界面，它们之间应该具备一个单向的函数关系 $View = f(state)$
 
 Vue 所做的工作即为自动描述了这一函数关系，使得 HTML 文档中显示的元素可以通过 Vue 提供的模板语法 `{{ }}` 与 State 中的变量进行绑定，比如如果我想在页面某处显示脚本中的值 `x`，那 HTML 对应位置直接写 `{{ x }}` 即可。加上 Vue 提供的 `v-if` 和 `v-for` 之类的模板控制流，使得用户可以专注于数据的操作，而无需担心这些数据怎样更新到页面上
 
@@ -259,7 +259,7 @@ async function bar() {
 
 ## 后端
 
-本文采用 uvicorn + fastapi 在服务器上部署。部署具体可以参考 fastapi 文档。
+本文采用 uvicorn + FastAPI 在服务器上部署。部署具体可以参考 FastAPI 文档。
 
 ```bash
 pip install fastapi
@@ -268,7 +268,7 @@ vim main.py
 uvicorn main:app --host 0.0.0.0 --port 80	# for example
 ```
 
-fastapi 官方文档的说明非常清楚，直接贴代码：
+FastAPI 官方文档的说明非常清楚，直接贴代码：
 
 ```python
 from fastapi import FastAPI
@@ -322,4 +322,4 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"],
 
 ## 画饼
 
-啥时候用 Vue3 + fastapi 把自己博客重构一遍（）
+啥时候用 Vue3 + FastAPI 把自己博客重构一遍（）

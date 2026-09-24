@@ -1,12 +1,12 @@
 ---
-title: 数电计组实验 Vscode 配置指南
+title: 数电计组实验 VS Code 配置指南
 date: 2022-03-19 21:18:29
 tags: [笔记]
 category: 笔记
 tocbot: true
 ---
 
-本篇博客将带来优雅的 Vscode 编写数字电路实验 / 计算机组成原理实验的 Verilog 一键式配置方案，让你编写代码全程远离 Vivado（~~新建工程还是要见一面的~~）
+本篇博客将带来优雅的 VS Code 编写数字电路实验 / 计算机组成原理实验的 Verilog 一键式配置方案，让你编写代码全程远离 Vivado（~~新建工程还是要见一面的~~）
 
 主要还是介绍一些名词和工具，读者看上去了哪些可以自己挑
 
@@ -14,7 +14,7 @@ tocbot: true
 
 <!-- more -->
 
-## Vscode 插件
+## VS Code 插件
 
 首先可能需要连接远程的 Vlab 服务器，这个时候需要使用 Vscode-remote 插件
 
@@ -26,7 +26,7 @@ tocbot: true
 
 ![image-20220319212941961](./digital-lab/image-20220319212941961.png)
 
-这个时候已经能愉快的在 Vscode 上写 Verilog 了，但是仅仅能写肯定不够，我们还需要一个 linter(检查语法) 还有一个 formatter(代码格式化)
+这个时候已经能愉快的在 VS Code 上写 Verilog 了，但是仅仅能写肯定不够，我们还需要一个 linter(检查语法) 还有一个 formatter(代码格式化)
 
 这里推荐一个插件：Digital IDE
 
@@ -75,7 +75,7 @@ Ubuntu 包管理器装的版本比较旧，如果想要最新版可以自己下�
 
 具体使用方式可以参考 [这篇文章](http://www.sunnychen.top/2019/07/25/%E8%B7%A8%E8%AF%AD%E8%A8%80%E7%9A%84Verilator%E4%BB%BF%E7%9C%9F%EF%BC%9A%E4%BD%BF%E7%94%A8%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/) ，~~对着复制粘贴就行~~
 
-如果你发现 Vscode 找不到头文件 `verilated.h` ，那就找到这个设置（直接在 Vscode 的设置里搜索即可），路径添加以下两个中的一个（根据你自己的情况而定，自己看哪个目录能进，如果是包管理器装的应该是下面那个路径）
+如果你发现 VS Code 找不到头文件 `verilated.h` ，那就找到这个设置（直接在 VS Code 的设置里搜索即可），路径添加以下两个中的一个（根据你自己的情况而定，自己看哪个目录能进，如果是包管理器装的应该是下面那个路径）
 
 ![image-20220319214751930](./digital-lab/image-20220319214751930.png)
 

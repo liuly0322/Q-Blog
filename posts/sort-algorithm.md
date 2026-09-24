@@ -70,7 +70,7 @@ void bubble_sort(int* a, int n) {
 }
 ```
 
-~~所以说 cpp 真的好自由~~
+~~所以说 C++ 真的好自由~~
 
 这里通过 `sorted` 记录本次遍历是否完成排序。
 

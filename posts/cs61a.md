@@ -221,7 +221,7 @@ int main() {
 
 测试环境 `gcc version 11.2.0 (Ubuntu 11.2.0-7ubuntu2)` ，编译选项开启 -O2 后程序可以一直运行。
 
-而 python 当前版本每次调用函数一定会新建一个环境，不会对尾递归进行优化（这似乎是因为 python 希望报错时保留完整的函数栈信息）
+而 Python 当前版本每次调用函数一定会新建一个环境，不会对尾递归进行优化（这似乎是因为 Python 希望报错时保留完整的函数栈信息）
 
 在一些偏向纯函数式的语言（如 Haskell，Scheme）中尾递归优化几乎是必须的：它们通常都会使用递归来代替循环。
 
@@ -235,7 +235,7 @@ int main() {
 
 ### Map
 
-python 中 map 的基本语法如下：
+Python 中 map 的基本语法如下：
 
 ```python
 map(function_to_apply, list_of_inputs)
@@ -269,7 +269,7 @@ console.log(map1);
 
 ### Filter
 
-顾名思义，filter 创建一个函数返回 true 的元素列表。python 示例如下：
+顾名思义，filter 创建一个函数返回 true 的元素列表。Python 示例如下：
 
 ```python
 number_list = range(-5, 5)
@@ -325,7 +325,7 @@ console.log(array1.reduce(reducer, 5));
 
 (List Comprehension)
 
-在 python 中，对数组进行操作有更为简便的方法：列表推导式。
+在 Python 中，对数组进行操作有更为简便的方法：列表推导式。
 
 List Comprehension 是 map() 和 filter() 的一种替代品。它遵循数学上集合构建的形式，提供了一种创建列表的简洁方法。语法如下：
 
@@ -358,11 +358,11 @@ numbers = [1,3,4,5,6,7,10]
 factors = lambda n: [i for i in range(1, n + 1) if n % i == 0]
 ```
 
-### python 中的迭代器
+### Python 中的迭代器
 
-python 之所以 map 和 reduce 操作设计的稍显繁琐，很大一部分原因正如上文在 map 中所述，是 python 希望这些列表操作的高阶函数能返回一个迭代器对象。
+Python 之所以 map 和 reduce 操作设计的稍显繁琐，很大一部分原因正如上文在 map 中所述，是 Python 希望这些列表操作的高阶函数能返回一个迭代器对象。
 
-迭代器这个概念在很多语言中都有，但是 python 中这些列表操作的高阶函数（map, reduce, zip, sum, all, any 等）返回的迭代器（以及别的一些常见的自带迭代器，比如 range）的特别之处在于它们是懒加载的：意思是并不会一次性算出返回的列表，而只是每次需要用到迭代器的时候往后计算一个值。
+迭代器这个概念在很多语言中都有，但是 Python 中这些列表操作的高阶函数（map, reduce, zip, sum, all, any 等）返回的迭代器（以及别的一些常见的自带迭代器，比如 range）的特别之处在于它们是懒加载的：意思是并不会一次性算出返回的列表，而只是每次需要用到迭代器的时候往后计算一个值。
 
 这么说可能有点抽象，下面举一个实际一点的例子：
 
@@ -373,7 +373,7 @@ def sum_from_a_to_b(a, b):
 
 这个函数用于计算从 a 到 b 的自然数之和。单从代码的字面意思理解，我们可能会认为这段代码先生成 `range(a, b + 1)` ，一个长为 b - a + 1 的数组，然后再对这个数组应用 sum 方法。如此一来，空间复杂度为 $\Theta(b-a)$ 的线性复杂度。
 
-但实际上 python 在运行代码的时候不会这样处理。而是首先 sum 函数需要获取第一个值，于是 range 才返回第一个值 a，随后 sum 需要获取第二个值，range 再返回第二个值 a + 1，以此类推。不难发现这等效于下面的代码：
+但实际上 Python 在运行代码的时候不会这样处理。而是首先 sum 函数需要获取第一个值，于是 range 才返回第一个值 a，随后 sum 需要获取第二个值，range 再返回第二个值 a + 1，以此类推。不难发现这等效于下面的代码：
 
 ```python
 def sum_from_a_to_b(a, b):
@@ -390,7 +390,7 @@ def sum_from_a_to_b(a, b):
 
 ~~插播一道算法题~~
 
-来自于 [Project2 - Cats](https://inst.eecs.berkeley.edu/~cs61a/su20/proj/cats/) ，Problem 7。实际就是在求两个字符串直接的编辑距离，与 [Leetcode 72](https://leetcode-cn.com/problems/edit-distance/) 相同，题目如下：
+来自于 [Project2 - Cats](https://inst.eecs.berkeley.edu/~cs61a/su20/proj/cats/) ，Problem 7。实际就是在求两个字符串直接的编辑距离，与 [LeetCode 72](https://leetcode-cn.com/problems/edit-distance/) 相同，题目如下：
 
 给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数。
 
@@ -408,7 +408,7 @@ def sum_from_a_to_b(a, b):
 
 问题的核心在于如何简化这一问题。举个例子，purng 和 purring，前者相比后者缺少了 r 和 i 两个字符，编辑距离为 2。用搜索的观点看待，我们可能会认为应该枚举增加 r 增加 i 和增加 i 增加 r 这两种方式，但这两种方式结果是一致的：编辑操作之间顺序的交换并不会影响编辑的结果。因此，我们希望“统一”这两种操作。
 
-这一点 git 的 diff 可以给我们带来很好的参考。 [来自知乎](https://zhuanlan.zhihu.com/p/34640058)：
+这一点 Git 的 diff 可以给我们带来很好的参考。 [来自知乎](https://zhuanlan.zhihu.com/p/34640058)：
 
 ```plaintext
 编辑序列, - 代表删除 / + 代表插入(注意空行）
@@ -427,7 +427,7 @@ def sum_from_a_to_b(a, b):
 ------------------------------------------
 ```
 
-git 的 diff 是行与行之间的比较，且没有替换操作。但一目了然的是，对于一个编辑序列，我们可以将每个编辑操作按照它在原文本修改的位置进行排序，这样一来编辑操作进行的先后顺序也就无关紧要了。
+Git 的 diff 是行与行之间的比较，且没有替换操作。但一目了然的是，对于一个编辑序列，我们可以将每个编辑操作按照它在原文本修改的位置进行排序，这样一来编辑操作进行的先后顺序也就无关紧要了。
 
 以 ckiteus 和 kittens 为例，写出编辑距离对应的编辑序列：
 
@@ -510,7 +510,7 @@ $$m[i][j] = m[i-1][j-1]$$
 
 $$m[i][j] = min(m[i-1][j-1], m[i][j-1], m[i-1][j]) + 1$$
 
-据此可以编写出通过 Leetcode 72 的 cpp 版本动态规划代码：
+据此可以编写出通过 LeetCode 72 的 C++ 版本动态规划代码：
 
 ```cpp
 class Solution {

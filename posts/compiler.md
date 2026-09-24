@@ -1,5 +1,5 @@
 ---
-title: LLVM IR 稀疏条件常量传播优化及 WASM 初探
+title: LLVM IR 稀疏条件常量传播优化及 Wasm 初探
 date: 2023-02-07 22:50:29
 tags: [C-CPP, Wasm, 编译]
 category: 笔记
@@ -9,7 +9,7 @@ tocbot: true
 
 大三上学期匆匆忙忙结束了。其实每个学期结束时都会有写一篇「生活类」博客进行总结的冲动，不过奈何实在笔力有限，因此还是写一篇「技术类」博客记录下这个学期干的事情。
 
-这篇博客将介绍我和队友们在编译原理 H 课程中最终完成的课程项目，一个 SysYF 语言（C 语言子集）的编译器中的稀疏条件常量传播优化 Pass 以及项目的 WASM 展示界面构建。
+这篇博客将介绍我和队友们在编译原理 H 课程中最终完成的课程项目，一个 SysYF 语言（C 语言子集）的编译器中的稀疏条件常量传播优化 Pass 以及项目的 Wasm 展示界面构建。
 
 ![](https://wakatime.com/badge/user/fa1fef10-45f2-488a-a2ee-13dace23f634/project/b17163f8-8821-43b4-84dd-6f822d788f88.svg)
 
@@ -25,7 +25,7 @@ _这学期还看了很多番。安利《来自新世界》、《灵能百分百�
 
 编译器的工作阶段大致可以分为词法分析、语法分析、中间代码生成、中间代码优化和代码生成。
 
-本项目最终完成了三种中间代码优化（稀疏条件常量传播、公共子表达式删除和死代码消除）。本文主要介绍稀疏条件常量传播优化及 C++ Pass 实现，以及如何使用 WASM 构建一个优化结果展示界面。
+本项目最终完成了三种中间代码优化（稀疏条件常量传播、公共子表达式删除和死代码消除）。本文主要介绍稀疏条件常量传播优化及 C++ Pass 实现，以及如何使用 Wasm 构建一个优化结果展示界面。
 
 ![image-20230207231446062](./compiler/image-20230207231446062.png)
 
@@ -175,11 +175,11 @@ void InstructionVisitor::visit(Instruction *inst) {
 
 这里 `visit_br` 会更新 `cfg_worklist`。`visit_phi` 和 `visit_foldable` 只需要计算指令新的状态即可。
 
-## WASM
+## Wasm
 
 ### Intro
 
-WASM。即 WebAssembly，简单来说就是一种虚拟机字节码格式。现在主流浏览器都已支持这种字节码的运行。我们都知道 JavaScript 在浏览器中的运行就是先编译到字节码再执行的，那么这种新的字节码格式又有什么好处呢？它最大的优势就在于格式简单，方便从别的语言编译到 WebAssembly。一方面，这允许其他语言的库或程序直接在浏览器环境中被运行而无需移植到 JavaScript；另一方面，由于编译过程不在浏览器中进行，因此编译时间对用户来说是无感的，可以在编译时启用级别较高的优化，节省运行时间。目前，C++ 和 Rust 都有比较良好的 WebAssembly 生态及社区支持。
+Wasm。即 WebAssembly，简单来说就是一种虚拟机字节码格式。现在主流浏览器都已支持这种字节码的运行。我们都知道 JavaScript 在浏览器中的运行就是先编译到字节码再执行的，那么这种新的字节码格式又有什么好处呢？它最大的优势就在于格式简单，方便从别的语言编译到 WebAssembly。一方面，这允许其他语言的库或程序直接在浏览器环境中被运行而无需移植到 JavaScript；另一方面，由于编译过程不在浏览器中进行，因此编译时间对用户来说是无感的，可以在编译时启用级别较高的优化，节省运行时间。目前，C++ 和 Rust 都有比较良好的 WebAssembly 生态及社区支持。
 
 ### 与 JavaScript 的交互
 
@@ -187,7 +187,7 @@ WebAssembly 与 JavaScript 实际交互的都是 `i32` 类型的整数。超过 
 
 ### 与 CMake 项目
 
-C++ 编译到 WebAssembly 一般依赖 [emscripten](https://emscripten.org/) 工具链。下面介绍本项目作为一个 CMake 项目如何移植到 WASM。
+C++ 编译到 WebAssembly 一般依赖 [emscripten](https://emscripten.org/) 工具链。下面介绍本项目作为一个 CMake 项目如何移植到 Wasm。
 
 #### 暴露接口
 
@@ -283,7 +283,7 @@ emmake make -j
 
 相比普通构建流程，用 `emcmake` 和 `emmake` 包装了 `cmake` 和 `make`。
 
-值得一提的是，emscripten 官方提供了 docker 镜像方便命令的执行，无需下载安装依赖。
+值得一提的是，emscripten 官方提供了 Docker 镜像方便命令的执行，无需下载安装依赖。
 
 ```shell
 cd SysYF_Pass_Student && docker run \

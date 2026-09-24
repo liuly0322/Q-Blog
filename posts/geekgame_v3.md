@@ -1,5 +1,5 @@
 ---
-title: GeekGame 2023 个人题解
+title: GeekGame 2023 Writeup
 date: 2023-10-20 13:18:59
 tags: [CTF, 题解]
 category: 笔记
@@ -46,7 +46,7 @@ SUBLEVEL = 78
 
 > 本届 PKU GeekGame 的比赛平台会禁止选手昵称中包含某些特殊字符。截止到 2023 年 10 月 1 日，共禁止了多少个字符？（提示：本题答案与 Python 版本有关，以平台实际运行情况为准）
 
-找到源码，加一条 print 语句，python 跑一下就可以了。
+找到源码，加一条 print 语句，Python 跑一下就可以了。
 
 > 在 2011 年 1 月，Bilibili 游戏区下共有哪些子分区？（按网站显示顺序，以半角逗号分隔）
 

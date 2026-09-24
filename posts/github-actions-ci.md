@@ -102,7 +102,7 @@ with 相当于传入需要的参数
     python-version: 3.8
 ```
 
-分别使得 actions 可以访问本仓库文件以及设置起 python 和 pip 的环境
+分别使得 actions 可以访问本仓库文件以及设置起 Python 和 pip 的环境
 
 之后的 steps 则是构建出静态文件并 push 到 main 分支
 
@@ -110,7 +110,7 @@ with 相当于传入需要的参数
 
 GitHub Actions 的另一大常见用途便是用于测试，我们经常能看见别人的开源项目会有一个 ![test passing](https://github.com/liuly0322/l-plugin/actions/workflows/test.yml/badge.svg?branch=main) 的标识，甚至还有测试覆盖率，这都可以通过 GitHub Actions 实现，例如上面的图标表示的就是某个 workflow 上次运行的测试是否通过
 
-例如这个暑假摸了一个 QQ 机器人的插件 <https://github.com/liuly0322/l-plugin>（js 写的），就尝试配合 JS 的 mocha 测试框架玩了下 GitHub Actions 用于 push 后自动测试
+例如这个暑假摸了一个 QQ 机器人的插件 <https://github.com/liuly0322/l-plugin>（JS 写的），就尝试配合 JS 的 mocha 测试框架玩了下 GitHub Actions 用于 push 后自动测试
 
 只需要将测试脚本作为一个 step 执行即可：
 

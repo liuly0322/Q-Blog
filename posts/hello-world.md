@@ -33,7 +33,7 @@ category: web
 - Vue3
 - Vite2
 - Naive-ui（大部分组件来源）
-- Aplayer
+- APlayer
 - Hugo Kagome（部分主题参考）
 - QuAn\_（~~头像支持~~）
 - ...

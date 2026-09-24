@@ -1,12 +1,12 @@
 ---
-title: Hexo 博客夜间模式的实现兼 git 工作流简介
+title: Hexo 博客夜间模式的实现兼 Git 工作流简介
 date: 2021-07-09 09:36:41
 tags: [Hexo, Git]
 category: web
 tocbot: true
 ---
 
-本篇博客将记录 Hexo 默认 landscape 主题的夜间模式实现，以及 git 工作流的简单介绍。
+本篇博客将记录 Hexo 默认 landscape 主题的夜间模式实现，以及 Git 工作流的简单介绍。
 
 ## 基本思路
 
@@ -71,13 +71,13 @@ if (sessionStorage.getItem("hexoTheme") === null) {
 
 <p class="tip info"> 注意：这个 JS 应该放在 head 中加载，如果放在 footer 后加载会导致浅色样式生效后再应用深色模式 </p>
 
-## git 工作流
+## Git 工作流
 
-本次增加夜间模式所进行的修改都是在修改 Hexo 主题基础之上完成的。而一个主题会包含很多文件，有时候很难记住自己所进行的修改，再加上修改一般会很多很杂，这个时候就切实需要一个好用的版本控制工具。于是这里采用了 git。
+本次增加夜间模式所进行的修改都是在修改 Hexo 主题基础之上完成的。而一个主题会包含很多文件，有时候很难记住自己所进行的修改，再加上修改一般会很多很杂，这个时候就切实需要一个好用的版本控制工具。于是这里采用了 Git。
 
-### git 安装及配置
+### Git 安装及配置
 
-git 的安装直接在官网下载即可。Ubuntu 则可以直接 `sudo apt-get install git` 来安装 git。
+Git 的安装直接在官网下载即可。Ubuntu 则可以直接 `sudo apt-get install git` 来安装 Git。
 
 此后配置用户名和邮箱：
 
@@ -100,6 +100,6 @@ ssh-keygen -C 'you email address@gmail.com' -t rsa
 
 此后通过 `git commit -m "这里写注释"` 可以提交当前修改（还是在本地仓库）。最后 `git push origin main` 即可推送到 GitHub。
 
-vscode 图形界面已经集成了 git 的一些基本操作，可以很方便的完成推送。
+VS Code 图形界面已经集成了 Git 的一些基本操作，可以很方便的完成推送。
 
 如果想查看每次 commit 造成的更改，可以使用 `git log`，增加参数 `-p` 会显示每次 commit 造成的变化（增量形式），增加参数 `-num`（num 是自己制定的数字），则可以限制显示的提交次数。

@@ -167,7 +167,7 @@ export default class A {
 
 这个时候只有第一种导出变量和函数的情况可以被良好的优化。
 
-关于类的讨论可以参考 [rollup#349](https://github.com/rollup/rollup/issues/349)。
+关于类的讨论可以参考 [Rollup#349](https://github.com/rollup/rollup/issues/349)。
 
 ### 增加 Tree-Shaking！
 
@@ -272,7 +272,7 @@ export function APlayerFixedModePlugin(player) {
 
 这段话读着很爽，~~不明觉厉~~。Partial Evaluation 是一种编译器优化技术，它可以把一个解释器转换为编译器。这个技术的核心思想是，把一个程序的一部分（partial）的输入固定下来，然后对这个部分进行编译。这样可以把一部分的运行时计算提前到编译时，从而提高程序的运行效率。
 
-下面的 CPP 代码就是最简单的一种 Partial Evaluation：
+下面的 C++ 代码就是最简单的一种 Partial Evaluation：
 
 ```cpp
 int add_one(int a) {
@@ -296,7 +296,7 @@ main:
   .cfi_endproc
 ```
 
-CPP 编译器在编译时就把 `add_one(1)` 的结果计算出来了。除此之外，CPP 的模板特性也能支持编译期运算。
+C++ 编译器在编译时就把 `add_one(1)` 的结果计算出来了。除此之外，C++ 的模板特性也能支持编译期运算。
 
 ESM 在静态导入导出声明的特性下，其实也是有机会做更激进的编译器优化的。可以想象，若某些模块的导出函数只会有唯一的调用，且输入确定，那么就可以据此在编译期对 AST 进行优化。在 CommonJS 时期，Facebook 曾经有过一个 [prepack](https://github.com/facebookarchive/prepack) 项目是试图做 Partial Evaluator 的，但可惜不再维护了。开发团队回应：
 

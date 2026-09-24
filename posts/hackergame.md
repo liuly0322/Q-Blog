@@ -1,5 +1,5 @@
 ---
-title: Hackergame 2022 个人题解
+title: Hackergame 2022 Writeup
 date: 2022-10-29 18:18:40
 tags: [CTF, 题解]
 category: 笔记
@@ -99,13 +99,13 @@ const parse = (s) =>
     .join("\n");
 ```
 
-写一个简易的 HeiLang 赋值语句到 python 的转译脚本即可，这里用的 `Javascript`
+写一个简易的 HeiLang 赋值语句到 Python 的转译脚本即可，这里用的 JavaScript
 
-用转译出的代码替换原来代码，再执行新的 python 脚本即可得到 flag
+用转译出的代码替换原来代码，再执行新的 Python 脚本即可得到 flag
 
 ## Xcaptcha
 
-用 `Javascript` 脚本计算并模拟点击提交按钮，不能省略模拟提交的步骤，否则会被判超时
+用 JavaScript 脚本计算并模拟点击提交按钮，不能省略模拟提交的步骤，否则会被判超时
 
 ```javascript
 // 网上抄的 JS 大整数加法，原始出处有点难以考证，这里直接用了
@@ -674,7 +674,7 @@ while line := p.stdout.readline():
 
 ![image-20221025114330813](./hackergame/image-20221025114330813.png)
 
-先把文件都搞到本地方便用 VSCode 的 Live Server 插件观察热更新结果
+先把文件都搞到本地方便用 VS Code 的 Live Server 插件观察热更新结果
 
 ![image-20221025114139041](./hackergame/image-20221025114139041.png)
 
