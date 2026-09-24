@@ -53,15 +53,17 @@ const lines = [
   '| --- | ---: | ---: | ---: | ---: | ---: |',
 ]
 
+const slugs = new Set(articles.map(row => row.slug))
+
 lines.push(`| Home | ${comparison(home, 'contentMs')} | ${comparison(home, 'hydrationMs')} | ${comparison(home, 'fcpMs')} | ${comparison(home, 'lcpMs')} | ${comparison(home, 'cls', 'cls')} |`)
-for (const slug of [...new Set(articles.map(row => row.slug))]) {
+for (const slug of slugs) {
   const rows = articles.filter(row => row.slug === slug)
   lines.push(`| Article: \`${slug}\` | ${comparison(rows, 'articleMs')} | ${comparison(rows, 'hydrationMs')} | ${comparison(rows, 'fcpMs')} | ${comparison(rows, 'lcpMs')} | ${comparison(rows, 'cls', 'cls')} |`)
 }
 
 lines.push('', '| Page | JS requested by hydration | CSS requested by hydration | JS total | Script execution | Total transfer |', '| --- | ---: | ---: | ---: | ---: | ---: |')
 lines.push(`| Home | ${comparison(home, 'criticalJsBytes')} | ${comparison(home, 'criticalCssBytes')} | ${comparison(home, 'jsBytes')} | ${comparison(home, 'scriptMs')} | ${comparison(home, 'transferBytes')} |`)
-for (const slug of [...new Set(articles.map(row => row.slug))]) {
+for (const slug of slugs) {
   const rows = articles.filter(row => row.slug === slug)
   lines.push(`| Article: \`${slug}\` | ${comparison(rows, 'criticalJsBytes')} | ${comparison(rows, 'criticalCssBytes')} | ${comparison(rows, 'jsBytes')} | ${comparison(rows, 'scriptMs')} | ${comparison(rows, 'transferBytes')} |`)
 }
