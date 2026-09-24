@@ -1,7 +1,7 @@
 ---
 title: Ascend C 开发环境之 VS Code 指北
 date: 2025-11-11 16:16:06
-tags: [C/C++, 开发环境]
+tags: [C-CPP, 开发环境]
 category: 笔记
 ---
 

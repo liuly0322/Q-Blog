@@ -33,3 +33,28 @@ test('every article is a complete static page with working build assets', async 
       await fs.access(path.join('dist', asset))
   }
 })
+
+test('site pages include Bangumi and every tag page', async () => {
+  const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8'))
+  const staticPages = [
+    ['index.html', '/'],
+    ['about.html', '/about'],
+    ['archive.html', '/archive'],
+    ['links.html', '/links'],
+    ['tags.html', '/tags'],
+    ['bangumi.html', '/bangumi'],
+  ]
+  const tags = [...new Set(posts.flatMap(post => post.tags))]
+
+  for (const [file, url] of staticPages) {
+    const html = await fs.readFile(`dist/${file}`, 'utf8')
+    assert.match(html, /<div id="app" data-ssg="true">/)
+    assert.match(html, new RegExp(`<link rel="canonical" href="https://blog\\.liuly\\.moe${url}">`))
+  }
+
+  for (const tag of tags) {
+    const html = await fs.readFile(`dist/tags/${tag}.html`, 'utf8')
+    assert.match(html, /<div id="app" data-ssg="true">/)
+    assert.ok(html.includes(`<link rel="canonical" href="https://blog.liuly.moe/tags/${tag}">`), tag)
+  }
+})

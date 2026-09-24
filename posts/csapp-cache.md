@@ -1,7 +1,7 @@
 ---
 title: CSAPP 之 Cache Lab
 date: 2022-03-19 22:19:42
-tags: [算法, C/C++]
+tags: [算法, C-CPP]
 category: 笔记
 mathjax: true
 tocbot: true

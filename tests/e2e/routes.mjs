@@ -34,6 +34,7 @@ try {
     ['/archive', '.archive-year-group'],
     ['/links', 'a[href^="https://"]'],
     ['/tags', 'a[href^="/tags/"]'],
+    ['/bangumi', 'h1'],
   ]
   for (const [path, selector] of staticRoutes)
     await openHydratedPage(page, path, selector)
@@ -82,8 +83,7 @@ try {
 
   await openHydratedPage(page, '/tags', 'a[href^="/tags/"]')
   const tagUrl = await page.locator('a[href^="/tags/"]').first().getAttribute('href')
-  await page.locator(`a[href="${tagUrl}"]`).first().click()
-  await page.waitForURL(`**${tagUrl}`)
+  await openHydratedPage(page, tagUrl, '.grid a[href^="/posts/"]')
   const taggedPost = page.locator('.grid a[href^="/posts/"]').first()
   await taggedPost.waitFor({ state: 'visible' })
   await taggedPost.click()
@@ -142,5 +142,5 @@ finally {
   await server.close()
 }
 
-console.warn(JSON.stringify({ articles: posts.length, staticRoutes: 5, navigation: true, errors }))
+console.warn(JSON.stringify({ articles: posts.length, staticRoutes: 6, navigation: true, errors }))
 assert.deepEqual(errors, [])

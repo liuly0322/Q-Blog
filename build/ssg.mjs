@@ -14,6 +14,7 @@ const staticPages = [
   { url: '/archive', file: 'archive.html', title: '归档 | llyのblog', description: 'llyのblog 的全部文章。' },
   { url: '/links', file: 'links.html', title: '友情链接 | llyのblog', description: 'llyのblog 的友情链接。' },
   { url: '/tags', file: 'tags.html', title: '标签 | llyのblog', description: 'llyのblog 的文章标签。' },
+  { url: '/bangumi', file: 'bangumi.html', title: '动画列表 | llyのblog', description: '我在 Bangumi 上看过的动画及短评。' },
 ]
 
 const spaFallbackScript = `<script type="text/javascript">
@@ -73,6 +74,14 @@ try {
   const template = await fs.readFile(path.join(outputDir, 'index.html'), 'utf8')
   const manifest = JSON.parse(await fs.readFile(path.join(outputDir, '.vite/ssr-manifest.json'), 'utf8'))
   const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8'))
+  const tagPages = [...new Set(posts.flatMap(post => post.tags))].map((tag) => {
+    return {
+      url: `/tags/${tag}`,
+      file: `tags/${tag}.html`,
+      title: `${tag} | llyのblog`,
+      description: `标签「${tag}」下的全部文章。`,
+    }
+  })
   const started = performance.now()
   if (!template.includes('<div id="app"></div>'))
     throw new Error('Missing app placeholder in the client HTML')
@@ -80,7 +89,7 @@ try {
   const spaHtml = template.replace('</head>', `${spaFallbackScript}\n</head>`)
   await fs.writeFile(path.join(outputDir, 'spa.html'), spaHtml)
 
-  for (const pageInfo of staticPages) {
+  for (const pageInfo of [...staticPages, ...tagPages]) {
     const { html, modules } = await render(pageInfo.url)
     const assets = getAssetLinks(template, modules, manifest)
     const canonical = `${siteUrl}${pageInfo.url}`
@@ -96,7 +105,9 @@ try {
       .replace(/<meta name="description"[^>]*>/, () => `<meta name="description" content="${escapeHtml(pageInfo.description)}">`)
       .replace('</head>', () => `${metadata}\n${assets}\n</head>`)
       .replace('<div id="app"></div>', () => `<div id="app" data-ssg="true">${html}</div>`)
-    await fs.writeFile(path.join(outputDir, pageInfo.file), page)
+    const outputPath = path.join(outputDir, pageInfo.file)
+    await fs.mkdir(path.dirname(outputPath), { recursive: true })
+    await fs.writeFile(outputPath, page)
   }
 
   for (const post of posts) {
@@ -126,7 +137,7 @@ try {
       throw new Error(`Missing rendered article: ${post.url}`)
     await fs.writeFile(path.join(outputDir, 'posts', `${post.url}.html`), page)
   }
-  console.warn(`SSG: generated ${staticPages.length} site pages and ${posts.length} article pages in ${Math.round(performance.now() - started)} ms.`)
+  console.warn(`SSG: generated ${staticPages.length} static pages, ${tagPages.length} tag pages, and ${posts.length} article pages in ${Math.round(performance.now() - started)} ms.`)
 }
 finally {
   await fs.rm(serverDir, { recursive: true, force: true })

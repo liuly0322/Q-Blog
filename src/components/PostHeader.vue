@@ -12,7 +12,7 @@ defineProps<{
     <p>{{ post.date }}</p>
     <div class="border-b pb-4">
       <BlogTag v-for="tag in post.tags" :key="tag" class="mr-2 mb-4">
-        <router-link :to="`/tags/${encodeURIComponent(tag)}`" class="!text-inherit !no-underline">
+        <router-link :to="`/tags/${tag}`" class="!text-inherit !no-underline">
           {{ tag }}
         </router-link>
       </BlogTag>

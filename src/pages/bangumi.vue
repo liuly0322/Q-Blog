@@ -4,17 +4,19 @@ import LineMdLoadingLoop from '~icons/line-md/loading-loop?width=48px&height=48p
 const { animeList, loading, updateAnimeList } = useBangumi()
 
 const loadingElement = ref<HTMLElement>()
-const intersectionObserver = new IntersectionObserver(
-  ([entry]) => {
-    if (entry.isIntersecting)
-      updateAnimeListWithIntersectionCheck()
-  },
-)
+let intersectionObserver: IntersectionObserver | undefined
+
 onMounted(() => {
+  intersectionObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting)
+        updateAnimeListWithIntersectionCheck()
+    },
+  )
   loadingElement.value && intersectionObserver.observe(loadingElement.value)
 })
 onUnmounted(() => {
-  intersectionObserver.disconnect()
+  intersectionObserver?.disconnect()
 })
 
 function lineClamp(event: MouseEvent) {

@@ -27,7 +27,7 @@ const props = defineProps<{
       </div>
       <div class="mt-2 mx-2">
         <BlogTag v-for="tag in post.tags" :key="tag" class="m-0.5" size="small">
-          <router-link :to="`/tags/${encodeURIComponent(tag)}`">
+          <router-link :to="`/tags/${tag}`">
             {{ tag }}
           </router-link>
         </BlogTag>

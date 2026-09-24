@@ -19,7 +19,7 @@ const { posts } = useHomePosts()
     </router-link>
     <div class="text-left mt-6">
       <span v-for="tag in post.summary.tags" :key="tag" class="mr-2 text-slate-500">
-        <router-link :to="`/tags/${encodeURIComponent(tag)}`">#{{ tag }}</router-link>
+        <router-link :to="`/tags/${tag}`">#{{ tag }}</router-link>
       </span>
     </div>
   </article>
