@@ -14,7 +14,6 @@ const props = withDefaults(defineProps<{
 const playerRef = ref()
 const playerReady = ref(false)
 let instance: ReturnType<typeof import('aplayer-ts')['default']> | undefined
-let disposed = false
 
 onMounted(async () => {
   const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
@@ -22,9 +21,6 @@ onMounted(async () => {
     import('aplayer-ts'),
     fetch(url).then(response => response.json()),
   ])
-
-  if (disposed || !playerRef.value)
-    return
 
   instance = playerModule.default()
   instance.init({
@@ -39,7 +35,6 @@ onMounted(async () => {
   playerReady.value = true
 })
 onBeforeUnmount(() => {
-  disposed = true
   instance?.destroy()
 })
 </script>
