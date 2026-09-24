@@ -55,6 +55,7 @@
     "eslint-plugin-vue": "^9.32.0",
     "frontmatter": "^0.0.3",
     "image-size": "^1.2.0",
+    "jiti": "^2.7.0",
     "katex": "^0.16.21",
     "lightningcss": "^1.29.1",
     "markdown-it": "^14.1.0",
