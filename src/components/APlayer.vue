@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import APlayer from 'aplayer-ts'
 import 'aplayer-ts/src/css/base.css'
 import '~/styles/aplayer-dark.css'
 
@@ -14,11 +13,20 @@ const props = withDefaults(defineProps<{
 
 const playerRef = ref()
 const playerReady = ref(false)
-const instance = import.meta.env.SSR ? { init: () => { }, destroy: () => { } } : APlayer()
+let instance: ReturnType<typeof import('aplayer-ts')['default']> | undefined
+let disposed = false
 
 onMounted(async () => {
   const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
-  const audios = await fetch(url).then(response => response.json())
+  const [playerModule, audios] = await Promise.all([
+    import('aplayer-ts'),
+    fetch(url).then(response => response.json()),
+  ])
+
+  if (disposed || !playerRef.value)
+    return
+
+  instance = playerModule.default()
   instance.init({
     container: playerRef.value,
     theme: 'rgba(255,255,255,0.2)',
@@ -30,7 +38,10 @@ onMounted(async () => {
   })
   playerReady.value = true
 })
-onBeforeUnmount(() => instance.destroy())
+onBeforeUnmount(() => {
+  disposed = true
+  instance?.destroy()
+})
 </script>
 
 <template>
