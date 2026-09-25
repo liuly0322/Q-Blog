@@ -2,7 +2,9 @@
 import type { PostSummary } from '../src/composables/useSummary'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import process from 'node:process'
 import { pathToFileURL } from 'node:url'
+import { gzipSync } from 'node:zlib'
 import frontmatter from 'frontmatter'
 import { build } from 'vite'
 
@@ -11,6 +13,7 @@ type RenderEntry = typeof import('../src/entry-server').render
 
 const siteUrl = 'https://blog.liuly.moe'
 const outputDir = path.resolve('dist')
+const inlineStyles = process.env.SSG_INLINE_CSS !== '0'
 const serverDir = path.resolve('node_modules/.cache/q-blog-ssg')
 const staticPages = [
   { url: '/', file: 'index.html', title: 'llyのblog', description: '我的个人博客，写点想写的' },
@@ -54,13 +57,21 @@ function generateDescription(content: string, maxLength = 160): string {
     .slice(0, maxLength)
 }
 
-function getAssetLinks(template: string, modules: string[], manifest: SsrManifest): string {
-  const assets = new Set(modules.flatMap(id => manifest[id] ?? []))
-  return [...assets]
-    // Route JS is precached and served by the PWA service worker.
-    .filter(asset => asset.endsWith('.css') && !template.includes(`"${asset}"`))
+// Inlining trades a request for bytes on the document; past this size the trade reverses.
+const inlineStyleBudget = 20 * 1024
+
+// Route sheets as links, entry sheet inlined when the page can carry it.
+async function assemblePage(skeleton: string, metadata: string, modules: string[], manifest: SsrManifest): Promise<string> {
+  // modules yields route sheets only: the entry sheet is never in the manifest.
+  const routes = [...new Set(modules.flatMap(id => manifest[id] ?? []))]
+    .filter(asset => asset.endsWith('.css'))
     .map(asset => `<link rel="stylesheet" href="${escapeHtml(asset)}">`)
     .join('\n')
+  const entry = skeleton.match(/<link[^>]+rel="stylesheet"[^>]+href="(\/assets\/[^"]+\.css)"[^>]*>/)
+  if (!inlineStyles || !entry || gzipSync(skeleton).length > inlineStyleBudget)
+    return skeleton.replace('</head>', () => `${metadata}\n${routes}\n</head>`)
+  const sheet = await fs.readFile(path.join(outputDir, entry[1].replace(/^\//, '')), 'utf8')
+  return skeleton.replace(entry[0], '').replace('</head>', () => `${metadata}\n<style>${sheet}</style>\n${routes}\n</head>`)
 }
 
 // Vite 5's existing SSR build API; no new framework or runtime dependency.
@@ -97,7 +108,6 @@ try {
 
   for (const pageInfo of [...staticPages, ...tagPages]) {
     const { html, modules } = await render(pageInfo.url)
-    const assets = getAssetLinks(template, modules, manifest)
     const canonical = `${siteUrl}${pageInfo.url}`
     const metadata = [
       `<link rel="canonical" href="${escapeHtml(canonical)}">`,
@@ -106,11 +116,15 @@ try {
       `<meta property="og:description" content="${escapeHtml(pageInfo.description)}">`,
       `<meta property="og:url" content="${escapeHtml(canonical)}">`,
     ].join('\n')
-    const page = template
-      .replace(/<title>.*?<\/title>/s, () => `<title>${escapeHtml(pageInfo.title)}</title>`)
-      .replace(/<meta name="description"[^>]*>/, () => `<meta name="description" content="${escapeHtml(pageInfo.description)}">`)
-      .replace('</head>', () => `${metadata}\n${assets}\n</head>`)
-      .replace('<div id="app"></div>', () => `<div id="app" data-ssg="true">${html}</div>`)
+    const page = await assemblePage(
+      template
+        .replace(/<title>.*?<\/title>/s, () => `<title>${escapeHtml(pageInfo.title)}</title>`)
+        .replace(/<meta name="description"[^>]*>/, () => `<meta name="description" content="${escapeHtml(pageInfo.description)}">`)
+        .replace('<div id="app"></div>', () => `<div id="app" data-ssg="true">${html}</div>`),
+      metadata,
+      modules,
+      manifest,
+    )
     const outputPath = path.join(outputDir, pageInfo.file)
     await fs.mkdir(path.dirname(outputPath), { recursive: true })
     await fs.writeFile(outputPath, page)
@@ -123,7 +137,6 @@ try {
     const description = generateDescription(markdown)
     const content = await fs.readFile(path.join(outputDir, 'posts', `${post.url}.htm`), 'utf8')
     const { html, modules } = await render(url, { post: post.url, content })
-    const links = getAssetLinks(template, modules, manifest)
     const title = `${post.title} | llyのblog`
     const metadata = [
       `<link rel="canonical" href="${siteUrl}${url}">`,
@@ -134,11 +147,15 @@ try {
       '<meta property="article:author" content="liuly">',
       ...post.tags.map(tag => `<meta property="article:tag" content="${escapeHtml(tag)}">`),
     ].join('\n')
-    const page = template
-      .replace(/<title>.*?<\/title>/s, () => `<title>${escapeHtml(title)}</title>`)
-      .replace(/<meta name="description"[^>]*>/, () => `<meta name="description" content="${escapeHtml(description)}">`)
-      .replace('</head>', () => `${metadata}\n${links}\n</head>`)
-      .replace('<div id="app"></div>', () => `<div id="app" data-post="${escapeHtml(post.url)}" data-ssg="true">${html}</div>`)
+    const page = await assemblePage(
+      template
+        .replace(/<title>.*?<\/title>/s, () => `<title>${escapeHtml(title)}</title>`)
+        .replace(/<meta name="description"[^>]*>/, () => `<meta name="description" content="${escapeHtml(description)}">`)
+        .replace('<div id="app"></div>', () => `<div id="app" data-post="${escapeHtml(post.url)}" data-ssg="true">${html}</div>`),
+      metadata,
+      modules,
+      manifest,
+    )
     if (!page.includes('data-post-body'))
       throw new Error(`Missing rendered article: ${post.url}`)
     await fs.writeFile(path.join(outputDir, 'posts', `${post.url}.html`), page)

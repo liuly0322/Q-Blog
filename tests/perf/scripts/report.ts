@@ -78,8 +78,13 @@ if (baseAssets && currentAssets) {
   }
   lines.push('', '### Entry asset sizes (gzip)', '', '| Asset | Base → head |', '| --- | ---: |')
   lines.push(`| Entry JS | ${assetComparison('entryJs')} |`)
-  lines.push(`| Initial CSS | ${assetComparison('initialCss')} |`)
-  lines.push(`| Entry JS + initial CSS | ${assetComparison('initialJsCss')} |`)
+  const inlined = currentAssets.initialCss?.inlined
+  lines.push(`| Entry CSS${inlined ? ' (inlined)' : ''} | ${assetComparison('initialCss')} |`)
+  lines.push(`| Entry JS + entry CSS | ${assetComparison('initialJsCss')} |`)
+  // Inlining moves bytes off a request and into the document.
+  if (inlined && baseAssets.document && currentAssets.document) {
+    lines.push(`| Document (home) | ${assetComparison('document')} |`)
+  }
 }
 
 lines.push('', 'Data artifacts contain the per-run raw measurements. These are controlled browser timings, not field Core Web Vitals. The workflow reports results without failing on a percentage threshold while variance is being established.')
