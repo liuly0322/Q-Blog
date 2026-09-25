@@ -80,6 +80,7 @@ export default defineConfig(({ command, isSsrBuild }) => ({
     }),
     // PWA
     !isSsrBuild && VitePWA({
+      injectRegister: 'inline',
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,ico,svg}'],
