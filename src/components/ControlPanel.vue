@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import PostSearch from './PostSearch.vue'
-
 const { summary, tagCount } = useSummary()
 const { toggleDark } = useDarks()
 </script>

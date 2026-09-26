@@ -45,9 +45,7 @@ withDefaults(defineProps<{
   transition:
     border-color 0.3s cubic-bezier(.4, 0, .2, 1),
     background-color 0.3s cubic-bezier(.4, 0, .2, 1),
-    color 0.3s cubic-bezier(.4, 0, .2, 1),
-    box-shadow 0.3s cubic-bezier(.4, 0, .2, 1),
-    opacity 0.3s cubic-bezier(.4, 0, .2, 1);
+    color 0.3s cubic-bezier(.4, 0, .2, 1);
 }
 
 .blog-tag::after {

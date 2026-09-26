@@ -18,19 +18,12 @@ function setToc(element: HTMLElement) {
 }
 
 function updateToc(titleElements: HTMLElement[]) {
-  tocElements.value = []
-  let minTag = '9'
-  for (const e of titleElements) {
-    if (minTag > e.tagName[1])
-      minTag = e.tagName[1]
-  }
-  for (const e of titleElements) {
-    tocElements.value.push({
-      id: e.id,
-      text: e.textContent ?? '',
-      tab: Number.parseInt(e.tagName[1]) - Number.parseInt(minTag) - 1,
-    })
-  }
+  const base = Math.min(...titleElements.map(e => Number(e.tagName[1])))
+  tocElements.value = titleElements.map(e => ({
+    id: e.id,
+    text: e.textContent ?? '',
+    tab: Number(e.tagName[1]) - base - 1,
+  }))
 }
 
 function getToc() {

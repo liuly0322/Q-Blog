@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type createPlayer from 'aplayer-ts'
+
 import 'aplayer-ts/src/css/base.css'
 import '~/styles/aplayer-dark.css'
 
@@ -13,7 +15,7 @@ const props = withDefaults(defineProps<{
 
 const playerRef = ref()
 const playerReady = ref(false)
-let instance: ReturnType<typeof import('aplayer-ts')['default']> | undefined
+let instance: ReturnType<typeof createPlayer> | undefined
 
 onMounted(async () => {
   const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`

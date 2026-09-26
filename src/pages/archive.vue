@@ -72,9 +72,7 @@ const groupedSummary = computed(() => {
 .archive-title {
   line-height: 1.5;
 }
-</style>
 
-<style>
 html.dark .archive-year {
   color: #e5e7eb;
   border-color: rgba(255, 255, 255, 0.16);

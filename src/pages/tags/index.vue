@@ -5,14 +5,9 @@ const { tagCount } = useSummary()
 const breakpoints: [BlogTagSize, number][] = [
   ['large', tagCount[Math.floor(tagCount.length / 3)].times],
   ['medium', tagCount[Math.floor((tagCount.length * 2) / 3)].times - 1],
-  ['small', -1],
 ]
 function computeSize(times: number): BlogTagSize {
-  for (const [size, breakpoint] of breakpoints) {
-    if (times > breakpoint)
-      return size
-  }
-  return 'small'
+  return breakpoints.find(([, min]) => times > min)?.[0] ?? 'small'
 }
 </script>
 

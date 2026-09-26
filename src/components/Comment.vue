@@ -27,16 +27,14 @@ function init() {
 onMounted(init)
 watch(() => props.post, init)
 
-watch(isDark, (value, oldValue) => {
-  if (value !== oldValue) {
-    vueUtterances.value?.querySelector('iframe')?.contentWindow?.postMessage(
-      {
-        type: 'set-theme',
-        theme: value ? 'github-dark' : 'github-light',
-      },
-      'https://utteranc.es',
-    )
-  }
+watch(isDark, (value) => {
+  vueUtterances.value?.querySelector('iframe')?.contentWindow?.postMessage(
+    {
+      type: 'set-theme',
+      theme: value ? 'github-dark' : 'github-light',
+    },
+    'https://utteranc.es',
+  )
 })
 </script>
 
