@@ -1,3 +1,5 @@
+@import 'aplayer-ts/src/css/base.css';
+
 html.dark .aplayer {
   background: #1e1e1e;
 }

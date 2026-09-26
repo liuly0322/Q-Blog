@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import type createPlayer from 'aplayer-ts'
 
-import 'aplayer-ts/src/css/base.css'
-import '~/styles/aplayer-dark.css'
-
 const props = withDefaults(defineProps<{
   songServer?: 'netease' | 'tencent' | 'kugou' | 'xiami' | 'baidu'
   songType?: string
@@ -19,8 +16,9 @@ let instance: ReturnType<typeof createPlayer> | undefined
 
 onMounted(async () => {
   const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
-  const [createPlayer, audios] = await Promise.all([
+  const [createPlayer, , audios] = await Promise.all([
     import('aplayer-ts').then(({ default: createPlayer }) => createPlayer),
+    import('~/styles/aplayer-theme.css'),
     fetch(url).then(response => response.json()),
   ])
 
@@ -43,22 +41,22 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="playerRef" />
-  <div v-if="!playerReady" class="aplayer aplayer-withlrc pointer-events-none" aria-hidden="true">
-    <div class="aplayer-pic grid place-items-center bg-gray-100 dark:bg-hex-292929">
+  <div v-if="!playerReady" class="card m-1 overflow-hidden pointer-events-none" aria-hidden="true">
+    <div class="player-pic grid place-items-center bg-gray-100 dark:bg-hex-292929">
       <span class="text-2xl">♪</span>
     </div>
 
-    <div class="aplayer-info">
-      <div class="aplayer-music">
+    <div class="player-info">
+      <div class="player-music">
         <span class="skeleton h-[7px] w-[72%] bg-gray-200 dark:bg-hex-383838" />
         <span class="skeleton mt-2 h-[5px] w-[42%] bg-gray-100 dark:bg-hex-303030" />
       </div>
-      <div class="aplayer-lrc" />
-      <div class="aplayer-controller">
-        <div class="aplayer-bar-wrap">
+      <div class="player-lrc" />
+      <div class="flex">
+        <div class="player-bar">
           <div class="skeleton h-[2px] w-[72%] bg-gray-200 dark:bg-hex-383838" />
         </div>
-        <div class="aplayer-time flex items-center">
+        <div class="player-time flex items-center">
           <span class="text-[14px] leading-none mr-1">🔈</span>
           <span class="text-[14px] leading-none">☰</span>
         </div>
@@ -68,6 +66,43 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+.player-pic {
+  float: left;
+  width: 90px;
+  height: 90px;
+}
+
+.player-info {
+  box-sizing: border-box;
+  margin-left: 90px;
+  height: 90px;
+  padding: 10px 7px 0;
+}
+
+.player-music {
+  height: 22px;
+  margin: 0 0 13px 5px;
+}
+
+.player-lrc {
+  height: 30px;
+  margin: -10px 0 7px;
+}
+
+.player-bar {
+  flex: 1;
+  margin-left: 5px;
+  padding: 4px 0;
+}
+
+.player-time {
+  position: relative;
+  bottom: 4px;
+  height: 17px;
+  padding-left: 7px;
+  color: #999;
+}
+
 .skeleton {
   display: block;
   border-radius: 9999px;
