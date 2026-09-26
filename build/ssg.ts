@@ -7,6 +7,7 @@ import { pathToFileURL } from 'node:url'
 import { gzipSync } from 'node:zlib'
 import frontmatter from 'frontmatter'
 import { build } from 'vite'
+import { SITE_TITLE, staticPageDetails, staticPageTitles } from '../src/pageMeta.ts'
 
 type SsrManifest = Record<string, string[]>
 type RenderEntry = typeof import('../src/entry-server').render
@@ -15,14 +16,11 @@ const siteUrl = 'https://blog.liuly.moe'
 const outputDir = path.resolve('dist')
 const inlineStyles = process.env.SSG_INLINE_CSS !== '0'
 const serverDir = path.resolve('node_modules/.cache/q-blog-ssg')
-const staticPages = [
-  { url: '/', file: 'index.html', title: 'llyのblog', description: '我的个人博客，写点想写的' },
-  { url: '/about', file: 'about.html', title: '关于 | llyのblog', description: 'lly 的经历、兴趣与联系方式。' },
-  { url: '/archive', file: 'archive.html', title: '归档 | llyのblog', description: 'llyのblog 的全部文章。' },
-  { url: '/links', file: 'links.html', title: '友情链接 | llyのblog', description: 'llyのblog 的友情链接。' },
-  { url: '/tags', file: 'tags.html', title: '标签 | llyのblog', description: 'llyのblog 的文章标签。' },
-  { url: '/bangumi', file: 'bangumi.html', title: '动画列表 | llyのblog', description: '我在 Bangumi 上看过的动画及短评。' },
-]
+const staticPages = Object.entries(staticPageTitles).map(([url, title]) => ({
+  url,
+  title,
+  ...staticPageDetails[url],
+}))
 
 const spaFallbackScript = `<script type="text/javascript">
   // Single Page Apps for GitHub Pages
@@ -95,7 +93,7 @@ try {
     return {
       url: `/tags/${tag}`,
       file: `tags/${tag}.html`,
-      title: `${tag} | llyのblog`,
+      title: `${tag} | ${SITE_TITLE}`,
       description: `标签「${tag}」下的全部文章。`,
     }
   })
@@ -137,7 +135,7 @@ try {
     const description = generateDescription(markdown)
     const content = await fs.readFile(path.join(outputDir, 'posts', `${post.url}.htm`), 'utf8')
     const { html, modules } = await render(url, { post: post.url, content })
-    const title = `${post.title} | llyのblog`
+    const title = `${post.title} | ${SITE_TITLE}`
     const metadata = [
       `<link rel="canonical" href="${siteUrl}${url}">`,
       '<meta property="og:type" content="article">',

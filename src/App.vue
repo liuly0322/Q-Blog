@@ -1,5 +1,24 @@
 <script setup lang="ts">
+import { SITE_TITLE, staticPageTitles } from '~/pageMeta'
+
 const { toggleSidebar } = useMobileSidebar()
+
+const route = useRoute()
+const { summary } = useSummary()
+
+useTitle(computed(() => {
+  const post = route.params.post
+  if (typeof post === 'string') {
+    const title = summary.find(postMeta => postMeta.url === post)?.title ?? '404'
+    return `${title} | ${SITE_TITLE}`
+  }
+
+  const tag = route.params.tag
+  if (typeof tag === 'string')
+    return `${tag} | ${SITE_TITLE}`
+
+  return staticPageTitles[route.path] ?? SITE_TITLE
+}))
 
 // HMR
 if (import.meta.hot)

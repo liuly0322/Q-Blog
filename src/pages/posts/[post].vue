@@ -5,13 +5,6 @@ const props = defineProps<{ post: string }>()
 const { emptySummary, getCachedPostData, getCurrentPostSummary } = usePostData()
 const currPost = computed(() => getCurrentPostSummary(props.post))
 
-const title = computed(() => {
-  if (currPost.value === emptySummary)
-    return 'llyのblog'
-  return `${currPost.value.title} | llyのblog`
-})
-useTitle(title)
-
 const { setToc, enableToc } = useToc()
 onBeforeUnmount(() => {
   enableToc.value = false
