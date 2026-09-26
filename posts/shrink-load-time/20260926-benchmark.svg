@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="12 0 1600 560">
+<style>
+  text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;fill:#718096}
+  .title{font-family:system-ui,sans-serif;font-size:26px;font-weight:700;fill:#111827}
+  .sub{font-size:17px}.lab{font-size:15px}.val{font-size:15px;fill:#64748b}.pct{font-size:15px;fill:#0f8a78;font-weight:700}
+  .grid{stroke:#dbe3ec;stroke-dasharray:2 3}.link{stroke:#b8c0cc;stroke-width:4;stroke-linecap:round}
+  .base{fill:#7b8796}.head{fill:#0f8a78}.axis{stroke:#cbd5e1}.tick{font-size:14px}
+</style>
+<rect x="22" y="14" width="1580" height="532" rx="20" fill="#fff" stroke="#d9e1ea"/>
+<text x="48" y="64" class="title">hello-world</text>
+<text x="48" y="95" class="sub">articleMs · 10 of 10 repetitions improved · paired n=10</text>
+
+<circle cx="1230" cy="58" r="7" class="base"/><text x="1247" y="64" class="sub">baseline 5146a93</text>
+<circle cx="1432" cy="58" r="7" class="head"/><text x="1449" y="64" class="sub">head 09f7769</text>
+
+<g class="grid">
+  <line x1="142" y1="140" x2="1360" y2="140"/><line x1="142" y1="178" x2="1360" y2="178"/>
+  <line x1="142" y1="216" x2="1360" y2="216"/><line x1="142" y1="254" x2="1360" y2="254"/>
+  <line x1="142" y1="292" x2="1360" y2="292"/><line x1="142" y1="330" x2="1360" y2="330"/>
+  <line x1="142" y1="368" x2="1360" y2="368"/><line x1="142" y1="406" x2="1360" y2="406"/>
+  <line x1="142" y1="444" x2="1360" y2="444"/><line x1="142" y1="482" x2="1360" y2="482"/>
+</g>
+
+<g class="lab" text-anchor="end">
+  <text x="126" y="145">rep 0</text><text x="126" y="183">rep 1</text><text x="126" y="221">rep 2</text><text x="126" y="259">rep 3</text><text x="126" y="297">rep 4</text><text x="126" y="335">rep 5</text><text x="126" y="373">rep 6</text><text x="126" y="411">rep 7</text><text x="126" y="449">rep 8</text><text x="126" y="487">rep 9</text>
+</g>
+
+<!-- x = 142 + value/2000*1218 -->
+<g>
+  <g transform="translate(0 140)"><line x1="511" x2="1345" class="link"/><circle cx="511" r="6" class="head"/><circle cx="1345" r="5" class="base"/><text x="1377" y="5" class="val">1975 ms → 606 ms</text><text x="1548" y="5" class="pct">-69%</text></g>
+  <g transform="translate(0 178)"><line x1="509" x2="1338" class="link"/><circle cx="509" r="6" class="head"/><circle cx="1338" r="5" class="base"/><text x="1377" y="5" class="val">1964 ms → 602 ms</text><text x="1548" y="5" class="pct">-69%</text></g>
+  <g transform="translate(0 216)"><line x1="508" x2="1336" class="link"/><circle cx="508" r="6" class="head"/><circle cx="1336" r="5" class="base"/><text x="1377" y="5" class="val">1960 ms → 601 ms</text><text x="1548" y="5" class="pct">-69%</text></g>
+  <g transform="translate(0 254)"><line x1="507" x2="1335" class="link"/><circle cx="507" r="6" class="head"/><circle cx="1335" r="5" class="base"/><text x="1377" y="5" class="val">1959 ms → 599 ms</text><text x="1548" y="5" class="pct">-69%</text></g>
+  <g transform="translate(0 292)"><line x1="503" x2="1351" class="link"/><circle cx="503" r="6" class="head"/><circle cx="1351" r="5" class="base"/><text x="1377" y="5" class="val">1984 ms → 592 ms</text><text x="1548" y="5" class="pct">-70%</text></g>
+  <g transform="translate(0 330)"><line x1="504" x2="1334" class="link"/><circle cx="504" r="6" class="head"/><circle cx="1334" r="5" class="base"/><text x="1377" y="5" class="val">1958 ms → 594 ms</text><text x="1548" y="5" class="pct">-70%</text></g>
+  <g transform="translate(0 368)"><line x1="541" x2="1344" class="link"/><circle cx="541" r="6" class="head"/><circle cx="1344" r="5" class="base"/><text x="1377" y="5" class="val">1973 ms → 655 ms</text><text x="1548" y="5" class="pct">-67%</text></g>
+  <g transform="translate(0 406)"><line x1="509" x2="1361" class="link"/><circle cx="509" r="6" class="head"/><circle cx="1361" r="5" class="base"/><text x="1377" y="5" class="val">2001 ms → 602 ms</text><text x="1548" y="5" class="pct">-70%</text></g>
+  <g transform="translate(0 444)"><line x1="514" x2="1343" class="link"/><circle cx="514" r="6" class="head"/><circle cx="1343" r="5" class="base"/><text x="1377" y="5" class="val">1971 ms → 610 ms</text><text x="1548" y="5" class="pct">-69%</text></g>
+  <g transform="translate(0 482)"><line x1="517" x2="1333" class="link"/><circle cx="517" r="6" class="head"/><circle cx="1333" r="5" class="base"/><text x="1377" y="5" class="val">1956 ms → 615 ms</text><text x="1548" y="5" class="pct">-69%</text></g>
+</g>
+
+<line x1="142" y1="506" x2="1360" y2="506" class="axis"/>
+<g class="tick" text-anchor="middle">
+  <text x="142" y="530">0 ms</text><text x="447" y="530">500 ms</text><text x="751" y="530">1000 ms</text><text x="1056" y="530">1500 ms</text><text x="1360" y="530">2000 ms</text>
+</g>
+</svg>
