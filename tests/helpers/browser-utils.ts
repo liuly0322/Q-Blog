@@ -25,6 +25,8 @@ export async function startServer(directory: string) {
     '.css': 'text/css',
     '.json': 'application/json',
     '.svg': 'image/svg+xml',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
     '.png': 'image/png',
     '.webp': 'image/webp',
     '.woff2': 'font/woff2',

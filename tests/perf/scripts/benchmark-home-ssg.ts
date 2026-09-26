@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
-import { launchBrowser, mockExternalServices, startServer } from './home-ssg-browser-utils.ts'
+import { launchBrowser, mockExternalServices, startServer } from '../../helpers/browser-utils.ts'
 
 assert(process.argv[2], 'Usage: node benchmark-home-ssg.ts BASELINE_DIST [OUTPUT_JSON] [RUNS]')
 const outputFile = process.argv[3] || '/tmp/q-blog-home-ssg/results.json'

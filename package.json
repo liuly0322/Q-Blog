@@ -13,7 +13,7 @@
     "deps:fresh": "npx taze -w",
     "test": "pnpm build && pnpm test:ssg && pnpm test:e2e",
     "test:ssg": "node --test tests/ssg/ssg.test.ts",
-    "test:e2e": "node tests/e2e/routes.ts",
+    "test:e2e": "node --test tests/e2e/e2e.ts",
     "test:setup": "npm ci --prefix tests && cd tests && npx playwright install chromium",
     "typecheck": "vue-tsc --noEmit",
     "typecheck:test": "tsc --project tests/tsconfig.json",
