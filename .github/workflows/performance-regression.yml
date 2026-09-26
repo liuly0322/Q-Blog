@@ -3,6 +3,8 @@ name: Performance regression
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -14,6 +16,7 @@ concurrency:
 
 jobs:
   benchmark:
+    if: github.event_name != 'push' || contains(join(github.event.commits.*.message, ' '), '[perf]')
     runs-on: ubuntu-latest
     outputs:
       base_sha: ${{ steps.revisions.outputs.base_sha }}
