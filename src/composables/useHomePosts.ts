@@ -1,7 +1,11 @@
 const { summary, firstPageAbstracts } = useSummary()
-const { data } = import.meta.env.SSR
-  ? { data: ref<string[]>() }
-  : useFetch('/page.json').json<string[]>()
+
+const data = ref<string[]>()
+if (!import.meta.env.SSR) {
+  fetch('/page.json')
+    .then(res => res.json() as Promise<string[]>)
+    .then((value) => { data.value = value })
+}
 
 const { page } = usePage()
 

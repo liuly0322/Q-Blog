@@ -48,7 +48,6 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/compiler-sfc": "^3.5.13",
     "@vue/runtime-core": "^3.5.13",
-    "@vueuse/core": "^12.5.0",
     "@windicss/plugin-animations": "^1.0.9",
     "aplayer-ts": "^2.6.1",
     "eslint": "^9.18.0",

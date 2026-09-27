@@ -6,11 +6,11 @@ const { toggleSidebar } = useMobileSidebar()
 const route = useRoute()
 const { summary } = useSummary()
 
-useTitle(computed(() => {
+const title = computed(() => {
   const post = route.params.post
   if (typeof post === 'string') {
-    const title = summary.find(postMeta => postMeta.url === post)?.title ?? '404'
-    return `${title} | ${SITE_TITLE}`
+    const postTitle = summary.find(postMeta => postMeta.url === post)?.title ?? '404'
+    return `${postTitle} | ${SITE_TITLE}`
   }
 
   const tag = route.params.tag
@@ -18,7 +18,9 @@ useTitle(computed(() => {
     return `${tag} | ${SITE_TITLE}`
 
   return staticPageTitles[route.path] ?? SITE_TITLE
-}))
+})
+
+watch(title, value => !import.meta.env.SSR && (document.title = value), { immediate: true })
 
 // HMR
 if (import.meta.hot)

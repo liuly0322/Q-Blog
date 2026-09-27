@@ -1,6 +1,6 @@
-import type { AsyncComputedOnCancel } from '@vueuse/core'
+type OnCancel = (callback: () => void) => void
 
-async function getPostData(postName: string, onCancel?: AsyncComputedOnCancel) {
+async function getPostData(postName: string, onCancel?: OnCancel) {
   const abortController = new AbortController()
   onCancel && onCancel(() => abortController.abort())
   return fetch(`/posts/${postName}.htm`, { signal: abortController.signal })
@@ -17,7 +17,7 @@ function getCachedSeconds(postName: string) {
   return (now - Number(cachedTime)) / 1000
 }
 
-async function getCachedPostData(postName: string, onCancel?: AsyncComputedOnCancel) {
+async function getCachedPostData(postName: string, onCancel?: OnCancel) {
   const cached = sessionStorage.getItem(postName)
   const cachedSeconds = getCachedSeconds(postName)
   if (cached && cachedSeconds < 3600)

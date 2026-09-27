@@ -74,9 +74,6 @@ importers:
       '@vue/runtime-core':
         specifier: ^3.5.13
         version: 3.5.13
-      '@vueuse/core':
-        specifier: ^12.5.0
-        version: 12.5.0(typescript@5.7.3)
       '@windicss/plugin-animations':
         specifier: ^1.0.9
         version: 1.0.9
@@ -5710,7 +5707,8 @@ snapshots:
 
   '@types/unist@3.0.3': {}
 
-  '@types/web-bluetooth@0.0.20': {}
+  '@types/web-bluetooth@0.0.20':
+    optional: true
 
   '@typescript-eslint/eslint-plugin@8.21.0(@typescript-eslint/parser@8.21.0(eslint@9.18.0(jiti@2.7.0))(typescript@5.7.3))(eslint@9.18.0(jiti@2.7.0))(typescript@5.7.3)':
     dependencies:
@@ -5950,14 +5948,17 @@ snapshots:
       vue: 3.5.13(typescript@5.7.3)
     transitivePeerDependencies:
       - typescript
+    optional: true
 
-  '@vueuse/metadata@12.5.0': {}
+  '@vueuse/metadata@12.5.0':
+    optional: true
 
   '@vueuse/shared@12.5.0(typescript@5.7.3)':
     dependencies:
       vue: 3.5.13(typescript@5.7.3)
     transitivePeerDependencies:
       - typescript
+    optional: true
 
   '@windicss/config@1.9.4':
     dependencies:
