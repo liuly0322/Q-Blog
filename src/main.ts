@@ -16,4 +16,9 @@ const initialPost = root.dataset.post && postBody
   : undefined
 const { app, router } = createSiteApp(root.dataset.ssg === 'true', initialPost)
 nprogress(router)
+
 router.isReady().then(() => app.mount(root))
+
+void import('./modules/imageZoom')
+  .then(({ default: imageZoom }) => imageZoom())
+  .catch(console.error)

@@ -4,6 +4,7 @@ import assert from 'node:assert/strict'
 // eslint-disable-next-line test/no-import-node-test
 import test, { after } from 'node:test'
 import { createSite, posts } from '../helpers/site.ts'
+import { registerImageZoom } from './imageZoom.ts'
 import { registerNavigation } from './navigation.ts'
 import { registerPlatform } from './platform.ts'
 import { registerRoutes } from './routes.ts'
@@ -15,6 +16,7 @@ const suites = {
   navigation: registerNavigation,
   titles: registerTitles,
   platform: registerPlatform,
+  imageZoom: registerImageZoom,
 }
 const site = await createSite()
 for (const register of Object.values(suites)) register(site)
