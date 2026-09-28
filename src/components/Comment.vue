@@ -49,3 +49,9 @@ watch(isDark, (value) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+:deep(.utterances) {
+  background: var(--card-bg);
+}
+</style>
