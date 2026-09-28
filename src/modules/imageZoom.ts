@@ -19,7 +19,9 @@ export default () => {
     const close = document.createElement('button')
     close.type = 'button'
     close.className = 'image-zoom-close'
-    close.textContent = '关闭'
+    close.setAttribute('aria-label', '关闭')
+    close.title = '关闭'
+    close.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="11"/><path d="m9 9 6 6m0-6-6 6"/></svg>'
     close.autofocus = true
     close.addEventListener('click', () => dialog!.close())
 

@@ -14,7 +14,6 @@
   padding: 64px 16px 16px;
   border: 0;
   background: transparent;
-  color: white;
   cursor: zoom-out;
 }
 
@@ -26,35 +25,38 @@
 
 .image-zoom::backdrop {
   background: rgb(0 0 0 / 80%);
+  animation: image-zoom-backdrop-in 140ms ease-out;
 }
 
-.image-zoom img {
-  display: block;
+.image-zoom[open] img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  animation: image-zoom-in 140ms ease-out;
 }
 
 .image-zoom-close {
   position: absolute;
-  top: 12px;
+  top: 16px;
   right: 16px;
-  padding: 10px 16px;
+  width: 42px;
+  height: 42px;
+  padding: 0;
   border: 0;
-  border-radius: 4px;
-  background: #333;
+  outline: none;
+  background: transparent;
   color: white;
-  font: inherit;
+  opacity: 0.8;
   cursor: pointer;
 }
 
-.image-zoom-close:focus-visible {
-  outline: 2px solid white;
-  outline-offset: 2px;
+.image-zoom-close svg {
+  display: block;
 }
 
-.image-zoom[open] img {
-  animation: image-zoom-in 140ms ease-out;
+.image-zoom-close:hover,
+.image-zoom-close:focus-visible {
+  opacity: 1;
 }
 
 @keyframes image-zoom-in {
@@ -62,10 +64,6 @@
     opacity: 0;
     transform: scale(0.96);
   }
-}
-
-.image-zoom[open]::backdrop {
-  animation: image-zoom-backdrop-in 140ms ease-out;
 }
 
 @keyframes image-zoom-backdrop-in {
@@ -76,7 +74,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .image-zoom[open] img,
-  .image-zoom[open]::backdrop {
+  .image-zoom::backdrop {
     animation: none;
   }
 }
