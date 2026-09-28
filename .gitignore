@@ -1,5 +1,6 @@
 /.vscode
 /node_modules
+/partial-evaluate/node_modules
 /tests/node_modules
 /tests/perf/node_modules
 /dist
