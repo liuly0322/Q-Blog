@@ -1,4 +1,6 @@
-const { summary, firstPageAbstracts } = useSummary()
+import firstPageAbstracts from '~/jsons/firstPageAbstracts.json'
+
+const { summary } = useSummary()
 
 const data = ref<string[]>()
 if (!import.meta.env.SSR) {

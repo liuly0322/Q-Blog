@@ -10,6 +10,7 @@
 /public/page.json
 /public/feed.xml
 /src/jsons/summary.json
+/src/jsons/firstPageAbstracts.json
 /src/types/auto-imports.d.ts
 /src/types/components.d.ts
 /package-lock.json

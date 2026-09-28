@@ -177,9 +177,9 @@ async function generateSiteSummary(posts: Post[], firstPageAbstracts: string[]) 
     posts: posts.map((post) => {
       return Object.fromEntries(Object.entries(post).filter(([k]) => k !== 'content'))
     }),
-    firstPageAbstracts,
   }
   await fs.writeFile(path.join('src/jsons', 'summary.json'), JSON.stringify(summary))
+  await fs.writeFile(path.join('src/jsons', 'firstPageAbstracts.json'), JSON.stringify(firstPageAbstracts))
 }
 
 async function generatePostAbstracts(abstracts: string[]) {

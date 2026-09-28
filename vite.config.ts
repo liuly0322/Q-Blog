@@ -34,6 +34,7 @@ export default defineConfig(({ command, isSsrBuild }) => ({
     // vue 官方插件，用来解析 sfc
     Vue({
       include: [/\.vue$/, /\.md$/],
+      features: { optionsAPI: false },
     }),
     // markdown 编译插件
     Markdown({
