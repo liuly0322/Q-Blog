@@ -52,3 +52,31 @@
   outline: 2px solid white;
   outline-offset: 2px;
 }
+
+.image-zoom[open] img {
+  animation: image-zoom-in 140ms ease-out;
+}
+
+@keyframes image-zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+.image-zoom[open]::backdrop {
+  animation: image-zoom-backdrop-in 140ms ease-out;
+}
+
+@keyframes image-zoom-backdrop-in {
+  from {
+    background: rgb(0 0 0 / 0%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-zoom[open] img,
+  .image-zoom[open]::backdrop {
+    animation: none;
+  }
+}
