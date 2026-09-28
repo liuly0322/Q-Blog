@@ -59,9 +59,6 @@ importers:
       '@types/node':
         specifier: ^22.10.10
         version: 22.10.10
-      '@types/nprogress':
-        specifier: ^0.2.3
-        version: 0.2.3
       '@types/rss':
         specifier: ^0.0.32
         version: 0.0.32
@@ -113,9 +110,6 @@ importers:
       markdown-it-texmath:
         specifier: ^1.0.0
         version: 1.0.0
-      nprogress:
-        specifier: ^0.2.0
-        version: 0.2.0
       rollup-plugin-visualizer:
         specifier: ^5.14.0
         version: 5.14.0(rollup@2.80.0)
@@ -1510,9 +1504,6 @@ packages:
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
-
-  '@types/nprogress@0.2.3':
-    resolution: {integrity: sha512-k7kRA033QNtC+gLc4VPlfnue58CM1iQLgn1IMAU8VPHGOj7oIHPp9UlhedEnD/Gl8evoCjwkZjlBORtZ3JByUA==}
 
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
@@ -3216,9 +3207,6 @@ packages:
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
-
-  nprogress@0.2.0:
-    resolution: {integrity: sha512-I19aIingLgR1fmhftnbWWO3dXc0hSxqHQHQb3H8m+K3TnEn/iSeTZZOyvKXWqQESMwuUVnatlCnZdLBZZt2VSA==}
 
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
@@ -5697,8 +5685,6 @@ snapshots:
 
   '@types/normalize-package-data@2.4.4': {}
 
-  '@types/nprogress@0.2.3': {}
-
   '@types/resolve@1.20.2': {}
 
   '@types/rss@0.0.32': {}
@@ -7779,8 +7765,6 @@ snapshots:
       validate-npm-package-license: 3.0.4
 
   normalize-path@3.0.0: {}
-
-  nprogress@0.2.0: {}
 
   nth-check@2.1.1:
     dependencies:

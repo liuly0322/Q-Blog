@@ -29,16 +29,15 @@ html.dark {
 
 #nprogress {
   pointer-events: none;
-}
-
-#nprogress .bar {
-  background: rgba(13, 148, 136, 0.75);
   position: fixed;
   z-index: 1031;
   top: 0;
   left: 0;
   width: 100%;
+  background: rgba(13, 148, 136, 0.75);
   height: 2px;
+  transform: translateX(-100%);
+  transition: transform 200ms ease, opacity 200ms linear 200ms;
 }
 
 /* katex displayMode */
