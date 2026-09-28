@@ -14,14 +14,7 @@
     <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
     <link rel="stylesheet" href="/katex/katex.min.css" media="print" onload="this.media='all'">
     <title>llyのblog</title>
-    <script>
-        (function () {
-            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-            const setting = localStorage.getItem('vueuse-color-scheme') || 'auto'
-            if (setting === 'dark' || (prefersDark && setting !== 'light'))
-                document.documentElement.classList.toggle('dark', true)
-        })()
-    </script>
+    <script>(s=>s=='dark'||s!='light'&&matchMedia('(prefers-color-scheme:dark)').matches?document.documentElement.className='dark':0)(localStorage['vueuse-color-scheme'])</script>
 </head>
 <body>
     <div id="app"></div>
