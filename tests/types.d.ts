@@ -14,6 +14,7 @@ interface Element {
 }
 
 interface Window {
+  releaseArticle: () => void
   bench: BrowserMetrics
   homeBench: BrowserMetrics
 }

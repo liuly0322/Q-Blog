@@ -44,3 +44,12 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+
+      - name: Upload browser failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-failures
+          path: tests/artifacts/**/failure.png
+          if-no-files-found: ignore
+          retention-days: 7

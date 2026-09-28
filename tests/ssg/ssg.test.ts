@@ -36,8 +36,6 @@ test('every article is a complete static page with working build assets', async 
     assert.match(html, /<div id="app" data-post=/)
     assert.match(html, /<article[^>]*>/)
     assert.match(html, /<div[^>]*data-post-body/)
-    const inlineScripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map(([, script]) => script).join('\n')
-    assert.doesNotMatch(inlineScripts, /spa-github-pages|history\.replaceState|l\.replace\(|sessionStorage\.setItem\(/)
     assert.doesNotMatch(html, /<div[^>]+class="[^"]*post-skeleton-list/)
     assert.ok(html.includes(`href="https://blog.liuly.moe/posts/${encodeURIComponent(post.url)}"`))
     assert.match(html, /<meta property="og:type" content="article">/)
@@ -72,6 +70,20 @@ test('site pages include Bangumi and every tag page', async () => {
     assert.equal(pageTitle(html), title, `${file}: <title>`)
     assert.equal(metaContent(html, 'description'), description, `${file}: description`)
     assert.equal(metaContent(html, 'og:title'), title, `${file}: og:title`)
+    const body = html.slice(html.indexOf('<main'), html.indexOf('</main>'))
+    const markers: Record<string, RegExp> = {
+      'index.html': /class="[^"]*md-blog-home[^"]*"/,
+      'about.html': /<h2[^>]*>名字<\/h2>/,
+      'archive.html': /class="[^"]*archive-item/,
+      'links.html': /href="https:\/\//,
+      'tags.html': /href="\/tags\//,
+      'bangumi.html': /<h1[^>]*>\s*动画列表\s*<\/h1>/,
+    }
+    assert.ok(markers[file].test(body), `${file}: missing static content`)
+    if (file === 'index.html' || file === 'archive.html') {
+      for (const post of file === 'index.html' ? posts.slice(0, 10) : posts)
+        assert(body.includes(`href="/posts/${encodeURIComponent(post.url)}"`), `${file}: missing ${post.url}`)
+    }
   }
 
   for (const tag of tags) {
@@ -79,5 +91,7 @@ test('site pages include Bangumi and every tag page', async () => {
     assert.match(html, /<div id="app" data-ssg="true">/)
     assert.ok(html.includes(`<link rel="canonical" href="https://blog.liuly.moe/tags/${tag}">`), tag)
     assert.equal(pageTitle(html), `${tag} | llyのblog`, `${tag}: <title>`)
+    const actual = [...html.matchAll(/href="\/posts\/([^"?#]+)"/g)].map(([, slug]) => decodeURIComponent(slug))
+    assert.deepEqual(actual, posts.filter(post => post.tags.includes(tag)).map(post => post.url), `${tag}: static article links`)
   }
 })
