@@ -7,9 +7,9 @@ category: web
 
 生成地图在我看来其实是一件非常 cool 的事情，从模拟经营类游戏的玩家，到铁道迷，再到 oc 世界观创作，谁不想把自己的大作美美的展示出来呢！
 
-![GPT-Image-2 一次直出：只有一些小错误](./sakurada-reset-map/sakurada-reset-map-01-gpt-image-2.webp)
+![GPT-Image-2 生成](./sakurada-reset-map/sakurada-reset-map-01-gpt-image-2.webp)
 
-*GPT-Image-2 一次直出：只有一些小错误*
+*GPT-Image-2 生成*
 
 <!-- more -->
 

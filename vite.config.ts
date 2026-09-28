@@ -82,11 +82,11 @@ export default defineConfig(({ command, isSsrBuild }) => ({
       injectRegister: 'inline',
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,ico,svg}'],
+        globPatterns: ['**/*.{js,css}'],
         // https://github.com/vite-pwa/vite-plugin-pwa/issues/120
         navigateFallback: null,
       },
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+      includeManifestIcons: false,
       manifest: {
         name: 'llyのblog',
         short_name: 'llyのblog',
