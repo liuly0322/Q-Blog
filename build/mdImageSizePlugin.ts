@@ -3,7 +3,7 @@
 // License: Apache-2.0 license
 
 import type markdownIt from 'markdown-it'
-import type { Token } from 'markdown-it'
+import type Token from 'markdown-it/lib/token.mjs'
 import path from 'node:path'
 import imageSize from 'image-size'
 

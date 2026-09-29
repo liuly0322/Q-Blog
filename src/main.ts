@@ -6,7 +6,6 @@ import 'virtual:windi-components.css'
 
 import './styles/main.css'
 import 'virtual:windi-utilities.css'
-import 'virtual:windi-devtools'
 
 const root = document.querySelector<HTMLElement>('#app')!
 // Reuse the actual SSR body; do not ship it again in an inline JSON payload.

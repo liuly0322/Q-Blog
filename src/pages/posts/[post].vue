@@ -74,7 +74,8 @@ if (import.meta.env.SSR) {
     const { JSDOM } = await import('jsdom')
     readHeadings(new JSDOM(data.value).window.document.body)
   })
-} else {
+}
+else {
   const body = document.querySelector<HTMLElement>('[data-post-body]')
   if (body && initialPost?.post === props.post && data.value === initialPost.content)
     readHeadings(body)
@@ -92,7 +93,7 @@ onMounted(() => {
       cancelled = true
       observer?.disconnect()
     })
-    
+
     // Update toc and observe headings after v-html has been updated.
     await nextTick()
     if (cancelled)
