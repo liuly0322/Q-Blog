@@ -5,11 +5,11 @@ tags: [函数式编程, TypeScript]
 category: web
 ---
 
-一份 Monad cheat sheet.
+一份 monad cheat sheet.
 
 > 以前在别人的一篇 blog 里看到过有这样一句话，大意是：关于 monad，几乎每个在学习函数式编程中接触到这个模式的，都会写一篇博客描述他的理解。而且不同的人对 monad 的理解有所不同（暗讽 monad 的复杂）。
 
-所以咱也来写一份！尽管 Monad（单子）是一个来源于范畴论的概念（在范畴论中它被定义为「自函子范畴上的幺半群」），若没有接触过范畴论可能会觉得这份定义很难理解，然而在实际编程中，我们只需要数行代码就可以构造出「幺半群」、「函子」和「单子」。
+所以咱也来写一份！尽管 monad（单子）是一个来源于范畴论的概念（在范畴论中它被定义为「自函子范畴上的幺半群」），若没有接触过范畴论可能会觉得这份定义很难理解，然而在实际编程中，我们只需要数行代码就可以构造出「幺半群」、「函子」和「单子」。
 
 本文将首先用 TypeScript 构造出「幺半群」、「函子」和「单子」及相关示例，然后再（尝试）解释这些概念。因为我们只需要在「程序语言的类型」这一具体语境下使用范畴论的一些概念，所以这里的「范畴论知识」也某种程度上被特化了，我们不会涉及到范畴论中的全部抽象。
 
@@ -214,11 +214,11 @@ match processed_order {
 
 > `and_then` 在别的地方可能会叫做 `bind`。这只是名字上的差别，对于链式调用写成 `and_then` 更直观。
 
-为了达成这个效果，就需要拓展自函子的功能。这就引入了 Monad。
+为了达成这个效果，就需要拓展自函子的功能。这就引入了 monad。
 
-> 除了提高程序组合性之外，Monad 还有助于处理副作用。例如读者可能已经熟悉 Haskell 中的 `IO` monad 以及 JavaScript 中的 `Promise`（虽然严格来说 `Promise` 不是 monad，但它很像）。
+> 除了提高程序组合性之外，monad 还有助于处理副作用。例如读者可能已经熟悉 Haskell 中的 `IO` monad 以及 JavaScript 中的 `Promise`（虽然严格来说 `Promise` 不是 monad，但它很像）。
 
-### Monad 的基本操作
+### monad 的基本操作
 
 如果我们根据已有的 `fmap`，尝试构造 `and_then`，会发现：
 
@@ -362,75 +362,135 @@ console.assert(left === right);
 
 最后，你可以开始理解「一个单子（Monad）说白了不过就是自函子范畴上的一个幺半群而已」这句话了。
 
-首先要注意，自函子范畴并不是我们一直在说的 $U$。自函子范畴是一个更高阶的范畴，它的对象是自函子，态射是自然变换。那这就有了自函子 $\text{id}$，自函子 $F$ 作为对象和自然变换 $\text{unit}$、自然变换 $\text{join}$ 作为态射。
+首先要注意，自函子范畴并不是我们一直在说的 $U$。自函子范畴是一个更高阶的范畴，它的对象是自函子，态射是自然变换。那这就有了自函子 $\text{id}$、自函子 $F$ 作为对象，以及自然变换 $\text{unit}$、自然变换 $\text{join}$ 作为态射。
 
 可见，「自函子范畴」五个字就概括了「函子 $F: U \to U$，连同两个自然变换」这些 monad 的要素了。
 
-这里的「幺半群」是一个令人困惑的点，因为它是我们前面介绍的代数结构中的幺半群的推广。它的严格定义需要先引入张量积、自然同构等概念，构造出一个张量范畴，然后再在张量范畴上定义幺半群。本文不打算作为一个严谨的数学教材把这些概念都先定义一遍，因此直接给出结论：
+这里的「幺半群」是一个令人困惑的点，因为它是我们前面介绍的代数结构中的幺半群的推广。它的严格定义需要先引入张量范畴。本文不打算作为一个严谨的数学教材把前置概念先按顺序定义一遍，而是结合本文示例说明。因此直接给出结论：
 
 - 自函子范畴是一个张量范畴；
-- 自函子范畴上的函子复合就是张量积。
+- 恒等自函子 $\text{id}$ 是这个张量范畴的单位对象。
 
-> 范畴 $C$ 上的张量积一般写成 $\otimes: C \times C \to C$，它是范畴 $C$ 上的一个二元运算。这里的自函子范畴就取函子复合作为张量积。因为我们这里没有给出张量积的定义，所以不严谨地，你可以先用「函子复合」这个模型来理解。
+> 张量范畴中有一种作用在两个对象上的「乘法」，称为张量积，通常记作 $\otimes$。给定两个对象 $A,B \in C$，它们的张量积仍然是 $C$ 中的对象，记作 $A \otimes B$。这里的自函子范畴就取函子复合作为张量积，因此对于两个自函子 $F,G$，$F \otimes G$ 就可以理解成 $F \circ G$。
 
-给定一个张量范畴 $C$，$C$ 上的幺半群（幺半群对象）是一个**对象** $M \in C$，连同两个态射:
+给定一个张量范畴 $C$，$C$ 上的幺半群（更准确地说是幺半群对象）是一个**对象** $M \in C$，连同两个态射：
 
-- $\mu: M \otimes M \to M$
-- $\eta: I \to M$
+- $\mu: M \otimes M \to M$，这里 $\mu$ 对应普通幺半群的**二元运算**；对应自函子的 `join` 自然变换；
+- $\eta: I \to M$，对应普通幺半群的单位元素，其中 $I$ 是张量范畴本身的单位对象。这里 $\eta$ 对应普通幺半群的**单位元素**；对应自函子的 `unit` 自然变换。
 
-代数结构中的幺半群的性质被移植如下（下面不严谨地写了交换图的箭头）：
+为了理解此时这个幺半群对象需要满足的结合律和左右单位律，我们先对张量范畴做一个简要说明：
 
-- 二元运算 $*$ 被 $\mu$ 取代；
-- $\mu$ 满足结合律：$(M \otimes M) \otimes M \to M \otimes (M \otimes M)$
-- 有一个单位元素 $I \in C$
-  - 左单位律：$I \otimes M \to M$
-  - 右单位律：$M \otimes I \to M$
-
-对应到自函子范畴上：
-
-- $F$ 自函子作为**幺半群对象** $M$；
-- $\text{join}$ 自然变换作为态射 $\mu$；
-- $\text{unit}$ 自然变换作为态射 $\eta$。
-- $\text{id}$ 自函子作为单位元素 $I$。
-
-回顾 monad 的 $\text{join}$ 和 $\text{unit}$ 满足的条件。第一条：
-
-$$\text{join}_a \circ \text{fmap}(\text{join}_a) = \text{join}_a \circ \text{join}_{F(a)}$$
-
-等号左边：
+**张量范畴要求存在一个可逆的结合子：**
 
 $$
-\begin{align*}
-\text{join}_a&: (F \otimes F)(a) \to F(a)\\
-\text{fmap}(\text{join}_a)&: (F \otimes (F \otimes F))(a) \to (F \otimes F)(a)\\
-\text{join}_a \circ \text{fmap}(\text{join}_a)&: (F \otimes (F \otimes F))(a) \to F(a)
-\end{align*}
+\alpha_{F,G,H}: (F \otimes G) \otimes H \to F \otimes (G \otimes H)
 $$
 
-所以它们的复合是一个 $F \otimes (F \otimes F)$ 到 $F$ 的自然变换。
+> 因为在一般的张量范畴中，$(F \otimes G) \otimes H$ 和 $F \otimes (G \otimes H)$ 并不要求是同一个对象，只要求它们之间有一个可逆的态射 $\alpha_{F,G,H}$，和其他一些条件（本文不展开），就足以探讨数学结构。
 
-等号右边：
+注意到自函子范畴的特殊性，由函子复合的性质，已然满足 $(F \otimes G) \otimes H = F \otimes (G \otimes H)$，因此 $\alpha_{F,G,H}$ 可以直接看作恒等变换。
+
+**张量范畴要求存在左右单位子：**
 
 $$
-\begin{align*}
-\text{join}_{F(a)}&: (F \otimes F)(F(a)) \to F(F(a))\\
-\text{join}_{F(a)}&: ((F \otimes F) \otimes F)(a) \to (F \otimes F)(a)\\
-\text{join}_a \circ \text{join}_{F(a)}&: ((F \otimes F) \otimes F)(a) \to F(a)
-\end{align*}
+\lambda_F: I \otimes F \to F
 $$
 
-所以它们的复合是一个 $(F \otimes F) \otimes F$ 到 $F$ 的自然变换。
+$$
+\rho_F: F \otimes I \to F
+$$
 
-等式的意义是 $F \otimes (F \otimes F)$ 和 $(F \otimes F) \otimes F$ 到 $F$ 存在一个相等的自然变换（并且我们给出了这个自然变换）。这就是为什么 monad 的第一条规则又叫做结合律。
+注意到自函子范畴的特殊性，由函子复合的性质，已然满足 $\text{id} \circ F = F$，$F \circ \text{id} = F$，因此 $\lambda_F$ 和 $\rho_F$ 也可以直接看作恒等变换。
 
-类似推导：
+**幺半群对象的结合律：**
 
-$$\text{join}_a \circ \text{unit}_{F(a)} = 1_{F}$$
+现在回到幺半群对象，我们就只考虑具体的某个自函子 $M$。
 
-说明 $\text{id} \otimes F$ 和 $F$ 到 $F$ 存在一个相等的自然变换。这就是左单位律。
+它的结合律是在考察这样的事情，考虑 $(M \otimes M) \otimes M$ 到 $M$，有两个复合态射：
 
-$$\text{join}_a \circ \text{fmap}(\text{unit}_a) = 1_{F}$$
+> 这里明确写出了三个 $M$ 复合的计算顺序。如果从 $M \otimes (M \otimes M)$ 出发也是可以的，读者可以自行推导会得到相同的结合律公式。
 
-说明 $F \otimes \text{id}$ 和 $F$ 到 $F$ 存在一个相等的自然变换。这就是右单位律。
+1. 先计算左边两个 $M$，再计算剩下的两个 $M$：
 
-自然，单子是一个自函子范畴上的幺半群（对象）。
+$$
+(M \otimes M) \otimes M
+\xrightarrow{\mu \otimes 1_M}
+M \otimes M
+\xrightarrow{\mu}
+M
+$$
+
+2. 先利用结合子改变括号的位置，再计算右边两个 $M$：
+
+$$
+(M \otimes M) \otimes M
+\xrightarrow{\alpha_{M,M,M}}
+M \otimes (M \otimes M)
+\xrightarrow{1_M \otimes \mu}
+M \otimes M
+\xrightarrow{\mu}
+M
+$$
+
+结合律就是在要求这两种复合态射是相等的：
+
+$$
+\mu \circ (\mu \otimes 1_M)
+=
+\mu \circ (1_M \otimes \mu) \circ \alpha_{M,M,M}
+$$
+
+> 这里的张量积 $\otimes$ 不仅可以作用于对象，也可以作用于态射。作用于态射时的定义：若 $f:A\to A'$ 和 $g:B\to B'$，则 $f\otimes g:A\otimes B\to A'\otimes B'$。
+
+这个要求写到我们的自函子范畴上就是：
+
+$$
+\text{join}_a \circ \text{join}_{F(a)}
+=
+\text{join}_a \circ \text{fmap}(\text{join}_a)
+$$
+
+等式两边分别表示：
+
+- 先合并外面的两层 $F$，再合并剩下的两层；
+- 先合并里面的两层 $F$，再合并剩下的两层。
+
+我们 monad 定义中就有这么一条。所以 monad 满足自函子范畴上的幺半群对象的结合律。
+
+**幺半群对象的左右单位律：** 
+
+这次要求相等的复合态射是：
+
+$$
+\mu \circ (\eta \otimes 1_M) = \lambda_M
+$$
+
+> 左单位律。显然这是 $\text{id} \circ M$ 到 $M$ 的两个态射。
+
+$$
+\mu \circ (1_M \otimes \eta) = \rho_M
+$$
+
+> 右单位律。显然这是 $M \circ \text{id}$ 到 $M$ 的两个态射。
+
+左单位律写到自函子范畴上，就是我们 monad 定义的第二条要求：
+
+$$
+\text{join}_a \circ \text{unit}_{F(a)}
+=
+1_{F(a)}
+$$
+
+> 这里 $\text{unit}_{F(a)}$ 把整个 $F(a)$ 再包装一层：$F(a) \to F(F(a))$，然后再通过 $\text{join}_a$ 合并回去，要求结果是原来的 $F(a)$。
+
+右单位律写到自函子范畴上，就是我们 monad 定义的第三条要求：
+
+$$
+\text{join}_a \circ \text{fmap}(\text{unit}_a)
+=
+1_{F(a)}
+$$
+
+> 这里 $\text{fmap}(\text{unit}_a)$ 是对 $F(a)$ 中的 $a$ 先应用 $\text{unit}$，得到：$F(a) \to F(F(a))$，然后通过 $\text{join}$ 合并回来，同样要求是原来的 $F(a)$。
+
+到这里，我们终于可以自信地说出，显然，单子是一个自函子范畴上的幺半群（对象）！
