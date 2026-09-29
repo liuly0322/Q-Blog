@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict'
+import { Buffer } from 'node:buffer'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import process from 'node:process'
 import { gzipSync } from 'node:zlib'
 
 const [directory, outputFile] = process.argv.slice(2)
@@ -9,7 +11,7 @@ assert(directory, 'Usage: node tests/perf/scripts/asset-sizes.ts DIST_DIR [OUTPU
 const root = path.resolve(directory)
 const html = await fs.readFile(path.join(root, 'index.html'), 'utf8')
 const jsPath = html.match(/<script[^>]+type="module"[^>]+src="([^"]+\.js)"/)?.[1]
-const cssPaths = [...html.matchAll(/<link\b(?=[^>]*\brel="stylesheet")(?=[^>]*\bhref="([^"]+\.css)")[^>]*>/g)].map(match => match[1])
+const cssPaths = [...html.matchAll(/<link\b(?=[^>]+\brel="stylesheet")(?=[^>]+\bhref="([^"]+\.css)")[^>]+>/g)].map(match => match[1])
 const cssPath = cssPaths.find(asset => asset.startsWith('/assets/'))
 assert(jsPath, 'Could not find the entry JavaScript in index.html')
 

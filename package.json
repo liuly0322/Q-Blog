@@ -22,8 +22,8 @@
     "deps:fresh:patch": "npx taze patch -w",
     "preview:host": "vite preview --host",
     "preview:open": "vite preview --open",
-    "lint": "eslint ./src ./build",
-    "lint:fix": "eslint ./src ./build --fix"
+    "lint": "eslint ./src ./build ./tests",
+    "lint:fix": "eslint ./src ./build ./tests --fix"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.16.0",

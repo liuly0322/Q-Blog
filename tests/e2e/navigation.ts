@@ -1,8 +1,63 @@
 import type { SiteHarness } from '../helpers/site.ts'
 import assert from 'node:assert/strict'
-import { articleWithToc, expectAnchor, expectArticleSnippet, openHydratedPage, posts, scrollArticle } from '../helpers/site.ts'
+import { articleWithToc, expectAnchor, expectArticle, expectArticleSnippet, openHydratedPage, posts, scrollArticle } from '../helpers/site.ts'
 
 export function registerNavigation(harness: SiteHarness) {
+  for (const source of ['/archive', scrollArticle]) {
+    harness.test(`article loading starts at the top when entering from ${source}`, async (site) => {
+      const { page } = site
+      const target = '/posts/programming-live-webpage'
+      await openHydratedPage(site, source, source === '/archive' ? '.archive-item' : '[data-post-body]')
+      await page.evaluate(() => window.scrollTo(0, 900))
+      assert(await page.evaluate(() => scrollY > 500))
+
+      let release!: () => void
+      const ready = new Promise<void>((resolve) => {
+        release = resolve
+      })
+      await page.route(`**${target}.htm`, async (route) => {
+        await ready
+        await route.continue()
+      })
+      try {
+        // Preserve the starting scroll position instead of scrolling the link into view.
+        await page.locator(`a[href="${target}"]`).first().evaluate((link: HTMLAnchorElement) => link.click())
+        await page.waitForURL(`**${target}`)
+        await page.locator('.post-skeleton-list').waitFor({ state: 'visible' })
+        const position = await page.evaluate(() => new Promise<number>((resolve) => {
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve(scrollY)))
+        }))
+        assert.equal(position, 0, 'The article header must be visible while its body is loading')
+      }
+      finally {
+        release()
+        await expectArticle(page, target)
+      }
+    }, { viewport: { width: 844, height: 390 } })
+  }
+
+  harness.test('cached article navigation starts at the top', async (site) => {
+    const { page } = site
+    const target = '/posts/programming-live-webpage'
+    let requests = 0
+    page.on('request', (request) => {
+      if (new URL(request.url()).pathname === `${target}.htm`)
+        requests++
+    })
+    await openHydratedPage(site, scrollArticle, '[data-post-body]')
+    const link = page.locator(`article a[href="${target}"]`)
+    await link.evaluate((element: HTMLAnchorElement) => element.click())
+    await expectArticle(page, target)
+    await page.goBack()
+    await expectArticleSnippet(page, scrollArticle)
+    await page.evaluate(() => window.scrollTo(0, 900))
+    assert(await page.evaluate(() => scrollY > 500))
+    await link.evaluate((element: HTMLAnchorElement) => element.click())
+    await expectArticle(page, target)
+    await page.waitForFunction(() => scrollY === 0)
+    assert.equal(requests, 1, 'The second visit must use cached article content')
+  })
+
   harness.test('article scroll position survives Back and Forward', async (site) => {
     const { page } = site
     await openHydratedPage(site, '/')
@@ -18,6 +73,33 @@ export function registerNavigation(harness: SiteHarness) {
     await page.waitForURL(`**${scrollArticle}`)
     await expectArticleSnippet(page, scrollArticle)
     await page.waitForFunction(expected => Math.abs(window.scrollY - expected) < 120, articleScrollY, {})
+  })
+
+  harness.test('two articles keep their own scroll positions through Back and Forward', async (site) => {
+    const { page } = site
+    const secondArticle = '/posts/programming-live-webpage'
+    await openHydratedPage(site, scrollArticle, '[data-post-body]')
+    await expectArticleSnippet(page, scrollArticle)
+    await page.evaluate(() => window.scrollTo(0, 900))
+    const firstPosition = await page.evaluate(() => scrollY)
+    assert(firstPosition > 500)
+
+    await page.locator(`article a[href="${secondArticle}"]`).evaluate((link: HTMLAnchorElement) => link.click())
+    await page.waitForURL(`**${secondArticle}`)
+    await expectArticle(page, secondArticle)
+    await page.evaluate(() => window.scrollTo(0, 500))
+    const secondPosition = await page.evaluate(() => scrollY)
+    assert(secondPosition > 300)
+
+    await page.goBack()
+    await page.waitForURL(`**${scrollArticle}`)
+    await expectArticleSnippet(page, scrollArticle)
+    await page.waitForFunction(expected => Math.abs(scrollY - expected) < 120, firstPosition)
+
+    await page.goForward()
+    await page.waitForURL(`**${secondArticle}`)
+    await expectArticle(page, secondArticle)
+    await page.waitForFunction(expected => Math.abs(scrollY - expected) < 120, secondPosition)
   })
 
   harness.test('archive returns to the clicked entry after Back', async (site) => {
@@ -111,6 +193,14 @@ export function registerNavigation(harness: SiteHarness) {
     await page.waitForURL(`${site.origin}/`)
     await page.waitForFunction(expected => Math.abs(scrollY - expected) < 120, position)
     assert.deepEqual(await cards.evaluateAll(elements => elements.map(el => el.getAttribute('href'))), expected)
+
+    await entry.click()
+    await page.waitForURL(`**${target}`)
+    await page.locator('header a[href="/"]').first().click()
+    await page.waitForURL(`${site.origin}/`)
+    await page.waitForFunction(href => document.querySelector('a.show-more')?.getAttribute('href') === href, `/posts/${posts[0].url}`)
+    await page.waitForFunction(() => scrollY === 0)
+    assert.equal(await page.evaluate(() => scrollY), 0)
   })
 
   harness.test('a late article response cannot overwrite the page after Back', async (site) => {

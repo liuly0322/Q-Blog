@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { restorePost } from '~/modules/navigationScroll'
 import { initialPostKey } from '~/ssg'
 
 const props = defineProps<{ post: string }>()
@@ -47,11 +48,7 @@ watch(() => props.post, async (post, _previous, onCleanup) => {
   loading.value = false
 }, { immediate: true })
 
-const { scroll, deferScroll } = useCustomScroll()
 const postContentEle = ref<HTMLElement>()
-watchEffect(() => {
-  props.post && scroll({ left: 0, top: 0 })
-})
 
 const toc = ref<{ id: string, text: string, tab: number, active: boolean }[]>([])
 function readHeadings(element: HTMLElement) {
@@ -82,6 +79,7 @@ else {
 }
 
 onMounted(() => {
+  watch(() => props.post, () => window.scrollTo({ left: 0, top: 0 }), { immediate: true })
   watch(data, async (_, _previous, onCleanup) => {
     // The data is not ready yet
     if (loading.value)
@@ -114,7 +112,7 @@ onMounted(() => {
     if (cancelled)
       return
 
-    deferScroll()
+    restorePost()
     if (window.location.hash) {
       try {
         document.getElementById(decodeURIComponent(window.location.hash.slice(1)))?.scrollIntoView()

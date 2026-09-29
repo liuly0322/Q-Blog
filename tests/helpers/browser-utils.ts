@@ -1,11 +1,11 @@
+import type { OutgoingHttpHeaders } from 'node:http'
+import type { AddressInfo } from 'node:net'
+import type { Browser, BrowserContext } from 'playwright'
 import fs from 'node:fs/promises'
 import http from 'node:http'
 import path from 'node:path'
 import process from 'node:process'
 import { gzipSync } from 'node:zlib'
-import type { OutgoingHttpHeaders } from 'node:http'
-import type { AddressInfo } from 'node:net'
-import type { Browser, BrowserContext } from 'playwright'
 
 // Optional test tooling, kept outside the application's dependency graph.
 export async function launchBrowser(): Promise<Browser> {
@@ -70,7 +70,7 @@ export async function startServer(directory: string) {
   const address = server.address() as AddressInfo
   return {
     origin: `http://127.0.0.1:${address.port}`,
-    close: () => new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve())),
+    close: () => new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())),
   }
 }
 export async function mockExternalServices(context: BrowserContext) {

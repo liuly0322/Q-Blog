@@ -18,6 +18,14 @@ export function registerPlatform(harness: SiteHarness) {
     await sidebar.locator('a[href="/archive"]').click()
     await page.waitForURL(`${site.origin}/archive`)
     await page.locator('.archive-item').first().waitFor({ state: 'visible' })
+    await page.waitForFunction(() => !document.querySelector('#sidebar')?.classList.contains('sidebar-open')
+      && !document.querySelector('.mdui-overlay')?.classList.contains('mdui-overlay-show'))
+
+    await page.getByRole('button', { name: 'menu' }).click()
+    await page.waitForFunction(() => document.querySelector('#sidebar')?.classList.contains('sidebar-open'))
+    await sidebar.locator('a[href="/archive"]').click()
+    await page.waitForFunction(() => !document.querySelector('#sidebar')?.classList.contains('sidebar-open')
+      && !document.querySelector('.mdui-overlay')?.classList.contains('mdui-overlay-show'))
   }, { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, colorScheme: 'dark' })
 
   harness.test('service worker reload keeps the article hydrated', async (site) => {

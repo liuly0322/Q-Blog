@@ -1,13 +1,14 @@
 import routes from 'virtual:generated-pages'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
+import { scrollBehavior } from './navigationScroll'
 
-const { saveScrollPosition, customScrollBehavior } = useCustomScroll()
+const { closeSidebar } = useMobileSidebar()
 
 export function createSiteRouter() {
   const router = createRouter({
     routes,
     history: import.meta.env.SSR ? createMemoryHistory() : createWebHistory(),
-    scrollBehavior: customScrollBehavior,
+    scrollBehavior,
   })
 
   router.beforeEach((to) => {
@@ -20,6 +21,7 @@ export function createSiteRouter() {
   })
 
   if (!import.meta.env.SSR)
-    router.beforeEach(saveScrollPosition)
+    router.afterEach(closeSidebar)
+
   return router
 }

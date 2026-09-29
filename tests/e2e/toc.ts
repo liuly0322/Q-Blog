@@ -14,7 +14,9 @@ export function registerToc(harness: SiteHarness) {
 
   harness.test('hydration preserves article width and TOC; observer updates state', async ({ page, origin }) => {
     let release!: () => void
-    const ready = new Promise<void>((resolve) => { release = resolve })
+    const ready = new Promise<void>((resolve) => {
+      release = resolve
+    })
     await page.route('**/assets/*.js', async (route) => {
       await ready
       await route.continue()

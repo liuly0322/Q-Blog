@@ -20,7 +20,9 @@ const title = computed(() => {
   return staticPageTitles[route.path] ?? SITE_TITLE
 })
 
-watch(title, value => !import.meta.env.SSR && (document.title = value), { immediate: true })
+onMounted(() => {
+  watch(title, value => document.title = value, { immediate: true })
+})
 
 // HMR
 if (import.meta.hot)

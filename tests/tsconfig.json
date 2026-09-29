@@ -3,10 +3,10 @@
   "compilerOptions": {
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "strict": true,
-    "noImplicitAny": false,
-    "strictNullChecks": false,
     "allowImportingTsExtensions": true,
+    "strict": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
     "noEmit": true
   },
   "include": ["**/*.ts", "**/*.d.ts"],

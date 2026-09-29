@@ -64,10 +64,12 @@ async function newPage(throttled) {
     const check = () => {
       const body = document.querySelector('article [data-post-body], article > div > div.md-blog')
       if (body && body.textContent.length && body.getBoundingClientRect().height
-        && getComputedStyle(body.parentElement).display !== 'none')
+        && getComputedStyle(body.parentElement).display !== 'none') {
         window.bench.article = performance.now()
-      else
+      }
+      else {
         requestAnimationFrame(check)
+      }
     }
     requestAnimationFrame(check)
   })
