@@ -2,8 +2,6 @@ import routes from 'virtual:generated-pages'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 import { scrollBehavior } from './navigationScroll'
 
-const { closeSidebar } = useMobileSidebar()
-
 export function createSiteRouter() {
   const router = createRouter({
     routes,
@@ -19,9 +17,6 @@ export function createSiteRouter() {
     if (path !== to.path)
       return { path, query: to.query, hash: to.hash, replace: true }
   })
-
-  if (!import.meta.env.SSR)
-    router.afterEach(closeSidebar)
 
   return router
 }

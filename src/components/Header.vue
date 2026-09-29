@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { toggleSidebar } = useMobileSidebar()
+const emit = defineEmits(['toggleSidebar'])
 const routePath = useRoute()
 
 const navOptions = [
@@ -48,7 +48,7 @@ const navOptions = [
       >
         {{ option.label }}
       </RouterLink>
-      <button aria-label="menu" class="lg:hidden mx-3 flex" @click="() => toggleSidebar()">
+      <button aria-label="menu" class="lg:hidden mx-3 flex" @click="emit('toggleSidebar')">
         <i-carbon:menu />
       </button>
     </div>
