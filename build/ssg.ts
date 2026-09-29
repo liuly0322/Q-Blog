@@ -57,24 +57,65 @@ function generateDescription(content: string, maxLength = 160): string {
     .slice(0, maxLength)
 }
 
-async function precompressAssets(directory: string): Promise<void> {
-  for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
+// Bound concurrent work so Brotli and page rendering do not multiply memory usage.
+async function forEachConcurrent<T>(items: T[], limit: number, work: (item: T) => Promise<void>): Promise<void> {
+  let next = 0
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (next < items.length)
+      await work(items[next++])
+  }))
+}
+
+async function collectAssets(directory: string): Promise<string[]> {
+  const entries = await fs.readdir(directory, { withFileTypes: true })
+  const paths = await Promise.all(entries.map(async (entry) => {
     const filename = path.join(directory, entry.name)
-    if (entry.isDirectory()) {
-      await precompressAssets(filename)
-    }
-    else if (entry.isFile() && /\.(?:html|js|css)$/i.test(entry.name)) {
-      const source = await fs.readFile(filename)
-      const compressed = await compressBrotli(source, {
-        params: { [constants.BROTLI_PARAM_QUALITY]: 11 },
-      })
-      await fs.writeFile(`${filename}.br`, compressed)
-    }
-  }
+    if (entry.isDirectory())
+      return collectAssets(filename)
+    if (entry.isFile() && /\.(?:html|js|css)$/i.test(entry.name))
+      return [filename]
+    return []
+  }))
+  return paths.flat()
+}
+
+async function precompressAssets(directory: string): Promise<void> {
+  await forEachConcurrent(await collectAssets(directory), 4, async (filename) => {
+    const source = await fs.readFile(filename)
+    const compressed = await compressBrotli(source, {
+      params: { [constants.BROTLI_PARAM_QUALITY]: 11 },
+    })
+    await fs.writeFile(`${filename}.br`, compressed)
+  })
 }
 
 // Inlining trades a request for bytes on the document; past this size the trade reverses.
 const inlineStyleBudget = 20 * 1024
+
+function pageMetadata(url: string, title: string, description: string, type: 'website' | 'article', tags: string[] = []): string {
+  const canonical = `${siteUrl}${url}`
+  const metadata = [
+    `<link rel="canonical" href="${escapeHtml(canonical)}">`,
+    `<meta property="og:type" content="${type}">`,
+    `<meta property="og:title" content="${escapeHtml(title)}">`,
+    `<meta property="og:description" content="${escapeHtml(description)}">`,
+    `<meta property="og:url" content="${escapeHtml(canonical)}">`,
+  ]
+  if (type === 'article') {
+    metadata.push(
+      '<meta property="article:author" content="liuly">',
+      ...tags.map(tag => `<meta property="article:tag" content="${escapeHtml(tag)}">`),
+    )
+  }
+  return metadata.join('\n')
+}
+
+function pageTemplate(template: string, title: string, description: string, app: string): string {
+  return template
+    .replace(/<title>.*?<\/title>/s, () => `<title>${escapeHtml(title)}</title>`)
+    .replace(/<meta name="description"[^>]*>/, () => `<meta name="description" content="${escapeHtml(description)}">`)
+    .replace('<div id="app"></div>', () => app)
+}
 
 // Route sheets as links, entry sheet inlined when the page can carry it.
 async function assemblePage(skeleton: string, metadata: string, modules: string[], manifest: SsrManifest): Promise<string> {
@@ -88,6 +129,39 @@ async function assemblePage(skeleton: string, metadata: string, modules: string[
     return skeleton.replace('</head>', () => `${metadata}\n${routes}\n</head>`)
   const sheet = await fs.readFile(path.join(outputDir, entry[1].replace(/^\//, '')), 'utf8')
   return skeleton.replace(entry[0], '').replace('</head>', () => `${metadata}\n<style>${sheet}</style>\n${routes}\n</head>`)
+}
+
+async function renderSitePage(pageInfo: { url: string, file: string, title: string, description: string }, template: string, manifest: SsrManifest, render: RenderEntry): Promise<void> {
+  const { html, modules } = await render(pageInfo.url)
+  const page = await assemblePage(
+    pageTemplate(template, pageInfo.title, pageInfo.description, `<div id="app" data-ssg="true">${html}</div>`),
+    pageMetadata(pageInfo.url, pageInfo.title, pageInfo.description, 'website'),
+    modules,
+    manifest,
+  )
+  const outputPath = path.join(outputDir, pageInfo.file)
+  await fs.mkdir(path.dirname(outputPath), { recursive: true })
+  await fs.writeFile(outputPath, page)
+}
+
+async function renderArticle(post: PostSummary, template: string, manifest: SsrManifest, render: RenderEntry): Promise<void> {
+  const url = `/posts/${encodeURIComponent(post.url)}`
+  const [markdown, content] = await Promise.all([
+    fs.readFile(path.join('posts', `${post.url}.md`), 'utf8'),
+    fs.readFile(path.join(outputDir, 'posts', `${post.url}.htm`), 'utf8'),
+  ])
+  const description = generateDescription(frontmatter(markdown).content)
+  const { html, modules } = await render(url, { post: post.url, content })
+  const title = `${post.title} | ${SITE_TITLE}`
+  const page = await assemblePage(
+    pageTemplate(template, title, description, `<div id="app" data-post="${escapeHtml(post.url)}" data-ssg="true">${html}</div>`),
+    pageMetadata(url, title, description, 'article', post.tags),
+    modules,
+    manifest,
+  )
+  if (!page.includes('data-post-body'))
+    throw new Error(`Missing rendered article: ${post.url}`)
+  await fs.writeFile(path.join(outputDir, 'posts', `${post.url}.html`), page)
 }
 
 // Vite 5's existing SSR build API; no new framework or runtime dependency.
@@ -122,60 +196,10 @@ try {
   const spaHtml = template.replace('</head>', `${spaFallbackScript}\n</head>`)
   await fs.writeFile(path.join(outputDir, 'spa.html'), spaHtml)
 
-  for (const pageInfo of [...staticPages, ...tagPages]) {
-    const { html, modules } = await render(pageInfo.url)
-    const canonical = `${siteUrl}${pageInfo.url}`
-    const metadata = [
-      `<link rel="canonical" href="${escapeHtml(canonical)}">`,
-      '<meta property="og:type" content="website">',
-      `<meta property="og:title" content="${escapeHtml(pageInfo.title)}">`,
-      `<meta property="og:description" content="${escapeHtml(pageInfo.description)}">`,
-      `<meta property="og:url" content="${escapeHtml(canonical)}">`,
-    ].join('\n')
-    const page = await assemblePage(
-      template
-        .replace(/<title>.*?<\/title>/s, () => `<title>${escapeHtml(pageInfo.title)}</title>`)
-        .replace(/<meta name="description"[^>]*>/, () => `<meta name="description" content="${escapeHtml(pageInfo.description)}">`)
-        .replace('<div id="app"></div>', () => `<div id="app" data-ssg="true">${html}</div>`),
-      metadata,
-      modules,
-      manifest,
-    )
-    const outputPath = path.join(outputDir, pageInfo.file)
-    await fs.mkdir(path.dirname(outputPath), { recursive: true })
-    await fs.writeFile(outputPath, page)
-  }
-
-  for (const post of posts) {
-    const url = `/posts/${encodeURIComponent(post.url)}`
-    // Metadata stays in HTML, rather than adding every description to the client JS.
-    const markdown = frontmatter(await fs.readFile(path.join('posts', `${post.url}.md`), 'utf8')).content
-    const description = generateDescription(markdown)
-    const content = await fs.readFile(path.join(outputDir, 'posts', `${post.url}.htm`), 'utf8')
-    const { html, modules } = await render(url, { post: post.url, content })
-    const title = `${post.title} | ${SITE_TITLE}`
-    const metadata = [
-      `<link rel="canonical" href="${siteUrl}${url}">`,
-      '<meta property="og:type" content="article">',
-      `<meta property="og:title" content="${escapeHtml(title)}">`,
-      `<meta property="og:description" content="${escapeHtml(description)}">`,
-      `<meta property="og:url" content="${siteUrl}${url}">`,
-      '<meta property="article:author" content="liuly">',
-      ...post.tags.map(tag => `<meta property="article:tag" content="${escapeHtml(tag)}">`),
-    ].join('\n')
-    const page = await assemblePage(
-      template
-        .replace(/<title>.*?<\/title>/s, () => `<title>${escapeHtml(title)}</title>`)
-        .replace(/<meta name="description"[^>]*>/, () => `<meta name="description" content="${escapeHtml(description)}">`)
-        .replace('<div id="app"></div>', () => `<div id="app" data-post="${escapeHtml(post.url)}" data-ssg="true">${html}</div>`),
-      metadata,
-      modules,
-      manifest,
-    )
-    if (!page.includes('data-post-body'))
-      throw new Error(`Missing rendered article: ${post.url}`)
-    await fs.writeFile(path.join(outputDir, 'posts', `${post.url}.html`), page)
-  }
+  await forEachConcurrent([
+    ...[...staticPages, ...tagPages].map(page => () => renderSitePage(page, template, manifest, render)),
+    ...posts.map(post => () => renderArticle(post, template, manifest, render)),
+  ], 4, task => task())
   console.warn(`SSG: generated ${staticPages.length} static pages, ${tagPages.length} tag pages, and ${posts.length} article pages in ${Math.round(performance.now() - started)} ms.`)
   await precompressAssets(outputDir)
 }
