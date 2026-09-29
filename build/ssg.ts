@@ -4,7 +4,8 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import { pathToFileURL } from 'node:url'
-import { gzipSync } from 'node:zlib'
+import { promisify } from 'node:util'
+import { brotliCompress, constants, gzipSync } from 'node:zlib'
 import frontmatter from 'frontmatter'
 import { build } from 'vite'
 import { SITE_TITLE, staticPageDetails, staticPageTitles } from '../src/pageMeta.ts'
@@ -14,6 +15,7 @@ type RenderEntry = typeof import('../src/entry-server').render
 
 const siteUrl = 'https://blog.liuly.moe'
 const outputDir = path.resolve('dist')
+const compressBrotli = promisify(brotliCompress)
 const inlineStyles = process.env.SSG_INLINE_CSS !== '0'
 const serverDir = path.resolve('node_modules/.cache/q-blog-ssg')
 const staticPages = Object.entries(staticPageTitles).map(([url, title]) => ({
@@ -53,6 +55,22 @@ function generateDescription(content: string, maxLength = 160): string {
     .replace(/[#*~`><!-]/g, '')
     .replace(/\s+/g, ' ')
     .slice(0, maxLength)
+}
+
+async function precompressAssets(directory: string): Promise<void> {
+  for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
+    const filename = path.join(directory, entry.name)
+    if (entry.isDirectory()) {
+      await precompressAssets(filename)
+    }
+    else if (entry.isFile() && /\.(?:html|js|css)$/i.test(entry.name)) {
+      const source = await fs.readFile(filename)
+      const compressed = await compressBrotli(source, {
+        params: { [constants.BROTLI_PARAM_QUALITY]: 11 },
+      })
+      await fs.writeFile(`${filename}.br`, compressed)
+    }
+  }
 }
 
 // Inlining trades a request for bytes on the document; past this size the trade reverses.
@@ -159,6 +177,7 @@ try {
     await fs.writeFile(path.join(outputDir, 'posts', `${post.url}.html`), page)
   }
   console.warn(`SSG: generated ${staticPages.length} static pages, ${tagPages.length} tag pages, and ${posts.length} article pages in ${Math.round(performance.now() - started)} ms.`)
+  await precompressAssets(outputDir)
 }
 finally {
   await fs.rm(serverDir, { recursive: true, force: true })
