@@ -1,54 +1,20 @@
-import { formatDate } from '~/utils/date'
-
 interface Anime {
-  updated_at: string
   comment: string
-  tags: { name: string, count: number }[]
   subject: {
-    date: string
     images: {
-      small: string
-      grid: string
-      large: string
       medium: string
-      common: string
     }
     name: string
     name_cn: string
     short_summary: string
-    tags: { name: string, count: number }[]
-    score: number
-    type: number
     id: number
-    eps: number
-    volumes: number
-    collection_total: number
-    rank: number
   }
-  subject_id: number
-  vol_status: number
-  ep_status: number
-  subject_type: number
-  type: number
   rate: number
-  private: boolean
 }
 
 interface Collections {
   total: number
-  limit: number
-  offset: number
   data: Anime[]
-}
-
-function prettyAnimeDates(animes: Anime[]) {
-  return animes.map((anime) => {
-    const update_time = formatDate(anime.updated_at)
-    return {
-      ...anime,
-      updated_at: update_time,
-    }
-  })
 }
 
 const PAGE_SIZE = 12
@@ -64,7 +30,7 @@ async function updateBangumiData(page: number) {
 
   const data: Collections = await res.json()
   const totalSize = data.total
-  animeList.value = animeList.value.concat(prettyAnimeDates(data.data))
+  animeList.value = animeList.value.concat(data.data)
   if (offset + data.data.length >= totalSize)
     throw new Error('No more data')
 }

@@ -12,8 +12,3 @@ export function getCurrentSeason() {
     return '秋'
   return '冬'
 }
-
-export function formatDate(date: string) {
-  const d = new Date(date)
-  return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}`
-}
