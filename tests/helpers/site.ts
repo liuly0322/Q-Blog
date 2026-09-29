@@ -50,6 +50,7 @@ export async function createSite(): Promise<SiteHarness> {
           ...options,
         })
         const errors: string[] = []
+        const warnings: string[] = []
         const expected = new Map<string, number>()
         let failed = false
         const directory = path.resolve('tests/artifacts', name.replace(/[^\w-]/g, '_'))
@@ -58,7 +59,11 @@ export async function createSite(): Promise<SiteHarness> {
           const page = await context.newPage()
           page.on('pageerror', error => errors.push(`${page.url()}: ${String(error)}`))
           page.on('console', (message) => {
-            if (message.type() !== 'error')
+            const type = message.type()
+            if (type !== 'error' && type !== 'warning')
+              return
+            // 测试主动 block 了 service worker，这条是 harness 的产物
+            if (message.text() === 'Service Worker registration blocked by Playwright')
               return
             const url = message.location().url.split('#')[0]
             const status = expected.get(url)
@@ -66,7 +71,11 @@ export async function createSite(): Promise<SiteHarness> {
               expected.delete(url)
               return
             }
-            errors.push(`${url || page.url()}: ${message.text()}`)
+            const entry = `${url || page.url()}: ${message.text()}`
+            if (type === 'error')
+              errors.push(entry)
+            else
+              warnings.push(entry)
           })
           await run({ origin: server.origin, page, expectHttpError: (url, status) => expected.set(url, status) })
         }
@@ -76,18 +85,21 @@ export async function createSite(): Promise<SiteHarness> {
         }
         finally {
           try {
-            if (failed || errors.length > 0) {
+            if (failed || errors.length > 0 || warnings.length > 0) {
               await fs.mkdir(directory, { recursive: true })
               await context.pages()[0]?.screenshot({ path: path.join(directory, 'failure.png'), timeout: 5000 }).catch(() => {})
               t.diagnostic(`Failure artifacts: ${directory}`)
               t.diagnostic(JSON.stringify(errors))
+              t.diagnostic(JSON.stringify(warnings))
             }
           }
           finally {
             await context.close()
           }
-          if (!failed)
+          if (!failed) {
             assert.deepEqual(errors, [], 'Unexpected browser errors')
+            assert.deepEqual(warnings, [], 'Unexpected browser warnings')
+          }
         }
       })
     },

@@ -34,7 +34,10 @@ export default defineConfig(({ command, isSsrBuild }) => ({
     // vue 官方插件，用来解析 sfc
     Vue({
       include: [/\.vue$/, /\.md$/],
-      features: { optionsAPI: false },
+      features: {
+        optionsAPI: false,
+        prodHydrationMismatchDetails: !!process.env.HYDRATION_DETAILS && !isSsrBuild,
+      },
     }),
     // markdown 编译插件
     Markdown({
