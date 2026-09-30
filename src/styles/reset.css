@@ -1,0 +1,53 @@
+/* Element normalization. Site typography is defined in main.css. */
+*, ::before, ::after {
+  box-sizing: border-box;
+  border: 0 solid #e5e7eb;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+button, input {
+  font: inherit;
+  color: inherit;
+  padding: 0;
+}
+
+button {
+  background: none;
+  cursor: pointer;
+}
+
+hr {
+  border-top-width: 1px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+input::placeholder {
+  color: #9ca3af;
+}
+
+img, svg {
+  display: block;
+}
+
+p, h1, h2, h3, h4, h5, h6, hr {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

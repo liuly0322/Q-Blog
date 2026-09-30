@@ -2,7 +2,7 @@
   "name": "lly_blog",
   "type": "module",
   "version": "1.0.0",
-  "description": "A blog built with Vite, Vue 3, and WindiCSS.",
+  "description": "A blog built with Vite, Vue 3, and UnoCSS.",
   "scripts": {
     "dev": "vite",
     "build": "node build/ssg.ts",
@@ -38,7 +38,6 @@
     "@types/rss": "^0.0.32",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/compiler-sfc": "^3.5.13",
-    "@windicss/plugin-animations": "^1.0.9",
     "aplayer-ts": "^2.6.1",
     "eslint": "^9.18.0",
     "frontmatter": "^0.0.3",
@@ -55,6 +54,7 @@
     "rss": "^1.2.2",
     "terser": "^5.37.0",
     "typescript": "^5.7.3",
+    "unocss": "66.6.7",
     "unplugin-auto-import": "^19.0.0",
     "unplugin-icons": "^22.0.0",
     "unplugin-vue-components": "^28.0.0",
@@ -63,10 +63,8 @@
     "vite-plugin-pages": "^0.32.4",
     "vite-plugin-pwa": "^0.21.1",
     "vite-plugin-vsharp": "^1.9.1",
-    "vite-plugin-windicss": "^1.9.4",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
-    "vue-tsc": "^2.2.0",
-    "windicss": "^3.5.6"
+    "vue-tsc": "^2.2.0"
   }
 }
