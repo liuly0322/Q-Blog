@@ -9,7 +9,7 @@ const { toggleDark } = useDarks()
       <img
         src="/avatar_192.webp"
         alt="liuly"
-        class="rounded-full cursor-pointer"
+        class="rounded-full"
         height="100"
         width="100"
       >

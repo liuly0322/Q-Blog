@@ -41,14 +41,15 @@ if (import.meta.hot)
     <div class="flex">
       <Sidebar
         id="sidebar"
-        class="<lg:fixed <lg:z-3 <lg:right-[-300px] w-[256px] flex-shrink-0 sticky top-20 <lg:top-16 overflow-auto h-full lg:mr-4 duration-300 <lg:bg-hex-fff <lg:dark:bg-hex-1e1e1e"
+        class="w-[256px] flex-shrink-0 sticky top-20 overflow-auto h-full lg:mr-4"
         :class="{ 'sidebar-open': sidebarOpen }"
         style="max-height: calc(100vh - 80px)"
       />
       <main class="flex-grow min-w-0 pb-10 text-center text-gray-700 dark:text-gray-200">
         <router-view />
         <div
-          class="lg:hidden mdui-overlay"
+          id="mdui-overlay"
+          class="lg:hidden"
           :class="{ 'mdui-overlay-show': sidebarOpen }"
           @click="sidebarOpen = false"
         />
@@ -60,7 +61,43 @@ if (import.meta.hot)
 <style>
 @media (max-width: 1023.9px) {
   #sidebar {
+    background-color: #fff;
     max-height: calc(100vh - 64px) !important;
+    position: fixed;
+    right: 0;
+    top: 64px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 3;
+  }
+
+  html.dark #sidebar {
+    background-color: #1e1e1e;
+  }
+
+  #sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+
+  #mdui-overlay {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    width: 5000px;
+    height: 5000px;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.4);
+    backface-visibility: hidden;
+    display: none;
+    opacity: 0;
+    transition-duration: 0.3s;
+    transition-property: opacity, visibility;
+    will-change: opacity;
+  }
+
+  #mdui-overlay.mdui-overlay-show {
+    display: unset;
+    opacity: 1;
   }
 }
 </style>
