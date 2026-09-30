@@ -2,17 +2,17 @@ import { resolve } from 'node:path'
 import Vue from '@vitejs/plugin-vue'
 import mdLinkAttrPlugin from 'markdown-it-link-attributes'
 import { visualizer } from 'rollup-plugin-visualizer'
+import UnoCSS from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
 import Components from 'unplugin-vue-components/vite'
 import Markdown from 'unplugin-vue-markdown/vite'
 import { defineConfig } from 'vite'
-import Pages from 'vite-plugin-pages'
 
+import Pages from 'vite-plugin-pages'
 import { VitePWA } from 'vite-plugin-pwa'
 import vsharp from 'vite-plugin-vsharp'
-import Windicss from 'vite-plugin-windicss'
 import BuildPosts from './build/buildPosts'
 import { getCurrentSeason, getCurrentYear } from './src/utils/date'
 
@@ -57,10 +57,7 @@ export default defineConfig(({ command, isSsrBuild }) => ({
     Pages({
       extensions: ['vue', 'md'],
     }),
-    // windicss 插件
-    Windicss({
-      safelist: markdownWrapperClasses,
-    }),
+    UnoCSS(),
     // https://icones.netlify.app/
     Icons({
       autoInstall: true,

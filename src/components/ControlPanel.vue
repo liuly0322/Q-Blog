@@ -18,13 +18,13 @@ const { toggleDark } = useDarks()
     <p class="mt-2 mb-6">愛の形骸<br>追う絵 覆う手を</p>
     <div class="flex justify-around my-4">
       <router-link to="/archive" class="flex flex-col items-center hover:text-hex-42b883">
-        <p class="text-[11px]">
+        <p class="text-[11px] leading-none">
           POSTS
         </p>
         <p>{{ summary.length }}</p>
       </router-link>
       <router-link to="/tags" class="flex flex-col items-center hover:text-hex-42b883">
-        <p class="text-[11px]">
+        <p class="text-[11px] leading-none">
           TAGS
         </p>
         <p>{{ tagCount.length }}</p>

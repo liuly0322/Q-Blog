@@ -1,11 +1,11 @@
 import { createSiteApp } from './app'
 import nprogress from './modules/nprogress'
 
-import 'virtual:windi-base.css'
-import 'virtual:windi-components.css'
+import './styles/reset.css'
+import 'virtual:uno:components.css'
 
 import './styles/main.css'
-import 'virtual:windi-utilities.css'
+import 'virtual:uno.css'
 
 const root = document.querySelector<HTMLElement>('#app')!
 // Reuse the actual SSR body; do not ship it again in an inline JSON payload.

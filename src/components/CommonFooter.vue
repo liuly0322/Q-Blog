@@ -13,7 +13,7 @@ onMounted(() => {
   <footer class="flex flex-col items-center justify-center pt-8 pb-12 leading-8 border-t-[0.8px] dark:border-white/9">
     <div class="flex items-center">
       <span>© 2021 - {{ footer.year }}</span>
-      <span class="px-2.5 mt-1 animate-heartBeat animate-infinite"><IconRedHeart /></span>
+      <span class="px-2.5 mt-1 animate-heart-beat animate-duration-1000 animate-count-infinite"><IconRedHeart /></span>
       <span>{{ footer.season }}</span>
     </div>
     <p>
