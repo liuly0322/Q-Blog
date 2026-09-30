@@ -66,8 +66,8 @@ if (import.meta.hot)
     position: fixed;
     right: 0;
     top: 64px;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
+    translate: 100% 0;
+    transition: translate 0.3s ease;
     z-index: 3;
   }
 
@@ -76,7 +76,7 @@ if (import.meta.hot)
   }
 
   #sidebar.sidebar-open {
-    transform: translateX(0);
+    translate: 0 0;
   }
 
   #mdui-overlay {
