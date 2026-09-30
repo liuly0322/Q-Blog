@@ -51,7 +51,8 @@ watch(() => props.post, async (post, _previous, onCleanup) => {
 const postContentEle = ref<HTMLElement>()
 
 const toc = ref<{ id: string, text: string, tab: number, active: boolean }[]>([])
-function readHeadings(element: HTMLElement) {
+type Heading = Pick<HTMLElement, 'id' | 'textContent' | 'tagName'>
+function readHeadings(element: { querySelectorAll: (selector: string) => ArrayLike<Heading> }) {
   const headings = Array.from(element.querySelectorAll('h2,h3,h4'), heading => ({
     id: heading.id,
     text: heading.textContent ?? '',
@@ -68,8 +69,8 @@ function readHeadings(element: HTMLElement) {
 
 if (import.meta.env.SSR) {
   onServerPrefetch(async () => {
-    const { JSDOM } = await import('jsdom')
-    readHeadings(new JSDOM(data.value).window.document.body)
+    const { parse } = await import('node-html-parser')
+    readHeadings(parse(data.value))
   })
 }
 else {

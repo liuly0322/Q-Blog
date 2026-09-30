@@ -11,19 +11,12 @@ import mdImageSizePlugin from './mdImageSizePlugin'
 
 const SITE_URL = 'https://blog.liuly.moe'
 
+const publicImages = path.join('public', 'images')
+const publicPosts = path.join('public', 'posts')
+
 const descriptionRenderer = markdownIt()
   .use(mdImageSizePlugin(SITE_URL))
-const abstractRenderer = configureMarkdownRenderer(markdownIt({ html: true }))
-
-async function createPostRenderer() {
-  const shiki = await Shiki({
-    themes: {
-      light: 'vitesse-light',
-      dark: 'vitesse-dark',
-    },
-  })
-  return configureMarkdownRenderer(markdownIt({ html: true }).use(shiki))
-}
+const baseRenderer = configureMarkdownRenderer(markdownIt({ html: true }))
 
 function configureMarkdownRenderer(renderer: ReturnType<typeof markdownIt>) {
   return renderer
@@ -38,16 +31,19 @@ function configureMarkdownRenderer(renderer: ReturnType<typeof markdownIt>) {
     .use(mdImageSizePlugin())
 }
 
+async function createPostRenderer() {
+  const shiki = await Shiki({
+    themes: {
+      light: 'vitesse-light',
+      dark: 'vitesse-dark',
+    },
+  })
+  return configureMarkdownRenderer(markdownIt({ html: true }).use(shiki))
+}
+
 let postRendererPromise: ReturnType<typeof createPostRenderer> | undefined
 function getPostRenderer() {
   return postRendererPromise ??= createPostRenderer()
-}
-
-const publicImages = path.join('public', 'images')
-const publicPosts = path.join('public', 'posts')
-
-async function fileExists(dir: string) {
-  return fs.access(dir).then(() => true).catch(() => false)
 }
 
 export default ({ incremental = false }: { incremental?: boolean } = {}) => ({
@@ -174,9 +170,7 @@ async function generateStaticPosts(posts: Post[], incremental: boolean) {
 
 async function generateSiteSummary(posts: Post[], firstPageAbstracts: string[]) {
   const summary = {
-    posts: posts.map((post) => {
-      return Object.fromEntries(Object.entries(post).filter(([k]) => k !== 'content'))
-    }),
+    posts: posts.map(({ title, date, tags, url }) => ({ title, date, tags, url })),
   }
   await fs.writeFile(path.join('src/jsons', 'summary.json'), JSON.stringify(summary))
   await fs.writeFile(path.join('src/jsons', 'firstPageAbstracts.json'), JSON.stringify(firstPageAbstracts))
@@ -187,13 +181,11 @@ async function generatePostAbstracts(abstracts: string[]) {
 }
 
 async function buildPosts(incremental: boolean) {
-  if (!await fileExists(publicImages))
-    await fs.mkdir(publicImages)
-  if (!await fileExists(publicPosts))
-    await fs.mkdir(publicPosts)
+  await fs.mkdir(publicImages, { recursive: true })
+  await fs.mkdir(publicPosts, { recursive: true })
 
   const posts = await collectPostsAndImages()
-  const abstracts = posts.map(post => abstractRenderer.render(truncate(post.content, 100)))
+  const abstracts = posts.map(post => baseRenderer.render(truncate(post.content, 100)))
 
   await Promise.all([
     generateRSS(posts),
