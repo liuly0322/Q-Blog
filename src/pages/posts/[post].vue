@@ -114,7 +114,7 @@ onMounted(() => {
 
 <template>
   <div class="flex items-start">
-    <article class="lg:card px-6 flex-grow min-w-0" data-pagefind-body>
+    <article class="lg:card bg-surface px-6 flex-grow min-w-0" data-pagefind-body>
       <PostHeader :post="currPost" />
       <div v-if="loading" class="post-skeleton-list my-1.6em text-left">
         <template v-for="i in 4" :key="i">

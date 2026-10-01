@@ -40,7 +40,7 @@ watch(isDark, (value) => {
 
 <template>
   <div class="relative">
-    <div ref="vueUtterances" class="min-h-268px relative z-2" />
+    <div ref="vueUtterances" class="min-h-268px relative z-2 bg-surface" />
     <div class="absolute inset-0 flex flex-col items-center justify-center">
       <LineMdLoadingLoop class="text-accent" />
       <p class="mt-4">
@@ -49,9 +49,3 @@ watch(isDark, (value) => {
     </div>
   </div>
 </template>
-
-<style scoped>
-:deep(.utterances) {
-  background: var(--surface);
-}
-</style>

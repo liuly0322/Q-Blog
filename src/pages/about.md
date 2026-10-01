@@ -2,7 +2,7 @@
 title: 关于
 ---
 
-<div class="lg:card p-6 lg:px-12 lg:py-8">
+<div class="bg-surface lg:card p-6 lg:px-12 lg:py-8">
 
 ## 名字
 

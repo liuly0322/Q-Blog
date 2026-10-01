@@ -23,7 +23,7 @@ const toc = computed(() => groupedSummary.value.map(([year]) => ({
 
 <template>
   <div class="flex items-start">
-    <div class="lg:card px-6 py-6 flex-grow min-w-0">
+    <div class="lg:card bg-surface px-6 py-6 flex-grow min-w-0">
       <div class="archive-content m-auto text-left">
         <section v-for="[year, posts] in groupedSummary" :key="year" class="archive-year-group">
           <h2 :id="`archive-${year}`" class="archive-year mb-2 border-b text-xl">
