@@ -42,7 +42,7 @@ watch(isDark, (value) => {
   <div class="relative">
     <div ref="vueUtterances" class="min-h-268px relative z-2" />
     <div class="absolute inset-0 flex flex-col items-center justify-center">
-      <LineMdLoadingLoop style="color: #18a058;" />
+      <LineMdLoadingLoop class="text-hex-18a058" />
       <p class="mt-4">
         评论加载中...
       </p>

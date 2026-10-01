@@ -13,7 +13,7 @@ withDefaults(defineProps<{
 <template>
   <div
     v-bind="$attrs"
-    class="blog-tag"
+    class="blog-tag relative box-border inline-flex items-center leading-none cursor-pointer"
     :class="`blog-tag--${size}`"
   >
     <span class="blog-tag__content"><slot /></span>
@@ -29,19 +29,13 @@ withDefaults(defineProps<{
   --blog-tag-text-color: #2080f0;
 
   border-radius: calc(var(--blog-tag-height) / 2);
-  position: relative;
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
   flex-wrap: nowrap;
   height: var(--blog-tag-height);
   padding: 0 calc(var(--blog-tag-height) / 3);
   color: var(--blog-tag-text-color);
   background-color: var(--blog-tag-color);
   font-size: var(--blog-tag-font-size);
-  line-height: 1;
   white-space: nowrap;
-  cursor: pointer;
   transition:
     border-color 0.3s cubic-bezier(.4, 0, .2, 1),
     background-color 0.3s cubic-bezier(.4, 0, .2, 1),

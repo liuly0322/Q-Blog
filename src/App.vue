@@ -49,7 +49,7 @@ if (import.meta.hot)
         <router-view />
         <div
           id="mdui-overlay"
-          class="lg:hidden"
+          class="fixed z-2 hidden lg:hidden"
           :class="{ 'mdui-overlay-show': sidebarOpen }"
           @click="sidebarOpen = false"
         />
@@ -80,15 +80,12 @@ if (import.meta.hot)
   }
 
   #mdui-overlay {
-    position: fixed;
     top: 64px;
     left: 0;
     width: 5000px;
     height: 5000px;
-    z-index: 2;
     background: rgba(0, 0, 0, 0.4);
     backface-visibility: hidden;
-    display: none;
     opacity: 0;
     transition-duration: 0.3s;
     transition-property: opacity, visibility;

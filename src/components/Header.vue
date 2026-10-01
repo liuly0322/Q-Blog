@@ -43,7 +43,7 @@ const navOptions = [
         v-for="option in navOptions"
         :key="option.to"
         class="block mx-3 hover:text-hex-42b883"
-        :style="routePath.path.match(option.match) ? 'color: #42b883' : ''"
+        :class="{ 'text-hex-42b883': routePath.path.match(option.match) }"
         :to="option.to"
       >
         {{ option.label }}

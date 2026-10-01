@@ -16,17 +16,17 @@ const groupedSummary = computed(() => {
 </script>
 
 <template>
-  <div class="archive-content text-left">
+  <div class="archive-content m-auto text-left">
     <section v-for="[year, posts] in groupedSummary" :key="year" class="archive-year-group">
-      <h2 class="archive-year">
+      <h2 class="archive-year mb-2 border-b text-xl text-gray-700 dark:text-gray-200">
         {{ year }}
       </h2>
       <router-link
         v-for="post in posts" :key="post.url"
-        class="archive-item flex items-center" :to="`/posts/${post.url}`"
+        class="archive-item border-b flex items-center hover:text-hex-42b883" :to="`/posts/${post.url}`"
       >
         <time class="archive-date flex-shrink-0">{{ post.date.slice(5, 10) }}</time>
-        <span class="archive-title">{{ post.title }}</span>
+        <span>{{ post.title }}</span>
       </router-link>
     </section>
   </div>
@@ -35,7 +35,6 @@ const groupedSummary = computed(() => {
 <style scoped>
 .archive-content {
   width: min(calc(100% - 3.5rem), 700px);
-  margin: 0 auto;
   padding-top: 1.5rem;
 }
 
@@ -44,23 +43,16 @@ const groupedSummary = computed(() => {
 }
 
 .archive-year {
-  margin: 0 0 0.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(107, 114, 128, 0.25);
-  color: #374151;
-  font-size: 1.25rem;
+  border-bottom-color: rgba(107, 114, 128, 0.25);
   font-weight: 600;
+  line-height: 1.5;
 }
 
 .archive-item {
   min-height: 3.25rem;
-  border-bottom: 1px solid rgba(107, 114, 128, 0.14);
-  color: inherit;
+  border-bottom-color: rgba(107, 114, 128, 0.14);
   transition: color 0.2s;
-}
-
-.archive-item:hover {
-  color: #42b883;
 }
 
 .archive-date {
@@ -69,12 +61,7 @@ const groupedSummary = computed(() => {
   font-size: 0.8rem;
 }
 
-.archive-title {
-  line-height: 1.5;
-}
-
 html.dark .archive-year {
-  color: #e5e7eb;
   border-color: rgba(255, 255, 255, 0.16);
 }
 

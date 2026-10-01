@@ -79,7 +79,7 @@ function isInView(el: HTMLElement) {
 
         <div>
           <span
-            class="rating-stars"
+            class="rating-stars inline-block leading-none"
             role="img"
             :aria-label="`评分 ${anime.rate} / 10`"
             :style="{ '--rating': `${anime.rate * 10}%` }"
@@ -91,16 +91,14 @@ function isInView(el: HTMLElement) {
     </div>
   </div>
   <div v-if="loading" ref="loadingElement" class="pt-5 flex justify-center">
-    <LineMdLoadingLoop style="color: #18a058;" />
+    <LineMdLoadingLoop class="text-hex-18a058" />
   </div>
 </template>
 
 <style scoped>
 .rating-stars {
-  display: inline-block;
   font-size: 1.6em;
   color: transparent;
-  line-height: 1;
   letter-spacing: 0.1em;
   background: linear-gradient(to right, #f59e0b var(--rating), #d1d5db var(--rating));
   background-clip: text;

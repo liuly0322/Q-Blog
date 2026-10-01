@@ -130,8 +130,8 @@ onMounted(() => {
       <PostHeader :post="currPost" />
       <div v-if="loading" class="post-skeleton-list my-1.6em text-left">
         <template v-for="i in 4" :key="i">
-          <div v-for="line in (i % 3) + 1" :key="`skeleton-${i}-${line}`" class="post-skeleton-line" />
-          <div class="post-skeleton-line" :style="{ width: `${30 + i * 12}%` }" />
+          <div v-for="line in (i % 3) + 1" :key="`skeleton-${i}-${line}`" class="post-skeleton-line w-full" />
+          <div class="post-skeleton-line w-full" :style="{ width: `${30 + i * 12}%` }" />
         </template>
       </div>
       <div v-show="!loading">
@@ -152,7 +152,6 @@ onMounted(() => {
 
 <style scoped>
 .post-skeleton-line {
-  width: 100%;
   height: 14px;
   margin-bottom: 7px;
   background: linear-gradient(
