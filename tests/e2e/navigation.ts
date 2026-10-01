@@ -143,7 +143,9 @@ export function registerNavigation(harness: SiteHarness) {
     await expectAnchor(page, articleWithToc.anchor)
     const relatedUrl = '/posts/github-actions-ci' as const
     const relatedArticle = page.locator(`article a[href="${relatedUrl}"]`)
-    await relatedArticle.click()
+    // Leave from the heading: scrolling the footer link into view would save
+    // that reading position, which must take precedence over the URL hash.
+    await relatedArticle.evaluate((link: HTMLAnchorElement) => link.click())
     await page.waitForURL(`**${relatedUrl}`)
     await expectArticleSnippet(page, relatedUrl)
     await page.goBack()

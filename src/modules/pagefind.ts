@@ -73,17 +73,14 @@ export default (router: Router) => {
   // Capture also handles dialog replacements made by the official components.
   modal.addEventListener('close', restoreFocus, { ...options, capture: true })
   modal.addEventListener('click', navigateToResult, options)
-  const removeAfterEach = router.afterEach((to, from, failure) => {
-    if (!failure && to.fullPath !== from.fullPath)
-      closeForNavigation()
-  })
+  const removeBeforeEach = router.beforeEach(closeForNavigation)
 
   input.placeholder = '搜索...'
   input.disabled = false
 
   if (import.meta.hot) {
     import.meta.hot.dispose(() => {
-      removeAfterEach()
+      removeBeforeEach()
       events.abort()
       modal.close()
       modal.remove()

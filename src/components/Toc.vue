@@ -32,10 +32,7 @@ onMounted(() => {
 
 onUnmounted(() => observer.disconnect())
 
-function scrollIntoView(id: string) {
-  const element = document.getElementById(id)
-  element?.scrollIntoView({ behavior: 'smooth' })
-}
+const router = useRouter()
 </script>
 
 <template>
@@ -51,7 +48,7 @@ function scrollIntoView(id: string) {
         class="hover:text-accent pl-[1.5ch]"
         :class="{ 'text-accent': activeIds.has(item.id) }"
         :style="{ 'margin-left': `${item.tab * 1.5}ch` }"
-        @click="scrollIntoView(item.id)"
+        @click="router.push({ hash: `#${decodeURIComponent(item.id)}` })"
       >
         {{ item.text }}
       </li>

@@ -1,7 +1,7 @@
 import type { SiteHarness } from '../helpers/site.ts'
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
-import { expectArticleSnippet, openHydratedPage } from '../helpers/site.ts'
+import { expectAnchor, expectArticleSnippet, openHydratedPage } from '../helpers/site.ts'
 
 async function searchAsset(extension: string) {
   const files = await fs.readdir('dist/assets')
@@ -66,6 +66,55 @@ export function registerSearch(harness: SiteHarness) {
     finally {
       release()
     }
+  })
+
+  harness.test('search jumps to different heading hashes within the current article', async (site) => {
+    const { page, origin } = site
+    const path = '/posts/sakurada-reset-map'
+    await openHydratedPage(site, path, '[data-post-body]')
+    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLInputElement).disabled)
+    await page.evaluate(() => document.documentElement.dataset.searchTest = 'same-document')
+    const input = page.getByRole('textbox', { name: '搜索文章' })
+    const modal = page.getByRole('dialog', { includeHidden: true })
+    const hashes: string[] = []
+    for (const [query, heading] of [['GeoJSON', '中间层：GeoJSON'], ['初版渲染图', '后端：初版渲染图']]) {
+      await input.click()
+      await modal.getByRole('searchbox').fill(query)
+      const result = modal.locator(`a[href^="${path}.html#"]`).filter({ hasText: heading })
+      await result.waitFor({ state: 'visible' })
+      const hash = new URL((await result.getAttribute('href'))!, origin).hash
+      assert(!hashes.includes(hash), 'The second search must select a different heading')
+      hashes.push(hash)
+      await result.click()
+      await page.waitForURL(`${origin}${path}${hash}`)
+      await modal.waitFor({ state: 'hidden' })
+      await expectAnchor(page, await page.evaluate(hash => `#${CSS.escape(hash.slice(1))}`, hash))
+      await page.waitForFunction(() => document.activeElement !== document.querySelector('#site-search'))
+      assert.equal(await modal.getByRole('searchbox', { includeHidden: true }).inputValue(), '')
+      assert.equal(await page.evaluate(() => document.documentElement.dataset.searchTest), 'same-document')
+    }
+    await page.goBack()
+    await page.waitForURL(`${origin}${path}${hashes[0]}`)
+    await expectAnchor(page, await page.evaluate(hash => `#${CSS.escape(hash.slice(1))}`, hashes[0]))
+    await page.goForward()
+    await page.waitForURL(`${origin}${path}${hashes[1]}`)
+    await expectAnchor(page, await page.evaluate(hash => `#${CSS.escape(hash.slice(1))}`, hashes[1]))
+  })
+
+  harness.test('search selecting the current URL still dismisses the modal', async (site) => {
+    const { page, origin } = site
+    await openHydratedPage(site, '/posts/hello-world', '#toc-feature')
+    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLInputElement).disabled)
+    await page.getByRole('textbox', { name: '搜索文章' }).click()
+    const modal = page.getByRole('dialog', { includeHidden: true })
+    await modal.getByRole('searchbox').fill('Hello New World')
+    await modal.locator('a[href="/posts/hello-world.html"]').first().click()
+    await modal.waitFor({ state: 'hidden', timeout: 5000 })
+    assert.equal(page.url(), `${origin}/posts/hello-world`)
+    await page.waitForFunction(() => document.activeElement !== document.querySelector('#site-search'))
+    // The dialog close event resets the query asynchronously after it hides.
+    await page.waitForFunction(() => document.querySelector<HTMLInputElement>('dialog input[type="search"]')?.value === '', undefined, { timeout: 5000 })
+    assert.equal(await modal.getByRole('searchbox', { includeHidden: true }).inputValue(), '')
   })
 
   harness.test('Chinese modal search closes, restores focus and reopens with the keyboard', async (site) => {

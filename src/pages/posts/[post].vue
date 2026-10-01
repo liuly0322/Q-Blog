@@ -78,9 +78,19 @@ else {
     readHeadings(body)
 }
 
+const navigationCounter = ref(0)
+onMounted(() => {
+  const removeAfterEach = useRouter().afterEach(() => {
+    navigationCounter.value++
+  })
+  onUnmounted(() => {
+    removeAfterEach()
+  })
+})
+
 onMounted(() => {
   watch(() => props.post, () => window.scrollTo({ left: 0, top: 0 }), { immediate: true })
-  watch(data, async (_, _previous, onCleanup) => {
+  watch([data, navigationCounter], async (_, _previous, onCleanup) => {
     // The data is not ready yet
     if (loading.value)
       return
@@ -101,7 +111,9 @@ onMounted(() => {
     if (cancelled)
       return
 
-    restorePost()
+    if (restorePost())
+      return
+
     if (window.location.hash) {
       try {
         document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ behavior: 'smooth' })
