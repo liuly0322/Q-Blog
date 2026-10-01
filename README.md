@@ -50,6 +50,8 @@ pnpm build # compile to `dist` folder
 pnpm preview # preview the production build
 ```
 
+Run `pnpm build` first if you want to test the search feature in development.
+
 ## Credits
 
 - [tov-template](https://github.com/dishait/tov-template)

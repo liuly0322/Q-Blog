@@ -7,6 +7,7 @@ import { registerImageZoom } from './imageZoom.ts'
 import { registerNavigation } from './navigation.ts'
 import { registerPlatform } from './platform.ts'
 import { registerRoutes } from './routes.ts'
+import { registerSearch } from './search.ts'
 import { registerTitles } from './titles.ts'
 import { registerToc } from './toc.ts'
 
@@ -18,6 +19,7 @@ const suites = {
   titles: registerTitles,
   platform: registerPlatform,
   imageZoom: registerImageZoom,
+  search: registerSearch,
 }
 const site = await createSite()
 for (const register of Object.values(suites)) register(site)

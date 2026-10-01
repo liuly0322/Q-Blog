@@ -1,6 +1,6 @@
 import type { OutgoingHttpHeaders } from 'node:http'
 import type { AddressInfo } from 'node:net'
-import type { Browser, BrowserContext } from 'playwright'
+import type { Browser, BrowserContext, Page, Request } from 'playwright'
 import fs from 'node:fs/promises'
 import http from 'node:http'
 import path from 'node:path'
@@ -13,6 +13,8 @@ export async function launchBrowser(): Promise<Browser> {
     chromium,
   } = await import(process.env.Q_BLOG_PLAYWRIGHT || 'playwright')
   return chromium.launch({
+    // Avoid headless-shell's modifier-click popup race: microsoft/playwright#42142.
+    channel: 'chromium',
     headless: true,
   })
 }
@@ -84,4 +86,34 @@ export async function mockExternalServices(context: BrowserContext) {
       body: route.request().url().includes('meting-api') ? '[]' : '',
     })
   })
+}
+
+// A page CDP session can see a worker's request start without its completion
+// event. Playwright tracks requests across that handoff, so use it for idleness.
+export function trackPendingRequests(page: Page, origin: string) {
+  const pending = new Set<Request>()
+  page.on('request', (request) => {
+    if (new URL(request.url()).origin === origin)
+      pending.add(request)
+  })
+  page.on('requestfinished', request => pending.delete(request))
+  page.on('requestfailed', request => pending.delete(request))
+  return pending
+}
+
+export async function waitForDownloads(pending: ReadonlySet<Request>) {
+  const started = Date.now()
+  let quietSince: number | undefined
+  while (Date.now() - started < 25_000) {
+    if (pending.size === 0) {
+      quietSince ??= Date.now()
+      if (Date.now() - quietSince >= 500)
+        return
+    }
+    else {
+      quietSince = undefined
+    }
+    await new Promise(resolve => setTimeout(resolve, 100))
+  }
+  throw new Error(`Downloads did not settle: ${[...pending].map(request => request.url()).join(', ')}`)
 }

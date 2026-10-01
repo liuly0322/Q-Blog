@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
-import { launchBrowser, mockExternalServices, startServer } from '../../helpers/browser-utils.ts'
+import { launchBrowser, mockExternalServices, startServer, trackPendingRequests, waitForDownloads } from '../../helpers/browser-utils.ts'
 
 assert(process.argv[2], 'Usage: node benchmark-home-ssg.ts BASELINE_DIST [OUTPUT_JSON] [RUNS]')
 const outputFile = process.argv[3] || '/tmp/q-blog-home-ssg/results.json'
@@ -34,14 +34,13 @@ try {
       await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 })
 
       const requestMap = new Map()
-      const pending = new Set()
+      const pending = trackPendingRequests(page, origin)
       let started
       let documents = 0
       const errors = []
       cdp.on('Network.requestWillBeSent', (request) => {
         if (!request.request.url.startsWith(origin))
           return
-        pending.add(request.requestId)
         requestMap.set(request.requestId, {
           url: request.request.url,
           type: request.type,
@@ -59,12 +58,10 @@ try {
           request.bytes += response.encodedDataLength
       })
       cdp.on('Network.loadingFinished', (response) => {
-        pending.delete(response.requestId)
         const request = requestMap.get(response.requestId)
         if (request)
           request.bytes = response.encodedDataLength
       })
-      cdp.on('Network.loadingFailed', response => pending.delete(response.requestId))
       page.on('pageerror', error => errors.push(String(error)))
 
       await context.addInitScript(() => {
@@ -128,20 +125,9 @@ try {
       const visible = await page.evaluate(() => window.homeBench)
       assert(visible.content > 0, 'Homepage article excerpt never became visible')
 
+      await page.waitForFunction(() => window.homeBench?.hydration > 0, undefined, { timeout: 30_000 })
       // Wait for eager homepage images and the SPA's page.json request to settle.
-      const quietStarted = Date.now()
-      let quietSince
-      while (Date.now() - quietStarted < 25000) {
-        if (pending.size === 0) {
-          quietSince ??= Date.now()
-          if (Date.now() - quietSince >= 500)
-            break
-        }
-        else {
-          quietSince = undefined
-        }
-        await new Promise(resolve => setTimeout(resolve, 100))
-      }
+      await waitForDownloads(pending)
 
       const timings = await page.evaluate(() => window.homeBench)
       const metrics = await cdp.send('Performance.getMetrics')

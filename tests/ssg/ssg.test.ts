@@ -4,8 +4,30 @@ import path from 'node:path'
 // Use Node's built-in runner; this project does not depend on Vitest.
 // eslint-disable-next-line test/no-import-node-test
 import test from 'node:test'
+import { gunzipSync } from 'node:zlib'
 
 const htmlEscapes: Record<string, string> = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': '\'' }
+
+test('Pagefind indexes each article once with its title and excludes site chrome', async () => {
+  const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8'))
+  await fs.access('dist/pagefind/pagefind.js')
+  const fragments = await fs.readdir('dist/pagefind/fragment')
+  assert.equal(fragments.length, posts.length)
+  const urls = new Set<string>()
+  for (const file of fragments) {
+    const raw = gunzipSync(await fs.readFile(path.join('dist/pagefind/fragment', file))).toString()
+    assert(raw.startsWith('pagefind_dcd'))
+    const fragment = JSON.parse(raw.slice('pagefind_dcd'.length))
+    const post = posts.find(post => fragment.url === `/posts/${encodeURIComponent(post.url)}.html`)
+    assert(post, `Unexpected search result: ${fragment.url}`)
+    assert.equal(fragment.meta.title, post.title)
+    const content = fragment.content.replace(/\u200B/g, '')
+    for (const ignored of ['愛の形骸', '追う絵 覆う手を', '上一篇：', '下一篇：', '评论加载中...'])
+      assert(!content.includes(ignored), `${fragment.url}: indexed ${ignored}`)
+    urls.add(fragment.url)
+  }
+  assert.equal(urls.size, posts.length)
+})
 
 function decode(value: string) {
   return value.replace(/&(?:amp|lt|gt|quot|#39);/g, entity => htmlEscapes[entity])

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import process from 'node:process'
-import { launchBrowser, mockExternalServices, startServer } from '../../helpers/browser-utils.ts'
+import { launchBrowser, mockExternalServices, startServer, trackPendingRequests, waitForDownloads } from '../../helpers/browser-utils.ts'
 
 assert(process.argv[2], 'Usage: node scripts/benchmark-ssg.ts BASELINE_DIST [OUTPUT_JSON]')
 const runs = Number(process.env.BENCH_RUNS || 3)
@@ -36,14 +36,13 @@ try {
           rate: 4,
         })
         const requestMap = new Map()
-        const pending = new Set()
+        const pending = trackPendingRequests(page, origin)
         let started
         let documents = 0
         const errors = []
         cdp.on('Network.requestWillBeSent', (r) => {
           if (!r.request.url.startsWith(origin))
             return
-          pending.add(r.requestId)
           requestMap.set(r.requestId, {
             url: r.request.url,
             type: r.type,
@@ -61,12 +60,10 @@ try {
             request.bytes += r.encodedDataLength
         })
         cdp.on('Network.loadingFinished', (r) => {
-          pending.delete(r.requestId)
           const q = requestMap.get(r.requestId)
           if (q)
             q.bytes = r.encodedDataLength
         })
-        cdp.on('Network.loadingFailed', r => pending.delete(r.requestId))
         page.on('pageerror', e => errors.push(String(e)))
         await context.addInitScript(() => {
           window.bench = {
@@ -130,13 +127,14 @@ try {
           catch {}
           await new Promise(r => setTimeout(r, 100))
         }
+        await page.waitForFunction(() => window.bench?.hydration > 0, undefined, { timeout: 30_000 })
         await page.waitForTimeout(4000)
+        await waitForDownloads(pending)
         const timings = await page.evaluate(() => window.bench)
         const metrics = await cdp.send('Performance.getMetrics')
         assert(timings.hydration > 0, 'Vue app never hydrated')
         assert.deepEqual(errors, [])
         assert(timings.article > 0, 'Article never became visible')
-        assert.equal(pending.size, 0, 'Observation window ended with downloads pending')
         const offset = timings.origin - started
         const requests = [...requestMap.values()]
         const criticalRequests = requests.filter(request => request.startedAt <= timings.origin + timings.hydration)
