@@ -45,15 +45,11 @@ if (import.meta.hot)
         :class="{ 'sidebar-open': sidebarOpen }"
         style="max-height: calc(100vh - 80px)"
       />
-      <div class="flex-grow min-w-0 text-center">
-        <div class="flex flex-col" style="min-height: calc(100vh - 80px)">
-          <main class="flex-1">
-            <router-view />
-          </main>
-          <CommonFooter />
-        </div>
-      </div>
+      <main class="flex-grow min-w-0 text-center">
+        <router-view />
+      </main>
     </div>
+    <CommonFooter />
     <div
       id="mdui-overlay"
       class="fixed z-2 hidden lg:hidden"
