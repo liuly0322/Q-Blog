@@ -13,7 +13,7 @@ withDefaults(defineProps<{
 <template>
   <div
     v-bind="$attrs"
-    class="blog-tag relative box-border inline-flex items-center leading-none cursor-pointer"
+    class="blog-tag box-border inline-flex items-center leading-none cursor-pointer"
     :class="`blog-tag--${size}`"
   >
     <span class="blog-tag__content"><slot /></span>
@@ -24,32 +24,20 @@ withDefaults(defineProps<{
 .blog-tag {
   --blog-tag-font-size: 14px;
   --blog-tag-height: 28px;
-  --blog-tag-border: rgb(32 128 240 / 30%);
-  --blog-tag-color: rgb(32 128 240 / 10%);
-  --blog-tag-text-color: #2080f0;
 
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
   border-radius: calc(var(--blog-tag-height) / 2);
   flex-wrap: nowrap;
   height: var(--blog-tag-height);
-  padding: 0 calc(var(--blog-tag-height) / 3);
-  color: var(--blog-tag-text-color);
-  background-color: var(--blog-tag-color);
+  padding: 0 calc(var(--blog-tag-height) / 3 - 1px);
+  color: var(--accent);
+  background-color: color-mix(in srgb, var(--accent) 5%, transparent);
   font-size: var(--blog-tag-font-size);
   white-space: nowrap;
-  transition:
-    border-color 0.3s cubic-bezier(.4, 0, .2, 1),
-    background-color 0.3s cubic-bezier(.4, 0, .2, 1),
-    color 0.3s cubic-bezier(.4, 0, .2, 1);
 }
 
-.blog-tag::after {
-  position: absolute;
-  inset: 0;
-  border: 1px solid var(--blog-tag-border);
-  border-radius: inherit;
-  pointer-events: none;
-  content: '';
-  transition: border-color 0.3s cubic-bezier(.4, 0, .2, 1);
+.blog-tag:hover {
+  background-color: color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .blog-tag--small {
@@ -59,11 +47,5 @@ withDefaults(defineProps<{
 
 .blog-tag--large {
   --blog-tag-height: 34px;
-}
-
-html.dark .blog-tag {
-  --blog-tag-border: rgb(112 192 232 / 30%);
-  --blog-tag-color: #00000000;
-  --blog-tag-text-color: #70c0e8;
 }
 </style>

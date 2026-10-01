@@ -43,14 +43,12 @@ function isInView(el: HTMLElement) {
 </script>
 
 <template>
-  <h1 class="text-3xl font-bold">
-    动画列表
-  </h1>
-  <p class="mt-5">
-    我在 <a href="https://bangumi.tv/user/undef_baka" class="blue-link" target="_blank" rel="noopener noreferrer">bangumi</a>
-    上对部分看过动画的评分与短评（Optional）。
-  </p>
-  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-5">
+  <SectionDivider>
+    <h1>
+      动画列表（<a href="https://bangumi.tv/user/undef_baka" class="text-accent underline" target="_blank" rel="noopener noreferrer">bangumi</a>）
+    </h1>
+  </SectionDivider>
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
     <div
       v-for="anime in animeList" :key="anime.subject.id"
       class="flex items-center card p-3"
@@ -62,12 +60,12 @@ function isInView(el: HTMLElement) {
       <div class="h-full ml-2 flex flex-col justify-between flex-grow text-sm">
         <a
           :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer"
-          class="text-lg blue-link font-bold hover:underline"
+          class="text-lg text-accent font-bold hover:underline"
         >
           {{ anime.subject.name_cn || anime.subject.name }}
         </a>
 
-        <div class="cursor-pointer line-clamp-2 text-gray-500 my-2 whitespace-pre-line" @click="lineClamp">
+        <div class="cursor-pointer line-clamp-2 text-muted my-2 whitespace-pre-line" @click="lineClamp">
           {{ anime.subject.short_summary }}
         </div>
 
@@ -91,7 +89,7 @@ function isInView(el: HTMLElement) {
     </div>
   </div>
   <div v-if="loading" ref="loadingElement" class="pt-5 flex justify-center">
-    <LineMdLoadingLoop class="text-hex-18a058" />
+    <LineMdLoadingLoop class="text-accent" />
   </div>
 </template>
 
@@ -100,7 +98,7 @@ function isInView(el: HTMLElement) {
   font-size: 1.6em;
   color: transparent;
   letter-spacing: 0.1em;
-  background: linear-gradient(to right, #f59e0b var(--rating), #d1d5db var(--rating));
+  background: linear-gradient(to right, var(--accent) var(--rating), var(--border) var(--rating));
   background-clip: text;
   -webkit-background-clip: text;
 }

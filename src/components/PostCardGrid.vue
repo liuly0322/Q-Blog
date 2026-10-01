@@ -8,7 +8,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <SectionDivider :title="props.title" />
+  <SectionDivider>{{ props.title }}</SectionDivider>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <div
       v-for="post in props.summary" :key="post.url"
@@ -17,12 +17,12 @@ const props = defineProps<{
       <h2 class="font-medium text-base mb-4 mt-2">
         <router-link
           :to="`/posts/${encodeURIComponent(post.url)}`"
-          class="transition-colors hover:text-hex-42b883"
+          class="transition-colors hover:text-accent"
         >
           {{ post.title }}
         </router-link>
       </h2>
-      <div class="text-xs text-gray-500">
+      <div class="text-xs text-muted">
         {{ post.date }}
       </div>
       <div class="mt-2 mx-2">

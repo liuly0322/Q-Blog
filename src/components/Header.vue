@@ -27,8 +27,8 @@ const navOptions = [
 </script>
 
 <template>
-  <header class="sticky top-0 bg-white/70 dark:bg-hex-1e1e1e/70 z-3 flex items-center justify-between border-b-[0.8px] dark:border-white/9 p-2" style="-webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px)">
-    <router-link to="/" class="flex items-center hover:text-hex-42b883">
+  <header class="sticky top-0 z-3 flex items-center justify-between border-b-[0.8px] p-2" style="background: color-mix(in srgb, var(--surface) 70%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px)">
+    <router-link to="/" class="flex items-center hover:text-accent">
       <img
         src="/avatar_192.webp"
         alt="liuly"
@@ -42,8 +42,8 @@ const navOptions = [
       <RouterLink
         v-for="option in navOptions"
         :key="option.to"
-        class="block mx-3 hover:text-hex-42b883"
-        :class="{ 'text-hex-42b883': routePath.path.match(option.match) }"
+        class="block mx-3 hover:text-accent"
+        :class="{ 'text-accent': routePath.path.match(option.match) }"
         :to="option.to"
       >
         {{ option.label }}

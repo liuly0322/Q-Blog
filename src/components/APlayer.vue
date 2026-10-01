@@ -25,7 +25,7 @@ onMounted(async () => {
   instance = createPlayer()
   instance.init({
     container: playerRef.value,
-    theme: 'rgba(255,255,255,0.2)',
+    theme: 'var(--accent)',
     preload: 'none',
     lrcType: 3,
     listFolded: true,
@@ -42,19 +42,19 @@ onBeforeUnmount(() => {
 <template>
   <div ref="playerRef" />
   <div v-if="!playerReady" class="card m-1 overflow-hidden pointer-events-none" aria-hidden="true">
-    <div class="player-pic float-left grid place-items-center bg-gray-100 dark:bg-hex-292929">
+    <div class="player-pic float-left grid place-items-center bg-inset">
       <span class="text-2xl">♪</span>
     </div>
 
     <div class="player-info box-border">
       <div class="player-music">
-        <span class="skeleton block rounded-full h-[7px] w-[72%] bg-gray-200 dark:bg-hex-383838" />
-        <span class="skeleton block rounded-full mt-2 h-[5px] w-[42%] bg-gray-100 dark:bg-hex-303030" />
+        <span class="skeleton block rounded-full h-[7px] w-[72%]" />
+        <span class="skeleton block rounded-full mt-2 h-[5px] w-[42%]" />
       </div>
       <div class="player-lrc" />
       <div class="flex">
         <div class="player-bar flex-1">
-          <div class="skeleton block rounded-full h-[2px] w-[72%] bg-gray-200 dark:bg-hex-383838" />
+          <div class="skeleton block rounded-full h-[2px] w-[72%]" />
         </div>
         <div class="player-time relative flex items-center">
           <span class="text-[14px] leading-none mr-1">🔈</span>
@@ -96,17 +96,13 @@ onBeforeUnmount(() => {
   bottom: 4px;
   height: 17px;
   padding-left: 7px;
-  color: #999;
+  color: var(--muted);
 }
 
 .skeleton {
-  background-image: linear-gradient(90deg, transparent 25%, #ffffffcc 50%, transparent 75%);
+  background-image: linear-gradient(90deg, var(--border) 25%, var(--surface) 50%, var(--border) 75%);
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.6s ease-in-out infinite;
-}
-
-html.dark .skeleton {
-  background-image: linear-gradient(90deg, transparent 25%, #ffffff1a 50%, transparent 75%);
 }
 
 @keyframes skeleton-shimmer {

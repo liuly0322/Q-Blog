@@ -1,28 +1,58 @@
 @import 'aplayer-ts/src/css/base.css';
 
-html.dark .aplayer {
-  background: #1e1e1e;
+.aplayer {
+  color: var(--text);
+  background: var(--surface);
+  border: 0.8px solid var(--border);
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 4%);
 }
 
-html.dark .aplayer .aplayer-list ol li {
-  border-top: 1px solid #161616;
+/* Override vendor colors (and per-song inline themes) without copying its selector chains. */
+.aplayer :is(.aplayer-author, .aplayer-time, .aplayer-list-index, .aplayer-list-author, .aplayer-lrc p, .aplayer-notice) {
+  color: var(--muted) !important;
 }
 
-html.dark .aplayer .aplayer-list ol li.aplayer-list-light {
-  background: #161616;
+.aplayer :is(.aplayer-info, .aplayer-list li) {
+  border-color: var(--border) !important;
 }
 
-html.dark .aplayer.aplayer-withlist .aplayer-info {
-  border-bottom: 1px solid #161616;
+.aplayer :is(.aplayer-bar, .aplayer-volume-bar) {
+  background: var(--border) !important;
 }
 
-html.dark .aplayer .aplayer-lrc::before,
-html.dark .aplayer .aplayer-lrc::after {
-  background: linear-gradient(180deg,
-      rgba(30, 30, 30, 0) 0,
-      rgba(30, 30, 30, 0.8));
+.aplayer .aplayer-loaded {
+  background: var(--muted) !important;
 }
 
-html.dark .aplayer .aplayer-list ol li:hover {
-  background: #101010;
+.aplayer :is(.aplayer-played, .aplayer-thumb, .aplayer-volume, .aplayer-list-cur) {
+  background: var(--accent) !important;
+}
+
+.aplayer :is(.aplayer-list li:hover, .aplayer-list-light, .aplayer-notice) {
+  background: var(--inset-bg) !important;
+}
+
+.aplayer .aplayer-time .aplayer-icon path {
+  fill: var(--muted) !important;
+}
+
+.aplayer .aplayer-time .aplayer-icon:hover path {
+  fill: var(--accent) !important;
+}
+
+.aplayer .aplayer-lrc::before {
+  background: linear-gradient(to bottom, var(--surface), transparent);
+}
+
+.aplayer .aplayer-lrc::after {
+  background: linear-gradient(to bottom, transparent, var(--surface));
+}
+
+.aplayer .aplayer-list ol::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
+.aplayer .aplayer-list ol::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
 }

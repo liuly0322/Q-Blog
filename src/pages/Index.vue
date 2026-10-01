@@ -12,7 +12,7 @@ onMounted(() => {
 <template>
   <article v-for="post in posts" :key="post.summary.url" class="mb-4 p-7 card">
     <div class="text-3xl font-medium my-4">
-      <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`" class="hover:text-hex-42b883">
+      <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`" class="hover:text-accent">
         {{
           post.summary.title
         }}
@@ -25,13 +25,12 @@ onMounted(() => {
       查看更多
     </router-link>
     <div class="text-left mt-6">
-      <span v-for="tag in post.summary.tags" :key="tag" class="mr-2 text-slate-500">
-        <router-link :to="`/tags/${tag}`">#{{ tag }}</router-link>
+      <span v-for="tag in post.summary.tags" :key="tag" class="mr-2 text-muted">
+        <router-link :to="`/tags/${tag}`" class="hover:text-accent">#{{ tag }}</router-link>
       </span>
     </div>
   </article>
   <div class="my-10 inline-block">
     <Pagination />
   </div>
-  <CommonFooter />
 </template>

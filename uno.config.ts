@@ -2,6 +2,15 @@ import { defineConfig, presetWind3 } from 'unocss'
 
 export default defineConfig({
   presets: [presetWind3({ dark: 'class', preflight: 'on-demand' })],
+  theme: {
+    colors: {
+      accent: 'var(--accent)',
+      muted: 'var(--muted)',
+      surface: 'var(--surface)',
+      inset: 'var(--inset-bg)',
+      line: 'var(--border)',
+    },
+  },
   content: {
     pipeline: { include: [/\/src\/.*\.(?:vue|md)$/] },
   },
@@ -11,19 +20,17 @@ export default defineConfig({
   rules: [
     ['card', {
       'border-radius': '0.5rem',
-      'box-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+      'box-shadow': '0 2px 6px rgb(0 0 0 / 4%)',
       'border-width': '0.8px',
-      'border-color': 'rgba(255, 255, 255, 0.09)',
-      'background-color': 'var(--card-bg)',
+      'border-color': 'var(--border)',
+      'background-color': 'var(--surface)',
     }, { layer: 'components' }],
-    ['blue-link', { color: '#258fb8' }, { layer: 'components' }],
     ['show-more', {
       'line-height': '1em',
       'padding': '6px 15px',
       'border-radius': '15px',
-      'color': '#fff',
-      'background': '#258fb8',
-      'text-shadow': '0 1px #1e7293',
+      'color': 'var(--accent)',
+      'background': 'color-mix(in srgb, var(--accent) 10%, transparent)',
       'text-decoration': 'none',
     }, { layer: 'components' }],
   ],

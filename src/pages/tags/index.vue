@@ -12,7 +12,7 @@ function computeSize(times: number): BlogTagSize {
 </script>
 
 <template>
-  <SectionDivider title="标签" />
+  <SectionDivider>标签</SectionDivider>
   <router-link v-for="tag in tagCount" :key="tag.content" :to="`/tags/${tag.content}`">
     <BlogTag :size="computeSize(tag.times)" class="m-1">
       {{ tag.content }}: {{ tag.times }}

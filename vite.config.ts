@@ -92,7 +92,7 @@ export default defineConfig(({ command, isSsrBuild }) => ({
         short_name: 'llyのblog',
         description: '我的个人博客，写点想写的',
         lang: 'zh-CN',
-        theme_color: '#ffffff',
+        theme_color: '#f6f7f8',
         icons: [
           {
             src: 'pwa-192x192.png',

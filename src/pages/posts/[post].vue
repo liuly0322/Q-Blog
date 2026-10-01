@@ -50,7 +50,7 @@ watch(() => props.post, async (post, _previous, onCleanup) => {
 
 const postContentEle = ref<HTMLElement>()
 
-const toc = ref<{ id: string, text: string, tab: number, active: boolean }[]>([])
+const toc = ref<{ id: string, text: string, tab: number }[]>([])
 type Heading = Pick<HTMLElement, 'id' | 'textContent' | 'tagName'>
 function readHeadings(element: { querySelectorAll: (selector: string) => ArrayLike<Heading> }) {
   const headings = Array.from(element.querySelectorAll('h2,h3,h4'), heading => ({
@@ -63,7 +63,6 @@ function readHeadings(element: { querySelectorAll: (selector: string) => ArrayLi
     id: heading.id,
     text: heading.text,
     tab: heading.level - base - 1,
-    active: false,
   }))
 }
 
@@ -87,26 +86,15 @@ onMounted(() => {
       return
 
     let cancelled = false
-    let observer: IntersectionObserver | undefined
     onCleanup(() => {
       cancelled = true
-      observer?.disconnect()
     })
 
-    // Update toc and observe headings after v-html has been updated.
+    // Update toc after v-html has been updated.
     await nextTick()
     if (cancelled)
       return
-
     readHeadings(postContentEle.value!)
-    observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const item = toc.value.find(item => item.id === entry.target.id)
-        if (item)
-          item.active = entry.isIntersecting
-      })
-    })
-    postContentEle.value!.querySelectorAll('h2,h3,h4').forEach(heading => observer!.observe(heading))
 
     // Restore scroll position after toc has been updated.
     await nextTick()
@@ -139,7 +127,6 @@ onMounted(() => {
         <div ref="postContentEle" class="md-blog m-auto text-left" data-post-body v-html="data" />
         <PostFooter :post="currPost.url" />
         <Comment :post="currPost" />
-        <CommonFooter />
       </div>
     </article>
     <Toc
@@ -156,9 +143,9 @@ onMounted(() => {
   margin-bottom: 7px;
   background: linear-gradient(
     90deg,
-    #dfdfdf 25%,
-    #f2f2f2 50%,
-    #dfdfdf 75%
+    var(--border) 25%,
+    var(--surface) 50%,
+    var(--border) 75%
   );
   background-size: 400% 100%;
   animation: skeleton-shimmer 1.4s ease-in-out infinite;
@@ -166,16 +153,6 @@ onMounted(() => {
 
 .post-skeleton-list {
   padding-top: 2px;
-}
-
-html.dark .post-skeleton-line {
-  background: linear-gradient(
-    90deg,
-    #464646 25%,
-    #5a5a5a 50%,
-    #464646 75%
-  );
-  background-size: 400% 100%;
 }
 
 @keyframes skeleton-shimmer {

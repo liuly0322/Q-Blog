@@ -10,18 +10,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <footer class="flex flex-col items-center justify-center pt-8 pb-12 leading-8 border-t-[0.8px] dark:border-white/9">
+  <footer class="flex flex-col items-center justify-center pt-8 pb-12 leading-8 border-t-[0.8px]">
     <div class="flex items-center">
       <span>© 2021 - {{ footer.year }}</span>
       <span class="px-2.5 mt-1 animate-heart-beat animate-duration-1000 animate-count-infinite"><IconRedHeart /></span>
       <span>{{ footer.season }}</span>
     </div>
     <p>
-      Under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="blue-link" target="_blank">CC BY-NC-SA 4.0</a>
+      Under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="text-accent" target="_blank">CC BY-NC-SA 4.0</a>
     </p>
     <div class="flex items-center">
       <img src="/icp.gov.moe.png" alt="moe-icp" width="32" height="32">
-      <a href="https://icp.gov.moe/?keyword=20240322" class="pl-4 blue-link" target="_blank">萌 ICP 备 20240322 号</a>
+      <a href="https://icp.gov.moe/?keyword=20240322" class="pl-4 text-accent" target="_blank">萌 ICP 备 20240322 号</a>
     </div>
   </footer>
 </template>

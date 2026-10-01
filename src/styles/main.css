@@ -9,7 +9,23 @@ body,
 }
 
 :root {
-  --card-bg: #fff;
+  --page-bg: #f6f7f8;
+  --surface: #fff;
+  --inset-bg: #f6f6f6;
+  --text: #333;
+  --muted: #737373;
+  --border: #e5e5e5;
+  --accent: #2563a6;
+}
+
+html.dark {
+  --page-bg: #121212;
+  --surface: #1e1e1e;
+  --inset-bg: #171717;
+  --text: #e5e5e5;
+  --muted: #a3a3a3;
+  --border: #363636;
+  --accent: #8bbcf0;
 }
 
 html {
@@ -18,13 +34,12 @@ html {
   line-height: 1.5;
   tab-size: 4;
   scrollbar-gutter: stable;
+  color: var(--text);
+  background: var(--page-bg);
+  color-scheme: light;
 }
 
-html.dark {
-  --card-bg: #1e1e1e;
-  color: #e5e7eb;
-  background: #121212;
-}
+html.dark { color-scheme: dark; }
 
 body {
   max-width: 1280px;
@@ -38,7 +53,7 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  background: rgba(13, 148, 136, 0.75);
+  background: var(--accent);
   height: 2px;
   transform: translateX(-100%);
   transition: transform 200ms ease, opacity 200ms linear 200ms;
