@@ -25,7 +25,7 @@ function incPage() {
     <template v-for="i in pageMax" :key="i">
       <span
         class="cursor-pointer mx-1.5"
-        :class="{ 'border-b border-hex-18a058 text-hex-18a058': i === page }"
+        :class="{ 'border-b border-accent text-accent': i === page }"
         @click="page = i"
       >{{ i }}</span>
     </template>

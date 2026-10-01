@@ -13,29 +13,43 @@ const groupedSummary = computed(() => {
   }
   return [...groups.entries()]
 })
+
+const toc = computed(() => groupedSummary.value.map(([year]) => ({
+  id: `archive-${year}`,
+  text: year,
+  tab: -1,
+})))
 </script>
 
 <template>
-  <div class="archive-content m-auto text-left">
-    <section v-for="[year, posts] in groupedSummary" :key="year" class="archive-year-group">
-      <h2 class="archive-year mb-2 border-b text-xl text-gray-700 dark:text-gray-200">
-        {{ year }}
-      </h2>
-      <router-link
-        v-for="post in posts" :key="post.url"
-        class="archive-item border-b flex items-center hover:text-hex-42b883" :to="`/posts/${post.url}`"
-      >
-        <time class="archive-date flex-shrink-0">{{ post.date.slice(5, 10) }}</time>
-        <span>{{ post.title }}</span>
-      </router-link>
-    </section>
+  <div class="flex items-start">
+    <div class="lg:card px-6 py-6 flex-grow min-w-0">
+      <div class="archive-content m-auto text-left">
+        <section v-for="[year, posts] in groupedSummary" :key="year" class="archive-year-group">
+          <h2 :id="`archive-${year}`" class="archive-year mb-2 border-b text-xl">
+            {{ year }}
+          </h2>
+          <router-link
+            v-for="post in posts" :key="post.url"
+            class="archive-item border-b flex items-center hover:text-accent" :to="`/posts/${post.url}`"
+          >
+            <time class="archive-date flex-shrink-0" :datetime="post.date.slice(0, 10)">{{ post.date.slice(0, 10) }}</time>
+            <span>{{ post.title }}</span>
+          </router-link>
+        </section>
+      </div>
+    </div>
+    <Toc
+      v-if="toc.length" :items="toc"
+      class="<xl:hidden w-[256px] flex-shrink-0 sticky top-20 overflow-auto text-left"
+      style="max-height: calc(100vh - 80px)"
+    />
   </div>
 </template>
 
 <style scoped>
 .archive-content {
-  width: min(calc(100% - 3.5rem), 700px);
-  padding-top: 1.5rem;
+  max-width: 1000px;
 }
 
 .archive-year-group + .archive-year-group {
@@ -44,28 +58,18 @@ const groupedSummary = computed(() => {
 
 .archive-year {
   padding-bottom: 0.5rem;
-  border-bottom-color: rgba(107, 114, 128, 0.25);
   font-weight: 600;
   line-height: 1.5;
 }
 
 .archive-item {
   min-height: 3.25rem;
-  border-bottom-color: rgba(107, 114, 128, 0.14);
   transition: color 0.2s;
 }
 
 .archive-date {
-  width: 4.5rem;
-  color: #9ca3af;
+  width: 7rem;
+  color: var(--muted);
   font-size: 0.8rem;
-}
-
-html.dark .archive-year {
-  border-color: rgba(255, 255, 255, 0.16);
-}
-
-html.dark .archive-item {
-  border-color: rgba(255, 255, 255, 0.1);
 }
 </style>

@@ -77,7 +77,7 @@ test('site pages include Bangumi and every tag page', async () => {
       'archive.html': /class="[^"]*archive-item/,
       'links.html': /href="https:\/\//,
       'tags.html': /href="\/tags\//,
-      'bangumi.html': /<h1[^>]*>\s*动画列表\s*<\/h1>/,
+      'bangumi.html': /<h1[^>]*>\s*动画列表（/,
     }
     assert.ok(markers[file].test(body), `${file}: missing static content`)
     if (file === 'index.html' || file === 'archive.html') {

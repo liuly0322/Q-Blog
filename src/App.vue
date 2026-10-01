@@ -45,23 +45,28 @@ if (import.meta.hot)
         :class="{ 'sidebar-open': sidebarOpen }"
         style="max-height: calc(100vh - 80px)"
       />
-      <main class="flex-grow min-w-0 pb-10 text-center text-gray-700 dark:text-gray-200">
-        <router-view />
-        <div
-          id="mdui-overlay"
-          class="fixed z-2 hidden lg:hidden"
-          :class="{ 'mdui-overlay-show': sidebarOpen }"
-          @click="sidebarOpen = false"
-        />
-      </main>
+      <div class="flex-grow min-w-0 text-center">
+        <div class="flex flex-col" style="min-height: calc(100vh - 80px)">
+          <main class="flex-1">
+            <router-view />
+          </main>
+          <CommonFooter />
+        </div>
+      </div>
     </div>
+    <div
+      id="mdui-overlay"
+      class="fixed z-2 hidden lg:hidden"
+      :class="{ 'mdui-overlay-show': sidebarOpen }"
+      @click="sidebarOpen = false"
+    />
   </div>
 </template>
 
 <style>
 @media (max-width: 1023.9px) {
   #sidebar {
-    background-color: #fff;
+    background-color: var(--surface);
     max-height: calc(100vh - 64px) !important;
     position: fixed;
     right: 0;
@@ -69,10 +74,6 @@ if (import.meta.hot)
     translate: 100% 0;
     transition: translate 0.3s ease;
     z-index: 3;
-  }
-
-  html.dark #sidebar {
-    background-color: #1e1e1e;
   }
 
   #sidebar.sidebar-open {

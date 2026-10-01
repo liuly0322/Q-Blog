@@ -12,7 +12,7 @@
   margin: 10px 0;
   padding-left: 15px;
   padding-right: 10px;
-  border-left: 3px solid #ccc;
+  border-left: 3px solid var(--border);
 }
 .md-blog blockquote p {
   margin: 0;
@@ -40,7 +40,7 @@
 }
 
 .md-blog a {
-  color: #258fb8;
+  color: var(--accent);
   text-decoration: underline;
 }
 .md-blog a:hover {
@@ -86,30 +86,26 @@
 }
 .md-blog th {
   font-weight: bold;
-  border-bottom: 3px solid #ddd;
+  border-bottom: 3px solid var(--border);
   padding-bottom: 0.5em;
 }
 .md-blog td {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--border);
   padding: 10px 0;
 }
 code[class*=language-] {
   padding: 1em;
-  background-color: #fbfbfb;
+  background-color: var(--inset-bg);
   display: block;
   overflow: auto;
 }
-html.dark code[class*=language-] {
-  background-color: #151515;
+.md-blog .shiki {
+  background-color: var(--inset-bg) !important;
 }
 .md-blog code:not(pre>code) {
-  color: #2f8a89;
-  background-color: #fbfbfb;
+  color: var(--accent);
+  background-color: var(--inset-bg);
   padding: 0.2em 0.4em;
-}
-html.dark .md-blog code:not(pre>code) {
-  color: #429988;
-  background-color: #151515;
 }
 html.dark .shiki,
 html.dark .shiki span {
