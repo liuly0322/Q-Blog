@@ -34,11 +34,7 @@ onUnmounted(() => observer.disconnect())
 
 function scrollIntoView(id: string) {
   const element = document.getElementById(id)
-  if (!element)
-    return
-  const headerOffset = 80
-  const offsetPosition = element.offsetTop - headerOffset
-  window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+  element?.scrollIntoView({ behavior: 'smooth' })
 }
 </script>
 
