@@ -116,7 +116,15 @@ onMounted(() => {
 
     if (window.location.hash) {
       try {
-        document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ behavior: 'smooth' })
+        const heading = document.getElementById(window.location.hash.slice(1))
+        if (!heading)
+          return
+
+        const margin = Number.parseFloat(getComputedStyle(heading).scrollMarginTop) || 0
+        window.scrollTo({
+          top: window.scrollY + heading.getBoundingClientRect().top - margin,
+          behavior: 'smooth',
+        })
       }
       catch { /* Ignore malformed URL fragments. */ }
     }
