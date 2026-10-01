@@ -52,7 +52,7 @@ export default ({ incremental = false }: { incremental?: boolean } = {}) => ({
     await buildPosts(incremental)
   },
   async handleHotUpdate({ file }: { file: string }) {
-    if (file.includes('posts') && !file.includes('public'))
+    if (file.startsWith(`${path.resolve('posts')}${path.sep}`))
       await buildPosts(incremental)
   },
 })

@@ -16,7 +16,13 @@ const initialPost = root.dataset.post && postBody
 const { app, router } = createSiteApp(root.dataset.ssg === 'true', initialPost)
 nprogress(router)
 
-router.isReady().then(() => app.mount(root))
+router.isReady().then(() => {
+  app.mount(root)
+  // Enhance the input only after Vue has hydrated its disabled SSR markup.
+  void import('./modules/pagefind')
+    .then(({ default: pagefind }) => pagefind(router))
+    .catch(console.error)
+})
 
 void import('./modules/imageZoom')
   .then(({ default: imageZoom }) => imageZoom())

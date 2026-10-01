@@ -1,4 +1,6 @@
-import { resolve } from 'node:path'
+import { readFile } from 'node:fs/promises'
+import { extname, resolve, sep } from 'node:path'
+import process from 'node:process'
 import Vue from '@vitejs/plugin-vue'
 import mdLinkAttrPlugin from 'markdown-it-link-attributes'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -31,6 +33,30 @@ export default defineConfig(({ command, isSsrBuild }) => ({
     },
   },
   plugins: [
+    {
+      name: 'serve-pagefind',
+      configureServer(server) {
+        const directory = resolve('dist/pagefind')
+        const types: Record<string, string> = { '.js': 'application/javascript', '.css': 'text/css' }
+        // Serve generated bundles unchanged, outside Vite's import analysis.
+        // Reuse the latest production index; run pnpm build to refresh it.
+        server.middlewares.use('/pagefind/', async (request, response) => {
+          try {
+            const pathname = decodeURIComponent(new URL(request.url || '/', 'http://localhost').pathname)
+            const file = resolve(directory, `.${pathname}`)
+            if (!file.startsWith(`${directory}${sep}`))
+              throw new Error('Invalid Pagefind path')
+            const content = await readFile(file)
+            response.setHeader('Content-Type', types[extname(file)] || 'application/octet-stream')
+            response.setHeader('Cache-Control', 'no-cache')
+            response.end(content)
+          }
+          catch {
+            response.writeHead(404).end('Pagefind index unavailable; run pnpm build.')
+          }
+        })
+      },
+    },
     // vue 官方插件，用来解析 sfc
     Vue({
       include: [/\.vue$/, /\.md$/],
@@ -83,6 +109,7 @@ export default defineConfig(({ command, isSsrBuild }) => ({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css}'],
+        globIgnores: ['pagefind/**'],
         // https://github.com/vite-pwa/vite-plugin-pwa/issues/120
         navigateFallback: null,
       },

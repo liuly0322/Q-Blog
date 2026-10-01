@@ -37,6 +37,7 @@
   font-weight: bold;
   line-height: 1.1em;
   margin: 1.1em 0;
+  scroll-margin-top: 80px;
 }
 
 .md-blog a {

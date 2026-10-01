@@ -104,7 +104,7 @@ onMounted(() => {
     restorePost()
     if (window.location.hash) {
       try {
-        document.getElementById(decodeURIComponent(window.location.hash.slice(1)))?.scrollIntoView()
+        document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ behavior: 'smooth' })
       }
       catch { /* Ignore malformed URL fragments. */ }
     }
@@ -114,7 +114,7 @@ onMounted(() => {
 
 <template>
   <div class="flex items-start">
-    <article class="lg:card px-6 flex-grow min-w-0">
+    <article class="lg:card px-6 flex-grow min-w-0" data-pagefind-body>
       <PostHeader :post="currPost" />
       <div v-if="loading" class="post-skeleton-list my-1.6em text-left">
         <template v-for="i in 4" :key="i">
@@ -125,8 +125,8 @@ onMounted(() => {
       <div v-show="!loading">
         <!-- eslint-disable-next-line vue/no-v-html -->
         <div ref="postContentEle" class="md-blog m-auto text-left" data-post-body v-html="data" />
-        <PostFooter :post="currPost.url" />
-        <Comment :post="currPost" />
+        <PostFooter :post="currPost.url" data-pagefind-ignore />
+        <Comment :post="currPost" data-pagefind-ignore />
       </div>
     </article>
     <Toc
