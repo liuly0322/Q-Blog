@@ -5,12 +5,12 @@ import { expectAnchor, openHydratedPage, posts } from '../helpers/site.ts'
 
 // Finish smooth scrolling before creating or traversing another history entry.
 async function waitForScrollToSettle(page: Page) {
-  await page.waitForFunction(async () => {
+  await page.waitForFunction((state) => {
     const position = scrollY
-    for (let frame = 0; frame < 6; frame++)
-      await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
-    return scrollY === position
-  }, undefined, { timeout: 5000 })
+    state.frames = position === state.position ? state.frames + 1 : 0
+    state.position = position
+    return state.frames >= 6
+  }, { position: null as number | null, frames: 0 }, { timeout: 5000 })
 }
 
 async function expectSettledAnchor(page: Page, selector: string) {
