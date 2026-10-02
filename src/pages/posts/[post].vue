@@ -79,13 +79,11 @@ else {
 }
 
 const navigationCounter = ref(0)
-onMounted(() => {
-  const removeAfterEach = useRouter().afterEach(() => {
-    navigationCounter.value++
-  })
-  onUnmounted(() => {
-    removeAfterEach()
-  })
+const removeAfterEach = useRouter().afterEach(() => {
+  navigationCounter.value++
+})
+onUnmounted(() => {
+  removeAfterEach()
 })
 
 onMounted(() => {
@@ -111,23 +109,7 @@ onMounted(() => {
     if (cancelled)
       return
 
-    if (restorePost())
-      return
-
-    if (window.location.hash) {
-      try {
-        const heading = document.getElementById(window.location.hash.slice(1))
-        if (!heading)
-          return
-
-        const margin = Number.parseFloat(getComputedStyle(heading).scrollMarginTop) || 0
-        window.scrollTo({
-          top: window.scrollY + heading.getBoundingClientRect().top - margin,
-          behavior: 'smooth',
-        })
-      }
-      catch { /* Ignore malformed URL fragments. */ }
-    }
+    restorePost()
   }, { immediate: true })
 })
 </script>
