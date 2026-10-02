@@ -19,6 +19,7 @@ body,
 }
 
 html.dark {
+  color-scheme: dark;
   --page-bg: #121212;
   --surface: #1e1e1e;
   --inset-bg: #171717;
@@ -38,8 +39,6 @@ html {
   background: var(--page-bg);
   color-scheme: light;
 }
-
-html.dark { color-scheme: dark; }
 
 body {
   max-width: 1280px;

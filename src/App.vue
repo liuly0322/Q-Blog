@@ -6,10 +6,8 @@ const route = useRoute()
 const router = useRouter()
 const { summary } = useSummary()
 
-onMounted(() => {
-  router.afterEach(() => {
-    sidebarOpen.value = false
-  })
+router.afterEach(() => {
+  sidebarOpen.value = false
 })
 
 const title = computed(() => {
