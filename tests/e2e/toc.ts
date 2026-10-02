@@ -20,6 +20,21 @@ async function expectSettledAnchor(page: Page, selector: string) {
 }
 
 export function registerToc(harness: SiteHarness) {
+  harness.test('Chinese TOC links expose the heading URL and navigate with the keyboard', async (site) => {
+    const { page, origin } = site
+    const path = '/posts/sakurada-reset-map'
+    await openHydratedPage(site, path, '[data-post-body]')
+    const id = await page.getByRole('heading', { name: '中间层：GeoJSON', exact: true }).getAttribute('id')
+    assert(id)
+    const link = page.locator('nav').getByRole('link', { name: '中间层：GeoJSON', exact: true })
+    const href = await link.getAttribute('href')
+    assert.equal(href, `${path}#${id}`)
+    await link.focus()
+    await page.keyboard.press('Enter')
+    await page.waitForURL(`${origin}${href}`)
+    await expectSettledAnchor(page, await page.evaluate(id => `#${CSS.escape(id)}`, id))
+  })
+
   harness.test('all static article TOCs match actual body DOM', async ({ page, origin }) => {
     for (const post of posts) {
       await page.goto(`${origin}/posts/${encodeURIComponent(post.url)}`)
@@ -93,7 +108,7 @@ export function registerToc(harness: SiteHarness) {
     await expectSettledAnchor(page, '#feature')
     await page.evaluate(() => scrollTo(0, scrollY + 250))
     const position = await page.evaluate(() => scrollY)
-    await page.locator('#toc-to-be-done').evaluate((item: HTMLElement) => item.click())
+    await page.locator('#toc-to-be-done a').evaluate((item: HTMLAnchorElement) => item.click())
     await page.waitForURL(`${origin}/posts/hello-world#to-be-done`)
     await expectSettledAnchor(page, '#to-be-done')
     await page.goBack()
@@ -162,7 +177,7 @@ export function registerToc(harness: SiteHarness) {
     await expectSettledAnchor(page, `#${ids[1]}`)
     await page.evaluate(() => scrollTo(0, scrollY + 250))
     const position = await page.evaluate(() => scrollY)
-    await page.locator(`#toc-${ids[2]}`).evaluate((item: HTMLElement) => item.click())
+    await page.locator(`#toc-${ids[2]} a`).evaluate((item: HTMLAnchorElement) => item.click())
     await page.waitForURL(`${origin}/archive#${ids[2]}`)
     await expectSettledAnchor(page, `#${ids[2]}`)
     await page.goBack()

@@ -24,7 +24,7 @@
 
 Welcome to [my personal blog site](https://blog.liuly.moe) ([subscribe](https://blog.liuly.moe/feed.xml)).
 
-- Vite5, Vue3, TypeScript, UnoCSS, Naive UI
+- Vite5, Vue3, TypeScript, UnoCSS
 - Responsive Web Design, Dark Mode, PWA
 - [WIP] **(Have a look!) Rollup [partial evaluate plugin](./partial-evaluate/)**
 

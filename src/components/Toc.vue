@@ -31,8 +31,6 @@ onMounted(() => {
 })
 
 onUnmounted(() => observer.disconnect())
-
-const router = useRouter()
 </script>
 
 <template>
@@ -48,9 +46,10 @@ const router = useRouter()
         class="hover:text-accent pl-[1.5ch]"
         :class="{ 'text-accent': activeIds.has(item.id) }"
         :style="{ 'margin-left': `${item.tab * 1.5}ch` }"
-        @click="router.push({ hash: `#${decodeURIComponent(item.id)}` })"
       >
-        {{ item.text }}
+        <RouterLink class="block" :to="`#${item.id}`">
+          {{ item.text }}
+        </RouterLink>
       </li>
     </ul>
   </nav>
