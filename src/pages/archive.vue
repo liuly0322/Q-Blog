@@ -24,16 +24,16 @@ const toc = computed(() => groupedSummary.value.map(([year]) => ({
 <template>
   <div class="flex items-start">
     <div class="lg:card bg-surface px-6 py-6 flex-grow min-w-0">
-      <div class="archive-content m-auto text-left">
-        <section v-for="[year, posts] in groupedSummary" :key="year" class="archive-year-group">
-          <h2 :id="`archive-${year}`" class="archive-year mb-2 border-b text-xl">
+      <div class="max-w-[1000px] m-auto text-left flex flex-col gap-10">
+        <section v-for="[year, posts] in groupedSummary" :key="year">
+          <h2 :id="`archive-${year}`" class="mb-2 border-b text-xl pb-2 font-medium">
             {{ year }}
           </h2>
           <router-link
             v-for="post in posts" :key="post.url"
-            class="archive-item border-b flex items-center hover:text-accent" :to="`/posts/${post.url}`"
+            class="min-h-12 border-b flex items-center transition-colors hover:text-accent" :to="`/posts/${post.url}`"
           >
-            <time class="archive-date flex-shrink-0" :datetime="post.date.slice(0, 10)">{{ post.date.slice(0, 10) }}</time>
+            <time class="w-28 text-muted text-xs flex-shrink-0" :datetime="post.date.slice(0, 10)">{{ post.date.slice(0, 10) }}</time>
             <span>{{ post.title }}</span>
           </router-link>
         </section>
@@ -46,30 +46,3 @@ const toc = computed(() => groupedSummary.value.map(([year]) => ({
     />
   </div>
 </template>
-
-<style scoped>
-.archive-content {
-  max-width: 1000px;
-}
-
-.archive-year-group + .archive-year-group {
-  margin-top: 2.75rem;
-}
-
-.archive-year {
-  padding-bottom: 0.5rem;
-  font-weight: 600;
-  line-height: 1.5;
-}
-
-.archive-item {
-  min-height: 3.25rem;
-  transition: color 0.2s;
-}
-
-.archive-date {
-  width: 7rem;
-  color: var(--muted);
-  font-size: 0.8rem;
-}
-</style>

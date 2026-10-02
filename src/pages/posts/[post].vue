@@ -118,10 +118,10 @@ onMounted(() => {
   <div class="flex items-start">
     <article class="lg:card bg-surface px-6 flex-grow min-w-0" data-pagefind-body>
       <PostHeader :post="currPost" />
-      <div v-if="loading" class="post-skeleton-list my-1.6em text-left">
+      <div v-if="loading" class="my-1.6em text-left pt-0.5 animate-pulse">
         <template v-for="i in 4" :key="i">
-          <div v-for="line in (i % 3) + 1" :key="`skeleton-${i}-${line}`" class="post-skeleton-line w-full" />
-          <div class="post-skeleton-line w-full" :style="{ width: `${30 + i * 12}%` }" />
+          <div v-for="line in (i % 3) + 1" :key="`skeleton-${i}-${line}`" class="h-3.5 mb-2 bg-line" />
+          <div class="h-3.5 mb-2 bg-line" :style="{ width: `${30 + i * 12}%` }" />
         </template>
       </div>
       <div v-show="!loading">
@@ -138,33 +138,3 @@ onMounted(() => {
     />
   </div>
 </template>
-
-<style scoped>
-.post-skeleton-line {
-  height: 14px;
-  margin-bottom: 7px;
-  background: linear-gradient(
-    90deg,
-    var(--border) 25%,
-    var(--surface) 50%,
-    var(--border) 75%
-  );
-  background-size: 400% 100%;
-  animation: skeleton-shimmer 1.4s ease-in-out infinite;
-}
-
-.post-skeleton-list {
-  padding-top: 2px;
-}
-
-@keyframes skeleton-shimmer {
-  from { background-position: 100% 0; }
-  to { background-position: -100% 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .post-skeleton-line {
-    animation: none;
-  }
-}
-</style>

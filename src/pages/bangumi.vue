@@ -77,10 +77,12 @@ function isInView(el: HTMLElement) {
 
         <div>
           <span
-            class="rating-stars inline-block leading-none"
+            class="inline-block text-2xl leading-none text-transparent bg-clip-text"
             role="img"
             :aria-label="`评分 ${anime.rate} / 10`"
-            :style="{ '--rating': `${anime.rate * 10}%` }"
+            :style="{
+              backgroundImage: `linear-gradient(to right, var(--accent) ${anime.rate * 10}%, var(--border) ${anime.rate * 10}%)`,
+            }"
           >
             ★★★★★
           </span>
@@ -92,14 +94,3 @@ function isInView(el: HTMLElement) {
     <LineMdLoadingLoop class="text-accent" />
   </div>
 </template>
-
-<style scoped>
-.rating-stars {
-  font-size: 1.6em;
-  color: transparent;
-  letter-spacing: 0.1em;
-  background: linear-gradient(to right, var(--accent) var(--rating), var(--border) var(--rating));
-  background-clip: text;
-  -webkit-background-clip: text;
-}
-</style>
