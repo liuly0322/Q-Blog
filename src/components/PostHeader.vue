@@ -11,11 +11,12 @@ defineProps<{
     <h1>{{ post.title }}</h1>
     <p data-pagefind-ignore>{{ post.date }}</p>
     <div class="border-b pb-4" data-pagefind-ignore>
-      <BlogTag v-for="tag in post.tags" :key="tag" class="mr-2 mb-4">
-        <router-link :to="`/tags/${tag}`" class="!text-inherit !no-underline">
-          {{ tag }}
-        </router-link>
-      </BlogTag>
+      <router-link
+        v-for="tag in post.tags" :key="tag" :to="`/tags/${tag}`"
+        class="blog-tag mr-2 mb-4 !no-underline"
+      >
+        {{ tag }}
+      </router-link>
     </div>
   </div>
 </template>

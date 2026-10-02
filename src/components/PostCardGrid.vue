@@ -26,11 +26,12 @@ const props = defineProps<{
         {{ post.date }}
       </div>
       <div class="mt-2 mx-2">
-        <BlogTag v-for="tag in post.tags" :key="tag" class="m-0.5" size="small">
-          <router-link :to="`/tags/${tag}`">
-            {{ tag }}
-          </router-link>
-        </BlogTag>
+        <router-link
+          v-for="tag in post.tags" :key="tag" :to="`/tags/${tag}`"
+          class="blog-tag h-5.5 px-1.5 text-xs m-0.5"
+        >
+          {{ tag }}
+        </router-link>
       </div>
     </div>
   </div>
