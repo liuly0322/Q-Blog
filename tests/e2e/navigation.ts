@@ -7,7 +7,7 @@ export function registerNavigation(harness: SiteHarness) {
     harness.test(`article loading starts at the top when entering from ${source}`, async (site) => {
       const { page } = site
       const target = '/posts/programming-live-webpage'
-      await openHydratedPage(site, source, source === '/archive' ? '.archive-item' : '[data-post-body]')
+      await openHydratedPage(site, source, source === '/archive' ? 'a[href^="/posts/"]' : '[data-post-body]')
       await page.evaluate(() => window.scrollTo(0, 900))
       assert(await page.evaluate(() => scrollY > 500))
 
@@ -23,7 +23,7 @@ export function registerNavigation(harness: SiteHarness) {
         // Preserve the starting scroll position instead of scrolling the link into view.
         await page.locator(`a[href="${target}"]`).first().evaluate((link: HTMLAnchorElement) => link.click())
         await page.waitForURL(`**${target}`)
-        await page.locator('.post-skeleton-list').waitFor({ state: 'visible' })
+        await page.locator('article div.animate-pulse').waitFor({ state: 'visible' })
         const position = await page.evaluate(() => new Promise<number>((resolve) => {
           requestAnimationFrame(() => requestAnimationFrame(() => resolve(scrollY)))
         }))
@@ -104,8 +104,8 @@ export function registerNavigation(harness: SiteHarness) {
 
   harness.test('archive returns to the clicked entry after Back', async (site) => {
     const { page } = site
-    await openHydratedPage(site, '/archive', '.archive-item')
-    const entry = page.locator(`.archive-item[href="${articleWithToc.path}"]`)
+    await openHydratedPage(site, '/archive', 'a[href^="/posts/"]')
+    const entry = page.locator(`main a[href="${articleWithToc.path}"]`)
     const target = '/posts/hello-world' as const
     await entry.scrollIntoViewIfNeeded()
     const position = await page.evaluate(() => scrollY)
@@ -232,7 +232,7 @@ export function registerNavigation(harness: SiteHarness) {
     })
     await expectArticleSnippet(page, '/posts/hello-world')
     assert(!(await page.locator('[data-post-body]').textContent()).includes('Late stale body'))
-    await page.locator('.post-skeleton-list').waitFor({ state: 'hidden' })
+    await page.locator('article div.animate-pulse').waitFor({ state: 'hidden' })
   })
 
   harness.test('failed article loading shows a useful error and navigation recovers', async (site) => {
@@ -244,7 +244,7 @@ export function registerNavigation(harness: SiteHarness) {
     await page.locator(`article a[href="${scrollArticle}"]`).first().click()
     await page.waitForURL(`**${scrollArticle}`)
     await page.getByText('文章加载失败，请刷新重试。', { exact: true }).waitFor({ state: 'visible' })
-    await page.locator('.post-skeleton-list').waitFor({ state: 'hidden' })
+    await page.locator('article div.animate-pulse').waitFor({ state: 'hidden' })
     await page.goBack()
     await page.waitForURL(`${site.origin}/`)
     await page.unroute(resource)

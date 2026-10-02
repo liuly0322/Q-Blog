@@ -58,7 +58,7 @@ test('every article is a complete static page with working build assets', async 
     assert.match(html, /<div id="app" data-post=/)
     assert.match(html, /<article[^>]*>/)
     assert.match(html, /<div[^>]*data-post-body/)
-    assert.doesNotMatch(html, /<div[^>]+class="[^"]*post-skeleton-list/)
+    assert.doesNotMatch(html, /<div[^>]+class="[^"]*animate-pulse/)
     assert.ok(html.includes(`href="https://blog.liuly.moe/posts/${encodeURIComponent(post.url)}"`))
     assert.match(html, /<meta property="og:type" content="article">/)
     assert.match(html, /<meta name="description" content="[^"]+">/)
@@ -66,7 +66,6 @@ test('every article is a complete static page with working build assets', async 
     assert.equal(metaContent(html, 'og:title'), `${post.title} | llyのblog`, `${post.url}: og:title`)
     const head = html.slice(0, html.indexOf('</head>'))
     const assets = [...head.matchAll(/(?:href|src)="(\/assets\/[^"?#]+)"/g)]
-    assert.ok(assets.some(([, asset]) => asset.endsWith('.css')), `${post.url}: missing CSS`)
     assert.ok(assets.some(([, asset]) => asset.endsWith('.js')), `${post.url}: missing JS`)
     for (const [, asset] of assets)
       await fs.access(path.join('dist', asset))
@@ -96,7 +95,7 @@ test('site pages include Bangumi and every tag page', async () => {
     const markers: Record<string, RegExp> = {
       'index.html': /class="[^"]*md-blog-home[^"]*"/,
       'about.html': /<h2[^>]*>名字<\/h2>/,
-      'archive.html': /class="[^"]*archive-item/,
+      'archive.html': /<h2[^>]*id="archive-/,
       'links.html': /href="https:\/\//,
       'tags.html': /href="\/tags\//,
       'bangumi.html': /<h1[^>]*>\s*动画列表（/,

@@ -50,7 +50,7 @@ export function registerPlatform(harness: SiteHarness) {
     await openSidebar()
     await sidebar.locator('a[href="/archive"]').click()
     await page.waitForURL(`${site.origin}/archive`)
-    await page.locator('.archive-item').first().waitFor({ state: 'visible' })
+    await page.locator('main a[href^="/posts/"]').first().waitFor({ state: 'visible' })
     await expectClosed()
 
     await openSidebar()

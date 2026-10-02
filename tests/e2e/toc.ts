@@ -153,8 +153,8 @@ export function registerToc(harness: SiteHarness) {
 
   harness.test('archive year TOC jumps to headings and only appears at xl', async (site) => {
     const { page } = site
-    await openHydratedPage(site, '/archive', '.archive-year')
-    const headings = await page.locator('.archive-year').evaluateAll(items => items.map(item => ({ id: item.id, text: item.textContent?.trim() })))
+    await openHydratedPage(site, '/archive', 'h2[id^="archive-"]')
+    const headings = await page.locator('h2[id^="archive-"]').evaluateAll(items => items.map(item => ({ id: item.id, text: item.textContent?.trim() })))
     const items = page.locator('nav li[id^="toc-archive-"]')
     assert.deepEqual(await items.evaluateAll(items => items.map(item => ({ id: item.id.slice(4), text: item.textContent?.trim() }))), headings)
     const target = headings[1]
@@ -170,8 +170,8 @@ export function registerToc(harness: SiteHarness) {
 
   harness.test('archive TOC Back preserves manual scrolling within a hash entry', async (site) => {
     const { page, origin } = site
-    await openHydratedPage(site, '/archive', '.archive-year')
-    const ids = await page.locator('.archive-year').evaluateAll(items => items.map(item => item.id))
+    await openHydratedPage(site, '/archive', 'h2[id^="archive-"]')
+    const ids = await page.locator('h2[id^="archive-"]').evaluateAll(items => items.map(item => item.id))
     assert(ids.length >= 3)
     await page.locator(`#toc-${ids[1]}`).click()
     await expectSettledAnchor(page, `#${ids[1]}`)
@@ -220,7 +220,7 @@ export function registerToc(harness: SiteHarness) {
     // SPA 返回归档再进同一篇：新建 [post] 组件，但 initialPost 仍指向这篇文章
     await page.locator('#sidebar a[href="/archive"]').click()
     await page.waitForURL('**/archive')
-    await page.locator('.archive-item[href="/posts/hello-world"]').click()
+    await page.locator('main a[href="/posts/hello-world"]').click()
     await page.waitForURL('**/posts/hello-world')
     await page.locator('#toc-feature').waitFor({ state: 'visible' })
     assert.deepEqual(await page.locator('nav li[id^="toc-"]').allTextContents(), expected)

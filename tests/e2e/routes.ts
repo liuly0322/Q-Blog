@@ -6,7 +6,7 @@ import { expectArticle, expectTitle, openHydratedPage, posts, ssgTitle } from '.
 const staticRoutes: [string, string, string][] = [
   ['/', '.show-more', 'llyのblog'],
   ['/about', '.md-blog', '关于 | llyのblog'],
-  ['/archive', '.archive-year-group', '归档 | llyのblog'],
+  ['/archive', 'main h2[id^="archive-"]', '归档 | llyのblog'],
   ['/links', 'main a[href^="https://"]', '友情链接 | llyのblog'],
   ['/tags', 'a[href^="/tags/"]', '标签 | llyのblog'],
   ['/bangumi', 'h1', '动画列表 | llyのblog'],
@@ -54,7 +54,7 @@ export function registerRoutes(harness: SiteHarness) {
           : route === '/archive'
             ? posts
             : posts.filter(post => post.tags.includes(posts[0].tags[0]))
-        const selector = route === '/' ? 'a.show-more' : route === '/archive' ? '.archive-item' : '.grid a[href^="/posts/"]'
+        const selector = route === '/' ? 'a.show-more' : route === '/archive' ? 'main a[href^="/posts/"]' : '.grid a[href^="/posts/"]'
         await site.page.locator(selector).first().waitFor({ state: 'visible' })
         const links = await site.page.locator(selector).evaluateAll(elements => elements.map(el => decodeURIComponent(el.getAttribute('href'))))
         assert.deepEqual(links, expected.map(post => `/posts/${post.url}`))
