@@ -17,6 +17,16 @@ export default defineConfig({
   // Ignore utility-like tokens from SVG paths and CSS/JS in scanned sources.
   // Use explicit utilities such as m-16, tab-4 and transition-colors instead.
   blocklist: ['m16', 'tab', 'container', 'backdrop-filter', 'transition', 'ease'],
+  shortcuts: {
+    'blog-tag': `
+      inline-flex items-center whitespace-nowrap
+      h-7 px-2 rounded-full
+      border border-[color-mix(in_srgb,var(--accent)_20%,transparent)]
+      bg-[color-mix(in_srgb,var(--accent)_5%,transparent)]
+      text-sm leading-none text-accent
+      hover:bg-[color-mix(in_srgb,var(--accent)_10%,transparent)]
+    `,
+  },
   rules: [
     ['card', {
       'border-radius': '0.5rem',
