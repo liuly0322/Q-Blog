@@ -1,0 +1,13 @@
+diff --git a/src/template/player.js b/src/template/player.js
+index 401e7e3de3ba95c4177a64e5573fd0016150f160..e092a931d9a5d2386432204232bb30706ea57cf9 100644
+--- a/src/template/player.js
++++ b/src/template/player.js
+@@ -116,7 +116,7 @@ export default function (options, cover, tplRenderers) {
+     } else if (options.loop === 'none') {
+         $$out += loopNone;
+     }
+-    $$out += ' </button> <button type="button" class="aplayer-icon aplayer-icon-menu"> ';
++    $$out += ' </button> <button type="button" class="aplayer-icon aplayer-icon-menu" aria-label="播放列表"> ';
+     $$out += menu;
+     $$out += ' </button> <button type="button" class="aplayer-icon aplayer-icon-lrc"> ';
+     $$out += lrc;

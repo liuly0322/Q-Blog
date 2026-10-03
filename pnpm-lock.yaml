@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  aplayer-ts@2.6.1:
+    hash: gehrau4pxtocmjehicch5p24sm
+    path: patches/aplayer-ts@2.6.1.patch
+
 importers:
 
   .:
@@ -49,7 +54,7 @@ importers:
         version: 3.5.13
       aplayer-ts:
         specifier: ^2.6.1
-        version: 2.6.1
+        version: 2.6.1(patch_hash=gehrau4pxtocmjehicch5p24sm)
       eslint:
         specifier: ^9.18.0
         version: 9.18.0(jiti@2.7.0)(supports-color@7.2.0)
@@ -6799,7 +6804,7 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  aplayer-ts@2.6.1: {}
+  aplayer-ts@2.6.1(patch_hash=gehrau4pxtocmjehicch5p24sm): {}
 
   are-docs-informative@0.0.2: {}
 
