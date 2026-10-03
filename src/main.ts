@@ -14,9 +14,10 @@ const initialPost = root.dataset.post && postBody
   ? { post: root.dataset.post, content: postBody.innerHTML }
   : undefined
 const { app, router } = createSiteApp(root.dataset.ssg === 'true', initialPost)
-nprogress(router)
 
 router.isReady().then(() => {
+  // Nprogress should not be enabled until the initial route is loaded.
+  nprogress(router)
   app.mount(root)
   // Enhance the input only after Vue has hydrated its disabled SSR markup.
   void import('./modules/pagefind')
