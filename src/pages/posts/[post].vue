@@ -87,7 +87,6 @@ onUnmounted(() => {
 })
 
 onMounted(() => {
-  watch(() => props.post, () => window.scrollTo({ left: 0, top: 0 }), { immediate: true })
   watch([data, navigationCounter], async (_, _previous, onCleanup) => {
     // The data is not ready yet
     if (loading.value)

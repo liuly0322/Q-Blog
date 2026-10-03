@@ -2,10 +2,8 @@
 const { posts } = useHomePosts()
 const { page } = usePage()
 
-onMounted(() => {
-  watch(page, () => {
-    window.scrollTo({ left: 0, top: 0 })
-  })
+watch(page, () => {
+  window.scrollTo({ left: 0, top: 0 })
 })
 </script>
 

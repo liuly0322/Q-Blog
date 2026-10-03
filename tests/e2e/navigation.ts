@@ -3,6 +3,40 @@ import assert from 'node:assert/strict'
 import { articleWithToc, expectAnchor, expectArticle, expectArticleSnippet, openHydratedPage, posts, scrollArticle } from '../helpers/site.ts'
 
 export function registerNavigation(harness: SiteHarness) {
+  for (const path of ['/', scrollArticle]) {
+    harness.test(`hydration preserves manual scrolling on ${path}`, async ({ page, origin }) => {
+      let release!: () => void
+      const ready = new Promise<void>((resolve) => {
+        release = resolve
+      })
+      await page.route('**/assets/*.js', async (route) => {
+        await ready
+        await route.continue()
+      })
+      try {
+        await page.goto(`${origin}${path}`, { waitUntil: 'commit' })
+        await page.locator('main article').first().waitFor({ state: 'visible' })
+        await page.waitForFunction(() => getComputedStyle(document.querySelector('main')!).textAlign === 'center')
+        assert.equal(await page.evaluate(() => !!document.querySelector('#app')?.__vue_app__), false)
+        const before = await page.evaluate(() => {
+          window.scrollTo(0, 900)
+          return window.scrollY
+        })
+        assert(before > 500, 'The static page must be scrolled before hydration')
+        release()
+        await page.waitForFunction(() => !!document.querySelector('#app')?.__vue_app__)
+        await page.waitForLoadState('load')
+        const after = await page.evaluate(() => new Promise<number>((resolve) => {
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve(window.scrollY)))
+        }))
+        assert(Math.abs(after - before) < 5, `Hydration changed scroll position from ${before} to ${after}`)
+      }
+      finally {
+        release()
+      }
+    })
+  }
+
   for (const source of ['/archive', scrollArticle]) {
     harness.test(`article loading starts at the top when entering from ${source}`, async (site) => {
       const { page } = site

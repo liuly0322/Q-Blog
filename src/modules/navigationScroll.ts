@@ -1,21 +1,23 @@
 import type { RouterScrollBehavior } from 'vue-router'
+import { START_LOCATION } from 'vue-router'
 
 interface Position {
   left: number
   top: number
 }
 
-let pendingScrollPosition: Position | null
+let pendingScrollPosition: Position | null | undefined
 
-export const scrollBehavior: RouterScrollBehavior = (to, _from, savedPosition) => {
-  pendingScrollPosition = null
+export const scrollBehavior: RouterScrollBehavior = (to, from, savedPosition) => {
+  if (from === START_LOCATION)
+    return false
 
   if (to.path === '/' && !savedPosition)
     usePage().page.value = 1
 
   if (to.path.startsWith('/posts/')) {
     pendingScrollPosition = savedPosition
-    return false
+    return to.path !== from.path ? { left: 0, top: 0 } : false
   }
 
   if (savedPosition)
@@ -29,7 +31,9 @@ export const scrollBehavior: RouterScrollBehavior = (to, _from, savedPosition) =
 
 export function restorePost() {
   const position = pendingScrollPosition
-  pendingScrollPosition = null
+
+  if (position === undefined)
+    return
 
   if (position) {
     window.scrollTo(position)
