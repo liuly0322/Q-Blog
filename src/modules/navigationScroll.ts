@@ -9,7 +9,7 @@ interface Position {
 let pendingScrollPosition: Position | null | undefined
 
 export const scrollBehavior: RouterScrollBehavior = (to, from, savedPosition) => {
-  if (from === START_LOCATION)
+  if (from === START_LOCATION && !savedPosition)
     return false
 
   if (to.path === '/' && !savedPosition)
