@@ -7,7 +7,7 @@ const { toggleDark } = useDarks()
   <div class="mx-1 mt-0 mb-6 text-center lg:card p-4">
     <div class="flex justify-center mb-2">
       <img
-        src="/avatar_192.webp"
+        src="/avatar_100.webp"
         alt="liuly"
         class="rounded-full"
         height="100"

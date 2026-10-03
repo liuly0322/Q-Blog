@@ -30,7 +30,7 @@ const navOptions = [
   <header class="sticky top-0 z-3 flex items-center justify-between border-b-[0.8px] p-2" style="background: color-mix(in srgb, var(--surface) 70%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px)">
     <router-link to="/" class="flex items-center hover:text-accent">
       <img
-        src="/avatar_192.webp"
+        src="/avatar_48.webp"
         alt="liuly"
         class="rounded-full cursor-pointer"
         height="48"
