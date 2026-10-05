@@ -155,7 +155,7 @@ export default defineConfig(({ command, isSsrBuild }) => ({
     terserOptions: { compress: { passes: 2 } },
     rollupOptions: {
       output: {
-        experimentalMinChunkSize: 10_000,
+        experimentalMinChunkSize: 4096,
       },
     },
   },

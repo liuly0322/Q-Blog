@@ -7,6 +7,7 @@ import mdAnchorPlugin from 'markdown-it-anchor'
 import mdLinkAttrPlugin from 'markdown-it-link-attributes'
 import mdMathPlugin from 'markdown-it-texmath'
 import RSS from 'rss'
+import { HOME_PAGE_SIZE, homePageCount } from '../src/utils/homePagination'
 import mdImageSizePlugin from './mdImageSizePlugin'
 
 const SITE_URL = 'https://blog.liuly.moe'
@@ -168,16 +169,29 @@ async function generateStaticPosts(posts: Post[], incremental: boolean) {
   await Promise.all(posts.map(generateStaticPost))
 }
 
-async function generateSiteSummary(posts: Post[], firstPageAbstracts: string[]) {
+async function generateSiteSummary(posts: Post[]) {
   const summary = {
     posts: posts.map(({ title, date, tags, url }) => ({ title, date, tags, url })),
   }
   await fs.writeFile(path.join('src/jsons', 'summary.json'), JSON.stringify(summary))
-  await fs.writeFile(path.join('src/jsons', 'firstPageAbstracts.json'), JSON.stringify(firstPageAbstracts))
 }
 
 async function generatePostAbstracts(abstracts: string[]) {
-  await fs.writeFile(path.join('public', 'page.json'), JSON.stringify(abstracts))
+  const directory = path.join('public', 'homePages')
+  await fs.mkdir(directory, { recursive: true })
+  const pageMax = homePageCount(abstracts.length)
+  const files = Array.from({ length: pageMax }, (_, i) => `home-page-${i + 1}.json`)
+  for (const file of await fs.readdir(directory)) {
+    if (!files.includes(file))
+      await fs.rm(path.join(directory, file))
+  }
+  await Promise.all(files.map(async (file, i) => {
+    const json = JSON.stringify(abstracts.slice(i * HOME_PAGE_SIZE, (i + 1) * HOME_PAGE_SIZE))
+    const destination = path.join(directory, file)
+    // Keep unchanged pages stable during development hot updates.
+    if (await fs.readFile(destination, 'utf8').catch(() => null) !== json)
+      await fs.writeFile(destination, json)
+  }))
 }
 
 async function buildPosts(incremental: boolean) {
@@ -191,6 +205,6 @@ async function buildPosts(incremental: boolean) {
     generateRSS(posts),
     generateStaticPosts(posts, incremental),
     generatePostAbstracts(abstracts),
-    generateSiteSummary(posts, abstracts.slice(0, 10)),
+    generateSiteSummary(posts),
   ])
 }

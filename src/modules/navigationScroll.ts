@@ -12,9 +12,6 @@ export const scrollBehavior: RouterScrollBehavior = (to, from, savedPosition) =>
   if (from === START_LOCATION && !savedPosition)
     return false
 
-  if (to.path === '/' && !savedPosition)
-    usePage().page.value = 1
-
   if (to.path.startsWith('/posts/')) {
     pendingScrollPosition = savedPosition
     return to.path !== from.path ? { left: 0, top: 0 } : false

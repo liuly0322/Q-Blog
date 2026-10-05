@@ -1,5 +1,9 @@
 export const SITE_TITLE = 'llyのblog'
 
+export function homePageTitle(page: number) {
+  return page === 1 ? SITE_TITLE : `第 ${page} 页 | ${SITE_TITLE}`
+}
+
 export const staticPageTitles: Record<string, string> = {
   '/': SITE_TITLE,
   '/about': `关于 | ${SITE_TITLE}`,

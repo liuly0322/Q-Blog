@@ -1,9 +1,24 @@
-<script setup lang="ts">
-const { posts } = useHomePosts()
-const { page } = usePage()
+<route>
+{
+  path: '/:page([0-9]+)?',
+  meta: { homePage: true },
+}
+</route>
 
-watch(page, () => {
-  window.scrollTo({ left: 0, top: 0 })
+<script setup lang="ts">
+import { homePostsCache } from '~/modules/homePosts'
+import { HOME_PAGE_SIZE, homePageCount } from '~/utils/homePagination'
+
+const props = defineProps<{
+  page?: string
+}>()
+const page = computed(() => Number(props.page || 1))
+const { summary } = useSummary()
+const homePageMax = homePageCount(summary.length)
+const posts = computed(() => {
+  const offset = (page.value - 1) * HOME_PAGE_SIZE
+  return homePostsCache.get(page.value)!
+    .map((detail, i) => ({ detail, summary: summary[offset + i] }))
 })
 </script>
 
@@ -28,7 +43,7 @@ watch(page, () => {
       </span>
     </div>
   </article>
-  <div class="my-10 inline-block">
-    <Pagination />
+  <div class="my-10 inline-block" :data-home-page="page">
+    <Pagination :page="page" :page-max="homePageMax" />
   </div>
 </template>

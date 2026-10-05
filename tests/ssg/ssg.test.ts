@@ -5,6 +5,7 @@ import path from 'node:path'
 // eslint-disable-next-line test/no-import-node-test
 import test from 'node:test'
 import { gunzipSync } from 'node:zlib'
+import { parse } from 'node-html-parser'
 
 const htmlEscapes: Record<string, string> = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': '\'' }
 
@@ -116,4 +117,35 @@ test('site pages include Bangumi and every tag page', async () => {
     const actual = [...html.matchAll(/href="\/posts\/([^"?#]+)"/g)].map(([, slug]) => decodeURIComponent(slug))
     assert.deepEqual(actual, posts.filter(post => post.tags.includes(tag)).map(post => post.url), `${tag}: static article links`)
   }
+})
+
+test('every homepage pagination route has its own content, metadata, and real links', async () => {
+  const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8'))
+  const pageMax = Math.ceil(posts.length / 10)
+  for (let page = 1; page <= pageMax; page++) {
+    const url = page === 1 ? '/' : `/${page}`
+    const html = await fs.readFile(page === 1 ? 'dist/index.html' : `dist/${page}.html`, 'utf8')
+    const root = parse(html)
+    const expected = posts.slice((page - 1) * 10, page * 10)
+    const links = root.querySelectorAll('a.show-more').map(link => link.getAttribute('href'))
+    assert.deepEqual(links, expected.map(post => `/posts/${encodeURIComponent(post.url)}`), url)
+    const excerpts = root.querySelectorAll('.md-blog-home')
+    const abstracts = JSON.parse(await fs.readFile(`dist/homePages/home-page-${page}.json`, 'utf8')) as string[]
+    assert.equal(abstracts.length, expected.length, url)
+    assert.deepEqual(excerpts.map(excerpt => excerpt.textContent), abstracts.map(detail => parse(detail).textContent), url)
+    assert.equal(excerpts.length, expected.length, url)
+    assert(excerpts.every(excerpt => excerpt.textContent.trim().length > 0), url)
+    assert.equal(root.querySelector('[data-home-page]')?.getAttribute('data-home-page'), String(page))
+    const title = page === 1 ? 'llyのblog' : `第 ${page} 页 | llyのblog`
+    assert.equal(pageTitle(html), title)
+    assert.equal(metaContent(html, 'og:title'), title)
+    assert.equal(root.querySelector('link[rel="canonical"]')?.getAttribute('href'), `https://blog.liuly.moe${url}`)
+    const pagination = root.querySelector('nav[aria-label="文章分页"]')!
+    const numbered = pagination.querySelectorAll('a').filter(link => /^\d+$/.test(link.textContent.trim()))
+    assert.deepEqual(numbered.map(link => link.getAttribute('href')), Array.from({ length: pageMax }, (_, i) => i === 0 ? '/' : `/${i + 1}`))
+    assert.equal(pagination.querySelector('a[aria-current="page"]')?.textContent.trim(), String(page))
+    assert.equal(pagination.querySelector('[aria-label="上一页"]')?.getAttribute('aria-disabled'), page === 1 ? 'true' : undefined)
+    assert.equal(pagination.querySelector('[aria-label="下一页"]')?.getAttribute('aria-disabled'), page === pageMax ? 'true' : undefined)
+  }
+  await assert.rejects(fs.access('dist/page.json'))
 })

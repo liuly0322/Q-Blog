@@ -1,5 +1,6 @@
 import routes from 'virtual:generated-pages'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
+import { loadHomePage } from './homePosts'
 import { scrollBehavior } from './navigationScroll'
 
 export function createSiteRouter() {
@@ -16,6 +17,11 @@ export function createSiteRouter() {
 
     if (path !== to.path)
       return { path, query: to.query, hash: to.hash, replace: true }
+  })
+
+  router.beforeResolve(async (to) => {
+    if (to.meta.homePage)
+      await loadHomePage(Number(to.params.page || 1))
   })
 
   return router

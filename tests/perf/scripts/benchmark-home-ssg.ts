@@ -126,7 +126,7 @@ try {
       assert(visible.content > 0, 'Homepage article excerpt never became visible')
 
       await page.waitForFunction(() => window.homeBench?.hydration > 0, undefined, { timeout: 30_000 })
-      // Wait for eager homepage images and the SPA's page.json request to settle.
+      // Wait for eager homepage images and hydration requests to settle.
       await waitForDownloads(pending)
 
       const timings = await page.evaluate(() => window.homeBench)

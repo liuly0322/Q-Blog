@@ -15,6 +15,11 @@ interface Element {
 
 interface Window {
   releaseArticle: () => void
+  homePageFetch: {
+    requests: number
+    complete: boolean
+    release: () => void
+  }
   bench: BrowserMetrics
   homeBench: BrowserMetrics
 }

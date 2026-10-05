@@ -1,9 +1,32 @@
+import type { Page } from 'playwright'
 import type { SiteHarness } from '../helpers/site.ts'
 import assert from 'node:assert/strict'
 import { archiveWithToc, articleWithToc, expectAnchor, expectArticle, expectArticleSnippet, openHydratedPage, posts, scrollArticle, waitForScrollToSettle } from '../helpers/site.ts'
 
+async function holdHomePageData(page: Page) {
+  await page.evaluate(() => {
+    const originalFetch = window.fetch.bind(window)
+    let release!: () => void
+    const ready = new Promise<void>((resolve) => {
+      release = resolve
+    })
+    window.homePageFetch = { requests: 0, complete: false, release }
+    // Gate JSON responses equally for emitted assets and inline data URLs.
+    window.fetch = async (input, init) => {
+      const response = await originalFetch(input, init)
+      if (!response.headers.get('content-type')?.includes('application/json'))
+        return response
+      window.homePageFetch.requests++
+      await ready
+      await response.clone().json()
+      window.homePageFetch.complete = true
+      return response
+    }
+  })
+}
+
 export function registerNavigation(harness: SiteHarness) {
-  for (const path of [scrollArticle, archiveWithToc.path, `${articleWithToc.path}${articleWithToc.anchor}`, `${archiveWithToc.path}${archiveWithToc.anchor}`]) {
+  for (const path of ['/2', scrollArticle, archiveWithToc.path, `${articleWithToc.path}${articleWithToc.anchor}`, `${archiveWithToc.path}${archiveWithToc.anchor}`]) {
     harness.test(`reload preserves reading position on ${path}`, async (site) => {
       const { page, origin } = site
       const hash = new URL(path, origin).hash
@@ -30,7 +53,7 @@ export function registerNavigation(harness: SiteHarness) {
     })
   }
 
-  for (const path of ['/', scrollArticle]) {
+  for (const path of ['/', '/2', scrollArticle]) {
     harness.test(`hydration preserves manual scrolling on ${path}`, async ({ page, origin }) => {
       let release!: () => void
       const ready = new Promise<void>((resolve) => {
@@ -260,6 +283,12 @@ export function registerNavigation(harness: SiteHarness) {
 
   harness.test('.html URLs are normalized on the client', async (site) => {
     const { page } = site
+    for (const [source, path, pageNumber] of [['/index.html', '/', 1], ['/2.html', '/2', 2]] as const) {
+      await openHydratedPage(site, source, '.show-more')
+      await page.waitForURL(`${site.origin}${path}`)
+      const expected = posts.slice((pageNumber - 1) * 10, pageNumber * 10).map(post => `/posts/${encodeURIComponent(post.url)}`)
+      assert.deepEqual(await page.locator('a.show-more').evaluateAll(links => links.map(link => link.getAttribute('href'))), expected)
+    }
     await openHydratedPage(site, '/posts/hello-world.html?test=1#feature', '#toc-feature')
     await page.waitForURL(`${site.origin}${articleWithToc.path}?test=1${articleWithToc.anchor}`)
     assert.equal(await page.locator('article h1').first().textContent(), articleWithToc.title)
@@ -280,7 +309,9 @@ export function registerNavigation(harness: SiteHarness) {
     const index = posts.findIndex(post => `/posts/${post.url}` === target)
     const pageNumber = Math.floor(index / 10) + 1
     assert(pageNumber > 1, 'Pagination fixture must be beyond the first page')
-    await page.locator('span.cursor-pointer').filter({ hasText: new RegExp(`^${pageNumber}$`) }).click()
+    await page.getByRole('navigation', { name: '文章分页' }).getByRole('link', { name: String(pageNumber), exact: true }).click()
+    await page.waitForURL(`${site.origin}/${pageNumber}`)
+    await page.waitForFunction(() => scrollY === 0)
     const expected = posts.slice((pageNumber - 1) * 10, pageNumber * 10).map(post => `/posts/${encodeURIComponent(post.url)}`)
     const cards = page.locator('a.show-more[href^="/posts/"]')
     await page.waitForFunction(href => document.querySelector('a.show-more')?.getAttribute('href') === href, expected[0])
@@ -293,7 +324,7 @@ export function registerNavigation(harness: SiteHarness) {
     await page.waitForURL(`**${target}`)
     await expectArticleSnippet(page, target)
     await page.goBack()
-    await page.waitForURL(`${site.origin}/`)
+    await page.waitForURL(`${site.origin}/${pageNumber}`)
     await page.waitForFunction(expected => Math.abs(scrollY - expected) < 120, position)
     assert.deepEqual(await cards.evaluateAll(elements => elements.map(el => el.getAttribute('href'))), expected)
 
@@ -304,6 +335,82 @@ export function registerNavigation(harness: SiteHarness) {
     await page.waitForFunction(href => document.querySelector('a.show-more')?.getAttribute('href') === href, `/posts/${posts[0].url}`)
     await page.waitForFunction(() => scrollY === 0)
     assert.equal(await page.evaluate(() => scrollY), 0)
+  })
+
+  harness.test('homepage pages keep their own content and reading positions through history', async (site) => {
+    const { page, origin } = site
+    await openHydratedPage(site, '/', '.show-more')
+    const positions: number[] = []
+    const pagination = page.getByRole('navigation', { name: '文章分页' })
+    for (let current = 1; current <= 3; current++) {
+      if (current > 1) {
+        // Preserve the reading position when leaving instead of scrolling the footer into view.
+        await pagination.getByRole('link', { name: String(current), exact: true }).evaluate((link: HTMLAnchorElement) => link.click())
+        await page.waitForURL(`${origin}/${current}`)
+        await page.waitForFunction(() => scrollY === 0)
+      }
+      await page.evaluate(position => scrollTo(0, position), 300 + current * 200)
+      positions.push(await page.evaluate(() => scrollY))
+    }
+    for (const [direction, current] of [['back', 2], ['back', 1], ['forward', 2], ['forward', 3]] as const) {
+      if (direction === 'back')
+        await page.goBack()
+      else
+        await page.goForward()
+      await page.waitForURL(current === 1 ? `${origin}/` : `${origin}/${current}`)
+      await page.waitForFunction(position => Math.abs(scrollY - position) < 5, positions[current - 1], { timeout: 5000 })
+      const expected = posts.slice((current - 1) * 10, current * 10).map(post => `/posts/${encodeURIComponent(post.url)}`)
+      assert.deepEqual(await page.locator('a.show-more').evaluateAll(links => links.map(link => link.getAttribute('href'))), expected)
+    }
+  })
+
+  harness.test('homepage navigation waits for data and reuses it on later visits', async (site) => {
+    const { page, origin } = site
+    await openHydratedPage(site, '/', '.show-more')
+    await holdHomePageData(page)
+    try {
+      const pagination = page.getByRole('navigation', { name: '文章分页' })
+      await pagination.getByRole('link', { name: '2', exact: true }).click()
+      await page.waitForFunction(() => window.homePageFetch.requests === 1)
+      assert.equal(page.url(), `${origin}/`)
+      assert.equal(await page.locator('.show-more').first().getAttribute('href'), `/posts/${encodeURIComponent(posts[0].url)}`)
+      await page.evaluate(() => window.homePageFetch.release())
+      await page.waitForURL(`${origin}/2`)
+      await page.waitForFunction(() => scrollY === 0)
+      const expected = posts.slice(10, 20).map(post => `/posts/${encodeURIComponent(post.url)}`)
+      assert.deepEqual(await page.locator('a.show-more').evaluateAll(links => links.map(link => link.getAttribute('href'))), expected)
+      assert.equal(await page.evaluate(() => window.homePageFetch.requests), 1)
+      await pagination.getByRole('link', { name: '1', exact: true }).click()
+      await page.waitForURL(`${origin}/`)
+      await pagination.getByRole('link', { name: '2', exact: true }).click()
+      await page.waitForURL(`${origin}/2`)
+      assert.equal(await page.evaluate(() => window.homePageFetch.requests), 1, 'Subsequent visits must reuse the page data')
+    }
+    finally {
+      await page.evaluate(() => window.homePageFetch.release())
+    }
+  })
+
+  harness.test('a late homepage response cannot overwrite a newer route', async (site) => {
+    const { page, origin } = site
+    await openHydratedPage(site, '/', '.show-more')
+    await holdHomePageData(page)
+    try {
+      await page.getByRole('navigation', { name: '文章分页' }).getByRole('link', { name: '2', exact: true }).click()
+      await page.waitForFunction(() => window.homePageFetch.requests === 1)
+      await page.locator('#sidebar a[href="/archive"]').click()
+      await page.waitForURL(`${origin}/archive`)
+      await page.evaluate(() => window.homePageFetch.release())
+      await page.waitForFunction(() => window.homePageFetch.complete)
+      await page.evaluate(() => new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+      }))
+      assert.equal(page.url(), `${origin}/archive`)
+      assert(await page.locator('main h2[id^="archive-"]').count() > 0)
+    }
+    finally {
+      await page.evaluate(() => window.homePageFetch.release())
+    }
   })
 
   harness.test('a late article response cannot overwrite the page after Back', async (site) => {

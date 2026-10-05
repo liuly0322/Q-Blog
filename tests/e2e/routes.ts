@@ -21,6 +21,29 @@ export function registerRoutes(harness: SiteHarness) {
     })
   }
 
+  const pageMax = Math.ceil(posts.length / 10)
+  for (let pageNumber = 1; pageNumber <= pageMax; pageNumber++) {
+    const path = pageNumber === 1 ? '/' : `/${pageNumber}`
+    harness.test(`homepage ${path} hydrates without downloading its excerpts again`, async (site) => {
+      const requests: string[] = []
+      const documents: string[] = []
+      site.page.on('request', (request) => {
+        requests.push(new URL(request.url()).pathname)
+        if (request.isNavigationRequest() && request.frame() === site.page.mainFrame())
+          documents.push(request.url())
+      })
+      const response = await openHydratedPage(site, path, '.show-more')
+      const title = pageNumber === 1 ? 'llyのblog' : `第 ${pageNumber} 页 | llyのblog`
+      assert.equal(await ssgTitle(response, site.page), title)
+      await expectTitle(site.page, title)
+      const expected = posts.slice((pageNumber - 1) * 10, pageNumber * 10).map(post => `/posts/${encodeURIComponent(post.url)}`)
+      assert.deepEqual(await site.page.locator('a.show-more').evaluateAll(links => links.map(link => link.getAttribute('href'))), expected)
+      assert.equal((await site.page.getByRole('navigation', { name: '文章分页' }).locator('[aria-current="page"]').textContent())?.trim(), String(pageNumber))
+      assert.deepEqual(documents, [`${site.origin}${path}`], 'Direct entry must use its own static document')
+      assert(!requests.some(path => /home-page-\d|\/page\.json$|\/spa\.html$/.test(path)), `Unexpected homepage data request: ${requests}`)
+    })
+  }
+
   for (const post of posts) {
     harness.test(`article ${post.url} hydrates from its own SSG output`, async (site) => {
       const requests: string[] = []
@@ -41,7 +64,7 @@ export function registerRoutes(harness: SiteHarness) {
     })
   }
 
-  for (const route of ['/', '/archive', `/tags/${encodeURIComponent(posts[0].tags[0])}`, '/posts/hello-world']) {
+  for (const route of ['/', '/2', `/${pageMax}`, '/archive', `/tags/${encodeURIComponent(posts[0].tags[0])}`, '/posts/hello-world']) {
     harness.test(`SSG content is usable without JavaScript on ${route}`, async (site) => {
       const response = await site.page.goto(site.origin + route)
       assert.equal(response.status(), 200)
@@ -49,16 +72,18 @@ export function registerRoutes(harness: SiteHarness) {
         await expectArticle(site.page, route)
       }
       else {
-        const expected = route === '/'
-          ? posts.slice(0, 10)
+        const isHomepage = route === '/' || /^\/\d+$/.test(route)
+        const pageNumber = route === '/' ? 1 : Number(route.slice(1))
+        const expected = isHomepage
+          ? posts.slice((pageNumber - 1) * 10, pageNumber * 10)
           : route === '/archive'
             ? posts
             : posts.filter(post => post.tags.includes(posts[0].tags[0]))
-        const selector = route === '/' ? 'a.show-more' : route === '/archive' ? 'main a[href^="/posts/"]' : '.grid a[href^="/posts/"]'
+        const selector = isHomepage ? 'a.show-more' : route === '/archive' ? 'main a[href^="/posts/"]' : '.grid a[href^="/posts/"]'
         await site.page.locator(selector).first().waitFor({ state: 'visible' })
         const links = await site.page.locator(selector).evaluateAll(elements => elements.map(el => decodeURIComponent(el.getAttribute('href'))))
         assert.deepEqual(links, expected.map(post => `/posts/${post.url}`))
-        if (route === '/') {
+        if (isHomepage) {
           await site.page.locator('.md-blog-home').first().waitFor({ state: 'visible' })
           const excerpts = await site.page.locator('.md-blog-home').allTextContents()
           assert.equal(excerpts.length, expected.length)
@@ -67,4 +92,18 @@ export function registerRoutes(harness: SiteHarness) {
       }
     }, { javaScriptEnabled: false })
   }
+
+  harness.test('homepage links navigate and reload without JavaScript', async (site) => {
+    const { page } = site
+    await page.goto(`${site.origin}/`)
+    const pagination = page.getByRole('navigation', { name: '文章分页' })
+    await pagination.getByRole('link', { name: '2', exact: true }).click()
+    await page.waitForURL(`${site.origin}/2`)
+    const expected = posts.slice(10, 20).map(post => `/posts/${encodeURIComponent(post.url)}`)
+    assert.deepEqual(await page.locator('a.show-more').evaluateAll(links => links.map(link => link.getAttribute('href'))), expected)
+    await page.reload()
+    assert.deepEqual(await page.locator('a.show-more').evaluateAll(links => links.map(link => link.getAttribute('href'))), expected)
+    await pagination.getByRole('link', { name: '上一页' }).click()
+    await page.waitForURL(`${site.origin}/`)
+  }, { javaScriptEnabled: false })
 }

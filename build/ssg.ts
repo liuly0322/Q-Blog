@@ -7,10 +7,11 @@ import { pathToFileURL } from 'node:url'
 import { gzipSync } from 'node:zlib'
 import frontmatter from 'frontmatter'
 import { build } from 'vite'
-import { SITE_TITLE, staticPageDetails, staticPageTitles } from '../src/pageMeta.ts'
+import { homePageTitle, SITE_TITLE, staticPageDetails, staticPageTitles } from '../src/pageMeta.ts'
+import { homePageCount, homePagePath } from '../src/utils/homePagination.ts'
 
 type SsrManifest = Record<string, string[]>
-type RenderEntry = typeof import('../src/entry-server').render
+type ServerEntry = typeof import('../src/entry-server')
 
 const siteUrl = 'https://blog.liuly.moe'
 const outputDir = path.resolve('dist')
@@ -85,10 +86,20 @@ try {
       minify: false,
     },
   })
-  const { render } = await import(pathToFileURL(path.join(serverDir, 'entry-server.js')).href) as { render: RenderEntry }
+  const { render, homePostsCache, postCache } = await import(pathToFileURL(path.join(serverDir, 'entry-server.js')).href) as ServerEntry
   const template = await fs.readFile(path.join(outputDir, 'index.html'), 'utf8')
   const manifest = JSON.parse(await fs.readFile(path.join(outputDir, '.vite/ssr-manifest.json'), 'utf8')) as SsrManifest
   const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8')) as { posts: PostSummary[] }
+  for (let page = 1; page <= homePageCount(posts.length); page++) {
+    const abstracts = JSON.parse(await fs.readFile(path.join(outputDir, 'homePages', `home-page-${page}.json`), 'utf8')) as string[]
+    homePostsCache.set(page, abstracts)
+  }
+  const paginationPages = Array.from({ length: homePageCount(posts.length) - 1 }, (_, i) => ({
+    url: homePagePath(i + 2),
+    file: `${i + 2}.html`,
+    title: homePageTitle(i + 2),
+    description: `我的个人博客，写点想写的（第 ${i + 2} 页）`,
+  }))
   const tagPages = [...new Set(posts.flatMap(post => post.tags))].map((tag) => {
     return {
       url: `/tags/${tag}`,
@@ -104,7 +115,7 @@ try {
   const spaHtml = template.replace('</head>', `${spaFallbackScript}\n</head>`)
   await fs.writeFile(path.join(outputDir, 'spa.html'), spaHtml)
 
-  for (const pageInfo of [...staticPages, ...tagPages]) {
+  for (const pageInfo of [...staticPages, ...paginationPages, ...tagPages]) {
     const { html, modules } = await render(pageInfo.url)
     const canonical = `${siteUrl}${pageInfo.url}`
     const metadata = [
@@ -133,8 +144,8 @@ try {
     // Metadata stays in HTML, rather than adding every description to the client JS.
     const markdown = frontmatter(await fs.readFile(path.join('posts', `${post.url}.md`), 'utf8')).content
     const description = generateDescription(markdown)
-    const content = await fs.readFile(path.join(outputDir, 'posts', `${post.url}.htm`), 'utf8')
-    const { html, modules } = await render(url, { post: post.url, content })
+    postCache.set(post.url, await fs.readFile(path.join(outputDir, 'posts', `${post.url}.htm`), 'utf8'))
+    const { html, modules } = await render(url)
     const title = `${post.title} | ${SITE_TITLE}`
     const metadata = [
       `<link rel="canonical" href="${siteUrl}${url}">`,
@@ -158,7 +169,7 @@ try {
       throw new Error(`Missing rendered article: ${post.url}`)
     await fs.writeFile(path.join(outputDir, 'posts', `${post.url}.html`), page)
   }
-  console.warn(`SSG: generated ${staticPages.length} static pages, ${tagPages.length} tag pages, and ${posts.length} article pages in ${Math.round(performance.now() - started)} ms.`)
+  console.warn(`SSG: generated ${staticPages.length} static pages, ${paginationPages.length} pagination pages, ${tagPages.length} tag pages, and ${posts.length} article pages in ${Math.round(performance.now() - started)} ms.`)
 }
 finally {
   await fs.rm(serverDir, { recursive: true, force: true })

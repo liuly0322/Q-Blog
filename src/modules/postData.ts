@@ -16,7 +16,7 @@ async function getPostData(postName: string, onCancel?: OnCancel) {
     })
 }
 
-async function getCachedPostData(postName: string, onCancel?: OnCancel) {
+export async function getCachedPostData(postName: string, onCancel?: OnCancel) {
   const cached = postCache.get(postName)
   if (cached !== undefined)
     return cached
@@ -26,12 +26,3 @@ async function getCachedPostData(postName: string, onCancel?: OnCancel) {
   postCache.set(postName, data)
   return data
 }
-
-const emptySummary = Object.freeze({ url: '', title: '404 Not Found', tags: [], date: '' })
-
-const { summary } = useSummary()
-function getCurrentPostSummary(postName: string) {
-  return summary.find(post_ => postName === post_.url) ?? emptySummary
-}
-
-export default () => ({ emptySummary, postCache, getCachedPostData, getCurrentPostSummary })

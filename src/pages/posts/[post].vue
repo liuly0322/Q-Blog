@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { restorePost } from '~/modules/navigationScroll'
+import { getCachedPostData, postCache } from '~/modules/postData'
 
 const props = defineProps<{ post: string }>()
-const { emptySummary, postCache, getCachedPostData, getCurrentPostSummary } = usePostData()
-const currPost = computed(() => getCurrentPostSummary(props.post))
+const { summary } = useSummary()
+const emptySummary = Object.freeze({ url: '', title: '404 Not Found', tags: [], date: '' })
+const currPost = computed(() => summary.find(post => props.post === post.url) ?? emptySummary)
 
 const NOT_FOUND = '<p><strong>找不到页面了 :(</strong></p>'
 const LOAD_FAILED = '<p><strong>文章加载失败，请刷新重试。</strong></p>'

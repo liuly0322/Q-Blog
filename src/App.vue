@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SITE_TITLE, staticPageTitles } from '~/pageMeta'
+import { homePageTitle, SITE_TITLE, staticPageTitles } from '~/pageMeta'
 
 const sidebarOpen = ref(false)
 const route = useRoute()
@@ -20,6 +20,9 @@ const title = computed(() => {
   const tag = route.params.tag
   if (typeof tag === 'string')
     return `${tag} | ${SITE_TITLE}`
+
+  if (route.meta.homePage)
+    return homePageTitle(Number(route.params.page || 1))
 
   return staticPageTitles[route.path] ?? SITE_TITLE
 })

@@ -1,6 +1,7 @@
 import { createSiteApp } from './app'
-import { postCache } from './composables/usePostData'
+import { homePostsCache } from './modules/homePosts'
 import nprogress from './modules/nprogress'
+import { postCache } from './modules/postData'
 
 import './styles/reset.css'
 import 'virtual:uno:components.css'
@@ -9,10 +10,15 @@ import './styles/main.css'
 import 'virtual:uno.css'
 
 const root = document.querySelector<HTMLElement>('#app')!
-// Reuse the actual SSR body; do not ship it again in an inline JSON payload.
+
 const postBody = root.querySelector<HTMLElement>('[data-post-body]')
-if (root.dataset.post && postBody)
-  postCache.set(root.dataset.post, postBody.innerHTML)
+if (postBody)
+  postCache.set(root.dataset.post!, postBody.innerHTML)
+
+const homePage = root.querySelector<HTMLElement>('[data-home-page]')
+if (homePage) {
+  homePostsCache.set(Number(homePage.dataset.homePage), Array.from(root.querySelectorAll('.md-blog-home'), excerpt => excerpt.innerHTML))
+}
 
 const { app, router } = createSiteApp(root.dataset.ssg === 'true')
 
