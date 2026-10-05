@@ -1,0 +1,58 @@
+@import 'aplayer-ts/src/css/base.css';
+
+.aplayer {
+  color: var(--text);
+  background: var(--surface);
+  border: 0.8px solid var(--border);
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 4%);
+}
+
+/* Override vendor colors (and per-song inline themes) without copying its selector chains. */
+.aplayer :is(.aplayer-author, .aplayer-time, .aplayer-list-index, .aplayer-list-author, .aplayer-lrc p, .aplayer-notice) {
+  color: var(--muted) !important;
+}
+
+.aplayer :is(.aplayer-info, .aplayer-list li) {
+  border-color: var(--border) !important;
+}
+
+.aplayer :is(.aplayer-bar, .aplayer-volume-bar) {
+  background: var(--border) !important;
+}
+
+.aplayer .aplayer-loaded {
+  background: var(--muted) !important;
+}
+
+.aplayer :is(.aplayer-played, .aplayer-thumb, .aplayer-volume, .aplayer-list-cur) {
+  background: var(--accent) !important;
+}
+
+.aplayer :is(.aplayer-list li:hover, .aplayer-list-light, .aplayer-notice) {
+  background: var(--inset-bg) !important;
+}
+
+.aplayer .aplayer-time .aplayer-icon path {
+  fill: var(--muted) !important;
+}
+
+.aplayer .aplayer-time .aplayer-icon:hover path {
+  fill: var(--accent) !important;
+}
+
+.aplayer .aplayer-lrc::before {
+  background: linear-gradient(to bottom, var(--surface), transparent);
+}
+
+.aplayer .aplayer-lrc::after {
+  background: linear-gradient(to bottom, transparent, var(--surface));
+}
+
+.aplayer .aplayer-list ol::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
+.aplayer .aplayer-list ol::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}

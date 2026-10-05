@@ -1,0 +1,99 @@
+@import './md.css';
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: auto;
+  padding: 0;
+}
+
+:root {
+  --page-bg: #f6f7f8;
+  --surface: #fff;
+  --inset-bg: #f6f6f6;
+  --text: #333;
+  --muted: #737373;
+  --border: #e5e5e5;
+  --accent: #2563a6;
+  --header-h: 4rem;
+  --header-gap: 1rem;
+  --content-top: calc(var(--header-h) + var(--header-gap));
+}
+
+html.dark {
+  color-scheme: dark;
+  --page-bg: #121212;
+  --surface: #1e1e1e;
+  --inset-bg: #171717;
+  --text: #e5e5e5;
+  --muted: #a3a3a3;
+  --border: #363636;
+  --accent: #8bbcf0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  line-height: 1.5;
+  tab-size: 4;
+  scrollbar-gutter: stable;
+  color: var(--text);
+  background: var(--page-bg);
+  color-scheme: light;
+}
+
+body {
+  max-width: 1280px;
+  font-size: 14px;
+}
+
+#nprogress {
+  pointer-events: none;
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--accent);
+  height: 2px;
+  transform: translateX(-100%);
+  transition: transform 200ms ease, opacity 200ms linear 200ms;
+}
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+@media (max-width: 1023.9px) {
+  #sidebar {
+    background-color: var(--surface);
+    max-height: calc(100vh - var(--header-h));
+    position: fixed;
+    right: 0;
+    top: var(--header-h);
+    translate: 100% 0;
+    transition: translate 0.3s ease;
+    z-index: 3;
+  }
+
+  #sidebar.sidebar-open {
+    translate: 0 0;
+  }
+
+  #mdui-overlay {
+    inset: var(--header-h) 0 0;
+    background: rgba(0, 0, 0, 0.4);
+    backface-visibility: hidden;
+    opacity: 0;
+    transition-duration: 0.3s;
+    transition-property: opacity, visibility;
+    will-change: opacity;
+  }
+
+  #mdui-overlay.mdui-overlay-show {
+    display: unset;
+    opacity: 1;
+  }
+}

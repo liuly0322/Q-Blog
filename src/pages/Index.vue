@@ -1,0 +1,34 @@
+<script setup lang="ts">
+const { posts } = useHomePosts()
+const { page } = usePage()
+
+watch(page, () => {
+  window.scrollTo({ left: 0, top: 0 })
+})
+</script>
+
+<template>
+  <article v-for="post in posts" :key="post.summary.url" class="mb-4 p-7 card">
+    <div class="text-3xl font-medium my-4">
+      <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`" class="hover:text-accent">
+        {{
+          post.summary.title
+        }}
+      </router-link>
+    </div>
+    {{ post.summary.date }}
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <div class="md-blog md-blog-home m-auto text-left" v-html="post.detail" />
+    <router-link class="show-more" :to="`/posts/${encodeURIComponent(post.summary.url)}`">
+      查看更多
+    </router-link>
+    <div class="text-left mt-6">
+      <span v-for="tag in post.summary.tags" :key="tag" class="mr-2 text-muted">
+        <router-link :to="`/tags/${tag}`" class="hover:text-accent">#{{ tag }}</router-link>
+      </span>
+    </div>
+  </article>
+  <div class="my-10 inline-block">
+    <Pagination />
+  </div>
+</template>

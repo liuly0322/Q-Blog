@@ -1,0 +1,14 @@
+pagefind-modal {
+  --pf-text: var(--text);
+  --pf-text-secondary: var(--muted);
+  --pf-text-muted: var(--muted);
+  --pf-background: var(--surface);
+  --pf-border: var(--border);
+  --pf-border-focus: var(--accent);
+  --pf-outline-focus: var(--accent);
+  --pf-mark: var(--accent);
+  --pf-hover: var(--inset-bg);
+  --pf-skeleton: var(--border);
+  --pf-skeleton-shine: var(--inset-bg);
+  --pf-font: inherit;
+}

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="590" viewBox="0 0 1040 590" role="img" aria-labelledby="title desc">
+  <title id="title">从 RSS 到 ActivityPub</title>
+  <desc id="desc">博客构建生成 feed.xml。RSS 阅读器定期读取它；Cloudflare Worker 也每五分钟读取它，将新条目转换为 Create Article，通过队列由 Worker 投递到关注者所在实例的 inbox。KV 保存身份、关注者和文章状态。箭头表示内容流向。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M0 0 8 4 0 8" fill="none" stroke="#63718a" stroke-width="1.5"/></marker>
+    <style>
+      text { font-family: system-ui, -apple-system, 'Segoe UI', 'Noto Sans CJK SC', 'Microsoft YaHei', sans-serif; fill: #24324a; }
+      .title { font-size: 28px; font-weight: 700; }
+      .head { font-size: 20px; font-weight: 650; }
+      .body { font-size: 16px; }
+      .small { font-size: 14px; fill: #52627a; }
+      .line { fill: none; stroke: #63718a; stroke-width: 2; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1040" height="590" rx="20" fill="#f7f9fc"/>
+  <text x="36" y="51" class="title">一份 Feed，两个订阅入口</text>
+  <text x="36" y="81" class="body">RSS 提供内容 · ActivityPub 连接账号与关注者</text>
+
+  <rect x="34" y="243" width="192" height="120" rx="14" fill="#fff" stroke="#c9d4e3"/>
+  <text x="54" y="278" class="head">静态博客</text>
+  <text x="54" y="309" class="body">Markdown → Pages</text>
+  <text x="54" y="338" class="small">构建生成文章与 Feed</text>
+  <path d="M226 303 H270" class="line"/>
+
+  <rect x="280" y="243" width="198" height="120" rx="14" fill="#fff4e8" stroke="#e1ac72"/>
+  <text x="302" y="278" class="head">feed.xml / RSS</text>
+  <text x="302" y="309" class="body">标题 · 摘要 · 链接</text>
+  <text x="302" y="338" class="small">博客现有的内容接口</text>
+
+  <rect x="555" y="120" width="224" height="87" rx="14" fill="#fff4e8" stroke="#e1ac72"/>
+  <text x="578" y="154" class="head">RSS 阅读器</text>
+  <text x="578" y="184" class="body">定期拉取，展示更新</text>
+  <path d="M379 243 V164 H545" class="line"/>
+  <text x="402" y="150" class="small">读取 RSS</text>
+
+  <rect x="531" y="226" width="481" height="266" rx="18" fill="#edf3ff" stroke="#c3d4f1"/>
+  <text x="553" y="255" class="small">Cloudflare · ap.liuly.moe</text>
+  <rect x="555" y="273" width="220" height="90" rx="12" fill="#fff" stroke="#8da9d5"/>
+  <text x="574" y="305" class="head">Worker + Fedify</text>
+  <text x="574" y="335" class="body">新条目 → Create(Article)</text>
+  <path d="M478 303 H545" class="line"/>
+  <text x="555" y="394" class="small">Cron 每 5 分钟读取 Feed</text>
+
+  <rect x="814" y="273" width="173" height="90" rx="12" fill="#fff" stroke="#8da9d5"/>
+  <text x="837" y="305" class="head">Queue</text>
+  <text x="831" y="334" class="body">异步任务与重试</text>
+  <path d="M775 318 H804" class="line"/>
+
+  <rect x="555" y="421" width="220" height="50" rx="10" fill="#fff" stroke="#8da9d5"/>
+  <text x="574" y="452" class="body">KV：身份 / 关注者 / 文章</text>
+  <path d="M730 363 V411" class="line" marker-start="url(#arrow)"/>
+
+  <rect x="280" y="510" width="495" height="56" rx="12" fill="#eaf7f0" stroke="#8abda3"/>
+  <text x="302" y="545" class="head">关注者所在实例的 inbox → 社交时间线</text>
+  <path d="M901 363 V380 H994 V538 H786" class="line"/>
+  <text x="818" y="424" class="small">Worker 消费队列</text>
+  <text x="818" y="448" class="small">通过 ActivityPub 投递</text>
+  <text x="36" y="558" class="small">箭头表示内容流向</text>
+</svg>

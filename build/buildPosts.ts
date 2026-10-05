@@ -1,0 +1,196 @@
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import Shiki from '@shikijs/markdown-it'
+import frontmatter from 'frontmatter'
+import markdownIt from 'markdown-it'
+import mdAnchorPlugin from 'markdown-it-anchor'
+import mdLinkAttrPlugin from 'markdown-it-link-attributes'
+import mdMathPlugin from 'markdown-it-texmath'
+import RSS from 'rss'
+import mdImageSizePlugin from './mdImageSizePlugin'
+
+const SITE_URL = 'https://blog.liuly.moe'
+
+const publicImages = path.join('public', 'images')
+const publicPosts = path.join('public', 'posts')
+
+const descriptionRenderer = markdownIt()
+  .use(mdImageSizePlugin(SITE_URL))
+const baseRenderer = configureMarkdownRenderer(markdownIt({ html: true }))
+
+function configureMarkdownRenderer(renderer: ReturnType<typeof markdownIt>) {
+  return renderer
+    .use(mdMathPlugin)
+    .use(mdAnchorPlugin)
+    .use(mdLinkAttrPlugin, {
+      attrs: {
+        target: '_blank',
+        rel: 'noopener',
+      },
+    })
+    .use(mdImageSizePlugin())
+}
+
+async function createPostRenderer() {
+  const shiki = await Shiki({
+    themes: {
+      light: 'vitesse-light',
+      dark: 'vitesse-dark',
+    },
+  })
+  return configureMarkdownRenderer(markdownIt({ html: true }).use(shiki))
+}
+
+let postRendererPromise: ReturnType<typeof createPostRenderer> | undefined
+function getPostRenderer() {
+  return postRendererPromise ??= createPostRenderer()
+}
+
+export default ({ incremental = false }: { incremental?: boolean } = {}) => ({
+  name: 'build-posts',
+  async buildStart() {
+    await buildPosts(incremental)
+  },
+  async handleHotUpdate({ file }: { file: string }) {
+    if (file.startsWith(`${path.resolve('posts')}${path.sep}`))
+      await buildPosts(incremental)
+  },
+})
+
+function formatDate(date: Date) {
+  return date
+    .toISOString()
+    .replace(/T/g, ' ')
+    .replace(/\.\d{3}Z/, '')
+}
+
+interface Post {
+  title: string
+  date: string
+  tags: string[]
+  url: string
+  content: string
+}
+
+async function collectEachPostAndImages(file: string): Promise<Post | void> {
+  if (file.endsWith('.md')) {
+    const blogName = path.basename(file, '.md')
+    const blogPath = path.join('posts', file)
+    const content = await fs.readFile(blogPath, { encoding: 'utf-8' })
+    const parsed = frontmatter(content)
+    return {
+      title: parsed.data.title,
+      date: String(parsed.data.date.valueOf()),
+      tags: parsed.data.tags,
+      url: blogName,
+      content: parsed.content,
+    }
+  }
+  else if (!path.extname(file)) {
+    const dirname = path.join('posts', file)
+    const images = await fs.readdir(dirname)
+    // Copy images in parallel for better performance
+    await Promise.all(images.map(image =>
+      fs.copyFile(path.join(dirname, image), path.join(publicImages, image)),
+    ))
+  }
+}
+
+async function collectPostsAndImages(): Promise<Post[]> {
+  const files = await fs.readdir('posts')
+  const posts = (await Promise.all(files.map(collectEachPostAndImages))).filter(
+    (file): file is Post => file !== undefined,
+  )
+  posts.sort((a, b) => Number(b.date) - Number(a.date))
+  posts.forEach((post) => {
+    post.date = formatDate(new Date(Number(post.date)))
+  })
+  return posts
+}
+
+function truncate(s: string, len: number) {
+  const moreIndex = s.indexOf('<!-- more -->')
+  if (moreIndex !== -1)
+    return s.slice(0, moreIndex)
+  return s.length > len ? s.slice(0, len) : s
+}
+
+function removeRSSLastBuildDate(xml: string) {
+  return xml.replace(/<lastBuildDate>.*<\/lastBuildDate>/, '')
+}
+
+async function generateRSS(posts: Post[]) {
+  const feed = new RSS({
+    title: 'liuly\'s Blog',
+    description: 'liuly 的个人 Blog',
+    site_url: SITE_URL,
+    feed_url: `${SITE_URL}/feed.xml`,
+    copyright: '2024 liuly',
+    language: 'zh-cn',
+  })
+  for (const post of posts) {
+    feed.item({
+      title: post.title,
+      url: `${SITE_URL}/posts/${post.url}`,
+      description: descriptionRenderer.render(truncate(post.content, 100)),
+      date: `${post.date} UTC+8`,
+    })
+  }
+  const xml = removeRSSLastBuildDate(feed.xml())
+  await fs.writeFile(path.join('public', 'feed.xml'), xml)
+}
+
+async function checkPostHasChanged(post: Post) {
+  const src = path.join('posts', `${post.url}.md`)
+  const dst = path.join(publicPosts, `${post.url}.htm`)
+  const srcStat = await fs.stat(src)
+  const dstStat = await fs.stat(dst).catch(() => null)
+  return dstStat === null || srcStat.mtimeMs > dstStat.mtimeMs
+}
+
+async function generateStaticPost(post: Post) {
+  if (!await checkPostHasChanged(post))
+    return
+
+  const postRenderer = await getPostRenderer()
+  await fs.writeFile(
+    path.join(publicPosts, `${post.url}.htm`),
+    postRenderer.render(post.content),
+  )
+}
+
+async function generateStaticPosts(posts: Post[], incremental: boolean) {
+  if (!incremental) {
+    await fs.rm(publicPosts, { recursive: true, force: true })
+    await fs.mkdir(publicPosts, { recursive: true })
+  }
+
+  await Promise.all(posts.map(generateStaticPost))
+}
+
+async function generateSiteSummary(posts: Post[], firstPageAbstracts: string[]) {
+  const summary = {
+    posts: posts.map(({ title, date, tags, url }) => ({ title, date, tags, url })),
+  }
+  await fs.writeFile(path.join('src/jsons', 'summary.json'), JSON.stringify(summary))
+  await fs.writeFile(path.join('src/jsons', 'firstPageAbstracts.json'), JSON.stringify(firstPageAbstracts))
+}
+
+async function generatePostAbstracts(abstracts: string[]) {
+  await fs.writeFile(path.join('public', 'page.json'), JSON.stringify(abstracts))
+}
+
+async function buildPosts(incremental: boolean) {
+  await fs.mkdir(publicImages, { recursive: true })
+  await fs.mkdir(publicPosts, { recursive: true })
+
+  const posts = await collectPostsAndImages()
+  const abstracts = posts.map(post => baseRenderer.render(truncate(post.content, 100)))
+
+  await Promise.all([
+    generateRSS(posts),
+    generateStaticPosts(posts, incremental),
+    generatePostAbstracts(abstracts),
+    generateSiteSummary(posts, abstracts.slice(0, 10)),
+  ])
+}
