@@ -10,7 +10,7 @@ const navOptions = [
 </script>
 
 <template>
-  <header class="sticky top-0 z-3 flex items-center justify-between border-b-[0.8px] p-2" style="background: color-mix(in srgb, var(--surface) 70%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px)">
+  <header class="sticky top-0 z-3 flex items-center justify-between border-b-[0.8px] p-4" style="background: color-mix(in srgb, var(--surface) 70%, transparent); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px)">
     <router-link to="/" class="flex items-center hover:text-accent">
       <img
         src="/avatar_192.webp"
@@ -21,17 +21,17 @@ const navOptions = [
       >
       <span class="<sm:hidden pl-2 text-lg">llyのblog</span>
     </router-link>
-    <div class="inline-flex items-center">
+    <div class="flex items-center gap-4">
       <RouterLink
         v-for="option in navOptions"
         :key="option.to"
-        class="block mx-3 hover:text-accent"
+        class="block hover:text-accent"
         :class="{ 'text-accent': route.path === option.to }"
         :to="option.to"
       >
         {{ option.label }}
       </RouterLink>
-      <label for="sidebar-toggle" class="lg:hidden mx-3 flex relative cursor-pointer">
+      <label for="sidebar-toggle" class="lg:hidden relative cursor-pointer">
         <input
           id="sidebar-toggle"
           type="checkbox"

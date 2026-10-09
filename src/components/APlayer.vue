@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="playerRef" />
-  <div v-if="!playerReady" class="card m-1 flex h-[90px] overflow-hidden pointer-events-none" aria-hidden="true">
+  <div v-if="!playerReady" class="card flex h-[92px] overflow-hidden pointer-events-none" aria-hidden="true">
     <div class="grid w-[90px] place-items-center bg-inset">
       <span class="text-2xl">♪</span>
     </div>
@@ -55,7 +55,7 @@ onBeforeUnmount(() => {
           <div class="h-[2px] w-[72%] animate-pulse rounded-full bg-line" />
         </div>
         <div class="text-muted">
-          <span class="mr-1">🔈</span>
+          <span>🔈&nbsp;</span>
           <span>☰</span>
         </div>
       </div>

@@ -4,7 +4,7 @@ const { toggleDark } = useDarks()
 </script>
 
 <template>
-  <div class="mx-1 mb-6 text-center lg:card p-6">
+  <div class="mb-6 text-center lg:card p-6">
     <div class="flex justify-center mb-2">
       <img
         src="/avatar_192.webp"
@@ -16,15 +16,15 @@ const { toggleDark } = useDarks()
     </div>
     <p class="text-xl">lly | undef_baka</p>
     <p class="mt-2 mb-6">愛の形骸<br>追う絵 覆う手を</p>
-    <div class="flex justify-around mb-4">
+    <div class="flex text-base justify-around mb-4">
       <router-link to="/archive" class="flex flex-col items-center hover:text-accent">
-        <p class="text-[11px] leading-none">
+        <p class="text-xs leading-none">
           POSTS
         </p>
         <p>{{ summary.length }}</p>
       </router-link>
       <router-link to="/tags" class="flex flex-col items-center hover:text-accent">
-        <p class="text-[11px] leading-none">
+        <p class="text-xs leading-none">
           TAGS
         </p>
         <p>{{ tagCount.length }}</p>

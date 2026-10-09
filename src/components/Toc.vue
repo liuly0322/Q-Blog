@@ -34,7 +34,7 @@ onUnmounted(() => observer.disconnect())
 </script>
 
 <template>
-  <nav class="aside <xl:hidden card pl-6 p-4 ml-5 mr-1 text-left">
+  <nav class="aside <xl:hidden card pl-6 p-4 ml-4 text-left">
     <h2 class="font-medium text-lg mb-4">
       目录
     </h2>

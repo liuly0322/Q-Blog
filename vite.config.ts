@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises'
 import { extname, resolve, sep } from 'node:path'
 import process from 'node:process'
 import Vue from '@vitejs/plugin-vue'
+import { Features } from 'lightningcss'
 import mdLinkAttrPlugin from 'markdown-it-link-attributes'
 import { visualizer } from 'rollup-plugin-visualizer'
 import UnoCSS from 'unocss/vite'
@@ -133,6 +134,9 @@ export default defineConfig(withClientOnly(({ command, isSsrBuild }, ClientOnly)
   ],
   css: {
     transformer: 'lightningcss',
+    lightningcss: {
+      exclude: Features.LightDark,
+    },
   },
   build: {
     minify: 'terser',
