@@ -19,7 +19,7 @@ export default defineConfig({
   blocklist: ['m16', 'tab', 'container', 'backdrop-filter', 'transition', 'ease'],
   shortcuts: {
     // Shared sticky side column geometry.
-    'aside': 'w-[256px] flex-shrink-0 sticky top-[var(--content-top)] overflow-auto max-h-[calc(100vh_-_var(--content-top))]',
+    'aside': 'w-[256px] shrink-0 sticky top-[var(--content-top)] overflow-auto max-h-[calc(100vh_-_var(--content-top))]',
     'blog-tag': `
       inline-flex items-center whitespace-nowrap
       h-7 px-2 rounded-full

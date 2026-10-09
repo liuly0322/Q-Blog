@@ -11,11 +11,11 @@ defineProps<{
 
 <template>
   <nav class="flex text-base" aria-label="文章分页">
-    <RouterLink v-if="page > 1" :to="homePagePath(page - 1)" class="mx-1 pt-1.5" aria-label="上一页">
-      <AntDesignLeftCircleOutlined />
+    <RouterLink v-if="page > 1" :to="homePagePath(page - 1)" class="mx-1" aria-label="上一页">
+      <AntDesignLeftCircleOutlined class="pt-1.5" />
     </RouterLink>
-    <span v-else class="mx-1 pt-1.5 cursor-not-allowed" aria-label="上一页" aria-disabled="true">
-      <AntDesignLeftCircleOutlined />
+    <span v-else class="mx-1 cursor-not-allowed" aria-label="上一页" aria-disabled="true">
+      <AntDesignLeftCircleOutlined class="pt-1.5" />
     </span>
     <RouterLink
       v-for="i in pageMax" :key="i"
@@ -26,11 +26,11 @@ defineProps<{
     >
       {{ i }}
     </RouterLink>
-    <RouterLink v-if="page < pageMax" :to="homePagePath(page + 1)" class="mx-1 pt-1.5" aria-label="下一页">
-      <AntDesignRightCircleOutlined />
+    <RouterLink v-if="page < pageMax" :to="homePagePath(page + 1)" class="mx-1" aria-label="下一页">
+      <AntDesignRightCircleOutlined class="pt-1.5" />
     </RouterLink>
-    <span v-else class="mx-1 pt-1.5 cursor-not-allowed" aria-label="下一页" aria-disabled="true">
-      <AntDesignRightCircleOutlined />
+    <span v-else class="mx-1 cursor-not-allowed" aria-label="下一页" aria-disabled="true">
+      <AntDesignRightCircleOutlined class="pt-1.5" />
     </span>
   </nav>
 </template>

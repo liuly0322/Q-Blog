@@ -10,22 +10,25 @@ import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
 import Components from 'unplugin-vue-components/vite'
 import Markdown from 'unplugin-vue-markdown/vite'
-import { defineConfig } from 'vite'
+import { type ConfigEnv, defineConfig, type UserConfig, type UserConfigFnObject } from 'vite'
 
 import Pages from 'vite-plugin-pages'
 import { VitePWA } from 'vite-plugin-pwa'
-import vsharp from 'vite-plugin-vsharp'
 import BuildPosts from './build/buildPosts'
 import { getCurrentSeason, getCurrentYear } from './src/utils/date'
 
 const markdownWrapperClasses = 'md-blog m-auto text-left'
 
-const buildStamp = { year: getCurrentYear(), season: getCurrentSeason() }
+type ClientOnly = <T>(createPlugin: () => T) => T | false
 
-export default defineConfig(({ command, isSsrBuild }) => ({
+function withClientOnly(config: (env: ConfigEnv, ClientOnly: ClientOnly) => UserConfig): UserConfigFnObject {
+  return env => config(env, createPlugin => env.isSsrBuild ? false : createPlugin())
+}
+
+export default defineConfig(withClientOnly(({ command, isSsrBuild }, ClientOnly) => ({
   define: {
-    __BUILD_YEAR__: String(buildStamp.year),
-    __BUILD_SEASON__: JSON.stringify(buildStamp.season),
+    __BUILD_YEAR__: String(getCurrentYear()),
+    __BUILD_SEASON__: JSON.stringify(getCurrentSeason()),
   },
   resolve: {
     alias: {
@@ -57,7 +60,6 @@ export default defineConfig(({ command, isSsrBuild }) => ({
         })
       },
     },
-    // vue 官方插件，用来解析 sfc
     Vue({
       include: [/\.vue$/, /\.md$/],
       features: {
@@ -65,7 +67,6 @@ export default defineConfig(({ command, isSsrBuild }) => ({
         prodHydrationMismatchDetails: !!process.env.HYDRATION_DETAILS && !isSsrBuild,
       },
     }),
-    // markdown 编译插件
     Markdown({
       wrapperClasses: markdownWrapperClasses,
       markdownItSetup(md) {
@@ -77,25 +78,20 @@ export default defineConfig(({ command, isSsrBuild }) => ({
         })
       },
     }),
-    // 自动构建文件
-    !isSsrBuild && BuildPosts({ incremental: command === 'serve' }),
-    // 文件路由
+    ClientOnly(() => BuildPosts({ incremental: command === 'serve' })),
     Pages({
       extensions: ['vue', 'md'],
     }),
     UnoCSS(),
-    // https://icones.netlify.app/
     Icons({
       autoInstall: true,
     }),
-    // 组件自动按需引入
     Components({
       dts: resolve(__dirname, './src/types/components.d.ts'),
       resolvers: [
         IconsResolver(),
       ],
     }),
-    // api 自动按需引入
     AutoImport({
       dts: './src/types/auto-imports.d.ts',
       imports: ['vue', 'vue-router'],
@@ -103,8 +99,7 @@ export default defineConfig(({ command, isSsrBuild }) => ({
         './src/composables',
       ],
     }),
-    // PWA
-    !isSsrBuild && VitePWA({
+    ClientOnly(() => VitePWA({
       injectRegister: 'inline',
       registerType: 'autoUpdate',
       workbox: {
@@ -133,19 +128,8 @@ export default defineConfig(({ command, isSsrBuild }) => ({
           },
         ],
       },
-    }),
-    // 压缩图片
-    !isSsrBuild && vsharp({
-      excludePublic: [
-        'public/*',
-      ],
-      includePublic: [
-        'public/images/*.png',
-        'public/images/*.jpg',
-      ],
-    }),
-    // 打包体积分析
-    !isSsrBuild && visualizer(),
+    })),
+    process.env.ROLLUP_ENABLE_VISUALIZER && ClientOnly(() => visualizer()),
   ],
   css: {
     transformer: 'lightningcss',
@@ -159,4 +143,4 @@ export default defineConfig(({ command, isSsrBuild }) => ({
       },
     },
   },
-}))
+})))

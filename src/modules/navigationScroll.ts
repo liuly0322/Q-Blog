@@ -29,7 +29,7 @@ export const scrollBehavior: RouterScrollBehavior = (to, from, savedPosition) =>
   return { left: 0, top: 0 }
 }
 
-export function restorePost() {
+export function restorePostScroll() {
   const position = pendingScrollPosition
 
   if (position === undefined)

@@ -12,7 +12,7 @@ onMounted(() => {
   <footer class="flex flex-wrap items-center justify-center pt-8 pb-12 leading-8">
     <div class="flex items-center">
       <span>© 2021 - {{ footer.year }}</span>
-      <span class="px-2.5 animate-heart-beat animate-duration-1000 animate-count-infinite"><svg viewBox="0 0 32 32" width="16" height="16">
+      <span class="px-2.5 animate-heart-beat animate-count-infinite"><svg viewBox="0 0 32 32" width="16" height="16">
         <path fill="#f8312f" d="M16 29S2 21 2 11C2 4 11 2 16 8c5-6 14-4 14 3 0 10-14 18-14 18" />
         <ellipse cx="23" cy="12" rx="2.5" ry="4" fill="#f37366" transform="rotate(30 23 12)" />
       </svg></span>

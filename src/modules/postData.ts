@@ -5,9 +5,9 @@ export const postCache = new Map<string, string>()
 if (import.meta.hot)
   import.meta.hot.on('vite:beforeUpdate', () => postCache.clear())
 
-async function getPostData(postName: string, onCancel?: OnCancel) {
+async function getPostData(postName: string, onCancel: OnCancel) {
   const abortController = new AbortController()
-  onCancel && onCancel(() => abortController.abort())
+  onCancel(() => abortController.abort())
   return fetch(`/posts/${postName}.htm`, { signal: abortController.signal })
     .then((res) => {
       if (!res.ok)
@@ -16,7 +16,7 @@ async function getPostData(postName: string, onCancel?: OnCancel) {
     })
 }
 
-export async function getCachedPostData(postName: string, onCancel?: OnCancel) {
+export async function getCachedPostData(postName: string, onCancel: OnCancel) {
   const cached = postCache.get(postName)
   if (cached !== undefined)
     return cached

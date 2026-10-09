@@ -7,9 +7,9 @@ const props = defineProps<{
 }>()
 
 const { isDark } = useDarks()
-const vueUtterances = ref<HTMLElement>()
+const utterancesContainer = ref<HTMLElement>()
 function init() {
-  vueUtterances.value?.firstChild?.remove()
+  utterancesContainer.value?.firstChild?.remove()
 
   const utterances = document.createElement('script')
   utterances.async = true
@@ -21,14 +21,14 @@ function init() {
     utterances.setAttribute('theme', 'github-dark')
   else utterances.setAttribute('theme', 'github-light')
 
-  vueUtterances.value?.appendChild(utterances)
+  utterancesContainer.value?.appendChild(utterances)
 }
 
 onMounted(init)
 watch(() => props.post, init)
 
 watch(isDark, (value) => {
-  vueUtterances.value?.querySelector('iframe')?.contentWindow?.postMessage(
+  utterancesContainer.value?.querySelector('iframe')?.contentWindow?.postMessage(
     {
       type: 'set-theme',
       theme: value ? 'github-dark' : 'github-light',
@@ -39,8 +39,8 @@ watch(isDark, (value) => {
 </script>
 
 <template>
-  <div class="relative">
-    <div ref="vueUtterances" class="min-h-268px relative z-2 bg-surface" />
+  <div class="relative min-h-269px">
+    <div ref="utterancesContainer" class="relative z-2 bg-surface" />
     <div class="absolute inset-0 flex flex-col items-center justify-center">
       <LineMdLoadingLoop class="text-accent" />
       <p class="mt-4">

@@ -4,7 +4,7 @@ const props = defineProps<{
 }>()
 const { summary } = useSummary()
 const postIndex = computed(() =>
-  summary.findIndex(PostSummary => PostSummary.url === props.post),
+  summary.findIndex(post => post.url === props.post),
 )
 </script>
 

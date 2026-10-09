@@ -1,12 +1,14 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import Shiki from '@shikijs/markdown-it'
+import { fromAsyncCodeToHtml } from '@shikijs/markdown-it/async'
 import frontmatter from 'frontmatter'
 import markdownIt from 'markdown-it'
 import mdAnchorPlugin from 'markdown-it-anchor'
+import markdownItAsync from 'markdown-it-async'
 import mdLinkAttrPlugin from 'markdown-it-link-attributes'
 import mdMathPlugin from 'markdown-it-texmath'
 import RSS from 'rss'
+import { codeToHtml } from 'shiki'
 import { HOME_PAGE_SIZE, homePageCount } from '../src/utils/homePagination'
 import mdImageSizePlugin from './mdImageSizePlugin'
 
@@ -15,12 +17,22 @@ const SITE_URL = 'https://blog.liuly.moe'
 const publicImages = path.join('public', 'images')
 const publicPosts = path.join('public', 'posts')
 
-const descriptionRenderer = markdownIt()
+const rssRenderer = markdownIt()
   .use(mdImageSizePlugin(SITE_URL))
-const baseRenderer = configureMarkdownRenderer(markdownIt({ html: true }))
+const abstractRenderer = configureMarkdownRenderer(markdownIt({ html: true }))
+const postRenderer = configureMarkdownRenderer(
+  markdownItAsync({ html: true }).use(
+    fromAsyncCodeToHtml(codeToHtml, {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+    }),
+  ),
+)
 
-function configureMarkdownRenderer(renderer: ReturnType<typeof markdownIt>) {
-  return renderer
+function configureMarkdownRenderer<T extends ReturnType<typeof markdownIt> | ReturnType<typeof markdownItAsync>>(renderer: T) {
+  renderer
     .use(mdMathPlugin)
     .use(mdAnchorPlugin)
     .use(mdLinkAttrPlugin, {
@@ -30,24 +42,10 @@ function configureMarkdownRenderer(renderer: ReturnType<typeof markdownIt>) {
       },
     })
     .use(mdImageSizePlugin())
+  return renderer
 }
 
-async function createPostRenderer() {
-  const shiki = await Shiki({
-    themes: {
-      light: 'vitesse-light',
-      dark: 'vitesse-dark',
-    },
-  })
-  return configureMarkdownRenderer(markdownIt({ html: true }).use(shiki))
-}
-
-let postRendererPromise: ReturnType<typeof createPostRenderer> | undefined
-function getPostRenderer() {
-  return postRendererPromise ??= createPostRenderer()
-}
-
-export default ({ incremental = false }: { incremental?: boolean } = {}) => ({
+export default ({ incremental }: { incremental: boolean }) => ({
   name: 'build-posts',
   async buildStart() {
     await buildPosts(incremental)
@@ -109,11 +107,11 @@ async function collectPostsAndImages(): Promise<Post[]> {
   return posts
 }
 
-function truncate(s: string, len: number) {
+function extractAbstract(s: string) {
   const moreIndex = s.indexOf('<!-- more -->')
   if (moreIndex !== -1)
     return s.slice(0, moreIndex)
-  return s.length > len ? s.slice(0, len) : s
+  return s.slice(0, 100)
 }
 
 function removeRSSLastBuildDate(xml: string) {
@@ -133,7 +131,7 @@ async function generateRSS(posts: Post[]) {
     feed.item({
       title: post.title,
       url: `${SITE_URL}/posts/${post.url}`,
-      description: descriptionRenderer.render(truncate(post.content, 100)),
+      description: rssRenderer.render(extractAbstract(post.content)),
       date: `${post.date} UTC+8`,
     })
   }
@@ -153,10 +151,9 @@ async function generateStaticPost(post: Post) {
   if (!await checkPostHasChanged(post))
     return
 
-  const postRenderer = await getPostRenderer()
   await fs.writeFile(
     path.join(publicPosts, `${post.url}.htm`),
-    postRenderer.render(post.content),
+    await postRenderer.renderAsync(post.content),
   )
 }
 
@@ -199,7 +196,7 @@ async function buildPosts(incremental: boolean) {
   await fs.mkdir(publicPosts, { recursive: true })
 
   const posts = await collectPostsAndImages()
-  const abstracts = posts.map(post => baseRenderer.render(truncate(post.content, 100)))
+  const abstracts = posts.map(post => abstractRenderer.render(extractAbstract(post.content)))
 
   await Promise.all([
     generateRSS(posts),

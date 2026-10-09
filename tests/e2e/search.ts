@@ -11,6 +11,27 @@ async function searchAsset(extension: string) {
 }
 
 export function registerSearch(harness: SiteHarness) {
+  harness.test('Chinese compounds match indexed content and preserve heading links', async (site) => {
+    const { page, origin } = site
+    await openHydratedPage(site, '/')
+    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLInputElement).disabled)
+    await page.getByRole('textbox', { name: '搜索文章' }).click()
+    const modal = page.getByRole('dialog', { includeHidden: true })
+    await modal.getByRole('searchbox').fill('水合')
+    const path = '/posts/shrink-load-time'
+    const article = modal.locator(`a[href="${path}.html"]`).first()
+    await article.waitFor({ state: 'visible' })
+    assert.equal(await article.textContent(), '从 SPA 出发的 hydration——博客加载时间现已缩短 60%')
+    const heading = modal.locator(`a[href^="${path}.html#"]`).filter({ hasText: /^水合$/ })
+    await heading.waitFor({ state: 'visible' })
+    const hash = new URL((await heading.getAttribute('href'))!, origin).hash
+    assert.equal(decodeURIComponent(hash), '#水合')
+    await heading.click()
+    await page.waitForURL(`${origin}${path}${hash}`)
+    await expectAnchor(page, await page.evaluate(hash => `#${CSS.escape(hash.slice(1))}`, hash))
+    assert.equal(await page.locator('[data-post-body]').evaluate(body => body.textContent!.includes('\u200B')), false)
+  })
+
   harness.test('search stays disabled until the official UI loads, then opens a modal and navigates within the SPA', async (site) => {
     const { page } = site
     let release: () => void

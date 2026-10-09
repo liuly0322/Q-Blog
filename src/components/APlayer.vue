@@ -41,22 +41,20 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="playerRef" />
-  <div v-if="!playerReady" class="card m-1 overflow-hidden pointer-events-none" aria-hidden="true">
-    <div class="player-pic float-left grid place-items-center bg-inset">
+  <div v-if="!playerReady" class="card m-1 flex h-[90px] overflow-hidden pointer-events-none" aria-hidden="true">
+    <div class="grid w-[90px] place-items-center bg-inset">
       <span class="text-2xl">♪</span>
     </div>
-
-    <div class="player-info box-border">
-      <div class="player-music">
-        <span class="animate-pulse bg-line block rounded-full h-[7px] w-[72%]" />
-        <span class="animate-pulse bg-line block rounded-full mt-2 h-[5px] w-[42%]" />
+    <div class="flex flex-1 flex-col justify-between px-2 pt-[10px]">
+      <div class="flex flex-col gap-2">
+        <span class="h-2 w-[72%] animate-pulse rounded-full bg-line" />
+        <span class="h-1 w-[42%] animate-pulse rounded-full bg-line" />
       </div>
-      <div class="player-lrc" />
-      <div class="flex">
-        <div class="player-bar flex-1">
-          <div class="animate-pulse bg-line block rounded-full h-[2px] w-[72%]" />
+      <div class="flex items-center pb-1">
+        <div class="flex-1">
+          <div class="h-[2px] w-[72%] animate-pulse rounded-full bg-line" />
         </div>
-        <div class="player-time relative flex items-center">
+        <div class="text-muted">
           <span class="mr-1">🔈</span>
           <span>☰</span>
         </div>
@@ -64,38 +62,3 @@ onBeforeUnmount(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.player-pic {
-  width: 90px;
-  height: 90px;
-}
-
-.player-info {
-  margin-left: 90px;
-  height: 90px;
-  padding: 10px 7px 0;
-}
-
-.player-music {
-  height: 22px;
-  margin: 0 0 13px 5px;
-}
-
-.player-lrc {
-  height: 30px;
-  margin: -10px 0 7px;
-}
-
-.player-bar {
-  margin-left: 5px;
-  padding: 4px 0;
-}
-
-.player-time {
-  bottom: 4px;
-  height: 17px;
-  padding-left: 7px;
-  color: var(--muted);
-}
-</style>

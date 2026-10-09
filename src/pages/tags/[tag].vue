@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const props = defineProps<{ tag: string }>()
 const { summary } = useSummary()
-const curSummary = computed(() =>
+const tagPosts = computed(() =>
   summary.filter(post => post.tags.includes(props.tag)),
 )
 </script>
 
 <template>
-  <PostCardGrid :title="props.tag" :summary="curSummary" />
+  <PostCardGrid :title="props.tag" :summary="tagPosts" />
 </template>

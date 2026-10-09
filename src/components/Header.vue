@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const emit = defineEmits(['toggleSidebar'])
-const routePath = useRoute()
+const route = useRoute()
 
 const navOptions = [
   { label: '主页', to: '/' },
@@ -27,14 +26,21 @@ const navOptions = [
         v-for="option in navOptions"
         :key="option.to"
         class="block mx-3 hover:text-accent"
-        :class="{ 'text-accent': routePath.path === option.to }"
+        :class="{ 'text-accent': route.path === option.to }"
         :to="option.to"
       >
         {{ option.label }}
       </RouterLink>
-      <button aria-label="menu" class="lg:hidden mx-3 flex" @click="emit('toggleSidebar')">
-        <i-carbon:menu />
-      </button>
+      <label for="sidebar-toggle" class="lg:hidden mx-3 flex relative cursor-pointer">
+        <input
+          id="sidebar-toggle"
+          type="checkbox"
+          aria-label="menu"
+          aria-controls="sidebar"
+          class="absolute inset-0 w-full h-full m-0 opacity-0 cursor-pointer peer"
+        >
+        <i-carbon:menu class="peer-focus-visible:outline" />
+      </label>
     </div>
   </header>
 </template>

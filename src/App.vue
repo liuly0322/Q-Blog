@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import { homePageTitle, SITE_TITLE, staticPageTitles } from '~/pageMeta'
 
-const sidebarOpen = ref(false)
 const route = useRoute()
 const router = useRouter()
 const { summary } = useSummary()
-
-router.afterEach(() => {
-  sidebarOpen.value = false
-})
 
 const title = computed(() => {
   const post = route.params.post
@@ -28,31 +23,33 @@ const title = computed(() => {
 })
 
 onMounted(() => {
+  router.afterEach(() => {
+    const menu = document.querySelector<HTMLInputElement>('#sidebar-toggle')
+    menu && (menu.checked = false)
+  })
   watch(title, value => document.title = value, { immediate: true })
 })
 </script>
 
 <template>
   <div>
-    <Header class="mb-4 h-16 box-border" @toggle-sidebar="sidebarOpen = !sidebarOpen" />
+    <Header class="mb-4 h-16" />
     <div class="flex flex-col" style="min-height: calc(100vh - var(--content-top))">
       <div class="flex flex-1">
-        <Sidebar
-          id="sidebar"
-          class="aside h-full lg:mr-4"
-          :class="{ 'sidebar-open': sidebarOpen }"
-        />
+        <aside id="sidebar" class="aside h-full lg:mr-4">
+          <ControlPanel />
+          <APlayer song-server="netease" song-id="373425292" />
+        </aside>
         <main class="flex-grow min-w-0 text-center">
           <router-view />
         </main>
       </div>
       <CommonFooter />
     </div>
-    <div
+    <label
       id="mdui-overlay"
-      class="fixed z-2 hidden lg:hidden"
-      :class="{ 'mdui-overlay-show': sidebarOpen }"
-      @click="sidebarOpen = false"
+      for="sidebar-toggle"
+      class="fixed z-2 hidden cursor-pointer"
     />
   </div>
 </template>

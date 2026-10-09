@@ -4,7 +4,7 @@ const { toggleDark } = useDarks()
 </script>
 
 <template>
-  <div class="mx-1 mt-0 mb-6 text-center lg:card p-4">
+  <div class="mx-1 mb-6 text-center lg:card p-6">
     <div class="flex justify-center mb-2">
       <img
         src="/avatar_192.webp"
@@ -16,7 +16,7 @@ const { toggleDark } = useDarks()
     </div>
     <p class="text-xl">lly | undef_baka</p>
     <p class="mt-2 mb-6">愛の形骸<br>追う絵 覆う手を</p>
-    <div class="flex justify-around my-4">
+    <div class="flex justify-around mb-4">
       <router-link to="/archive" class="flex flex-col items-center hover:text-accent">
         <p class="text-[11px] leading-none">
           POSTS
@@ -30,7 +30,7 @@ const { toggleDark } = useDarks()
         <p>{{ tagCount.length }}</p>
       </router-link>
     </div>
-    <PostSearch class="px-4 pb-4" />
+    <PostSearch class="mb-6" />
     <div class="flex justify-center my-2">
       <button aria-label="toggle-dark-mode" @click="toggleDark()">
         <i-carbon:haze-night class="text-2xl hidden dark:block" />

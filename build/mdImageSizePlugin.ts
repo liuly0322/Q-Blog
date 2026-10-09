@@ -13,27 +13,27 @@ export default (absolutePathPrefix = '') =>
       const token = tokens[index]
       const srcIndex = token.attrIndex('src')
       const mdUrl = token.attrs![srcIndex][1]
-      const caption = md.utils.escapeHtml(token.content)
+      const altText = md.utils.escapeHtml(token.content)
       const otherAttributes = generateAttributes(md, token)
 
-      const { localUrl, siteUrl } = getImageUrl(mdUrl, absolutePathPrefix)
-      const { width, height } = localUrl
-        ? imageSize(localUrl)
+      const { localPath, siteUrl } = getImageUrl(mdUrl, absolutePathPrefix)
+      const { width, height } = localPath
+        ? imageSize(localPath)
         : { width: null, height: null }
       const dimensionsAttributes = width && height ? ` width="${width}" height="${height}"` : ''
 
-      return `<img src="${siteUrl}" alt="${caption}"${dimensionsAttributes}${otherAttributes ? ` ${otherAttributes}` : ''}>`
+      return `<img src="${siteUrl}" alt="${altText}"${dimensionsAttributes}${otherAttributes ? ` ${otherAttributes}` : ''}>`
     }
   }
 
 function getImageUrl(mdUrl: string, absolutePathPrefix: string): {
-  localUrl: string
+  localPath: string
   siteUrl: string
 } {
   const isExternalImage = mdUrl.startsWith('http://') || mdUrl.startsWith('https://')
   if (isExternalImage) {
     return {
-      localUrl: '',
+      localPath: '',
       siteUrl: mdUrl,
     }
   }
@@ -42,7 +42,7 @@ function getImageUrl(mdUrl: string, absolutePathPrefix: string): {
   if (isLocalRelativeUrl)
     mdUrl = `/images/${path.basename(mdUrl)}`
   return {
-    localUrl: `./public${mdUrl}`,
+    localPath: `./public${mdUrl}`,
     siteUrl: `${absolutePathPrefix}${mdUrl}`,
   }
 }

@@ -1,7 +1,7 @@
 import routes from 'virtual:generated-pages'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
-import { loadHomePage } from './homePosts'
 import { scrollBehavior } from './navigationScroll'
+import { loadPostAbstracts } from './postAbstractsData'
 
 export function createSiteRouter() {
   const router = createRouter({
@@ -21,7 +21,7 @@ export function createSiteRouter() {
 
   router.beforeResolve(async (to) => {
     if (to.meta.homePage)
-      await loadHomePage(Number(to.params.page || 1))
+      await loadPostAbstracts(Number(to.params.page || 1))
   })
 
   return router

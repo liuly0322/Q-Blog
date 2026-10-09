@@ -78,22 +78,16 @@ body {
     z-index: 3;
   }
 
-  #sidebar.sidebar-open {
+  #app:has(#sidebar-toggle:checked) #sidebar {
     translate: 0 0;
   }
 
   #mdui-overlay {
     inset: var(--header-h) 0 0;
     background: rgba(0, 0, 0, 0.4);
-    backface-visibility: hidden;
-    opacity: 0;
-    transition-duration: 0.3s;
-    transition-property: opacity, visibility;
-    will-change: opacity;
   }
 
-  #mdui-overlay.mdui-overlay-show {
-    display: unset;
-    opacity: 1;
+  #app:has(#sidebar-toggle:checked) #mdui-overlay {
+    display: block;
   }
 }

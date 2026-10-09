@@ -1,5 +1,6 @@
 import type { SiteHarness } from '../helpers/site.ts'
 import assert from 'node:assert/strict'
+import { setTimeout } from 'node:timers/promises'
 import { openHydratedPage, posts, waitForScrollToSettle } from '../helpers/site.ts'
 
 export function registerPlatform(harness: SiteHarness) {
@@ -18,8 +19,8 @@ export function registerPlatform(harness: SiteHarness) {
       }
       await expectFooterAtBottom()
 
-      if (await page.getByRole('button', { name: 'menu' }).isVisible())
-        await page.getByRole('button', { name: 'menu' }).click()
+      if (await page.getByRole('checkbox', { name: 'menu' }).isVisible())
+        await page.getByRole('checkbox', { name: 'menu' }).click()
       await page.locator('#sidebar a[href="/archive"]').click()
       await page.waitForURL(`${origin}/archive`)
       await page.locator('h2[id^="archive-"]').first().waitFor({ state: 'visible' })
@@ -62,7 +63,7 @@ export function registerPlatform(harness: SiteHarness) {
     async function openSidebar() {
       assert.equal(await sidebar.count(), 1, 'Sidebar must exist')
       assert.equal(await overlay.count(), 1, 'Overlay must exist')
-      await page.getByRole('button', { name: 'menu' }).click()
+      await page.getByRole('checkbox', { name: 'menu' }).click()
       await page.waitForFunction(() => {
         const sidebar = document.querySelector('#sidebar')
         const overlay = document.querySelector('#mdui-overlay')
@@ -93,6 +94,73 @@ export function registerPlatform(harness: SiteHarness) {
     await sidebar.locator('a[href="/archive"]').click()
     await expectClosed()
   }, { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, colorScheme: 'dark' })
+
+  harness.test('mobile sidebar opens and closes without JavaScript', async (site) => {
+    const { page, origin } = site
+    await page.goto(`${origin}/posts/hello-world`)
+    const menu = page.getByRole('checkbox', { name: 'menu' })
+    const sidebar = page.locator('#sidebar')
+    const overlay = page.locator('#mdui-overlay')
+
+    async function expectSidebar(open: boolean) {
+      for (let attempt = 0; attempt < 50; attempt++) {
+        const bounds = await sidebar.boundingBox()
+        assert(bounds)
+        const positioned = open ? bounds.x >= 0 && bounds.x + bounds.width <= 391 : bounds.x >= 390
+        if (positioned && await overlay.isVisible() === open)
+          return
+        await setTimeout(100)
+      }
+      assert.fail(`Sidebar should be ${open ? 'open' : 'closed'}`)
+    }
+
+    await expectSidebar(false)
+    await menu.tap()
+    await expectSidebar(true)
+    await menu.tap()
+    await expectSidebar(false)
+    await menu.tap()
+    await expectSidebar(true)
+    await overlay.tap({ position: { x: 10, y: 10 } })
+    await expectSidebar(false)
+    await menu.focus()
+    await page.keyboard.press('Space')
+    await expectSidebar(true)
+    await sidebar.locator('a[href="/tags"]').click()
+    await page.waitForURL(`${origin}/tags`)
+    await expectSidebar(false)
+  }, { javaScriptEnabled: false, viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true })
+
+  harness.test('mobile sidebar preserves its state across hydration', async (site) => {
+    const { page, origin } = site
+    let release!: () => void
+    const scriptsReady = new Promise<void>(resolve => release = resolve)
+    await page.route('**/assets/*.js', async (route) => {
+      await scriptsReady
+      await route.continue()
+    })
+
+    try {
+      await page.goto(`${origin}/posts/hello-world`, { waitUntil: 'commit' })
+      const menu = page.getByRole('checkbox', { name: 'menu' })
+      await menu.tap()
+      assert(await menu.isChecked())
+      assert.equal(await page.evaluate(() => !!document.querySelector('#app')?.__vue_app__), false)
+
+      release()
+      await page.waitForFunction(() => !!document.querySelector('#app')?.__vue_app__)
+      assert(await menu.isChecked())
+      await menu.tap()
+      assert.equal(await menu.isChecked(), false)
+      await menu.tap()
+      await page.locator('#sidebar a[href="/archive"]').click()
+      await page.waitForURL(`${origin}/archive`)
+      assert.equal(await menu.isChecked(), false)
+    }
+    finally {
+      release()
+    }
+  }, { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true })
 
   harness.test('service worker reload keeps the article hydrated', async (site) => {
     const { page } = site

@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { restorePost } from '~/modules/navigationScroll'
+import { restorePostScroll } from '~/modules/navigationScroll'
 import { getCachedPostData, postCache } from '~/modules/postData'
 
 const props = defineProps<{ post: string }>()
 const { summary } = useSummary()
-const emptySummary = Object.freeze({ url: '', title: '404 Not Found', tags: [], date: '' })
-const currPost = computed(() => summary.find(post => props.post === post.url) ?? emptySummary)
+const notFoundSummary = Object.freeze({ url: '', title: '404 Not Found', tags: [], date: '' })
+const postSummary = computed(() => summary.find(post => props.post === post.url) ?? notFoundSummary)
 
 const NOT_FOUND = '<p><strong>找不到页面了 :(</strong></p>'
 const LOAD_FAILED = '<p><strong>文章加载失败，请刷新重试。</strong></p>'
 
 function knownContent(postName: string) {
-  if (currPost.value === emptySummary)
+  if (postSummary.value === notFoundSummary)
     return NOT_FOUND
   return postCache.get(postName)
 }
 
 const initialContent = knownContent(props.post)
-const data = ref(initialContent ?? '')
+const postHtml = ref(initialContent ?? '')
 const loading = ref(initialContent === undefined)
 
 let cancelLoad = () => {}
@@ -26,7 +26,7 @@ async function loadPost(post: string) {
 
   const known = knownContent(post)
   if (known !== undefined) {
-    data.value = known
+    postHtml.value = known
     loading.value = false
     return
   }
@@ -46,7 +46,7 @@ async function loadPost(post: string) {
   if (cancelled)
     return
 
-  data.value = content
+  postHtml.value = content
   loading.value = false
 }
 
@@ -54,7 +54,7 @@ if (initialContent === undefined)
   void loadPost(props.post)
 watch(() => props.post, loadPost)
 
-const postContentEle = ref<HTMLElement>()
+const postBody = ref<HTMLElement>()
 
 const toc = ref<{ id: string, text: string, tab: number }[]>([])
 type Heading = Pick<HTMLElement, 'id' | 'textContent' | 'tagName'>
@@ -75,10 +75,10 @@ function readHeadings(element: { querySelectorAll: (selector: string) => ArrayLi
 if (import.meta.env.SSR) {
   onServerPrefetch(async () => {
     const { parse } = await import('node-html-parser')
-    readHeadings(parse(data.value))
+    readHeadings(parse(postHtml.value))
   })
 }
-else if (data.value) {
+else if (postHtml.value) {
   const body = document.querySelector<HTMLElement>('[data-post-body]')
   body && readHeadings(body)
 }
@@ -90,7 +90,7 @@ const removeAfterEach = useRouter().afterEach(() => {
 onUnmounted(removeAfterEach)
 
 onMounted(() => {
-  watch([data, navigationCounter], async (_, _previous, onCleanup) => {
+  watch([postHtml, navigationCounter], async (_, _previous, onCleanup) => {
     // The data is not ready yet
     if (loading.value)
       return
@@ -104,13 +104,13 @@ onMounted(() => {
     await nextTick()
     if (cancelled)
       return
-    readHeadings(postContentEle.value!)
+    readHeadings(postBody.value!)
 
     // Restore scroll position after toc has been updated.
     await nextTick()
     if (cancelled)
       return
-    restorePost()
+    restorePostScroll()
   }, { immediate: true })
 })
 </script>
@@ -118,7 +118,7 @@ onMounted(() => {
 <template>
   <div class="flex items-start">
     <article class="lg:card bg-surface px-6 flex-grow min-w-0" data-pagefind-body>
-      <PostHeader :post="currPost" />
+      <PostHeader :post="postSummary" />
       <div v-if="loading" class="my-1.6em text-left pt-0.5 animate-pulse">
         <template v-for="i in 4" :key="i">
           <div v-for="line in (i % 3) + 1" :key="`skeleton-${i}-${line}`" class="h-3.5 mb-2 bg-line" />
@@ -127,9 +127,9 @@ onMounted(() => {
       </div>
       <div v-show="!loading">
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <div ref="postContentEle" class="md-blog m-auto text-left" data-post-body v-html="data" />
-        <PostFooter :post="currPost.url" data-pagefind-ignore />
-        <Comment :post="currPost" data-pagefind-ignore />
+        <div ref="postBody" class="md-blog m-auto text-left" data-post-body v-html="postHtml" />
+        <PostFooter :post="postSummary.url" data-pagefind-ignore />
+        <Comment :post="postSummary" data-pagefind-ignore />
       </div>
     </article>
     <Toc

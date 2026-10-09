@@ -6,7 +6,7 @@
 </route>
 
 <script setup lang="ts">
-import { homePostsCache } from '~/modules/homePosts'
+import { postAbstractsCache } from '~/modules/postAbstractsData'
 import { HOME_PAGE_SIZE, homePageCount } from '~/utils/homePagination'
 
 const props = defineProps<{
@@ -17,13 +17,13 @@ const { summary } = useSummary()
 const homePageMax = homePageCount(summary.length)
 const posts = computed(() => {
   const offset = (page.value - 1) * HOME_PAGE_SIZE
-  return homePostsCache.get(page.value)!
-    .map((detail, i) => ({ detail, summary: summary[offset + i] }))
+  return postAbstractsCache.get(page.value)!
+    .map((abstract, i) => ({ abstract, summary: summary[offset + i] }))
 })
 </script>
 
 <template>
-  <article v-for="post in posts" :key="post.summary.url" class="mb-4 p-7 card">
+  <article v-for="post in posts" :key="post.summary.url" class="mb-4 p-6 card">
     <div class="text-3xl font-medium my-4">
       <router-link :to="`/posts/${encodeURIComponent(post.summary.url)}`" class="hover:text-accent">
         {{
@@ -33,7 +33,7 @@ const posts = computed(() => {
     </div>
     {{ post.summary.date }}
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div class="md-blog md-blog-home m-auto text-left" v-html="post.detail" />
+    <div class="md-blog md-blog-home m-auto text-left" v-html="post.abstract" />
     <router-link class="show-more" :to="`/posts/${encodeURIComponent(post.summary.url)}`">
       查看更多
     </router-link>

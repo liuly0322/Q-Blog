@@ -45,15 +45,15 @@ const htmlEscapes: Record<string, string> = {
   '\'': '&#39;',
 }
 
-function escapeHtml(value: unknown): string {
-  return String(value).replace(/[&<>"']/g, char => htmlEscapes[char])
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, char => htmlEscapes[char])
 }
 
-function generateDescription(content: string, maxLength = 160): string {
+function generateDescription(content: string): string {
   return content
     .replace(/[#*~`><!-]/g, '')
     .replace(/\s+/g, ' ')
-    .slice(0, maxLength)
+    .slice(0, 160)
 }
 
 // Inlining trades a request for bytes on the document; past this size the trade reverses.
@@ -62,15 +62,15 @@ const inlineStyleBudget = 20 * 1024
 // Route sheets as links, entry sheet inlined when the page can carry it.
 async function assemblePage(skeleton: string, metadata: string, modules: string[], manifest: SsrManifest): Promise<string> {
   // modules yields route sheets only: the entry sheet is never in the manifest.
-  const routes = [...new Set(modules.flatMap(id => manifest[id] ?? []))]
+  const routeStyleLinks = [...new Set(modules.flatMap(id => manifest[id] ?? []))]
     .filter(asset => asset.endsWith('.css'))
     .map(asset => `<link rel="stylesheet" href="${escapeHtml(asset)}">`)
     .join('\n')
   const entry = skeleton.match(/<link[^>]+rel="stylesheet"[^>]+href="(\/assets\/[^"]+\.css)"[^>]*>/)
   if (!inlineStyles || !entry || gzipSync(skeleton).length > inlineStyleBudget)
-    return skeleton.replace('</head>', () => `${metadata}\n${routes}\n</head>`)
+    return skeleton.replace('</head>', () => `${metadata}\n${routeStyleLinks}\n</head>`)
   const sheet = await fs.readFile(path.join(outputDir, entry[1].replace(/^\//, '')), 'utf8')
-  return skeleton.replace(entry[0], '').replace('</head>', () => `${metadata}\n<style>${sheet}</style>\n${routes}\n</head>`)
+  return skeleton.replace(entry[0], '').replace('</head>', () => `${metadata}\n<style>${sheet}</style>\n${routeStyleLinks}\n</head>`)
 }
 
 // Vite 5's existing SSR build API; no new framework or runtime dependency.
@@ -86,13 +86,13 @@ try {
       minify: false,
     },
   })
-  const { render, homePostsCache, postCache } = await import(pathToFileURL(path.join(serverDir, 'entry-server.js')).href) as ServerEntry
+  const { render, postAbstractsCache, postCache } = await import(pathToFileURL(path.join(serverDir, 'entry-server.js')).href) as ServerEntry
   const template = await fs.readFile(path.join(outputDir, 'index.html'), 'utf8')
   const manifest = JSON.parse(await fs.readFile(path.join(outputDir, '.vite/ssr-manifest.json'), 'utf8')) as SsrManifest
   const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8')) as { posts: PostSummary[] }
   for (let page = 1; page <= homePageCount(posts.length); page++) {
     const abstracts = JSON.parse(await fs.readFile(path.join(outputDir, 'homePages', `home-page-${page}.json`), 'utf8')) as string[]
-    homePostsCache.set(page, abstracts)
+    postAbstractsCache.set(page, abstracts)
   }
   const paginationPages = Array.from({ length: homePageCount(posts.length) - 1 }, (_, i) => ({
     url: homePagePath(i + 2),

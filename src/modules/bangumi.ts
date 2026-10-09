@@ -18,7 +18,7 @@ interface Collections {
 }
 
 const PAGE_SIZE = 12
-const animeList: Ref<Anime[]> = ref([])
+export const animeList: Ref<Anime[]> = ref([])
 async function updateBangumiData(page: number) {
   const offset = page * PAGE_SIZE
   // https://gist.github.com/liuly0322/7100018ad6cd9f82aff3fee1e9bcd6f3
@@ -36,24 +36,22 @@ async function updateBangumiData(page: number) {
 }
 
 let page = 0
-const loading = ref(true)
+export const hasMore = ref(true)
 async function updateNewPage() {
   try {
     await updateBangumiData(page)
     page++
   }
   catch (error) {
-    loading.value = false
+    hasMore.value = false
   }
 }
 
-let ticking = false
-async function updateAnimeList() {
-  if (ticking || !loading.value)
+let loading = false
+export async function updateAnimeList() {
+  if (loading || !hasMore.value)
     return
-  ticking = true
+  loading = true
   await updateNewPage()
-  ticking = false
+  loading = false
 }
-
-export default () => ({ animeList, loading, updateAnimeList })

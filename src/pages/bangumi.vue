@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import LineMdLoadingLoop from '~icons/line-md/loading-loop?width=48px&height=48px'
-
-const { animeList, loading, updateAnimeList } = useBangumi()
+import { animeList, hasMore, updateAnimeList } from '~/modules/bangumi'
 
 const loadingElement = ref<HTMLElement>()
 let intersectionObserver: IntersectionObserver | undefined
@@ -19,7 +18,7 @@ onUnmounted(() => {
   intersectionObserver?.disconnect()
 })
 
-function lineClamp(event: MouseEvent) {
+function toggleLineClamp(event: MouseEvent) {
   const el = event.target as HTMLElement
   const lineClamp = Array.from(el.classList).find(cls => cls.startsWith('line-clamp-'))?.split('-')[2]
   if (lineClamp) {
@@ -48,16 +47,16 @@ function isInView(el: HTMLElement) {
       动画列表（<a href="https://bangumi.tv/user/undef_baka" class="text-accent underline" target="_blank" rel="noopener noreferrer">bangumi</a>）
     </h1>
   </SectionDivider>
-  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     <div
       v-for="anime in animeList" :key="anime.subject.id"
-      class="flex items-center card p-3"
+      class="flex items-center card p-4 gap-4"
     >
-      <a class="flex-shrink-0" :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer">
+      <a class="shrink-0" :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer">
         <img :src="anime.subject.images.medium" :alt="anime.subject.name" class="rounded-lg" width="130" height="182">
       </a>
 
-      <div class="h-full ml-2 flex flex-col justify-between flex-grow text-sm">
+      <div class="h-full flex flex-col justify-between flex-grow text-sm">
         <a
           :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer"
           class="text-lg text-accent font-bold hover:underline"
@@ -65,13 +64,13 @@ function isInView(el: HTMLElement) {
           {{ anime.subject.name_cn || anime.subject.name }}
         </a>
 
-        <div class="cursor-pointer line-clamp-2 text-muted my-2 whitespace-pre-line" @click="lineClamp">
+        <div class="cursor-pointer line-clamp-2 text-muted my-2 whitespace-pre-line" @click="toggleLineClamp">
           {{ anime.subject.short_summary }}
         </div>
 
         <hr>
 
-        <div v-if="anime.comment" class="cursor-pointer line-clamp-3 my-2" @click="lineClamp">
+        <div v-if="anime.comment" class="cursor-pointer line-clamp-3 my-2" @click="toggleLineClamp">
           {{ anime.comment }}
         </div>
 
@@ -90,7 +89,7 @@ function isInView(el: HTMLElement) {
       </div>
     </div>
   </div>
-  <div v-if="loading" ref="loadingElement" class="pt-5 flex justify-center">
+  <div v-if="hasMore" ref="loadingElement" class="mt-6 flex justify-center">
     <LineMdLoadingLoop class="text-accent" />
   </div>
 </template>

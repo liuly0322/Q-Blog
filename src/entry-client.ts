@@ -1,6 +1,6 @@
 import { createSiteApp } from './app'
-import { homePostsCache } from './modules/homePosts'
 import nprogress from './modules/nprogress'
+import { postAbstractsCache } from './modules/postAbstractsData'
 import { postCache } from './modules/postData'
 
 import './styles/reset.css'
@@ -17,7 +17,7 @@ if (postBody)
 
 const homePage = root.querySelector<HTMLElement>('[data-home-page]')
 if (homePage) {
-  homePostsCache.set(Number(homePage.dataset.homePage), Array.from(root.querySelectorAll('.md-blog-home'), excerpt => excerpt.innerHTML))
+  postAbstractsCache.set(Number(homePage.dataset.homePage), Array.from(root.querySelectorAll('.md-blog-home'), excerpt => excerpt.innerHTML))
 }
 
 const { app, router } = createSiteApp(root.dataset.ssg === 'true')
