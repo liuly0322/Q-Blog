@@ -135,7 +135,10 @@ export default defineConfig(withClientOnly(({ command, isSsrBuild }, ClientOnly)
   css: {
     transformer: 'lightningcss',
     lightningcss: {
-      exclude: Features.LightDark,
+      // Some features are excluded because we don't need these polyfills:
+      // Features.LightDark: light-dark() polyfill (--lightningcss-light and --lightningcss-dark)
+      // Features.IsSelector: :is() polyfill (:-webkit-any and :-moz-any)
+      exclude: Features.LightDark | Features.IsSelector,
     },
   },
   build: {
