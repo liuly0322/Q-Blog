@@ -38,7 +38,7 @@ onMounted(() => {
       <div class="flex flex-1">
         <aside id="sidebar" class="aside h-full lg:mr-4">
           <ControlPanel />
-          <APlayer song-server="netease" song-id="373425292" />
+          <APlayer song-id="373425292" />
         </aside>
         <main class="flex-grow min-w-0 text-center">
           <router-view />

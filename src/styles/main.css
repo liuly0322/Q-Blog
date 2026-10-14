@@ -62,8 +62,7 @@ body {
 }
 
 .katex-display {
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: auto hidden;
 }
 
 @media (max-width: 1023.9px) {

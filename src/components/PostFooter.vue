@@ -10,14 +10,14 @@ const postIndex = computed(() =>
 
 <template>
   <div class="overflow-hidden my-12 p-4 border-t border-b">
-    <div v-if="postIndex > 0" class="float-left my-2 mr-2">
+    <div v-if="postIndex > 0" class="float-left my-2 mr-4">
       <router-link
         :to="`/posts/${encodeURIComponent(summary[postIndex - 1].url)}`"
       >
         上一篇：{{ summary[postIndex - 1].title }}
       </router-link>
     </div>
-    <div v-if="postIndex + 1 < summary.length" class="float-right my-2">
+    <div v-if="postIndex + 1 < summary.length" class="float-right my-2 ml-4">
       <router-link
         :to="`/posts/${encodeURIComponent(summary[postIndex + 1].url)}`"
       >

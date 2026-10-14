@@ -1,24 +1,13 @@
 <script setup lang="ts">
-import type { PostSummary } from '~/composables/useSummary'
-
 const { summary } = useSummary()
 
-const groupedSummary = computed(() => {
-  const groups = new Map<string, PostSummary[]>()
-  for (const post of summary) {
-    const year = post.date.slice(0, 4)
-    const group = groups.get(year) ?? []
-    group.push(post)
-    groups.set(year, group)
-  }
-  return [...groups.entries()]
-})
+const groupedSummary = [...Map.groupBy(summary, post => post.date.slice(0, 4))]
 
-const toc = computed(() => groupedSummary.value.map(([year]) => ({
+const toc = groupedSummary.map(([year]) => ({
   id: `archive-${year}`,
   text: year,
-  tab: -1,
-})))
+  tab: 0,
+}))
 </script>
 
 <template>

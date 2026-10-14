@@ -43,7 +43,7 @@ onUnmounted(() => observer.disconnect())
         v-for="item in items"
         :id="`toc-${item.id}`"
         :key="`toc-${item.id}`"
-        class="hover:text-accent pl-[1.5ch]"
+        class="hover:text-accent"
         :class="{ 'text-accent': activeIds.has(item.id) }"
         :style="{ 'margin-left': `${item.tab * 1.5}ch` }"
       >

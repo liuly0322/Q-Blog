@@ -4,55 +4,36 @@ import { getCachedPostData, postCache } from '~/modules/postData'
 
 const props = defineProps<{ post: string }>()
 const { summary } = useSummary()
-const notFoundSummary = Object.freeze({ url: '', title: '404 Not Found', tags: [], date: '' })
+const notFoundSummary = { url: '', title: '404 Not Found', tags: [], date: '' }
 const postSummary = computed(() => summary.find(post => props.post === post.url) ?? notFoundSummary)
 
 const NOT_FOUND = '<p><strong>找不到页面了 :(</strong></p>'
 const LOAD_FAILED = '<p><strong>文章加载失败，请刷新重试。</strong></p>'
 
-function knownContent(postName: string) {
-  if (postSummary.value === notFoundSummary)
-    return NOT_FOUND
-  return postCache.get(postName)
-}
+const postHtml = ref('')
+const loading = ref(false)
 
-const initialContent = knownContent(props.post)
-const postHtml = ref(initialContent ?? '')
-const loading = ref(initialContent === undefined)
-
-let cancelLoad = () => {}
-async function loadPost(post: string) {
-  cancelLoad()
-
-  const known = knownContent(post)
-  if (known !== undefined) {
+watch(() => props.post, async (post, _previous, onCleanup) => {
+  const known = postSummary.value === notFoundSummary ? NOT_FOUND : postCache.get(post)
+  if (known) {
     postHtml.value = known
     loading.value = false
     return
   }
 
-  let cancelled = false
-  let abort: (() => void) | undefined
-  cancelLoad = () => {
-    cancelled = true
-    abort?.()
-  }
-
+  let active = true
+  onCleanup(() => {
+    active = false
+  })
   loading.value = true
 
-  const content = await getCachedPostData(post, (callback) => {
-    abort = callback
-  }).catch(() => LOAD_FAILED)
-  if (cancelled)
+  const content = await getCachedPostData(post).catch(() => LOAD_FAILED)
+  if (!active)
     return
 
   postHtml.value = content
   loading.value = false
-}
-
-if (initialContent === undefined)
-  void loadPost(props.post)
-watch(() => props.post, loadPost)
+}, { immediate: true })
 
 const postBody = ref<HTMLElement>()
 
@@ -68,7 +49,7 @@ function readHeadings(element: { querySelectorAll: (selector: string) => ArrayLi
   toc.value = headings.map(heading => ({
     id: heading.id,
     text: heading.text,
-    tab: heading.level - base - 1,
+    tab: heading.level - base,
   }))
 }
 

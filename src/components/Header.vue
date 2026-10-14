@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const route = useRoute()
-
 const navOptions = [
   { label: '主页', to: '/' },
   { label: '友链', to: '/links' },
@@ -26,7 +24,7 @@ const navOptions = [
         v-for="option in navOptions"
         :key="option.to"
         class="block hover:text-accent"
-        :class="{ 'text-accent': route.path === option.to }"
+        exact-active-class="text-accent"
         :to="option.to"
       >
         {{ option.label }}

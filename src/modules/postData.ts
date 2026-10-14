@@ -1,28 +1,19 @@
-type OnCancel = (callback: () => void) => void
-
 export const postCache = new Map<string, string>()
 
 if (import.meta.hot)
   import.meta.hot.on('vite:beforeUpdate', () => postCache.clear())
 
-async function getPostData(postName: string, onCancel: OnCancel) {
-  const abortController = new AbortController()
-  onCancel(() => abortController.abort())
-  return fetch(`/posts/${postName}.htm`, { signal: abortController.signal })
-    .then((res) => {
-      if (!res.ok)
-        throw new Error(`Post request failed: ${res.status}`)
-      return res.text()
-    })
-}
-
-export async function getCachedPostData(postName: string, onCancel: OnCancel) {
+export async function getCachedPostData(postName: string) {
   const cached = postCache.get(postName)
   if (cached !== undefined)
     return cached
 
-  const data = await getPostData(postName, onCancel)
+  const response = await fetch(`/posts/${postName}.htm`)
+  if (!response.ok)
+    // eslint-disable-next-line unicorn/error-message -- The caller supplies the user-facing error.
+    throw new Error()
 
+  const data = await response.text()
   postCache.set(postName, data)
   return data
 }
