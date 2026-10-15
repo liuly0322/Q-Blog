@@ -36,7 +36,7 @@ export default defineConfig({
       'border-width': '0.8px',
       'border-color': 'var(--border)',
       'background-color': 'var(--surface)',
-    }, { layer: 'components' }],
+    }],
     ['show-more', {
       'line-height': '1em',
       'padding': '6px 15px',
@@ -44,6 +44,6 @@ export default defineConfig({
       'color': 'var(--accent)',
       'background': 'color-mix(in srgb, var(--accent) 10%, transparent)',
       'text-decoration': 'none',
-    }, { layer: 'components' }],
+    }],
   ],
 })

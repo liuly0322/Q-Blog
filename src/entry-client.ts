@@ -3,9 +3,6 @@ import nprogress from './modules/nprogress'
 import { postAbstractsCache } from './modules/postAbstractsData'
 import { postCache } from './modules/postData'
 
-import './styles/reset.css'
-import 'virtual:uno:components.css'
-
 import './styles/main.css'
 import 'virtual:uno.css'
 

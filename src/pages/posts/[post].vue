@@ -40,16 +40,10 @@ const postBody = ref<HTMLElement>()
 const toc = ref<{ id: string, text: string, tab: number }[]>([])
 type Heading = Pick<HTMLElement, 'id' | 'textContent' | 'tagName'>
 function readHeadings(element: { querySelectorAll: (selector: string) => ArrayLike<Heading> }) {
-  const headings = Array.from(element.querySelectorAll('h2,h3,h4'), heading => ({
+  toc.value = Array.from(element.querySelectorAll('h2,h3,h4'), heading => ({
     id: heading.id,
     text: heading.textContent ?? '',
-    level: Number(heading.tagName[1]),
-  }))
-  const base = Math.min(...headings.map(heading => heading.level))
-  toc.value = headings.map(heading => ({
-    id: heading.id,
-    text: heading.text,
-    tab: heading.level - base,
+    tab: Number(heading.tagName[1]) - 2,
   }))
 }
 
@@ -65,33 +59,23 @@ else if (postHtml.value) {
 }
 
 const navigationCounter = ref(0)
-const removeAfterEach = useRouter().afterEach(() => {
+onUnmounted(useRouter().afterEach(() => {
   navigationCounter.value++
-})
-onUnmounted(removeAfterEach)
+}))
 
 onMounted(() => {
-  watch([postHtml, navigationCounter], async (_, _previous, onCleanup) => {
+  watch([postHtml, navigationCounter], async () => {
     // The data is not ready yet
     if (loading.value)
       return
 
-    let cancelled = false
-    onCleanup(() => {
-      cancelled = true
-    })
-
     // Update toc after v-html has been updated.
     await nextTick()
-    if (cancelled)
-      return
-    readHeadings(postBody.value!)
+    postBody.value && readHeadings(postBody.value)
 
     // Restore scroll position after toc has been updated.
     await nextTick()
-    if (cancelled)
-      return
-    restorePostScroll()
+    postBody.value && restorePostScroll()
   }, { immediate: true })
 })
 </script>
