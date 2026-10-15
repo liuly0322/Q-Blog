@@ -113,8 +113,6 @@ onMounted(() => {
         <Comment :post="postSummary" data-pagefind-ignore />
       </div>
     </article>
-    <Toc
-      v-if="toc.length" :items="toc"
-    />
+    <Toc v-if="toc.length" :items="toc" />
   </div>
 </template>

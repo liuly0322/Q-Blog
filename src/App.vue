@@ -46,10 +46,6 @@ onMounted(() => {
       </div>
       <CommonFooter />
     </div>
-    <label
-      id="mdui-overlay"
-      for="sidebar-toggle"
-      class="fixed z-2 hidden cursor-pointer"
-    />
+    <label id="mdui-overlay" for="sidebar-toggle" class="fixed z-2 hidden cursor-pointer" />
   </div>
 </template>

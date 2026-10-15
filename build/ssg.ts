@@ -56,9 +56,6 @@ function generateDescription(content: string): string {
     .slice(0, 160)
 }
 
-// Inlining trades a request for bytes on the document; past this size the trade reverses.
-const inlineStyleBudget = 20 * 1024
-
 // Route sheets as links, entry sheet inlined when the page can carry it.
 async function assemblePage(skeleton: string, metadata: string, modules: string[], manifest: SsrManifest): Promise<string> {
   // modules yields route sheets only: the entry sheet is never in the manifest.
@@ -67,7 +64,7 @@ async function assemblePage(skeleton: string, metadata: string, modules: string[
     .map(asset => `<link rel="stylesheet" href="${escapeHtml(asset)}">`)
     .join('\n')
   const entry = skeleton.match(/<link[^>]+rel="stylesheet"[^>]+href="(\/assets\/[^"]+\.css)"[^>]*>/)
-  if (!inlineStyles || !entry || gzipSync(skeleton).length > inlineStyleBudget)
+  if (!inlineStyles || !entry)
     return skeleton.replace('</head>', () => `${metadata}\n${routeStyleLinks}\n</head>`)
   const sheet = await fs.readFile(path.join(outputDir, entry[1].replace(/^\//, '')), 'utf8')
   return skeleton.replace(entry[0], '').replace('</head>', () => `${metadata}\n<style>${sheet}</style>\n${routeStyleLinks}\n</head>`)

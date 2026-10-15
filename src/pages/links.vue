@@ -5,7 +5,10 @@ import friends from '~/jsons/friends.json'
 <template>
   <SectionDivider>友情链接</SectionDivider>
   <div class="overflow-hidden flex flex-wrap gap-4">
-    <a v-for="friend in friends" :key="friend.name" :href="friend.url" target="_blank" class="flex-auto text-left flex card p-4">
+    <a
+      v-for="friend in friends" :key="friend.name" :href="friend.url" target="_blank"
+      class="flex-auto text-left flex card p-4"
+    >
       <img :src="friend.avatar" :alt="friend.name" class="mr-4 rounded-full" style="aspect-ratio: 1;" height="48" width="48">
       <div class="flex flex-col">
         <b>{{ friend.name }}</b>

@@ -43,9 +43,7 @@ watch(isDark, (value) => {
     <div ref="utterancesContainer" class="relative z-2 bg-surface" />
     <div class="absolute inset-0 flex flex-col items-center justify-center">
       <LineMdLoadingLoop class="text-accent" />
-      <p class="mt-4">
-        评论加载中...
-      </p>
+      <p class="mt-4">评论加载中...</p>
     </div>
   </div>
 </template>

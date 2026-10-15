@@ -21,9 +21,7 @@ const tagPosts = computed(() =>
           {{ post.title }}
         </router-link>
       </h2>
-      <div class="text-xs text-muted">
-        {{ post.date }}
-      </div>
+      <div class="text-xs text-muted">{{ post.date }}</div>
       <div class="mt-2">
         <router-link
           v-for="postTag in post.tags" :key="postTag" :to="`/tags/${postTag}`"
