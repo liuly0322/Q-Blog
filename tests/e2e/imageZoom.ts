@@ -10,14 +10,15 @@ export function registerImageZoom(harness: SiteHarness) {
     await image.evaluate((element: HTMLImageElement) => element.decode())
     await image.scrollIntoViewIfNeeded()
     const scrollY = await page.evaluate(() => window.scrollY)
+    const overflow = await page.evaluate(() => getComputedStyle(document.documentElement).overflow)
     await image.click()
     const dialog = page.getByRole('dialog', { name: '图片预览' })
     await dialog.waitFor({ state: 'visible' })
     assert.equal(await dialog.locator('img').getAttribute('src'), await image.evaluate((element: HTMLImageElement) => element.currentSrc))
-    assert.equal(await page.evaluate(() => document.documentElement.style.overflow), 'hidden')
+    assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).overflow), 'hidden')
     await page.keyboard.press('Escape')
     await dialog.waitFor({ state: 'hidden' })
-    await page.waitForFunction(() => document.documentElement.style.overflow !== 'hidden')
+    assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).overflow), overflow)
     assert.equal(await page.evaluate(() => window.scrollY), scrollY)
 
     await page.locator(`article a[href="${scrollArticle}"]`).first().click()
@@ -29,8 +30,18 @@ export function registerImageZoom(harness: SiteHarness) {
     await dialog.waitFor({ state: 'visible' })
     assert.equal(await page.locator('.image-zoom').count(), 1)
     assert.equal(await dialog.locator('img').getAttribute('src'), await articleImage.evaluate((element: HTMLImageElement) => element.currentSrc))
-    await dialog.getByRole('button', { name: '关闭' }).click()
+    await dialog.getByRole('button', { name: '关闭' }).locator('svg path').click()
     await dialog.waitFor({ state: 'hidden' })
+
+    // Opening while another control has focus must return focus to it on close.
+    const previousFocus = page.locator('header a[href="/about"]')
+    await previousFocus.focus()
+    await articleImage.evaluate((element: HTMLImageElement) => element.click())
+    await dialog.waitFor({ state: 'visible' })
+    await dialog.locator('img').click()
+    await dialog.waitFor({ state: 'hidden' })
+    assert.equal(await previousFocus.evaluate(element => document.activeElement === element), true)
+    assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).overflow), overflow)
   })
 
   harness.test('mobile image preview fits the viewport and closes on empty space', async (site) => {

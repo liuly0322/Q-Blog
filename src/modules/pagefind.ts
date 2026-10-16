@@ -5,8 +5,9 @@ import '@pagefind/component-ui/css'
 import '../styles/pagefind.css'
 
 export default (router: Router) => {
-  const input = document.querySelector<HTMLInputElement>('#site-search')
-  if (!input)
+  const button = document.querySelector<HTMLButtonElement>('#site-search')
+  const label = button?.querySelector('[data-search-label]')
+  if (!button || !label)
     return
 
   configureInstance('default', { bundlePath: `${import.meta.env.BASE_URL}pagefind/` })
@@ -17,31 +18,9 @@ export default (router: Router) => {
 
   const events = new AbortController()
   const options = { signal: events.signal }
-  let restoringFocus = false
-  let restoreFocusOnClose = true
-  const open = () => {
-    if (restoringFocus)
-      return
-    restoreFocusOnClose = true
-    // Let our close handler restore focus without reopening the modal.
-    input.blur()
-    modal.open()
-  }
-  const restoreFocus = () => {
-    if (!restoreFocusOnClose) {
-      input.blur()
-      return
-    }
-    restoringFocus = true
-    input.focus({ preventScroll: true })
-    restoringFocus = false
-  }
   const closeForNavigation = () => {
-    // The native close event is queued, so keep focus restoration disabled until
-    // the next explicit open, even when navigation finishes before that event.
-    restoreFocusOnClose = false
     modal.close()
-    input.blur()
+    button.blur()
   }
   const navigateToResult = (event: MouseEvent) => {
     const link = event.target instanceof Element ? event.target.closest('a') : null
@@ -58,25 +37,12 @@ export default (router: Router) => {
     void router.push(`${url.pathname.replace(/\.html$/, '')}${url.search}${url.hash}`)
   }
 
-  input.addEventListener('focus', open, options)
-  input.addEventListener('click', open, options)
-  input.form?.addEventListener('submit', (event) => {
-    event.preventDefault()
-    open()
-  }, options)
-  input.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      open()
-    }
-  }, options)
-  // Capture also handles dialog replacements made by the official components.
-  modal.addEventListener('close', restoreFocus, { ...options, capture: true })
+  button.addEventListener('click', () => modal.open(), options)
   modal.addEventListener('click', navigateToResult, options)
   const removeBeforeEach = router.beforeEach(closeForNavigation)
 
-  input.placeholder = '搜索...'
-  input.disabled = false
+  label.textContent = '搜索...'
+  button.disabled = false
 
   if (import.meta.hot) {
     import.meta.hot.dispose(() => {
@@ -84,8 +50,8 @@ export default (router: Router) => {
       events.abort()
       modal.close()
       modal.remove()
-      input.disabled = true
-      input.placeholder = '搜索加载中...'
+      button.disabled = true
+      label.textContent = '搜索加载中...'
     })
   }
 }

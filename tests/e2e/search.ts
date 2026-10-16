@@ -14,8 +14,8 @@ export function registerSearch(harness: SiteHarness) {
   harness.test('Chinese compounds match indexed content and preserve heading links', async (site) => {
     const { page, origin } = site
     await openHydratedPage(site, '/')
-    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLInputElement).disabled)
-    await page.getByRole('textbox', { name: '搜索文章' }).click()
+    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLButtonElement).disabled)
+    await page.getByRole('button', { name: '搜索文章' }).click()
     const modal = page.getByRole('dialog', { includeHidden: true })
     await modal.getByRole('searchbox').fill('水合')
     const path = '/posts/shrink-load-time'
@@ -48,12 +48,12 @@ export function registerSearch(harness: SiteHarness) {
     try {
       await openHydratedPage(site, '/')
       await bundleRequested
-      const input = page.getByRole('textbox', { name: '搜索文章' })
-      assert.equal(await input.isDisabled(), true)
+      const button = page.getByRole('button', { name: '搜索文章' })
+      assert.equal(await button.isDisabled(), true)
       release()
-      await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLInputElement).disabled)
+      await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLButtonElement).disabled)
       assert.equal(requests.some(url => /\/pagefind\/(?:pagefind\.js|pagefind-worker\.js|wasm\.|index\/|fragment\/)/.test(url)), false)
-      await input.click()
+      await button.click()
       const modal = page.getByRole('dialog', { includeHidden: true })
       await modal.waitFor({ state: 'visible' })
       await modal.getByRole('searchbox').fill('GeoJSON')
@@ -73,12 +73,12 @@ export function registerSearch(harness: SiteHarness) {
       await expectArticleSnippet(page, '/posts/sakurada-reset-map')
       assert.equal(await page.evaluate(() => document.documentElement.dataset.searchTest), 'same-document')
       await modal.waitFor({ state: 'hidden' })
-      assert.equal(await input.isDisabled(), false)
+      assert.equal(await button.isDisabled(), false)
       await page.waitForFunction(() => document.activeElement !== document.querySelector('#site-search'))
       assert.equal(await modal.getByRole('searchbox', { includeHidden: true }).inputValue(), '')
       await modal.locator('a').first().waitFor({ state: 'detached' })
-      // The enhanced input and modal continue to work after SPA navigation.
-      await input.click()
+      // The search button and modal continue to work after SPA navigation.
+      await button.click()
       await modal.waitFor({ state: 'visible' })
       assert.equal(await modal.getByRole('searchbox').inputValue(), '')
       await modal.getByRole('searchbox').fill('Hello New World')
@@ -93,13 +93,13 @@ export function registerSearch(harness: SiteHarness) {
     const { page, origin } = site
     const path = '/posts/sakurada-reset-map'
     await openHydratedPage(site, path, '[data-post-body]')
-    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLInputElement).disabled)
+    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLButtonElement).disabled)
     await page.evaluate(() => document.documentElement.dataset.searchTest = 'same-document')
-    const input = page.getByRole('textbox', { name: '搜索文章' })
+    const button = page.getByRole('button', { name: '搜索文章' })
     const modal = page.getByRole('dialog', { includeHidden: true })
     const hashes: string[] = []
     for (const [query, heading] of [['GeoJSON', '中间层：GeoJSON'], ['初版渲染图', '后端：初版渲染图']]) {
-      await input.click()
+      await button.click()
       await modal.getByRole('searchbox').fill(query)
       const result = modal.locator(`a[href^="${path}.html#"]`).filter({ hasText: heading })
       await result.waitFor({ state: 'visible' })
@@ -125,8 +125,8 @@ export function registerSearch(harness: SiteHarness) {
   harness.test('search selecting the current URL still dismisses the modal', async (site) => {
     const { page, origin } = site
     await openHydratedPage(site, '/posts/hello-world', '#toc-feature')
-    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLInputElement).disabled)
-    await page.getByRole('textbox', { name: '搜索文章' }).click()
+    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLButtonElement).disabled)
+    await page.getByRole('button', { name: '搜索文章' }).click()
     const modal = page.getByRole('dialog', { includeHidden: true })
     await modal.getByRole('searchbox').fill('Hello New World')
     await modal.locator('a[href="/posts/hello-world.html"]').first().click()
@@ -141,10 +141,16 @@ export function registerSearch(harness: SiteHarness) {
   harness.test('Chinese modal search closes, restores focus and reopens with the keyboard', async (site) => {
     const { page } = site
     await openHydratedPage(site, '/')
-    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLInputElement).disabled)
-    const input = page.getByRole('textbox', { name: '搜索文章' })
-    await input.focus()
+    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLButtonElement).disabled)
+    const button = page.getByRole('button', { name: '搜索文章' })
     const modal = page.getByRole('dialog', { includeHidden: true })
+    // Tabbing to the trigger must not open the dialog.
+    await page.locator('#sidebar a[href="/tags"]').focus()
+    await page.keyboard.press('Tab')
+    assert.equal(await button.evaluate(element => document.activeElement === element), true)
+    assert.equal(await modal.isVisible(), false)
+    await button.press('Enter')
+    await modal.waitFor({ state: 'visible' })
     await modal.getByRole('searchbox').fill('博客')
     await modal.locator('mark').first().waitFor({ state: 'visible' })
     await page.evaluate(() => document.documentElement.classList.add('dark'))
@@ -156,9 +162,11 @@ export function registerSearch(harness: SiteHarness) {
     assert.equal(colours.background, 'rgb(30, 30, 30)')
     await modal.getByRole('searchbox').press('Escape')
     await modal.waitFor({ state: 'hidden' })
-    // Hiding the dialog is synchronous; its close event restores focus later.
+    // Native dialog focus restoration must not reopen the modal.
     await page.waitForFunction(() => document.activeElement === document.querySelector('#site-search'), undefined, { timeout: 5000 })
-    await input.press('Enter')
+    // Pagefind resets the query in the asynchronous close event, after focus returns.
+    await page.waitForFunction(() => document.querySelector<HTMLInputElement>('dialog input[type="search"]')?.value === '', undefined, { timeout: 5000 })
+    await button.press('Space')
     await modal.waitFor({ state: 'visible' })
     assert.equal(await modal.getByRole('searchbox').inputValue(), '')
     await modal.getByRole('searchbox').fill('Hello New World')
@@ -166,16 +174,16 @@ export function registerSearch(harness: SiteHarness) {
     await page.mouse.click(2, 2)
     await modal.waitFor({ state: 'hidden' })
     await page.waitForFunction(() => document.activeElement === document.querySelector('#site-search'), undefined, { timeout: 5000 })
-    assert.equal(await modal.getByRole('searchbox', { includeHidden: true }).inputValue(), '')
+    await page.waitForFunction(() => document.querySelector<HTMLInputElement>('dialog input[type="search"]')?.value === '', undefined, { timeout: 5000 })
     // Navigating elsewhere after dismissing search also releases the trigger.
     await page.locator('header a[href="/about"]').evaluate((link: HTMLAnchorElement) => link.click())
     await page.waitForURL('**/about')
-    assert.equal(await input.evaluate(element => document.activeElement === element), false)
+    assert.equal(await button.evaluate(element => document.activeElement === element), false)
   })
 
-  harness.test('search remains a disabled native input without JavaScript', async ({ page, origin }) => {
+  harness.test('search remains a disabled native button without JavaScript', async ({ page, origin }) => {
     await page.goto(origin)
-    assert.equal(await page.getByRole('textbox', { name: '搜索文章' }).isDisabled(), true)
+    assert.equal(await page.getByRole('button', { name: '搜索文章' }).isDisabled(), true)
     assert.equal(await page.locator('pagefind-modal').count(), 0)
   }, { javaScriptEnabled: false })
 }

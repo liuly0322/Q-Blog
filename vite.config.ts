@@ -143,7 +143,7 @@ export default defineConfig(withClientOnly(({ command, isSsrBuild }, ClientOnly)
   },
   build: {
     minify: 'terser',
-    terserOptions: { compress: { passes: 2 } },
+    terserOptions: { compress: { passes: 2 }, format: { comments: false } },
     rollupOptions: {
       output: {
         experimentalMinChunkSize: 4096,

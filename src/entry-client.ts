@@ -23,7 +23,7 @@ router.isReady().then(() => {
   // Nprogress should not be enabled until the initial route is loaded.
   nprogress(router)
   app.mount(root)
-  // Enhance the input only after Vue has hydrated its disabled SSR markup.
+  // Enable the search button only after Vue has hydrated its disabled SSR markup.
   void import('./modules/pagefind')
     .then(({ default: pagefind }) => pagefind(router))
     .catch(console.error)

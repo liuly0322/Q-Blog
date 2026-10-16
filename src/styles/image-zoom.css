@@ -2,6 +2,10 @@
   cursor: zoom-in;
 }
 
+html:has(.image-zoom[open]) {
+  overflow: hidden;
+}
+
 .image-zoom {
   position: fixed;
   inset: 0;
