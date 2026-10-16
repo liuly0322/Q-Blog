@@ -7,17 +7,14 @@ import mdAnchorPlugin from 'markdown-it-anchor'
 import markdownItAsync from 'markdown-it-async'
 import mdLinkAttrPlugin from 'markdown-it-link-attributes'
 import mdMathPlugin from 'markdown-it-texmath'
-import RSS from 'rss'
 import { codeToHtml } from 'shiki'
-import { SITE_URL } from '../src/pageMeta'
 import { HOME_PAGE_SIZE, homePageCount } from '../src/utils/homePagination'
-import mdImageSizePlugin from './mdImageSizePlugin'
+import extractAbstract from './utils/extractAbstract'
+import mdImageSizePlugin from './utils/mdImageSizePlugin'
 
 const publicImages = path.join('public', 'images')
 const publicPosts = path.join('public', 'posts')
 
-const rssRenderer = markdownIt()
-  .use(mdImageSizePlugin(SITE_URL))
 const abstractRenderer = configureMarkdownRenderer(markdownIt({ html: true }))
 const postRenderer = configureMarkdownRenderer(
   markdownItAsync({ html: true }).use(
@@ -106,38 +103,6 @@ async function collectPostsAndImages(): Promise<Post[]> {
   return posts
 }
 
-function extractAbstract(s: string) {
-  const moreIndex = s.indexOf('<!-- more -->')
-  if (moreIndex !== -1)
-    return s.slice(0, moreIndex)
-  return s.slice(0, 100)
-}
-
-function removeRSSLastBuildDate(xml: string) {
-  return xml.replace(/<lastBuildDate>.*<\/lastBuildDate>/, '')
-}
-
-async function generateRSS(posts: Post[]) {
-  const feed = new RSS({
-    title: 'liuly\'s Blog',
-    description: 'liuly 的个人 Blog',
-    site_url: SITE_URL,
-    feed_url: `${SITE_URL}/feed.xml`,
-    copyright: '2024 liuly',
-    language: 'zh-cn',
-  })
-  for (const post of posts) {
-    feed.item({
-      title: post.title,
-      url: `${SITE_URL}/posts/${post.url}`,
-      description: rssRenderer.render(extractAbstract(post.content)),
-      date: `${post.date} UTC+8`,
-    })
-  }
-  const xml = removeRSSLastBuildDate(feed.xml())
-  await fs.writeFile(path.join('public', 'feed.xml'), xml)
-}
-
 async function checkPostHasChanged(post: Post) {
   const src = path.join('posts', `${post.url}.md`)
   const dst = path.join(publicPosts, `${post.url}.htm`)
@@ -198,7 +163,6 @@ async function buildPosts(incremental: boolean) {
   const abstracts = posts.map(post => abstractRenderer.render(extractAbstract(post.content)))
 
   await Promise.all([
-    generateRSS(posts),
     generateStaticPosts(posts, incremental),
     generatePostAbstracts(abstracts),
     generateSiteSummary(posts),

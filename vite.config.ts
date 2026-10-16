@@ -15,7 +15,7 @@ import { type ConfigEnv, defineConfig, type UserConfig, type UserConfigFnObject 
 
 import Pages from 'vite-plugin-pages'
 import { VitePWA } from 'vite-plugin-pwa'
-import BuildPosts from './build/buildPosts'
+import PostsPlugin from './build/postsPlugin'
 import { getCurrentSeason, getCurrentYear } from './src/utils/date'
 
 const markdownWrapperClasses = 'md-blog m-auto text-left'
@@ -79,7 +79,7 @@ export default defineConfig(withClientOnly(({ command, isSsrBuild }, ClientOnly)
         })
       },
     }),
-    ClientOnly(() => BuildPosts({ incremental: command === 'serve' })),
+    ClientOnly(() => PostsPlugin({ incremental: command === 'serve' })),
     Pages({
       extensions: ['vue', 'md'],
     }),

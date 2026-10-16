@@ -5,7 +5,7 @@
   "description": "A blog built with Vite, Vue 3, and UnoCSS.",
   "scripts": {
     "dev": "vite",
-    "build": "node build/ssg.ts && node build/pagefind.ts",
+    "build": "node build/index.ts",
     "postinstall": "npm run build",
     "dev:host": "vite --host",
     "dev:open": "vite --open",

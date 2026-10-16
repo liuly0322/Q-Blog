@@ -1,5 +1,5 @@
-/* eslint-disable antfu/no-top-level-await */
 import type { Node } from 'node-html-parser'
+import type { PagefindIndex } from 'pagefind'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { HTMLElement, NodeType, parse } from 'node-html-parser'
@@ -28,28 +28,30 @@ function segmentText(node: Node) {
   node.childNodes.forEach(segmentText)
 }
 
-const created = await pagefind.createIndex()
-const { errors, index } = created
-if (!index || errors.length)
-  throw new Error('Pagefind failed to create an index')
-
-async function indexHtmlFile(file: string) {
+async function indexHtmlFile(index: PagefindIndex, file: string) {
   const html = parse(await fs.readFile(path.join('dist/posts', file), 'utf8'))
   const bodies = html.querySelectorAll('[data-pagefind-body]')
   if (!bodies.length)
     throw new Error(`Missing Pagefind body in ${file}`)
   bodies.forEach(segmentText)
-  const { errors } = await index!.addHTMLFile({
+  const { errors } = await index.addHTMLFile({
     url: `/posts/${encodeURIComponent(file)}`,
     content: html.toString(),
   })
   if (errors.length)
     throw new Error(`Pagefind failed to add ${file}: ${errors.join('\n')}`)
 }
-for (const file of (await fs.readdir('dist/posts')).filter(file => file.endsWith('.html')))
-  await indexHtmlFile(file)
 
-await fs.rm('dist/pagefind', { recursive: true, force: true })
-const { errors: writeErrors } = await index.writeFiles({ outputPath: 'dist/pagefind' })
-if (writeErrors.length)
-  throw new Error(`Pagefind failed to write files: ${writeErrors.join('\n')}`)
+export default async function buildSearchIndex() {
+  const { errors, index } = await pagefind.createIndex()
+  if (!index || errors.length)
+    throw new Error('Pagefind failed to create an index')
+
+  for (const file of (await fs.readdir('dist/posts')).filter(file => file.endsWith('.html')))
+    await indexHtmlFile(index, file)
+
+  await fs.rm('dist/pagefind', { recursive: true, force: true })
+  const { errors: writeErrors } = await index.writeFiles({ outputPath: 'dist/pagefind' })
+  if (writeErrors.length)
+    throw new Error(`Pagefind failed to write files: ${writeErrors.join('\n')}`)
+}
