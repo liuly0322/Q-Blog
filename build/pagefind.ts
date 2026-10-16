@@ -2,13 +2,11 @@
 import type { Node } from 'node-html-parser'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { gunzipSync, gzipSync } from 'node:zlib'
 import { HTMLElement, NodeType, parse } from 'node-html-parser'
 import * as pagefind from 'pagefind'
 
 const segmenter = new Intl.Segmenter('zh-CN', { granularity: 'word' })
 const han = /\p{Script=Han}/u
-const fragmentHeader = 'pagefind_dcd'
 
 // Align index boundaries with browser queries: Pagefind/pagefind#1237.
 function segmentText(node: Node) {
@@ -30,55 +28,28 @@ function segmentText(node: Node) {
   node.childNodes.forEach(segmentText)
 }
 
-function checkErrors({ errors }: { errors: string[] }) {
-  if (errors.length)
-    throw new Error(errors.join('\n'))
-}
+const created = await pagefind.createIndex()
+const { errors, index } = created
+if (!index || errors.length)
+  throw new Error('Pagefind failed to create an index')
 
-try {
-  const created = await pagefind.createIndex()
-  checkErrors(created)
-  const { index } = created
-  if (!index)
-    throw new Error('Pagefind failed to create an index')
-  for (const file of await fs.readdir('dist/posts')) {
-    if (!file.endsWith('.html'))
-      continue
-    const html = parse(await fs.readFile(path.join('dist/posts', file), 'utf8'), {
-      parseNoneClosedTags: true,
-      blockTextElements: { script: true, style: true, noscript: true },
-    })
-    const bodies = html.querySelectorAll('[data-pagefind-body]')
-    if (!bodies.length)
-      throw new Error(`Missing Pagefind body in ${file}`)
-    bodies.forEach(segmentText)
-    checkErrors(await index.addHTMLFile({
-      url: `/posts/${encodeURIComponent(file)}`,
-      content: html.toString(),
-    }))
-  }
-  const output = await index.getFiles()
-  checkErrors(output)
-  await fs.rm('dist/pagefind', { recursive: true, force: true })
-  for (const file of output.files) {
-    let content = file.content
-    if (file.path.endsWith('.pf_fragment')) {
-      const data = gunzipSync(content)
-      if (data.subarray(0, fragmentHeader.length).toString() !== fragmentHeader)
-        throw new Error('Unexpected Pagefind fragment format')
-      const fragment = JSON.parse(data.subarray(fragmentHeader.length).toString())
-      // Boundaries belong in indexed content, not displayed titles or headings.
-      for (const key of Object.keys(fragment.meta))
-        fragment.meta[key] = fragment.meta[key].replaceAll('\u200B', '')
-      for (const anchor of fragment.anchors)
-        anchor.text = anchor.text.replaceAll('\u200B', '')
-      content = gzipSync(fragmentHeader + JSON.stringify(fragment))
-    }
-    const destination = path.join('dist/pagefind', file.path)
-    await fs.mkdir(path.dirname(destination), { recursive: true })
-    await fs.writeFile(destination, content)
-  }
+async function indexHtmlFile(file: string) {
+  const html = parse(await fs.readFile(path.join('dist/posts', file), 'utf8'))
+  const bodies = html.querySelectorAll('[data-pagefind-body]')
+  if (!bodies.length)
+    throw new Error(`Missing Pagefind body in ${file}`)
+  bodies.forEach(segmentText)
+  const { errors } = await index!.addHTMLFile({
+    url: `/posts/${encodeURIComponent(file)}`,
+    content: html.toString(),
+  })
+  if (errors.length)
+    throw new Error(`Pagefind failed to add ${file}: ${errors.join('\n')}`)
 }
-finally {
-  await pagefind.close()
-}
+for (const file of (await fs.readdir('dist/posts')).filter(file => file.endsWith('.html')))
+  await indexHtmlFile(file)
+
+await fs.rm('dist/pagefind', { recursive: true, force: true })
+const { errors: writeErrors } = await index.writeFiles({ outputPath: 'dist/pagefind' })
+if (writeErrors.length)
+  throw new Error(`Pagefind failed to write files: ${writeErrors.join('\n')}`)

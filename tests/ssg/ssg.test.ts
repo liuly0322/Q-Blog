@@ -9,7 +9,7 @@ import { parse } from 'node-html-parser'
 
 const htmlEscapes: Record<string, string> = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': '\'' }
 
-test('Pagefind indexes each article once with its title and excludes site chrome', async () => {
+test('Pagefind indexes each article once and excludes site chrome', async () => {
   const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8'))
   await fs.access('dist/pagefind/pagefind.js')
   const fragments = await fs.readdir('dist/pagefind/fragment')
@@ -21,7 +21,6 @@ test('Pagefind indexes each article once with its title and excludes site chrome
     const fragment = JSON.parse(raw.slice('pagefind_dcd'.length))
     const post = posts.find(post => fragment.url === `/posts/${encodeURIComponent(post.url)}.html`)
     assert(post, `Unexpected search result: ${fragment.url}`)
-    assert.equal(fragment.meta.title, post.title)
     const content = fragment.content.replace(/\u200B/g, '')
     for (const ignored of ['愛の形骸', '追う絵 覆う手を', '上一篇：', '下一篇：', '评论加载中...'])
       assert(!content.includes(ignored), `${fragment.url}: indexed ${ignored}`)

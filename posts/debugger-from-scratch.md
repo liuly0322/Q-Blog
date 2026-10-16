@@ -258,7 +258,7 @@ Killing running inferior (pid 204)
 501        210  0.0  0.0   4504   704 pts/0    t+   10:29   0:00 samples/sleepy_print 5
 ```
 
-> There should only be one samples/sleepy_print process. If you see multiple, or you see a <defunct> entry, then you are not killing or reaping child processes properly.
+> There should only be one samples/sleepy_print process. If you see multiple, or you see a `<defunct>` entry, then you are not killing or reaping child processes properly.
 
 ## 那个调用栈滔滔不绝的表达爱意
 

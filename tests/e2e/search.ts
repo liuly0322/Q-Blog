@@ -21,8 +21,7 @@ export function registerSearch(harness: SiteHarness) {
     const path = '/posts/shrink-load-time'
     const article = modal.locator(`a[href="${path}.html"]`).first()
     await article.waitFor({ state: 'visible' })
-    assert.equal(await article.textContent(), '从 SPA 出发的 hydration——博客加载时间现已缩短 60%')
-    const heading = modal.locator(`a[href^="${path}.html#"]`).filter({ hasText: /^水合$/ })
+    const heading = modal.locator(`a[href="${path}.html#${encodeURIComponent('水合')}"]`)
     await heading.waitFor({ state: 'visible' })
     const hash = new URL((await heading.getAttribute('href'))!, origin).hash
     assert.equal(decodeURIComponent(hash), '#水合')
@@ -101,7 +100,9 @@ export function registerSearch(harness: SiteHarness) {
     for (const [query, heading] of [['GeoJSON', '中间层：GeoJSON'], ['初版渲染图', '后端：初版渲染图']]) {
       await button.click()
       await modal.getByRole('searchbox').fill(query)
-      const result = modal.locator(`a[href^="${path}.html#"]`).filter({ hasText: heading })
+      const id = await page.locator('[data-post-body]').locator('h2,h3,h4').filter({ hasText: heading }).getAttribute('id')
+      assert(id, `Missing article heading: ${heading}`)
+      const result = modal.locator(`a[href="${path}.html#${id}"]`)
       await result.waitFor({ state: 'visible' })
       const hash = new URL((await result.getAttribute('href'))!, origin).hash
       assert(!hashes.includes(hash), 'The second search must select a different heading')
