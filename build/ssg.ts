@@ -4,16 +4,14 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import { pathToFileURL } from 'node:url'
-import { gzipSync } from 'node:zlib'
 import frontmatter from 'frontmatter'
 import { build } from 'vite'
-import { homePageTitle, SITE_TITLE, staticPageDetails, staticPageTitles } from '../src/pageMeta.ts'
+import { homePageTitle, SITE_TITLE, SITE_URL, staticPageDetails, staticPageTitles } from '../src/pageMeta.ts'
 import { homePageCount, homePagePath } from '../src/utils/homePagination.ts'
 
 type SsrManifest = Record<string, string[]>
 type ServerEntry = typeof import('../src/entry-server')
 
-const siteUrl = 'https://blog.liuly.moe'
 const outputDir = path.resolve('dist')
 const inlineStyles = process.env.SSG_INLINE_CSS !== '0'
 const serverDir = path.resolve('node_modules/.cache/q-blog-ssg')
@@ -114,7 +112,7 @@ try {
 
   for (const pageInfo of [...staticPages, ...paginationPages, ...tagPages]) {
     const { html, modules } = await render(pageInfo.url)
-    const canonical = `${siteUrl}${pageInfo.url}`
+    const canonical = `${SITE_URL}${pageInfo.url}`
     const metadata = [
       `<link rel="canonical" href="${escapeHtml(canonical)}">`,
       '<meta property="og:type" content="website">',
@@ -145,11 +143,11 @@ try {
     const { html, modules } = await render(url)
     const title = `${post.title} | ${SITE_TITLE}`
     const metadata = [
-      `<link rel="canonical" href="${siteUrl}${url}">`,
+      `<link rel="canonical" href="${SITE_URL}${url}">`,
       '<meta property="og:type" content="article">',
       `<meta property="og:title" content="${escapeHtml(title)}">`,
       `<meta property="og:description" content="${escapeHtml(description)}">`,
-      `<meta property="og:url" content="${siteUrl}${url}">`,
+      `<meta property="og:url" content="${SITE_URL}${url}">`,
       '<meta property="article:author" content="liuly">',
       ...post.tags.map(tag => `<meta property="article:tag" content="${escapeHtml(tag)}">`),
     ].join('\n')

@@ -18,13 +18,13 @@ interface Collections {
 }
 
 const PAGE_SIZE = 12
+
 export const animeList: Ref<Anime[]> = ref([])
+export const hasMore = ref(true)
+
 async function updateBangumiData(page: number) {
   const offset = page * PAGE_SIZE
-  // https://gist.github.com/liuly0322/7100018ad6cd9f82aff3fee1e9bcd6f3
-  const res = await fetch(
-    `https://bgm.liuly.moe/v0/users/undef_baka/collections?subject_type=2&type=2&limit=${PAGE_SIZE}&offset=${offset}`,
-  )
+  const res = await fetch(`https://bgm.liuly.moe/v0/users/undef_baka/collections?subject_type=2&type=2&limit=${PAGE_SIZE}&offset=${offset}`)
   if (!res.ok)
     throw new Error('Network response was not ok')
 
@@ -35,23 +35,20 @@ async function updateBangumiData(page: number) {
     throw new Error('No more data')
 }
 
-let page = 0
-export const hasMore = ref(true)
-async function updateNewPage() {
-  try {
-    await updateBangumiData(page)
-    page++
+const updateNewPage = (() => {
+  let page = 0
+  return async () => {
+    await updateBangumiData(page++).catch(() => hasMore.value = false)
   }
-  catch (error) {
-    hasMore.value = false
-  }
-}
+})()
 
-let loading = false
-export async function updateAnimeList() {
-  if (loading || !hasMore.value)
-    return
-  loading = true
-  await updateNewPage()
-  loading = false
-}
+export const updateAnimeList = (() => {
+  let loading = false
+  return async () => {
+    if (loading || !hasMore.value)
+      return
+    loading = true
+    await updateNewPage()
+    loading = false
+  }
+})()

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { PostSummary } from '~/composables/useSummary'
-
 defineProps<{
   post: PostSummary
 }>()

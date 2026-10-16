@@ -40,7 +40,7 @@ pnpm i
 Development：
 
 ```bash
-pnpm dev # run server at `localhost:3000`
+pnpm dev # run server at `localhost:5173`
 ```
 
 Build：

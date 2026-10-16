@@ -45,6 +45,9 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+      - name: Run lint and type checks
+        run: pnpm lint && pnpm typecheck
+
       - name: Upload browser failure screenshots
         if: failure()
         uses: actions/upload-artifact@v4

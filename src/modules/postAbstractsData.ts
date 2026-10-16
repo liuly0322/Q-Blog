@@ -4,11 +4,9 @@ if (import.meta.hot)
   import.meta.hot.on('vite:beforeUpdate', () => postAbstractsCache.clear())
 
 async function getPostAbstracts(page: number): Promise<string[]> {
-  const response = await fetch(`/homePages/home-page-${page}.json`)
-  return response.json()
+  return fetch(`/homePages/home-page-${page}.json`).then(res => res.json()).catch(() => [])
 }
 
 export async function loadPostAbstracts(page: number) {
-  if (!postAbstractsCache.has(page))
-    postAbstractsCache.set(page, await getPostAbstracts(page))
+  postAbstractsCache.has(page) || postAbstractsCache.set(page, await getPostAbstracts(page))
 }

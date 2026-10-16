@@ -1,21 +1,12 @@
 <script lang="ts" setup>
 import type createPlayer from 'aplayer-ts'
 
-const props = withDefaults(defineProps<{
-  songServer?: 'netease' | 'tencent' | 'kugou' | 'xiami' | 'baidu'
-  songType?: string
-  songId: string
-}>(), {
-  songServer: 'netease',
-  songType: 'playlist',
-})
-
 const playerRef = ref()
 const playerReady = ref(false)
 let instance: ReturnType<typeof createPlayer> | undefined
 
 onMounted(async () => {
-  const url = `https://api.liuly.moe/meting-api/?server=${props.songServer}&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
+  const url = `https://api.liuly.moe/meting-api/?server=netease&type=playlist&id=373425292&r=${Math.random()}`
   const [createPlayer, , audios] = await Promise.all([
     import('aplayer-ts').then(({ default: createPlayer }) => createPlayer),
     import('~/styles/aplayer-theme.css'),

@@ -53,7 +53,7 @@ function isInView(el: HTMLElement) {
       class="flex items-center card p-4 gap-4"
     >
       <a class="shrink-0" :href="`https://bgm.tv/subject/${anime.subject.id}`" target="_blank" rel="noopener noreferrer">
-        <img :src="anime.subject.images.medium" :alt="anime.subject.name" class="rounded-lg" width="130" height="182">
+        <img :src="`https://api.liuly.moe/image/${anime.subject.images.medium}`" :alt="anime.subject.name" class="rounded-lg" width="130" height="182">
       </a>
 
       <div class="h-full flex flex-col justify-between flex-grow text-sm">

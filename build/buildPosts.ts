@@ -9,10 +9,9 @@ import mdLinkAttrPlugin from 'markdown-it-link-attributes'
 import mdMathPlugin from 'markdown-it-texmath'
 import RSS from 'rss'
 import { codeToHtml } from 'shiki'
+import { SITE_URL } from '../src/pageMeta'
 import { HOME_PAGE_SIZE, homePageCount } from '../src/utils/homePagination'
 import mdImageSizePlugin from './mdImageSizePlugin'
-
-const SITE_URL = 'https://blog.liuly.moe'
 
 const publicImages = path.join('public', 'images')
 const publicPosts = path.join('public', 'posts')

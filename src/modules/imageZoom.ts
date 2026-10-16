@@ -28,14 +28,13 @@ export default () => {
     if (!(image instanceof HTMLImageElement)
       || !image.matches('.md-blog img')
       || image.closest('a, button')
+      || !image.complete
+      || !image.naturalWidth
       || event.defaultPrevented
       || event.button !== 0
       || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
       return
     }
-
-    if (!image.complete || !image.naturalWidth)
-      return
 
     if (!dialog)
       createDialog()

@@ -1,4 +1,5 @@
 export const SITE_TITLE = 'llyのblog'
+export const SITE_URL = 'https://blog.liuly.moe'
 
 export function homePageTitle(page: number) {
   return page === 1 ? SITE_TITLE : `第 ${page} 页 | ${SITE_TITLE}`
