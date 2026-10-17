@@ -25,8 +25,7 @@
 Welcome to [my personal blog site](https://blog.liuly.moe) ([subscribe](https://blog.liuly.moe/feed.xml)).
 
 - Vite5, Vue3, TypeScript, UnoCSS
-- Responsive Web Design, Dark Mode, PWA
-- [WIP] **(Have a look!) Rollup [partial evaluate plugin](./partial-evaluate/)**
+- Responsive Web Design, Dark Mode, PWA, SSG
 
 ## Usage
 
@@ -49,10 +48,3 @@ Build：
 pnpm build # compile to `dist` folder
 pnpm preview # preview the production build
 ```
-
-Run `pnpm build` first if you want to test the search feature in development.
-
-## Credits
-
-- [tov-template](https://github.com/dishait/tov-template)
-- [Vite PWA](https://github.com/vite-pwa/vite-plugin-pwa)
