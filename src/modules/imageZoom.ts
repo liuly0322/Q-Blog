@@ -2,7 +2,6 @@ import '../styles/image-zoom.css'
 
 export default () => {
   let dialog: HTMLDialogElement | undefined
-  let preview: HTMLImageElement
 
   function createDialog() {
     dialog = document.createElement('dialog')
@@ -17,8 +16,7 @@ export default () => {
     close.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="11"/><path d="m9 9 6 6m0-6-6 6"/></svg>'
     close.autofocus = true
 
-    preview = document.createElement('img')
-    dialog.append(close, preview)
+    dialog.append(close)
     dialog.addEventListener('click', () => dialog!.close())
     document.body.append(dialog)
   }
@@ -39,8 +37,11 @@ export default () => {
     if (!dialog)
       createDialog()
 
+    const preview = document.createElement('img')
     preview.src = image.currentSrc || image.src
     preview.alt = image.alt
+    dialog!.querySelector('img')?.remove()
+    dialog!.append(preview)
     dialog!.showModal()
   }
 
