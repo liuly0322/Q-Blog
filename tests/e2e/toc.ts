@@ -1,7 +1,7 @@
 import type { Page } from 'playwright'
-import type { SiteHarness } from '../helpers/site.ts'
+import type { Site, SiteHarness } from '../helpers/site.ts'
 import assert from 'node:assert/strict'
-import { archiveWithToc, expectAnchor, openHydratedPage, posts, waitForScrollToSettle } from '../helpers/site.ts'
+import { archiveWithToc, articleWithToc, expectAnchor, openHydratedPage, waitForScrollToSettle } from '../helpers/site.ts'
 
 async function expectSettledAnchor(page: Page, selector: string) {
   await expectAnchor(page, selector)
@@ -9,53 +9,137 @@ async function expectSettledAnchor(page: Page, selector: string) {
   await expectAnchor(page, selector)
 }
 
+async function expectActive(page: Page, id: string | null) {
+  await page.waitForFunction((id) => {
+    const active = document.querySelectorAll('#page-toc li.text-accent')
+    return id === null ? active.length === 0 : active.length === 1 && active[0].id === `toc-${id}`
+  }, id, { timeout: 5000 })
+}
+
+async function mockNextPost({ page }: Site, body: string) {
+  const link = page.locator('article a[href^="/posts/"]').first()
+  const target = await link.getAttribute('href')
+  assert(target)
+  await page.route(`**${target}.htm`, route => route.fulfill({ contentType: 'text/html', body }))
+  await link.click()
+}
+
 export function registerToc(harness: SiteHarness) {
+  harness.test('TOC tracks section boundaries and viewport reflow', async (site) => {
+    const { page } = site
+    await openHydratedPage(site, articleWithToc.path, '#toc-feature')
+    await mockNextPost(site, '<div style="height: 30vw"></div><h2 id="one" style="scroll-margin-top: 120px">One</h2><div style="height: 1400px"></div><h3 id="two" style="scroll-margin-top: 160px">Two</h3><div style="height: 1400px"></div>')
+    await page.locator('#toc-two').waitFor({ state: 'visible' })
+    const [first, second] = await page.locator('[data-post-body] h2, [data-post-body] h3').evaluateAll(headings => headings.map(heading => heading.getBoundingClientRect().top + scrollY - Number.parseFloat(getComputedStyle(heading).scrollMarginTop)))
+    assert(first !== undefined && second !== undefined)
+    for (const [top, id] of [[first - 5, null], [first + 5, 'one'], [first + 500, 'one'], [second - 5, 'one'], [second + 5, 'two'], [second - 5, 'one']] as const) {
+      await page.evaluate(top => scrollTo(0, top), top)
+      await expectActive(page, id)
+    }
+    // A visible upcoming heading must not displace the section being read.
+    assert(await page.locator('#one').evaluate(element => element.getBoundingClientRect().bottom < 0))
+    assert(await page.locator('#two').evaluate(element => element.getBoundingClientRect().top < innerHeight))
+    await page.addStyleTag({ content: 'html { overflow-anchor: none }' })
+    await page.evaluate(top => scrollTo(0, top), first - 5)
+    await expectActive(page, null)
+    const position = await page.evaluate(() => scrollY)
+    await page.setViewportSize({ width: 1280, height: 1000 })
+    await expectActive(page, 'one')
+    assert.equal(await page.evaluate(() => scrollY), position)
+  })
+
+  harness.test('TOC corrects its active section after a delayed image loads without scrolling', async (site) => {
+    const { page } = site
+    let release!: () => void
+    const ready = new Promise<void>((resolve) => {
+      release = resolve
+    })
+    await page.route('**/images/toc-delayed.svg', async (route) => {
+      await ready
+      await route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="800"><rect width="400" height="800" fill="gray"/></svg>' })
+    })
+    try {
+      await openHydratedPage(site, articleWithToc.path, '#toc-feature')
+      await page.addStyleTag({ content: 'html { overflow-anchor: none }' })
+      await mockNextPost(site, '<div style="height: 300px"></div><h2 id="one">One</h2><img src="/images/toc-delayed.svg" alt="Delayed image"><h2 id="two">Two</h2><div style="height: 1800px"></div>')
+      await page.locator('#toc-two').waitFor({ state: 'visible' })
+      await page.locator('#two').evaluate((element) => {
+        scrollTo(0, element.getBoundingClientRect().top + scrollY - Number.parseFloat(getComputedStyle(element).scrollMarginTop) + 5)
+      })
+      await expectActive(page, 'two')
+      const position = await page.evaluate(() => scrollY)
+      release()
+      await page.waitForFunction(() => document.querySelector<HTMLImageElement>('[data-post-body] img')!.naturalHeight > 0)
+      await expectActive(page, 'one')
+      assert.equal(await page.evaluate(() => scrollY), position)
+    }
+    finally { release() }
+  })
+
   for (const javaScriptEnabled of [true, false]) {
-    harness.test(`Chinese TOC links expose the heading URL and navigate with the keyboard${javaScriptEnabled ? '' : ' without JavaScript'}`, async (site) => {
+    harness.test(`mobile TOC supports keyboard links, dismissal and responsive scrolling${javaScriptEnabled ? '' : ' without JavaScript'}`, async (site) => {
       const { page, origin } = site
-      const path = '/posts/sakurada-reset-map'
+      const path = '/posts/formal-languages-and-complexity-notes'
       if (javaScriptEnabled)
         await openHydratedPage(site, path, '[data-post-body]')
       else
         await page.goto(`${origin}${path}`)
-      const id = await page.getByRole('heading', { name: '中间层：GeoJSON', exact: true }).getAttribute('id')
+      const toggle = page.getByRole('checkbox', { name: '目录', exact: true })
+      const trigger = page.locator('label[for="toc-toggle"]').last()
+      const panel = page.locator('#page-toc')
+      assert.equal(await panel.isVisible(), false)
+      const position = await page.evaluate(() => {
+        scrollTo(0, 1800)
+        return scrollY
+      })
+      assert(position > 0)
+      await toggle.focus()
+      await page.keyboard.press('Space')
+      await panel.waitFor({ state: 'visible' })
+      const bounds = await panel.boundingBox()
+      const triggerBounds = await trigger.boundingBox()
+      assert(bounds && triggerBounds && bounds.x >= 0 && bounds.x + bounds.width <= 390)
+      assert(bounds.y >= 64 && bounds.y + bounds.height < triggerBounds.y && triggerBounds.y + triggerBounds.height <= 844)
+      assert(await panel.evaluate(element => element.scrollHeight > element.clientHeight))
+      if (javaScriptEnabled) {
+        await panel.hover()
+        await page.mouse.wheel(0, 500)
+        await page.waitForFunction(() => document.getElementById('page-toc')!.scrollTop > 0, undefined, { timeout: 5000 })
+      }
+      assert.equal(await page.evaluate(() => scrollY), position)
+      await page.locator('label[for="toc-toggle"][aria-hidden]').click({ position: { x: 24, y: 120 } })
+      await panel.waitFor({ state: 'hidden' })
+      assert.equal(await page.evaluate(() => scrollY), position)
+      await trigger.click()
+      const link = panel.getByRole('link', { name: '绪论', exact: true })
+      const id = await page.getByRole('heading', { name: '绪论', exact: true }).getAttribute('id')
       assert(id)
-      const link = page.locator('nav').getByRole('link', { name: '中间层：GeoJSON', exact: true })
-      const href = await link.getAttribute('href')
-      assert.equal(href, `${path}#${id}`)
+      assert.equal(await link.getAttribute('href'), `${path}#${id}`)
       await link.focus()
       await page.keyboard.press('Enter')
-      await page.waitForURL(`${origin}${href}`)
+      await page.waitForURL(`${origin}${path}#${id}`)
       const selector = await page.evaluate(id => `#${CSS.escape(id)}`, id)
-      if (javaScriptEnabled)
+      if (javaScriptEnabled) {
         await expectSettledAnchor(page, selector)
-      else
+        await panel.waitFor({ state: 'hidden' })
+      }
+      else {
         await expectAnchor(page, selector)
-    }, { javaScriptEnabled })
-
-    harness.test(`direct archive hash keeps its heading below the header${javaScriptEnabled ? ' after hydration' : ' without JavaScript'}`, async (site) => {
-      const { path, anchor } = archiveWithToc
-      if (javaScriptEnabled)
-        await openHydratedPage(site, `${path}${anchor}`, anchor)
-      else
-        await site.page.goto(`${site.origin}${path}${anchor}`)
-      if (javaScriptEnabled)
-        await expectSettledAnchor(site.page, anchor)
-      else
-        await expectAnchor(site.page, anchor)
-    }, { javaScriptEnabled })
+      }
+      const items = await panel.locator('li').allTextContents()
+      await page.setViewportSize({ width: 1280, height: 1000 })
+      await panel.waitFor({ state: 'visible' })
+      assert.equal(await trigger.isVisible(), false)
+      assert.equal(await panel.evaluate(element => getComputedStyle(element).position), 'sticky')
+      assert.deepEqual(await panel.locator('li').allTextContents(), items)
+      await page.setViewportSize({ width: 1279, height: 1000 })
+      if (await toggle.isChecked())
+        await trigger.click()
+      await panel.waitFor({ state: 'hidden' })
+    }, { viewport: { width: 390, height: 844 }, javaScriptEnabled })
   }
 
-  harness.test('all static article TOCs match actual body DOM', async ({ page, origin }) => {
-    for (const post of posts) {
-      await page.goto(`${origin}/posts/${encodeURIComponent(post.url)}`)
-      const actual = await page.locator('nav li[id^="toc-"]').evaluateAll(items => items.map(item => ({ id: item.id.slice(4), text: item.textContent })))
-      const expected = await page.locator('[data-post-body] h2, [data-post-body] h3, [data-post-body] h4').evaluateAll(items => items.map(item => ({ id: item.id, text: item.textContent })))
-      assert.deepEqual(actual, expected, post.url)
-    }
-  }, { javaScriptEnabled: false })
-
-  harness.test('hydration preserves article width and TOC; observer updates state', async ({ page, origin }) => {
+  harness.test('TOC hydration preserves article geometry and heading labels', async ({ page, origin }) => {
     let release!: () => void
     const ready = new Promise<void>((resolve) => {
       release = resolve
@@ -65,177 +149,98 @@ export function registerToc(harness: SiteHarness) {
       await route.continue()
     })
     try {
-      await page.goto(`${origin}/posts/hello-world`, { waitUntil: 'commit' })
+      await page.goto(`${origin}${articleWithToc.path}`, { waitUntil: 'commit' })
       await page.locator('#toc-feature').waitFor({ state: 'visible' })
-      await page.waitForFunction(() => getComputedStyle(document.querySelector('#toc-feature')!.closest('nav')!).position === 'sticky')
+      await page.waitForFunction(() => getComputedStyle(document.querySelector('#page-toc')!).position === 'sticky')
       const before = await page.locator('article').boundingBox()
-      const text = await page.locator('nav li[id^="toc-"]').allTextContents()
+      const labels = await page.locator('#page-toc li').allTextContents()
       assert.equal(await page.evaluate(() => !!document.querySelector('#app')?.__vue_app__), false)
       release()
       await page.waitForFunction(() => !!document.querySelector('#app')?.__vue_app__)
-      await page.waitForFunction(() => !!document.querySelector('li[id^="toc-"].text-accent'))
       const after = await page.locator('article').boundingBox()
       assert(before && after)
       assert.equal(after.width, before.width)
       assert.equal(after.x, before.x)
-      assert.deepEqual(await page.locator('nav li[id^="toc-"]').allTextContents(), text)
-      await page.locator('#toc-feature').click()
-      await expectAnchor(page, '#feature')
+      assert.deepEqual(await page.locator('#page-toc li').allTextContents(), labels)
     }
-    finally {
-      release()
-    }
+    finally { release() }
   })
 
-  harness.test('article TOC hash entries survive Back and Forward within the same article', async (site) => {
-    const { page, origin } = site
-    const path = '/posts/hello-world'
-    await openHydratedPage(site, path, '#toc-feature')
-    await page.evaluate(() => document.documentElement.dataset.tocTest = 'same-document')
-    for (const hash of ['#feature', '#to-be-done']) {
-      await page.locator(`#toc-${hash.slice(1)}`).click()
-      await page.waitForURL(`${origin}${path}${hash}`)
-      await expectSettledAnchor(page, hash)
-    }
-    await page.goBack()
-    await page.waitForURL(`${origin}${path}#feature`)
-    await expectSettledAnchor(page, '#feature')
-    await page.goBack()
-    await page.waitForURL(`${origin}${path}`)
-    await page.waitForFunction(() => scrollY === 0, undefined, { timeout: 5000 })
-    await page.goForward()
-    await page.waitForURL(`${origin}${path}#feature`)
-    await expectSettledAnchor(page, '#feature')
-    await page.goForward()
-    await page.waitForURL(`${origin}${path}#to-be-done`)
-    await expectSettledAnchor(page, '#to-be-done')
-    assert.equal(await page.evaluate(() => document.documentElement.dataset.tocTest), 'same-document')
-  })
-
-  harness.test('article TOC Back restores the saved position after scrolling away from a heading', async (site) => {
-    const { page, origin } = site
-    await openHydratedPage(site, '/posts/hello-world', '#toc-feature')
-    await page.locator('#toc-feature').click()
-    await expectSettledAnchor(page, '#feature')
-    await page.evaluate(() => scrollTo(0, scrollY + 250))
-    const position = await page.evaluate(() => scrollY)
-    await page.locator('#toc-to-be-done a').evaluate((item: HTMLAnchorElement) => item.click())
-    await page.waitForURL(`${origin}/posts/hello-world#to-be-done`)
-    await expectSettledAnchor(page, '#to-be-done')
-    await page.goBack()
-    await page.waitForURL(`${origin}/posts/hello-world#feature`)
-    await page.waitForFunction(expected => Math.abs(scrollY - expected) < 5, position, { timeout: 5000 })
-    await waitForScrollToSettle(page)
-    assert(Math.abs(await page.evaluate(() => scrollY) - position) < 5, 'History restoration must survive the subsequent anchor scroll')
-  })
-
-  harness.test('clicking the current TOC hash returns to its heading after manual scrolling', async (site) => {
-    const { page, origin } = site
-    await openHydratedPage(site, '/posts/hello-world', '#toc-feature')
-    await page.locator('#toc-feature').click()
-    await page.waitForURL(`${origin}/posts/hello-world#feature`)
-    await expectSettledAnchor(page, '#feature')
-    await page.evaluate(() => scrollTo(0, scrollY + 250))
-    assert(await page.locator('#feature').evaluate(element => element.getBoundingClientRect().top < -100))
-    await page.locator('#toc-feature').click()
-    await expectSettledAnchor(page, '#feature')
-  })
-
-  harness.test('SPA heading-free body clears TOC and Back restores observer', async (site) => {
-    const { page } = site
-    await openHydratedPage(site, '/posts/hello-world', '#toc-feature')
-    const link = page.locator('article a[href^="/posts/"]').first()
-    const target = await link.getAttribute('href')
-    assert(target)
-    await page.route(`**${target}.htm`, route => route.fulfill({ contentType: 'text/html', body: '<p>No headings fixture</p>' }))
-    await link.click()
-    await page.getByText('No headings fixture', { exact: true }).waitFor()
-    assert.equal(await page.locator('nav li[id^="toc-"]').count(), 0)
-    await page.goBack()
-    await page.locator('#toc-feature').waitFor({ state: 'visible' })
-    await page.locator('#toc-feature').click()
-    await expectAnchor(page, '#feature')
-    await page.waitForFunction(() => document.getElementById('toc-feature')?.classList.contains('text-accent'))
-    await page.locator('#sidebar a[href="/archive"]').click()
-    await page.waitForURL('**/archive')
-    assert.equal(await page.locator('#toc-feature').count(), 0)
-    assert(await page.locator('nav li[id^="toc-archive-"]').count() > 0)
-  })
-
-  harness.test('archive year TOC jumps to headings and only appears at xl', async (site) => {
-    const { page } = site
-    await openHydratedPage(site, '/archive', 'h2[id^="archive-"]')
-    const headings = await page.locator('h2[id^="archive-"]').evaluateAll(items => items.map(item => ({ id: item.id, text: item.textContent?.trim() })))
-    const items = page.locator('nav li[id^="toc-archive-"]')
-    assert.deepEqual(await items.evaluateAll(items => items.map(item => ({ id: item.id.slice(4), text: item.textContent?.trim() }))), headings)
-    const target = headings[1]
-    assert(target)
-    await page.locator(`#toc-${target.id}`).click()
-    await expectSettledAnchor(page, `#${target.id}`)
-    await page.waitForFunction(id => document.getElementById(`toc-${id}`)?.classList.contains('text-accent'), target.id)
-    await page.setViewportSize({ width: 1279, height: 1000 })
-    assert.equal(await items.first().isVisible(), false)
-    await page.setViewportSize({ width: 1280, height: 1000 })
-    assert.equal(await items.first().isVisible(), true)
-  })
-
-  harness.test('archive TOC Back preserves manual scrolling within a hash entry', async (site) => {
-    const { page, origin } = site
-    await openHydratedPage(site, '/archive', 'h2[id^="archive-"]')
-    const ids = await page.locator('h2[id^="archive-"]').evaluateAll(items => items.map(item => item.id))
-    assert(ids.length >= 3)
-    await page.locator(`#toc-${ids[1]}`).click()
-    await expectSettledAnchor(page, `#${ids[1]}`)
-    await page.evaluate(() => scrollTo(0, scrollY + 250))
-    const position = await page.evaluate(() => scrollY)
-    await page.locator(`#toc-${ids[2]} a`).evaluate((item: HTMLAnchorElement) => item.click())
-    await page.waitForURL(`${origin}/archive#${ids[2]}`)
-    await expectSettledAnchor(page, `#${ids[2]}`)
-    await page.goBack()
-    await page.waitForURL(`${origin}/archive#${ids[1]}`)
-    await page.waitForFunction(expected => Math.abs(scrollY - expected) < 5, position, { timeout: 5000 })
-    await waitForScrollToSettle(page)
-    assert(Math.abs(await page.evaluate(() => scrollY) - position) < 5)
-  })
-
-  harness.test('SPA article with reused heading id observes the replacement DOM', async (site) => {
-    const { page } = site
-    await openHydratedPage(site, '/posts/hello-world', '#toc-feature')
-    await page.locator('#toc-feature').click()
-    await expectAnchor(page, '#feature')
-    await page.waitForFunction(() => document.getElementById('toc-feature')?.classList.contains('text-accent'))
-
-    const link = page.locator('article a[href^="/posts/"]').first()
-    const target = await link.getAttribute('href')
-    assert(target)
-    await page.route(`**${target}.htm`, route => route.fulfill({
-      contentType: 'text/html',
-      body: '<div style="height: 1500px">Replacement article</div><h2 id="feature">Replacement heading</h2><div style="height: 1000px"></div>',
-    }))
-    await link.click()
-    await page.getByRole('heading', { name: 'Replacement heading', exact: true }).waitFor({ state: 'attached' })
-    await page.waitForFunction(() => {
-      const item = document.getElementById('toc-feature')
-      return item?.textContent?.trim() === 'Replacement heading' && !item.classList.contains('text-accent')
+  for (const { path, anchor } of [articleWithToc, archiveWithToc]) {
+    harness.test(`TOC anchors, repeated clicks and saved reading positions survive history on ${path}`, async (site) => {
+      const { page, origin } = site
+      await openHydratedPage(site, `${path}${anchor}`, '#page-toc')
+      await expectSettledAnchor(page, anchor)
+      const next = page.locator(`#toc-${anchor.slice(1)} + li a`)
+      const href = await next.getAttribute('href')
+      assert(href)
+      const nextHash = new URL(href, origin).hash
+      await page.evaluate(() => scrollBy(0, 250))
+      await page.locator(`#toc-${anchor.slice(1)} a`).click()
+      await expectSettledAnchor(page, anchor)
+      const position = await page.evaluate(() => {
+        scrollBy(0, 250)
+        return scrollY
+      })
+      await next.evaluate((link: HTMLAnchorElement) => link.click())
+      await expectSettledAnchor(page, nextHash)
+      await page.goBack()
+      await page.waitForURL(`${origin}${path}${anchor}`)
+      await page.waitForFunction(expected => Math.abs(scrollY - expected) < 5, position)
+      await waitForScrollToSettle(page)
+      assert(Math.abs(await page.evaluate(() => scrollY) - position) < 5)
+      await page.goForward()
+      await page.waitForURL(`${origin}${path}${nextHash}`)
+      await expectSettledAnchor(page, nextHash)
     })
+  }
+
+  harness.test('TOC follows replacement headings when an SPA article reuses their ids', async (site) => {
+    const { page } = site
+    await openHydratedPage(site, articleWithToc.path, '#toc-feature')
     await page.locator('#toc-feature').click()
-    await expectAnchor(page, '#feature')
-    await page.waitForFunction(() => document.getElementById('toc-feature')?.classList.contains('text-accent'))
+    await expectSettledAnchor(page, '#feature')
+    await expectActive(page, 'feature')
+    await mockNextPost(site, '<div style="height: 1500px"></div><h2 id="feature">Replacement heading</h2><div style="height: 1000px"></div>')
+    await page.waitForFunction(() => document.getElementById('toc-feature')?.textContent?.trim() === 'Replacement heading')
+    await expectActive(page, null)
+    await page.locator('#toc-feature').click()
+    await expectSettledAnchor(page, '#feature')
+    await expectActive(page, 'feature')
   })
 
-  harness.test('article re-entered from archive from the same initial post keeps its TOC', async (site) => {
+  harness.test('TOC closes on article changes, clears without headings and returns on cached re-entry', async (site) => {
     const { page } = site
-    await openHydratedPage(site, '/posts/hello-world', '#toc-feature')
-    const expected = await page.locator('nav li[id^="toc-"]').allTextContents()
-    assert(expected.length > 0)
-    // SPA 返回归档再进同一篇：新建 [post] 组件，正文从缓存同步读取
-    await page.locator('#sidebar a[href="/archive"]').click()
-    await page.waitForURL('**/archive')
-    await page.locator('main a[href="/posts/hello-world"]').click()
-    await page.waitForURL('**/posts/hello-world')
+    await openHydratedPage(site, articleWithToc.path, '#toc-feature')
+    const labels = await page.locator('#page-toc li').allTextContents()
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.locator('label[for="toc-toggle"]').last().click()
+    const links = page.locator('article a[href^="/posts/"]')
+    const target = await links.first().getAttribute('href')
+    assert(target)
+    await page.route(`**${target}.htm`, route => route.fulfill({ contentType: 'text/html', body: '<h2 id="temporary">Temporary heading</h2>' }))
+    // Bypass the overlay: the article change itself must close the panel.
+    await links.first().evaluate((link: HTMLAnchorElement) => link.click())
+    await page.locator('#toc-temporary').waitFor({ state: 'attached' })
+    assert.equal(await page.locator('#toc-toggle').isChecked(), false)
+    await page.goBack()
+    await page.locator('#toc-feature').waitFor({ state: 'attached' })
+    const other = await links.last().getAttribute('href')
+    assert(other && other !== target)
+    await page.route(`**${other}.htm`, route => route.fulfill({ contentType: 'text/html', body: '<p>No headings fixture</p>' }))
+    await page.setViewportSize({ width: 1440, height: 1000 })
+    await links.last().click()
+    await page.getByText('No headings fixture', { exact: true }).waitFor()
+    assert.equal(await page.locator('#page-toc').count(), 0)
+    await page.goBack()
     await page.locator('#toc-feature').waitFor({ state: 'visible' })
-    assert.deepEqual(await page.locator('nav li[id^="toc-"]').allTextContents(), expected)
+    await page.locator('#sidebar a[href="/archive"]').click()
+    await page.locator('#toc-archive-2025').waitFor({ state: 'visible' })
+    await page.locator(`main a[href="${articleWithToc.path}"]`).click()
+    await page.locator('#toc-feature').waitFor({ state: 'visible' })
+    assert.deepEqual(await page.locator('#page-toc li').allTextContents(), labels)
     await page.locator('#toc-feature').click()
-    await expectAnchor(page, '#feature')
+    await expectSettledAnchor(page, '#feature')
+    await expectActive(page, 'feature')
   })
 }

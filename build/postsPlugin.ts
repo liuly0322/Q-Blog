@@ -123,8 +123,8 @@ async function generateStaticPost(post: Post) {
 
 async function generateStaticPosts(posts: Post[], incremental: boolean) {
   if (!incremental) {
-    await fs.rm(publicPosts, { recursive: true, force: true })
-    await fs.mkdir(publicPosts, { recursive: true })
+    const files = await fs.readdir(publicPosts)
+    await Promise.all(files.map(file => fs.rm(path.join(publicPosts, file), { recursive: true, force: true })))
   }
 
   await Promise.all(posts.map(generateStaticPost))
