@@ -5,6 +5,7 @@ import frontmatter from 'frontmatter'
 import markdownIt from 'markdown-it'
 import RSS from 'rss'
 import { SITE_URL } from '../src/pageMeta.ts'
+import { getCurrentYear } from '../src/utils/date.ts'
 import extractAbstract from './utils/extractAbstract.ts'
 import mdImageSizePlugin from './utils/mdImageSizePlugin.ts'
 
@@ -27,7 +28,7 @@ export default async function buildRSS() {
     description: 'liuly 的个人 Blog',
     site_url: SITE_URL,
     feed_url: `${SITE_URL}/feed.xml`,
-    copyright: '2024 liuly',
+    copyright: `${getCurrentYear()} liuly`,
     language: 'zh-cn',
   })
   for (const post of posts) {

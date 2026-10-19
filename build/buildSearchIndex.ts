@@ -29,7 +29,9 @@ function segmentText(node: Node) {
 }
 
 async function indexHtmlFile(index: PagefindIndex, file: string) {
-  const html = parse(await fs.readFile(path.join('dist/posts', file), 'utf8'))
+  const html = parse(await fs.readFile(path.join('dist/posts', file), 'utf8'), {
+    blockTextElements: { script: true, noscript: true, style: true, pre: false },
+  })
   const bodies = html.querySelectorAll('[data-pagefind-body]')
   if (!bodies.length)
     throw new Error(`Missing Pagefind body in ${file}`)

@@ -70,7 +70,7 @@ console.log(originalText); // 'my message'
 <!-- 为了兼容通过插入 innerHTML 的方式来加载，先写一个 pre 放需要的代码，再用 img onerror 触发执行 -->
 <!-- Well, XSS is fun, isn't it? -->
 
-<pre id="scriptSource" style="display: none">
+<pre id="scriptSource" style="display: none" data-pagefind-ignore>
 import("/post-assets/static-page-aes/crypto-js-4.2.0.bundle.mjs").then(({ default: CryptoJS }) => {
   window.CryptoJS = CryptoJS;
   const container = document.getElementById("aesCon");
@@ -106,7 +106,7 @@ import("/post-assets/static-page-aes/crypto-js-4.2.0.bundle.mjs").then(({ defaul
 }).catch(console.error);
 </pre>
 
-<div id="aesCon" style="margin: 1.5em 0; padding: clamp(16px, 4vw, 24px); border: 1px solid var(--border, #e5e5e5); border-radius: 14px; background: var(--inset-bg, #f6f6f6);">
+<div id="aesCon" data-pagefind-ignore style="margin: 1.5em 0; padding: clamp(16px, 4vw, 24px); border: 1px solid var(--border, #e5e5e5); border-radius: 14px; background: var(--inset-bg, #f6f6f6);">
   <style>
     #aesCon .aes-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
     #aesCon .aes-icon { display: grid; place-items: center; flex: 0 0 38px; height: 38px; border-radius: 10px; color: var(--accent, #2563a6); background: color-mix(in srgb, var(--accent, #2563a6) 10%, transparent); }

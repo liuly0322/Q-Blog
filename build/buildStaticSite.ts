@@ -3,7 +3,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import { pathToFileURL } from 'node:url'
-import frontmatter from 'frontmatter'
+import { parse } from 'node-html-parser'
 import { build } from 'vite'
 import { homePageTitle, SITE_TITLE, SITE_URL, staticPageDetails, staticPageTitles } from '../src/pageMeta.ts'
 import { homePageCount, homePagePath } from '../src/utils/homePagination.ts'
@@ -162,16 +162,16 @@ async function generatePages(pages: PageInfo[], context: RenderContext) {
     await writePage(pageInfo.file, await renderPage(pageInfo, context))
 }
 
-async function generatePosts(posts: PostSummary[], context: RenderContext) {
-  for (const post of posts) {
-    const markdown = frontmatter(await fs.readFile(path.join('posts', `${post.url}.md`), 'utf8')).content
+async function generatePosts(posts: PostSummary[], postAbstracts: string[], context: RenderContext) {
+  for (const [i, post] of posts.entries()) {
+    const abstract = parse(postAbstracts[i], {
+      blockTextElements: { script: true, noscript: true, style: true, pre: false },
+    }).textContent
     const pageInfo: PageInfo = {
       url: `/posts/${encodeURIComponent(post.url)}`,
       file: `posts/${post.url}.html`,
       title: `${post.title} | ${SITE_TITLE}`,
-      description: markdown.replace(/[#*~`><!-]/g, '')
-        .replace(/\s+/g, ' ')
-        .slice(0, 160),
+      description: abstract.replace(/\s+/g, ' ').trim().slice(0, 160),
       post,
     }
     const html = await renderPage(pageInfo, context)
@@ -189,6 +189,7 @@ export default async function buildStaticSite() {
     const server = await buildServer()
     const { template, manifest, posts } = await loadBuildData()
     await loadServerCache(posts, server)
+    const postAbstracts = [...server.postAbstractsCache.values()].flat()
 
     const paginationPages = collectPaginationPages(posts)
     const tagPages = collectTagPages(posts)
@@ -197,7 +198,7 @@ export default async function buildStaticSite() {
 
     await generateSpaFallback(template)
     await generatePages([...staticPages, ...paginationPages, ...tagPages], context)
-    await generatePosts(posts, context)
+    await generatePosts(posts, postAbstracts, context)
     console.warn(`SSG: generated ${staticPages.length} static pages, ${paginationPages.length} pagination pages, ${tagPages.length} tag pages, and ${posts.length} article pages in ${Math.round(performance.now() - started)} ms.`)
   }
   finally {
