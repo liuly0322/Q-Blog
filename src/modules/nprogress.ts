@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  * See LICENSE.md for the full license text.
  */
-import type { Router, RouteLocationNormalized } from 'vue-router'
+import type { RouteLocationNormalized, Router } from 'vue-router'
 
 export default (router: Router) => {
   let progress: HTMLDivElement | undefined

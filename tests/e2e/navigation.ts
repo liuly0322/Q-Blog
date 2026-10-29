@@ -460,4 +460,31 @@ export function registerNavigation(harness: SiteHarness) {
     await page.waitForURL(`**${scrollArticle}`)
     await expectArticleSnippet(page, scrollArticle)
   })
+
+  harness.test('progress bar skips initial load and same-path navigation but shows across routes', async (site) => {
+    const { page } = site
+    await page.addInitScript(() => {
+      window.__nprogressCount = 0
+      new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          for (const node of Array.from(mutation.addedNodes)) {
+            if (node instanceof HTMLElement && node.id === 'nprogress')
+              window.__nprogressCount++
+          }
+        }
+      }).observe(document, { childList: true, subtree: true })
+    })
+
+    await openHydratedPage(site, articleWithToc.path, '#toc-feature')
+    assert.equal(await page.evaluate(() => window.__nprogressCount), 0, 'Initial hydration must not trigger the progress bar')
+
+    await page.locator('#toc-feature a').click()
+    await expectAnchor(page, articleWithToc.anchor)
+    assert.equal(await page.evaluate(() => window.__nprogressCount), 0, 'Same-path hash navigation must skip the progress bar')
+
+    await page.locator('#sidebar a[href="/archive"]').click()
+    await page.waitForURL('**/archive')
+    assert.equal(await page.evaluate(() => window.__nprogressCount), 1, 'Route navigation must show the progress bar')
+    await page.locator('#nprogress').waitFor({ state: 'detached' })
+  })
 }

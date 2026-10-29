@@ -22,6 +22,7 @@ interface Window {
   }
   bench: BrowserMetrics
   homeBench: BrowserMetrics
+  __nprogressCount: number
 }
 
 interface LayoutShift extends PerformanceEntry {
