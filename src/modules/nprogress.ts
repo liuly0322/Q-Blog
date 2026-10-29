@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  * See LICENSE.md for the full license text.
  */
-import type { Router } from 'vue-router'
+import type { Router, RouteLocationNormalized } from 'vue-router'
 
 export default (router: Router) => {
   let progress: HTMLDivElement | undefined
@@ -16,8 +16,8 @@ export default (router: Router) => {
     progress!.style.transform = `translateX(${(next - 1) * 100}%)`
   }
 
-  function start() {
-    if (value > 0)
+  function onBeforeEach(to: RouteLocationNormalized, from: RouteLocationNormalized) {
+    if (to.path === from.path || value > 0)
       return
 
     // A new navigation can start while the previous bar is fading out.
@@ -50,7 +50,7 @@ export default (router: Router) => {
     }, 400)
   }
 
-  router.beforeEach(start)
+  router.beforeEach(onBeforeEach)
   router.afterEach(done)
   router.onError(done)
 }
