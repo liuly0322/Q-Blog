@@ -13,61 +13,73 @@ const staticRoutes: [string, string, string][] = [
 ]
 
 export function registerRoutes(harness: SiteHarness) {
-  for (const [path, selector, title] of staticRoutes) {
-    harness.test(`static route ${path} hydrates from its SSG output`, async (site) => {
+  harness.test('static routes hydrate from their SSG output', async (site) => {
+    for (const [path, selector, title] of staticRoutes) {
       const response = await openHydratedPage(site, path, selector)
       assert.equal(await ssgTitle(response, site.page), title, `${path}: static title`)
       await expectTitle(site.page, title)
-    })
-  }
+    }
+  })
 
   const pageMax = Math.ceil(posts.length / 10)
-  for (let pageNumber = 1; pageNumber <= pageMax; pageNumber++) {
-    const path = pageNumber === 1 ? '/' : `/${pageNumber}`
-    harness.test(`homepage ${path} hydrates without downloading its excerpts again`, async (site) => {
+  harness.test('homepage pagination routes hydrate without downloading excerpts again', async (site) => {
+    for (let pageNumber = 1; pageNumber <= pageMax; pageNumber++) {
+      const path = pageNumber === 1 ? '/' : `/${pageNumber}`
       const requests: string[] = []
       const documents: string[] = []
-      site.page.on('request', (request) => {
+      const onRequest = (request: any) => {
         requests.push(new URL(request.url()).pathname)
         if (request.isNavigationRequest() && request.frame() === site.page.mainFrame())
           documents.push(request.url())
-      })
-      const response = await openHydratedPage(site, path, '.show-more')
-      const title = pageNumber === 1 ? 'llyのblog' : `第 ${pageNumber} 页 | llyのblog`
-      assert.equal(await ssgTitle(response, site.page), title)
-      await expectTitle(site.page, title)
-      const expected = posts.slice((pageNumber - 1) * 10, pageNumber * 10).map(post => `/posts/${encodeURIComponent(post.url)}`)
-      assert.deepEqual(await site.page.locator('a.show-more').evaluateAll(links => links.map(link => link.getAttribute('href'))), expected)
-      assert.equal((await site.page.getByRole('navigation', { name: '文章分页' }).locator('[aria-current="page"]').textContent())?.trim(), String(pageNumber))
-      assert.deepEqual(documents, [`${site.origin}${path}`], 'Direct entry must use its own static document')
-      assert(!requests.some(path => /home-page-\d|\/page\.json$|\/spa\.html$/.test(path)), `Unexpected homepage data request: ${requests}`)
-    })
-  }
+      }
+      site.page.on('request', onRequest)
+      try {
+        const response = await openHydratedPage(site, path, '.show-more')
+        const title = pageNumber === 1 ? 'llyのblog' : `第 ${pageNumber} 页 | llyのblog`
+        assert.equal(await ssgTitle(response, site.page), title)
+        await expectTitle(site.page, title)
+        const expected = posts.slice((pageNumber - 1) * 10, pageNumber * 10).map(post => `/posts/${encodeURIComponent(post.url)}`)
+        assert.deepEqual(await site.page.locator('a.show-more').evaluateAll(links => links.map(link => link.getAttribute('href'))), expected)
+        assert.equal((await site.page.getByRole('navigation', { name: '文章分页' }).locator('[aria-current="page"]').textContent())?.trim(), String(pageNumber))
+        assert.deepEqual(documents, [`${site.origin}${path}`], 'Direct entry must use its own static document')
+        assert(!requests.some(path => /home-page-\d|\/page\.json$|\/spa\.html$/.test(path)), `Unexpected homepage data request: ${requests}`)
+      }
+      finally {
+        site.page.off('request', onRequest)
+      }
+    }
+  })
 
-  for (const post of posts) {
-    harness.test(`article ${post.url} hydrates from its own SSG output`, async (site) => {
+  harness.test('all articles hydrate from their own SSG output without fallback or extra requests', async (site) => {
+    for (const post of posts) {
       const requests: string[] = []
       const documents: string[] = []
-      site.page.on('request', (request) => {
+      const onRequest = (request: any) => {
         requests.push(new URL(request.url()).pathname)
         if (request.isNavigationRequest() && request.frame() === site.page.mainFrame())
           documents.push(request.url())
-      })
-      const url = `${site.origin}/posts/${encodeURIComponent(post.url)}`
-      const response = await openHydratedPage(site, `/posts/${encodeURIComponent(post.url)}`, '[data-post-body]')
-      await expectArticle(site.page, `/posts/${encodeURIComponent(post.url)}`)
-      assert.equal(site.page.url(), url, 'Direct entry must keep the article URL')
-      assert.deepEqual(documents, [url], 'Direct entry must not redirect or reload through a fallback')
-      assert.equal(await ssgTitle(response, site.page), `${post.title} | llyのblog`)
-      await expectTitle(site.page, `${post.title} | llyのblog`)
-      assert(!requests.some(url => /\.htm$|^\/page\.json$|^\/spa\.html$/.test(url)), `Unexpected request for ${post.url}: ${requests}`)
-    })
-  }
+      }
+      site.page.on('request', onRequest)
+      try {
+        const url = `${site.origin}/posts/${encodeURIComponent(post.url)}`
+        const response = await openHydratedPage(site, `/posts/${encodeURIComponent(post.url)}`, '[data-post-body]')
+        await expectArticle(site.page, `/posts/${encodeURIComponent(post.url)}`)
+        assert.equal(site.page.url(), url, `${post.url}: direct entry must keep the article URL`)
+        assert.deepEqual(documents, [url], `${post.url}: direct entry must not redirect or reload through a fallback`)
+        assert.equal(await ssgTitle(response, site.page), `${post.title} | llyのblog`, `${post.url}: static title`)
+        await expectTitle(site.page, `${post.title} | llyのblog`)
+        assert(!requests.some(url => /\.htm$|^\/page\.json$|^\/spa\.html$/.test(url)), `Unexpected request for ${post.url}: ${requests}`)
+      }
+      finally {
+        site.page.off('request', onRequest)
+      }
+    }
+  })
 
-  for (const route of ['/', '/2', `/${pageMax}`, '/archive', `/tags/${encodeURIComponent(posts[0].tags[0])}`, '/posts/hello-world']) {
-    harness.test(`SSG content is usable without JavaScript on ${route}`, async (site) => {
+  harness.test('SSG content is usable without JavaScript across routes', async (site) => {
+    for (const route of ['/', '/2', `/${pageMax}`, '/archive', `/tags/${encodeURIComponent(posts[0].tags[0])}`, '/posts/hello-world']) {
       const response = await site.page.goto(site.origin + route)
-      assert.equal(response.status(), 200)
+      assert.equal(response.status(), 200, `${route} must return 200`)
       if (route.startsWith('/posts/')) {
         await expectArticle(site.page, route)
       }
@@ -90,8 +102,8 @@ export function registerRoutes(harness: SiteHarness) {
           assert(excerpts.every(text => text.trim().length > 0))
         }
       }
-    }, { javaScriptEnabled: false })
-  }
+    }
+  }, { javaScriptEnabled: false })
 
   harness.test('homepage links navigate and reload without JavaScript', async (site) => {
     const { page } = site

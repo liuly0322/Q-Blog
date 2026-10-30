@@ -14,6 +14,7 @@ interface Element {
 }
 
 interface Window {
+  _originalFetch?: typeof fetch
   releaseArticle: () => void
   homePageFetch: {
     requests: number

@@ -11,24 +11,48 @@ async function searchAsset(extension: string) {
 }
 
 export function registerSearch(harness: SiteHarness) {
-  harness.test('Chinese compounds match indexed content and preserve heading links', async (site) => {
+  harness.test('Chinese compounds match indexed content, jump to headings across routes and preserve in-article history', async (site) => {
     const { page, origin } = site
     await openHydratedPage(site, '/')
     await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLButtonElement).disabled)
-    await page.getByRole('button', { name: '搜索文章' }).click()
+    const button = page.getByRole('button', { name: '搜索文章' })
     const modal = page.getByRole('dialog', { includeHidden: true })
+
+    await button.click()
     await modal.getByRole('searchbox').fill('水合')
     const path = '/posts/shrink-load-time'
     const article = modal.locator(`a[href="${path}.html"]`).first()
     await article.waitFor({ state: 'visible' })
     const heading = modal.locator(`a[href="${path}.html#${encodeURIComponent('水合')}"]`)
     await heading.waitFor({ state: 'visible' })
-    const hash = new URL((await heading.getAttribute('href'))!, origin).hash
-    assert.equal(decodeURIComponent(hash), '#水合')
+    const hash1 = new URL((await heading.getAttribute('href'))!, origin).hash
+    assert.equal(decodeURIComponent(hash1), '#水合')
     await heading.click()
-    await page.waitForURL(`${origin}${path}${hash}`)
-    await expectAnchor(page, await page.evaluate(hash => `#${CSS.escape(hash.slice(1))}`, hash))
+    await page.waitForURL(`${origin}${path}${hash1}`)
+    await expectAnchor(page, await page.evaluate(hash => `#${CSS.escape(hash.slice(1))}`, hash1))
     assert.equal(await page.locator('[data-post-body]').evaluate(body => body.textContent!.includes('\u200B')), false)
+
+    // Jumps to another heading hash within the current article without full navigation
+    await page.evaluate(() => document.documentElement.dataset.searchTest = 'same-document')
+    await button.click()
+    await modal.getByRole('searchbox').fill('Benchmark')
+    const secondHeading = modal.locator(`a[href="${path}.html#benchmark"]`)
+    await secondHeading.waitFor({ state: 'visible' })
+    const hash2 = new URL((await secondHeading.getAttribute('href'))!, origin).hash
+    await secondHeading.click()
+    await page.waitForURL(`${origin}${path}${hash2}`)
+    await modal.waitFor({ state: 'hidden' })
+    await expectAnchor(page, '#benchmark')
+    await page.waitForFunction(() => document.activeElement !== document.querySelector('#site-search'))
+    assert.equal(await modal.getByRole('searchbox', { includeHidden: true }).inputValue(), '')
+    assert.equal(await page.evaluate(() => document.documentElement.dataset.searchTest), 'same-document')
+
+    await page.goBack()
+    await page.waitForURL(`${origin}${path}${hash1}`)
+    await expectAnchor(page, await page.evaluate(hash => `#${CSS.escape(hash.slice(1))}`, hash1))
+    await page.goForward()
+    await page.waitForURL(`${origin}${path}${hash2}`)
+    await expectAnchor(page, '#benchmark')
   })
 
   harness.test('search stays disabled until UI loads, navigates across routes, and dismisses on current URL', async (site) => {
@@ -104,41 +128,6 @@ export function registerSearch(harness: SiteHarness) {
     finally {
       release()
     }
-  })
-
-  harness.test('search jumps to different heading hashes within the current article', async (site) => {
-    const { page, origin } = site
-    const path = '/posts/sakurada-reset-map'
-    await openHydratedPage(site, path, '[data-post-body]')
-    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLButtonElement).disabled)
-    await page.evaluate(() => document.documentElement.dataset.searchTest = 'same-document')
-    const button = page.getByRole('button', { name: '搜索文章' })
-    const modal = page.getByRole('dialog', { includeHidden: true })
-    const hashes: string[] = []
-    for (const [query, heading] of [['GeoJSON', '中间层：GeoJSON'], ['初版渲染图', '后端：初版渲染图']]) {
-      await button.click()
-      await modal.getByRole('searchbox').fill(query)
-      const id = await page.locator('[data-post-body]').locator('h2,h3,h4').filter({ hasText: heading }).getAttribute('id')
-      assert(id, `Missing article heading: ${heading}`)
-      const result = modal.locator(`a[href="${path}.html#${id}"]`)
-      await result.waitFor({ state: 'visible' })
-      const hash = new URL((await result.getAttribute('href'))!, origin).hash
-      assert(!hashes.includes(hash), 'The second search must select a different heading')
-      hashes.push(hash)
-      await result.click()
-      await page.waitForURL(`${origin}${path}${hash}`)
-      await modal.waitFor({ state: 'hidden' })
-      await expectAnchor(page, await page.evaluate(hash => `#${CSS.escape(hash.slice(1))}`, hash))
-      await page.waitForFunction(() => document.activeElement !== document.querySelector('#site-search'))
-      assert.equal(await modal.getByRole('searchbox', { includeHidden: true }).inputValue(), '')
-      assert.equal(await page.evaluate(() => document.documentElement.dataset.searchTest), 'same-document')
-    }
-    await page.goBack()
-    await page.waitForURL(`${origin}${path}${hashes[0]}`)
-    await expectAnchor(page, await page.evaluate(hash => `#${CSS.escape(hash.slice(1))}`, hashes[0]))
-    await page.goForward()
-    await page.waitForURL(`${origin}${path}${hashes[1]}`)
-    await expectAnchor(page, await page.evaluate(hash => `#${CSS.escape(hash.slice(1))}`, hashes[1]))
   })
 
   harness.test('Chinese modal search closes, restores focus and reopens with the keyboard', async (site) => {

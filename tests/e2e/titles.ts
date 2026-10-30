@@ -1,6 +1,6 @@
 import type { Site, SiteHarness } from '../helpers/site.ts'
 import assert from 'node:assert/strict'
-import { clickNav, expectArticle, expectTitle, openHydratedPage, posts, ssgTitle } from '../helpers/site.ts'
+import { clickNav, expectArticle, expectTitle, posts, ssgTitle } from '../helpers/site.ts'
 
 const SITE_TITLE = 'llyのblog'
 
@@ -16,16 +16,41 @@ export function registerTitles(harness: SiteHarness) {
   const [post] = posts
   const [tag] = post.tags
 
-  harness.test('title matches on tag page direct entry and follows navigation away', async (site) => {
+  harness.test('title matches on direct entry and follows SPA navigation across routes and articles', async (site) => {
+    const { page } = site
     await expectDirectEntry(site, `/tags/${encodeURIComponent(tag)}`, `${tag} | ${SITE_TITLE}`)
     await clickNav(site, 'a[href="/"]', '/')
-    await expectTitle(site.page, SITE_TITLE)
-  })
+    await expectTitle(page, SITE_TITLE)
 
-  harness.test('title follows navigation between articles and out to static routes', async (site) => {
-    const { page } = site
-    await openHydratedPage(site, `/posts/${encodeURIComponent(post.url)}`, '[data-post-body]')
+    await clickNav(site, 'a[href="/about"]', '/about')
+    await expectTitle(page, `关于 | ${SITE_TITLE}`)
+    await page.locator('.md-blog').waitFor({ state: 'visible' })
+
+    await clickNav(site, 'a[href="/bangumi"]', '/bangumi')
+    await expectTitle(page, `动画列表 | ${SITE_TITLE}`)
+    await page.getByRole('heading', { name: '动画列表（bangumi）', exact: true }).waitFor({ state: 'visible' })
+
+    await page.goBack()
+    await page.waitForURL(url => new URL(url).pathname === '/about')
+    await expectTitle(page, `关于 | ${SITE_TITLE}`)
+    await page.locator('.md-blog').waitFor({ state: 'visible' })
+
+    await page.goForward()
+    await page.waitForURL(url => new URL(url).pathname === '/bangumi')
+    await expectTitle(page, `动画列表 | ${SITE_TITLE}`)
+    await page.getByRole('heading', { name: '动画列表（bangumi）', exact: true }).waitFor({ state: 'visible' })
+
+    await clickNav(site, 'a[href="/tags"]', '/tags')
+    await expectTitle(page, `标签 | ${SITE_TITLE}`)
+
+    await clickNav(site, 'a[href="/archive"]', '/archive')
+    await expectTitle(page, `归档 | ${SITE_TITLE}`)
+
+    const postPath = `/posts/${encodeURIComponent(post.url)}`
+    await clickNav(site, `main a[href="${postPath}"]`, postPath)
+    await expectArticle(page, postPath)
     await expectTitle(page, `${post.title} | ${SITE_TITLE}`)
+
     const related = page.locator('article a[href^="/posts/"]').first()
     const relatedUrl = await related.getAttribute('href')
     const target = posts.find(item => `/posts/${encodeURIComponent(item.url)}` === relatedUrl)
@@ -34,30 +59,9 @@ export function registerTitles(harness: SiteHarness) {
     await page.waitForURL(`**${relatedUrl}`)
     await expectArticle(page, relatedUrl)
     await expectTitle(page, `${target.title} | ${SITE_TITLE}`)
-    await clickNav(site, 'a[href="/archive"]', '/archive')
-    await expectTitle(page, `归档 | ${SITE_TITLE}`)
-  })
 
-  harness.test('title follows SPA navigation across static routes', async (site) => {
-    const { page } = site
-    await openHydratedPage(site, '/')
+    await clickNav(site, 'a[href="/"]', '/')
     await expectTitle(page, SITE_TITLE)
-    await clickNav(site, 'a[href="/about"]', '/about')
-    await expectTitle(page, `关于 | ${SITE_TITLE}`)
-    await page.locator('.md-blog').waitFor({ state: 'visible' })
-    await clickNav(site, 'a[href="/bangumi"]', '/bangumi')
-    await expectTitle(page, `动画列表 | ${SITE_TITLE}`)
-    await page.getByRole('heading', { name: '动画列表（bangumi）', exact: true }).waitFor({ state: 'visible' })
-    await page.goBack()
-    await page.waitForURL(url => new URL(url).pathname === '/about')
-    await expectTitle(page, `关于 | ${SITE_TITLE}`)
-    await page.locator('.md-blog').waitFor({ state: 'visible' })
-    await page.goForward()
-    await page.waitForURL(url => new URL(url).pathname === '/bangumi')
-    await expectTitle(page, `动画列表 | ${SITE_TITLE}`)
-    await page.getByRole('heading', { name: '动画列表（bangumi）', exact: true }).waitFor({ state: 'visible' })
-    await clickNav(site, 'a[href="/tags"]', '/tags')
-    await expectTitle(page, `标签 | ${SITE_TITLE}`)
   })
 
   harness.test('404 redirect preserves path, query and hash and renders the fallback', async (site) => {

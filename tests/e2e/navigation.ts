@@ -5,7 +5,8 @@ import { archiveWithToc, articleWithToc, expectAnchor, expectArticle, expectArti
 
 async function holdHomePageData(page: Page) {
   await page.evaluate(() => {
-    const originalFetch = window.fetch.bind(window)
+    window._originalFetch ??= window.fetch.bind(window)
+    const originalFetch = window._originalFetch
     let release!: () => void
     const ready = new Promise<void>((resolve) => {
       release = resolve
@@ -26,9 +27,9 @@ async function holdHomePageData(page: Page) {
 }
 
 export function registerNavigation(harness: SiteHarness) {
-  for (const path of ['/2', scrollArticle, archiveWithToc.path, `${articleWithToc.path}${articleWithToc.anchor}`, `${archiveWithToc.path}${archiveWithToc.anchor}`]) {
-    harness.test(`reload preserves reading position on ${path}`, async (site) => {
-      const { page, origin } = site
+  harness.test('reload preserves reading position across pages and hash anchors', async (site) => {
+    const { page, origin } = site
+    for (const path of ['/2', scrollArticle, archiveWithToc.path, `${articleWithToc.path}${articleWithToc.anchor}`, `${archiveWithToc.path}${archiveWithToc.anchor}`]) {
       const hash = new URL(path, origin).hash
       await openHydratedPage(site, path, 'main')
       if (hash) {
@@ -50,11 +51,11 @@ export function registerNavigation(harness: SiteHarness) {
       const after = await page.evaluate(() => scrollY)
       assert(Math.abs(after - before) < 5, `Reload changed reading position from ${before} to ${after}`)
       assert.equal(page.url(), `${origin}${path}`)
-    })
-  }
+    }
+  })
 
-  for (const path of ['/', '/2', scrollArticle]) {
-    harness.test(`hydration preserves manual scrolling on ${path}`, async ({ page, origin }) => {
+  harness.test('hydration preserves manual scrolling across routes', async ({ page, origin }) => {
+    for (const path of ['/', '/2', scrollArticle]) {
       let release!: () => void
       const ready = new Promise<void>((resolve) => {
         release = resolve
@@ -83,9 +84,10 @@ export function registerNavigation(harness: SiteHarness) {
       }
       finally {
         release()
+        await page.unroute('**/assets/*.js')
       }
-    })
-  }
+    }
+  })
 
   for (const source of ['/archive', scrollArticle]) {
     harness.test(`article loading starts at the top when entering from ${source}${source === scrollArticle ? ' and reuses cache' : ''}`, async (site) => {
@@ -214,7 +216,7 @@ export function registerNavigation(harness: SiteHarness) {
     await page.waitForFunction(expected => Math.abs(scrollY - expected) < 120, secondPosition)
   })
 
-  harness.test('archive returns to the clicked entry after Back', async (site) => {
+  harness.test('archive and tag list pages return to their entries after Back', async (site) => {
     const { page } = site
     await openHydratedPage(site, '/archive', 'a[href^="/posts/"]')
     const entry = page.locator(`main a[href="${articleWithToc.path}"]`)
@@ -232,15 +234,14 @@ export function registerNavigation(harness: SiteHarness) {
       const rect = element.getBoundingClientRect()
       return rect.top >= 0 && rect.bottom <= innerHeight
     }))
-  })
 
-  harness.test('tag page returns to the card list after Back', async (site) => {
-    const { page } = site
     const tagUrl = '/tags/Vue'
-    await openHydratedPage(site, tagUrl, '.grid a[href^="/posts/"]')
+    await page.locator('#sidebar a[href="/tags"]').click()
+    await page.waitForURL('**/tags')
+    await page.locator(`a[href="${tagUrl}"]`).first().click()
+    await page.waitForURL(`**${tagUrl}`)
     const taggedPost = page.locator(`.grid a[href="${articleWithToc.path}"]`)
     await taggedPost.waitFor({ state: 'visible' })
-    const target = '/posts/hello-world' as const
     await taggedPost.click()
     await page.waitForURL('**/posts/**')
     await expectArticleSnippet(page, target)
@@ -347,7 +348,7 @@ export function registerNavigation(harness: SiteHarness) {
     }
   })
 
-  harness.test('homepage navigation waits for data and reuses it on later visits', async (site) => {
+  harness.test('homepage navigation waits for data, reuses it on later visits, and ignores stale responses after navigating away', async (site) => {
     const { page, origin } = site
     await openHydratedPage(site, '/', '.show-more')
     await holdHomePageData(page)
@@ -368,18 +369,10 @@ export function registerNavigation(harness: SiteHarness) {
       await pagination.getByRole('link', { name: '2', exact: true }).click()
       await page.waitForURL(`${origin}/2`)
       assert.equal(await page.evaluate(() => window.homePageFetch.requests), 1, 'Subsequent visits must reuse the page data')
-    }
-    finally {
-      await page.evaluate(() => window.homePageFetch.release())
-    }
-  })
 
-  harness.test('a late homepage response cannot overwrite a newer route', async (site) => {
-    const { page, origin } = site
-    await openHydratedPage(site, '/', '.show-more')
-    await holdHomePageData(page)
-    try {
-      await page.getByRole('navigation', { name: '文章分页' }).getByRole('link', { name: '2', exact: true }).click()
+      // A late homepage response cannot overwrite a newer route
+      await holdHomePageData(page)
+      await pagination.getByRole('link', { name: '3', exact: true }).click()
       await page.waitForFunction(() => window.homePageFetch.requests === 1)
       await page.locator('#sidebar a[href="/archive"]').click()
       await page.waitForURL(`${origin}/archive`)
