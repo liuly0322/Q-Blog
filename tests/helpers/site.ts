@@ -1,5 +1,5 @@
 /* eslint-disable antfu/no-top-level-await */
-import type { BrowserContextOptions, Page, Response } from 'playwright'
+import type { Browser, BrowserContextOptions, Page, Response } from 'playwright'
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -36,15 +36,34 @@ export interface SiteHarness {
   close: () => Promise<void>
 }
 
-export async function createSite(): Promise<SiteHarness> {
-  const browser = await launchBrowser()
+export async function createSite(workerCount = 2): Promise<SiteHarness> {
+  const browsers = await Promise.all(Array.from({ length: workerCount }, () => launchBrowser()))
   const server = await startServer('dist').catch(async (error) => {
-    await browser.close()
+    await Promise.all(browsers.map(b => b.close()))
     throw error
   })
+  const pool: Browser[] = [...browsers]
+  const waiting: ((browser: Browser) => void)[] = []
+
+  function acquireBrowser(): Promise<Browser> {
+    const browser = pool.pop()
+    if (browser)
+      return Promise.resolve(browser)
+    return new Promise(resolve => waiting.push(resolve))
+  }
+
+  function releaseBrowser(browser: Browser) {
+    const next = waiting.shift()
+    if (next)
+      next(browser)
+    else
+      pool.push(browser)
+  }
+
   return {
     test(name, run, options = {}) {
       test(name, { timeout: 60_000 }, async (t) => {
+        const browser = await acquireBrowser()
         const context = await browser.newContext({
           serviceWorkers: 'block',
           viewport: { width: 1440, height: 1000 },
@@ -96,6 +115,7 @@ export async function createSite(): Promise<SiteHarness> {
           }
           finally {
             await context.close()
+            releaseBrowser(browser)
           }
           if (!failed) {
             assert.deepEqual(errors, [], 'Unexpected browser errors')
@@ -106,7 +126,7 @@ export async function createSite(): Promise<SiteHarness> {
     },
     async close() {
       try {
-        await browser.close()
+        await Promise.all(browsers.map(b => b.close()))
       }
       finally { await server.close() }
     },
