@@ -31,8 +31,8 @@ export function registerSearch(harness: SiteHarness) {
     assert.equal(await page.locator('[data-post-body]').evaluate(body => body.textContent!.includes('\u200B')), false)
   })
 
-  harness.test('search stays disabled until the official UI loads, then opens a modal and navigates within the SPA', async (site) => {
-    const { page } = site
+  harness.test('search stays disabled until UI loads, navigates across routes, and dismisses on current URL', async (site) => {
+    const { page, origin } = site
     let release: () => void
     let requested: () => void
     const gate = new Promise<void>(resolve => release = resolve)
@@ -81,7 +81,25 @@ export function registerSearch(harness: SiteHarness) {
       await modal.waitFor({ state: 'visible' })
       assert.equal(await modal.getByRole('searchbox').inputValue(), '')
       await modal.getByRole('searchbox').fill('Hello New World')
-      await modal.locator('a[href="/posts/hello-world.html"]').first().waitFor({ state: 'visible' })
+      const targetLink = modal.locator('a[href="/posts/hello-world.html"]').first()
+      await targetLink.waitFor({ state: 'visible' })
+      await targetLink.click()
+      await page.waitForURL('**/posts/hello-world')
+      await expectArticleSnippet(page, '/posts/hello-world')
+      await modal.waitFor({ state: 'hidden' })
+
+      // Selecting the current URL dismisses the modal without navigation.
+      await button.click()
+      await modal.waitFor({ state: 'visible' })
+      assert.equal(await modal.getByRole('searchbox').inputValue(), '')
+      await modal.getByRole('searchbox').fill('Hello New World')
+      await targetLink.click()
+      await modal.waitFor({ state: 'hidden', timeout: 5000 })
+      assert.equal(page.url(), `${origin}/posts/hello-world`)
+      await page.waitForFunction(() => document.activeElement !== document.querySelector('#site-search'))
+      // The dialog close event resets the query asynchronously after it hides.
+      await page.waitForFunction(() => document.querySelector<HTMLInputElement>('dialog input[type="search"]')?.value === '', undefined, { timeout: 5000 })
+      assert.equal(await modal.getByRole('searchbox', { includeHidden: true }).inputValue(), '')
     }
     finally {
       release()
@@ -121,22 +139,6 @@ export function registerSearch(harness: SiteHarness) {
     await page.goForward()
     await page.waitForURL(`${origin}${path}${hashes[1]}`)
     await expectAnchor(page, await page.evaluate(hash => `#${CSS.escape(hash.slice(1))}`, hashes[1]))
-  })
-
-  harness.test('search selecting the current URL still dismisses the modal', async (site) => {
-    const { page, origin } = site
-    await openHydratedPage(site, '/posts/hello-world', '#toc-feature')
-    await page.waitForFunction(() => !(document.querySelector('#site-search') as HTMLButtonElement).disabled)
-    await page.getByRole('button', { name: '搜索文章' }).click()
-    const modal = page.getByRole('dialog', { includeHidden: true })
-    await modal.getByRole('searchbox').fill('Hello New World')
-    await modal.locator('a[href="/posts/hello-world.html"]').first().click()
-    await modal.waitFor({ state: 'hidden', timeout: 5000 })
-    assert.equal(page.url(), `${origin}/posts/hello-world`)
-    await page.waitForFunction(() => document.activeElement !== document.querySelector('#site-search'))
-    // The dialog close event resets the query asynchronously after it hides.
-    await page.waitForFunction(() => document.querySelector<HTMLInputElement>('dialog input[type="search"]')?.value === '', undefined, { timeout: 5000 })
-    assert.equal(await modal.getByRole('searchbox', { includeHidden: true }).inputValue(), '')
   })
 
   harness.test('Chinese modal search closes, restores focus and reopens with the keyboard', async (site) => {

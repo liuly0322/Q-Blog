@@ -16,37 +16,26 @@ export function registerTitles(harness: SiteHarness) {
   const [post] = posts
   const [tag] = post.tags
 
-  harness.test('SSG title matches the hydrated title on a tag page', async (site) => {
+  harness.test('title matches on tag page direct entry and follows navigation away', async (site) => {
     await expectDirectEntry(site, `/tags/${encodeURIComponent(tag)}`, `${tag} | ${SITE_TITLE}`)
-  })
-
-  harness.test('title follows navigation away from a tag page', async (site) => {
-    const { page } = site
-    await openHydratedPage(site, `/tags/${encodeURIComponent(tag)}`)
-    await expectTitle(page, `${tag} | ${SITE_TITLE}`)
     await clickNav(site, 'a[href="/"]', '/')
-    await expectTitle(page, SITE_TITLE)
+    await expectTitle(site.page, SITE_TITLE)
   })
 
-  harness.test('title follows navigation out of an article', async (site) => {
+  harness.test('title follows navigation between articles and out to static routes', async (site) => {
     const { page } = site
     await openHydratedPage(site, `/posts/${encodeURIComponent(post.url)}`, '[data-post-body]')
     await expectTitle(page, `${post.title} | ${SITE_TITLE}`)
-    await clickNav(site, 'a[href="/archive"]', '/archive')
-    await expectTitle(page, `归档 | ${SITE_TITLE}`)
-  })
-
-  harness.test('title follows navigation between two articles', async (site) => {
-    const { page } = site
-    await openHydratedPage(site, `/posts/${encodeURIComponent(post.url)}`, '[data-post-body]')
     const related = page.locator('article a[href^="/posts/"]').first()
     const relatedUrl = await related.getAttribute('href')
-    const target = posts.find(post => `/posts/${encodeURIComponent(post.url)}` === relatedUrl)
+    const target = posts.find(item => `/posts/${encodeURIComponent(item.url)}` === relatedUrl)
     assert(target, 'Related link must identify a known article')
     await related.click()
     await page.waitForURL(`**${relatedUrl}`)
     await expectArticle(page, relatedUrl)
     await expectTitle(page, `${target.title} | ${SITE_TITLE}`)
+    await clickNav(site, 'a[href="/archive"]', '/archive')
+    await expectTitle(page, `归档 | ${SITE_TITLE}`)
   })
 
   harness.test('title follows SPA navigation across static routes', async (site) => {

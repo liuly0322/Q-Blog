@@ -88,9 +88,14 @@ export function registerNavigation(harness: SiteHarness) {
   }
 
   for (const source of ['/archive', scrollArticle]) {
-    harness.test(`article loading starts at the top when entering from ${source}`, async (site) => {
+    harness.test(`article loading starts at the top when entering from ${source}${source === scrollArticle ? ' and reuses cache' : ''}`, async (site) => {
       const { page } = site
       const target = '/posts/programming-live-webpage'
+      let requests = 0
+      page.on('request', (request) => {
+        if (new URL(request.url()).pathname === `${target}.htm`)
+          requests++
+      })
       await openHydratedPage(site, source, source === '/archive' ? 'a[href^="/posts/"]' : '[data-post-body]')
       await page.evaluate(() => window.scrollTo(0, 900))
       assert(await page.evaluate(() => scrollY > 500))
@@ -117,31 +122,19 @@ export function registerNavigation(harness: SiteHarness) {
         release()
         await expectArticle(page, target)
       }
+
+      if (source === scrollArticle) {
+        await page.goBack()
+        await expectArticleSnippet(page, scrollArticle)
+        await page.evaluate(() => window.scrollTo(0, 900))
+        assert(await page.evaluate(() => scrollY > 500))
+        await page.locator(`a[href="${target}"]`).first().evaluate((link: HTMLAnchorElement) => link.click())
+        await expectArticle(page, target)
+        await page.waitForFunction(() => scrollY === 0)
+        assert.equal(requests, 1, 'The second visit must use cached article content')
+      }
     }, { viewport: { width: 844, height: 390 } })
   }
-
-  harness.test('cached article navigation starts at the top', async (site) => {
-    const { page } = site
-    const target = '/posts/programming-live-webpage'
-    let requests = 0
-    page.on('request', (request) => {
-      if (new URL(request.url()).pathname === `${target}.htm`)
-        requests++
-    })
-    await openHydratedPage(site, scrollArticle, '[data-post-body]')
-    const link = page.locator(`article a[href="${target}"]`)
-    await link.evaluate((element: HTMLAnchorElement) => element.click())
-    await expectArticle(page, target)
-    await page.goBack()
-    await expectArticleSnippet(page, scrollArticle)
-    await page.evaluate(() => window.scrollTo(0, 900))
-    assert(await page.evaluate(() => scrollY > 500))
-    await link.evaluate((element: HTMLAnchorElement) => element.click())
-    await expectArticle(page, target)
-    await page.waitForFunction(() => scrollY === 0)
-    assert.equal(requests, 1, 'The second visit must use cached article content')
-  })
-
   harness.test('article cache reuses SSG and fetched bodies without sessionStorage and resets on reload', async (site) => {
     const { page } = site
     const initial = '/posts/hello-world'
@@ -182,27 +175,13 @@ export function registerNavigation(harness: SiteHarness) {
     assert.deepEqual(requests, [`${fetched}.htm`, `${fetched}.htm`], 'Reload must discard the previous in-memory cache')
   })
 
-  harness.test('article scroll position survives Back and Forward', async (site) => {
-    const { page } = site
-    await openHydratedPage(site, '/')
-    await page.locator(`article a[href="${scrollArticle}"]`).first().click()
-    await page.waitForURL(`**${scrollArticle}`)
-    await expectArticleSnippet(page, scrollArticle)
-    await page.evaluate(() => window.scrollTo(0, 900))
-    const articleScrollY = await page.evaluate(() => window.scrollY)
-    assert(articleScrollY > 400, 'Article must be scrolled before history navigation')
-    await page.goBack()
-    await page.locator('.show-more').first().waitFor({ state: 'visible' })
-    await page.goForward()
-    await page.waitForURL(`**${scrollArticle}`)
-    await expectArticleSnippet(page, scrollArticle)
-    await page.waitForFunction(expected => Math.abs(window.scrollY - expected) < 120, articleScrollY, {})
-  })
-
-  harness.test('two articles keep their own scroll positions through Back and Forward', async (site) => {
+  harness.test('homepage and articles keep their own scroll positions through Back and Forward', async (site) => {
     const { page } = site
     const secondArticle = '/posts/programming-live-webpage'
-    await openHydratedPage(site, scrollArticle, '[data-post-body]')
+    await openHydratedPage(site, '/')
+
+    await page.locator(`article a[href="${scrollArticle}"]`).first().click()
+    await page.waitForURL(`**${scrollArticle}`)
     await expectArticleSnippet(page, scrollArticle)
     await page.evaluate(() => window.scrollTo(0, 900))
     const firstPosition = await page.evaluate(() => scrollY)
@@ -216,6 +195,15 @@ export function registerNavigation(harness: SiteHarness) {
     assert(secondPosition > 300)
 
     await page.goBack()
+    await page.waitForURL(`**${scrollArticle}`)
+    await expectArticleSnippet(page, scrollArticle)
+    await page.waitForFunction(expected => Math.abs(scrollY - expected) < 120, firstPosition)
+
+    await page.goBack()
+    await page.waitForURL(url => new URL(url).pathname === '/')
+    await page.locator('.show-more').first().waitFor({ state: 'visible' })
+
+    await page.goForward()
     await page.waitForURL(`**${scrollArticle}`)
     await expectArticleSnippet(page, scrollArticle)
     await page.waitForFunction(expected => Math.abs(scrollY - expected) < 120, firstPosition)
@@ -261,9 +249,11 @@ export function registerNavigation(harness: SiteHarness) {
     await page.locator('.grid a[href^="/posts/"]').first().waitFor({ state: 'visible' })
   })
 
-  harness.test('table of contents anchor survives Back and Forward', async (site) => {
+  harness.test('table of contents anchor click and position survive Back and Forward', async (site) => {
     const { page } = site
-    await openHydratedPage(site, `${articleWithToc.path}${articleWithToc.anchor}`, '#toc-feature')
+    await openHydratedPage(site, articleWithToc.path, '#toc-feature')
+    await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight))
+    await page.locator('#toc-feature a').click()
     await expectAnchor(page, articleWithToc.anchor)
     const relatedUrl = '/posts/github-actions-ci' as const
     const relatedArticle = page.locator(`article a[href="${relatedUrl}"]`)
@@ -293,13 +283,6 @@ export function registerNavigation(harness: SiteHarness) {
     await page.waitForURL(`${site.origin}${articleWithToc.path}?test=1${articleWithToc.anchor}`)
     assert.equal(await page.locator('article h1').first().textContent(), articleWithToc.title)
     await expectAnchor(page, articleWithToc.anchor)
-  })
-
-  harness.test('clicking the table of contents scrolls to the body heading', async (site) => {
-    await openHydratedPage(site, articleWithToc.path, '#toc-feature')
-    await site.page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight))
-    await site.page.locator('#toc-feature').click()
-    await expectAnchor(site.page, articleWithToc.anchor)
   })
 
   harness.test('homepage pagination and scroll survive an article round trip', async (site) => {
