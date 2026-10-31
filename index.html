@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/katex/katex.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="/katex/katex.min.css"></noscript>
     <title>llyのblog</title>
-    <script>(s=>s=='dark'||s!='light'&&matchMedia('(prefers-color-scheme:dark)').matches?document.documentElement.className='dark':0)(localStorage['vueuse-color-scheme'])</script>
+    <script>(s=>s=='dark'||s!='light'&&matchMedia('(prefers-color-scheme:dark)').matches?document.documentElement.className='dark':0)(localStorage['vueuse-color-scheme']);window.blogSummaryFuture=fetch('/summary.json').then(r=>r.json())</script>
 </head>
 <body>
     <div id="app"></div>

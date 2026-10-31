@@ -7,6 +7,10 @@
 declare const __BUILD_YEAR__: number
 declare const __BUILD_SEASON__: string
 
+interface Window {
+  blogSummaryFuture: Promise<{ posts: import('~/composables/useSummary').PostSummary[] }>
+}
+
 declare module 'frontmatter' {
   export default function frontmatter(content: string): {
     data: Record<string, any>

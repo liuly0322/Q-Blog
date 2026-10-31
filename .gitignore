@@ -9,7 +9,7 @@
 /public/images
 /public/feed.xml
 /public/homePages
-/src/jsons/summary.json
+/public/summary.json
 /src/types/auto-imports.d.ts
 /src/types/components.d.ts
 /package-lock.json

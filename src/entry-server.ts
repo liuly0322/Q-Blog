@@ -1,6 +1,7 @@
 import { renderToString } from 'vue/server-renderer'
 import { createSiteApp } from './app'
 
+export { setSummary } from './composables/useSummary'
 export { postAbstractsCache } from './modules/postAbstractsData'
 export { postCache } from './modules/postData'
 

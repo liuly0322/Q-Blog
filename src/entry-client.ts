@@ -1,4 +1,5 @@
 import { createSiteApp } from './app'
+import { setSummary } from './composables/useSummary'
 import nprogress from './modules/nprogress'
 import { postAbstractsCache } from './modules/postAbstractsData'
 import { postCache } from './modules/postData'
@@ -19,7 +20,8 @@ if (homePage) {
 
 const { app, router } = createSiteApp(root.dataset.ssg === 'true')
 
-router.isReady().then(() => {
+Promise.all([router.isReady(), window.blogSummaryFuture]).then(([, { posts }]) => {
+  setSummary(posts)
   // Nprogress should not be enabled until the initial route is loaded.
   nprogress(router)
   app.mount(root)

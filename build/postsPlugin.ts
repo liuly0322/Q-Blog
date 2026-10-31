@@ -134,7 +134,7 @@ async function generateSiteSummary(posts: Post[]) {
   const summary = {
     posts: posts.map(({ title, date, tags, url }) => ({ title, date, tags, url })),
   }
-  await fs.writeFile(path.join('src/jsons', 'summary.json'), JSON.stringify(summary))
+  await fs.writeFile(path.join('public', 'summary.json'), JSON.stringify(summary))
 }
 
 async function generatePostAbstracts(abstracts: string[]) {

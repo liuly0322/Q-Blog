@@ -59,12 +59,13 @@ async function buildServer(): Promise<ServerEntry> {
 async function loadBuildData() {
   const template = await fs.readFile(path.join(outputDir, 'index.html'), 'utf8')
   const manifest = JSON.parse(await fs.readFile(path.join(outputDir, '.vite/ssr-manifest.json'), 'utf8')) as SsrManifest
-  const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8')) as { posts: PostSummary[] }
+  const { posts } = JSON.parse(await fs.readFile(path.join(outputDir, 'summary.json'), 'utf8')) as { posts: PostSummary[] }
   return { template, manifest, posts }
 }
 
 async function loadServerCache(posts: PostSummary[], server: ServerEntry) {
-  const { postCache, postAbstractsCache } = server
+  const { postCache, postAbstractsCache, setSummary } = server
+  setSummary(posts)
   for (const post of posts) {
     postCache.set(post.url, await fs.readFile(path.join(outputDir, 'posts', `${post.url}.htm`), 'utf8'))
   }

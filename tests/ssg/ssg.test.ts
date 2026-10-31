@@ -10,7 +10,7 @@ import { parse } from 'node-html-parser'
 const htmlEscapes: Record<string, string> = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': '\'' }
 
 test('Pagefind indexes each article once and excludes site chrome', async () => {
-  const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8'))
+  const { posts } = JSON.parse(await fs.readFile('public/summary.json', 'utf8'))
   await fs.access('dist/pagefind/pagefind.js')
   const fragments = await fs.readdir('dist/pagefind/fragment')
   assert.equal(fragments.length, posts.length)
@@ -45,7 +45,7 @@ function metaContent(html: string, attribute: string) {
 }
 
 test('every article is a complete static page with working build assets', async () => {
-  const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8'))
+  const { posts } = JSON.parse(await fs.readFile('public/summary.json', 'utf8'))
   const files = await fs.readdir('dist/posts')
   assert.equal(files.filter(file => file.endsWith('.html')).length, posts.length)
   assert.equal(files.filter(file => file.endsWith('.htm')).length, posts.length)
@@ -79,7 +79,7 @@ test('every article is a complete static page with working build assets', async 
 })
 
 test('site pages include Bangumi and every tag page', async () => {
-  const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8'))
+  const { posts } = JSON.parse(await fs.readFile('public/summary.json', 'utf8'))
   const staticPages = [
     ['index.html', '/', 'llyのblog', '我的个人博客，写点想写的'],
     ['about.html', '/about', '关于 | llyのblog', 'lly 的经历、兴趣与联系方式。'],
@@ -124,7 +124,7 @@ test('site pages include Bangumi and every tag page', async () => {
 })
 
 test('every homepage pagination route has its own content, metadata, and real links', async () => {
-  const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8'))
+  const { posts } = JSON.parse(await fs.readFile('public/summary.json', 'utf8'))
   const pageMax = Math.ceil(posts.length / 10)
   for (let page = 1; page <= pageMax; page++) {
     const url = page === 1 ? '/' : `/${page}`

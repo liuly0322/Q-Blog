@@ -13,7 +13,7 @@ export interface Post {
   date: string
 }
 
-const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8')) as { posts: Post[] }
+const { posts } = JSON.parse(await fs.readFile('public/summary.json', 'utf8')) as { posts: Post[] }
 export { posts }
 
 // 内容相关 fixture：文章改名或调整结构时只改这里

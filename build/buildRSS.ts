@@ -22,7 +22,7 @@ async function renderPostAbstract(url: string) {
 }
 
 export default async function buildRSS() {
-  const { posts } = JSON.parse(await fs.readFile('src/jsons/summary.json', 'utf8')) as { posts: PostSummary[] }
+  const { posts } = JSON.parse(await fs.readFile(path.join('dist', 'summary.json'), 'utf8')) as { posts: PostSummary[] }
   const feed = new RSS({
     title: 'liuly\'s Blog',
     description: 'liuly 的个人 Blog',
