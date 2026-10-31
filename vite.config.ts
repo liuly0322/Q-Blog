@@ -142,6 +142,7 @@ export default defineConfig(withClientOnly(({ command, isSsrBuild }, ClientOnly)
     },
   },
   build: {
+    target: 'esnext',
     minify: 'terser',
     terserOptions: { compress: { passes: 2 }, format: { comments: false } },
     rollupOptions: {

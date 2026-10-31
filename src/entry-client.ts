@@ -1,3 +1,4 @@
+/* eslint-disable antfu/no-top-level-await */
 import { createSiteApp } from './app'
 import { setSummary } from './composables/useSummary'
 import nprogress from './modules/nprogress'
@@ -18,10 +19,11 @@ if (homePage) {
   postAbstractsCache.set(Number(homePage.dataset.homePage), Array.from(root.querySelectorAll('.md-blog-home'), excerpt => excerpt.innerHTML))
 }
 
+setSummary((await window.blogSummaryFuture).posts)
+
 const { app, router } = createSiteApp(root.dataset.ssg === 'true')
 
-Promise.all([router.isReady(), window.blogSummaryFuture]).then(([, { posts }]) => {
-  setSummary(posts)
+router.isReady().then(() => {
   // Nprogress should not be enabled until the initial route is loaded.
   nprogress(router)
   app.mount(root)
